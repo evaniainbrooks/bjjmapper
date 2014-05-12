@@ -14,6 +14,9 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require turbolinks
+//= require openid-jquery
+//= require openid-en
+//= require openid-init
 //= require_tree .
 //= require_self
 
