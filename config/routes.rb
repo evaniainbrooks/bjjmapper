@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   resources :users, :only => [:show, :edit, :update]
   root 'application#show'
+  get '/webstore' => 'application#webstore'
+
   get 'search/:query' => 'application#search'
   match '/signin' => 'sessions#new', :as => :signin, :via => [:get]
   match '/auth/:provider/callback' => 'sessions#create', :via => [:post, :get]

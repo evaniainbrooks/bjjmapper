@@ -17,6 +17,10 @@ class ApplicationController < ActionController::Base
   def show
   end
 
+  def webstore
+    render :layout => 'webstore'
+  end
+
   private
 
   def current_user

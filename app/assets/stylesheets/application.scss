@@ -12,6 +12,7 @@
  *
  *= require_tree .
  *= require_self
+ *= require bootstrap.min
  */
 
 html, body {
@@ -23,6 +24,7 @@ html, body {
 .map-canvas {
   height: 90%;
   top: 40px;
+  width: 100%;
 }
 
 .template {
@@ -31,6 +33,7 @@ html, body {
 
 .map-edit-control {
   padding-right: 5px;
+  padding-bottom: 5px;
   .inner {
     background-color: white;
     border-style: solid;
@@ -47,3 +50,28 @@ html, body {
   }
 }
 
+.pricetable {
+  margin-bottom: 10px;
+  td {
+    padding: 2px 5px; 
+  }
+  .price {
+    color: #b12704;
+  }
+
+  .shipping {
+    text-decoration: line-through;
+    color: #555555;
+  }
+}
+
+.swab {
+  width: 50px;
+  height: 50px;
+  margin-right: 7px;
+  float: left;
+}
+
+.clear {
+  clear: both;
+}

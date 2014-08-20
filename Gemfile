@@ -27,7 +27,7 @@ gem 'mongoid', '~> 4.0.0.beta'
 gem 'guard-rspec'
 gem 'google-analytics-rails'
 gem 'puma'
-gem 'twitter-bootstrap-rails'
+#gem 'twitter-bootstrap-rails', branch: 'bootstrap3'
 gem 'therubyrhino'
 gem 'geocoder'
 # Use ActiveModel has_secure_password

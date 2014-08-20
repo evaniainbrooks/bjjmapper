@@ -12,11 +12,12 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require twitter/bootstrap
+//= require bootstrap
 //= require turbolinks
 //= require openid-jquery
 //= require openid-en
 //= require openid-init
+//= require bootstrap.min
 //= require_tree .
 //= require_self
 
@@ -99,7 +100,7 @@ function placeMarker(map, loc) {
 
 function initInfoWindow(map, infoWindow, contentString, marker) {
   google.maps.event.addListener(marker, 'click', function() {
-    infoWindow.setContent(contentString);
+    infoWindow.setContent("<hr />" + contentString);
     infoWindow.open(map, marker);
   });
 }
