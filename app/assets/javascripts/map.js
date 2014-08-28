@@ -3,7 +3,7 @@ var map;
 function mapEditModeClickListener(event) {
   var marker = placeMarker(map, event.latLng);
   var newMapEditTemplate = template('.new-location')[0];
-  $('.coordinates', newMapEditTemplate).val([event.latLng.lat(), event.latLng.lng()]);
+  $('.coordinates', newMapEditTemplate).val(JSON.stringify([event.latLng.lng(), event.latLng.lat()]));
 
   var infoWindow = new google.maps.InfoWindow();
   initInfoWindow(map, infoWindow, newMapEditTemplate, marker);
@@ -81,8 +81,8 @@ function geoLocate() {
       var initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
       return setInitialLocation(initialLocation);
     }, function() {
-      var NYC =  new google.maps.LatLng(40.69847032728747, -73.9514422416687);
-      return setInitialLocation(NYC);
+      var SEATTLE =  new google.maps.LatLng(47.6097, 122.3331);
+      return setInitialLocation(SEATTLE);
     });
   }
 }

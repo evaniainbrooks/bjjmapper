@@ -6,9 +6,7 @@ class LocationsController < ApplicationController
   end
 
   def create
-    @location = Location.new(params[:location])
-    @location.save
-
+    @location = Location.create(create_params)
     redirect_to root_path
   end
 
@@ -37,6 +35,12 @@ class LocationsController < ApplicationController
 
   def term_query?
     params[:q].present?
+  end
+
+  def create_params
+    p = params.require(:location).permit(:title, :description, :coordinates)
+    p[:coordinates] = JSON.parse(p[:coordinates])
+    p
   end
   
   def set_location
