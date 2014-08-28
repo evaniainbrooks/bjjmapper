@@ -36,9 +36,10 @@ function mapDrawMarker(result, index) {
 function mapSearchForCurrentView(locationCallback) {
 
   var center = map.getCenter();
+  var url = $('.map-canvas').data('search-path');
 
   $.ajax({
-    url: 'search/test',
+    url: url,
     data: {
       viewport: 1,
       center: [center.lat(), center.lng()]

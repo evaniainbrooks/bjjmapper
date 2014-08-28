@@ -4,7 +4,9 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   resources :users, :only => [:show, :edit, :update]
-  root 'application#show'
+  root 'locations#index'
+
+  # TEMPORARY PODIUM WEBSTORE TEST REMOVE
   get '/webstore' => 'application#webstore'
 
   get 'search/:query' => 'application#search'
@@ -17,5 +19,7 @@ Rails.application.routes.draw do
   get '/teams' => 'application#teams'
   get '/people' => 'application#people'
 
-  resources :locations
+  resources :locations do
+    get :search, on: :collection
+  end
 end
