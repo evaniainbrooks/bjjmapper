@@ -1,20 +1,27 @@
-.navbar.navbar-fixed-top
-  .navbar-inner
-    .container
-      %a.btn.btn-navbar(data-target=".nav-collapse" data-toggle="collapse")
+%nav.navbar.navbar-default{:role => "navigation"}
+  .container-fluid
+    / Brand and toggle get grouped for better mobile display
+    .navbar-header
+      %button.navbar-toggle{"data-target" => ".main-navbar-collapse", "data-toggle" => "collapse", :type => "button"}
+        %span.sr-only Toggle navigation
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
-      %a.brand(href=root_path) RollFindr
-      .container.nav-collapse
-        .pull-left
-          %ul.nav.nav-pills
-            %li
-              %form.navbar-form.navbar-left{role: "search"}
-                .form-group
-                  %input.form-control{placeholder: "Search", type: "text"}/
-            %li= link_to "Teams", teams_path
-            %li= link_to "People", people_path
-            %li= link_to "About", meta_path
-        .pull-right
-          = render partial: 'profile_or_login'
+      %a.navbar-brand{:href => root_path} RollFindr
+    / Collect the nav links, forms, and other content for toggling
+    .main-navbar-collapse.collapse.navbar-collapse
+      %ul.nav.navbar-nav
+        %li.active
+          %a{:href => root_path} Map
+        %li
+          %a{:href => teams_path} Teams
+        %li
+          %a{:href => meta_path} About
+      %form.navbar-form.navbar-left{:role => "search"}
+        .form-group
+          %input.form-control{:placeholder => "Search", :type => "text"}/
+        %button.btn.btn-default{:type => "submit"} Submit
+      %ul.nav.navbar-nav.navbar-right
+        %li= render partial: 'profile_or_login'
+    / /.navbar-collapse
+  / /.container-fluid

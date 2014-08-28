@@ -1,13 +1,18 @@
+
+/ Map Overlay Button Template
 .map-edit-control.template 
   %button.btn.btn-primary.btn-lg
-    Add your school!
+    Add an academy!
 
+/ Show Location Marker Template
 .show-location.template
   .container
     %h3.title
     %p.description
     %p.coords
+    %img.image
 
+/ New Location Marker Template
 .new-location.template
   %form.form-horizontal.container{action: locations_path, method: :post}
     %fieldset
@@ -29,7 +34,9 @@
       .form-group
         %label.col-md-4.control-label{:for => "location[description]"} Description
         .col-md-6
-          %textarea.form-control{:name => "location[description]"} Description of your academy
+          %textarea.form-control{:name => "location[description]", :placeholder => "A brief description of your academy"}
       %input.coordinates.form-control.input-md{:name => "location[coordinates]", :type => "hidden"}/
-      %button#singlebutton.btn.btn-primary{:type => "Submit"} Create
+      %button.btn.btn-primary{:type => "Submit"} Create
+
+
 %div.map-canvas
