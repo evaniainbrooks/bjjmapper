@@ -1,5 +1,9 @@
 var map;
 
+function mapDragEndListener(event) {
+  mapSearchForCurrentView(mapDrawMarker);
+}
+
 function mapEditModeClickListener(event) {
   var marker = placeMarker(map, event.latLng);
   var newMapEditTemplate = template('.new-location')[0];
@@ -70,6 +74,7 @@ function initialize() {
 
   geoLocate();
   google.maps.event.addListener(map, 'click', mapEditModeClickListener); 
+  google.maps.event.addListener(map, 'dragend', mapDragEndListener);
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
@@ -79,10 +84,10 @@ function geoLocate() {
   if(navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       var initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-      return setInitialLocation(initialLocation);
+      return mapSetLocation(initialLocation);
     }, function() {
       var SEATTLE =  new google.maps.LatLng(47.6097, 122.3331);
-      return setInitialLocation(SEATTLE);
+      return mapSetLocation(SEATTLE);
     });
   }
 }
@@ -103,7 +108,7 @@ function initInfoWindow(map, infoWindow, contentString, marker) {
   });
 }
 
-function setInitialLocation(initLoc) {
+function mapSetLocation(initLoc) {
   map.setCenter(initLoc);
   mapSearchForCurrentView(mapDrawMarker);
 }
