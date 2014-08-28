@@ -19,27 +19,9 @@
     = favicon_link_tag 'favicon.ico', :rel => 'shortcut icon'
     = javascript_include_tag "application"
   %body
-    .navbar.navbar-fixed-top
-      .navbar-inner
-        .container
-          %a.btn.btn-navbar(data-target=".nav-collapse" data-toggle="collapse")
-            %span.icon-bar
-            %span.icon-bar
-            %span.icon-bar
-          %a.brand(href=root_path) RollFindr
-          .container.nav-collapse
-            .pull-left
-              %ul.nav.nav-pills
-                %li
-                  %form.navbar-form.navbar-left{role: "search"}
-                    .form-group
-                      %input.form-control{placeholder: "Search", type: "text"}/
-                %li= link_to "Teams", teams_path
-                %li= link_to "People", people_path
-                %li= link_to "About", meta_path
-            .pull-right
-              = render partial: 'profile_or_login'
+    = render partial: 'navbar_example'
     .container{style: 'height: 100%'}
       = yield
 
     = render partial: 'login_modal'
+

@@ -8,7 +8,12 @@ class ApplicationController < ActionController::Base
   helper_method :correct_user?
 
   def search
-    searchables = Location.all.to_a
+    searchables = if term_query?
+      Location.all.to_a
+    else
+      viewport_query
+    end
+      
     respond_to do |format|
       format.json { render json: searchables }
     end
@@ -18,7 +23,19 @@ class ApplicationController < ActionController::Base
   end
 
   def webstore
-    render :layout => 'webstore'
+    render layout: 'webstore'
+  end
+
+  private
+
+  def viewport_query
+    # TODO Distance value
+    center = params[:center]
+    locations = Location.near(center, 25)
+  end
+
+  def term_query?
+    params[:q].present?
   end
 
   private

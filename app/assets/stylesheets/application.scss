@@ -12,18 +12,18 @@
  *
  *= require_tree .
  *= require_self
- *= require bootstrap.min
+ *= require bootstrap
  */
 
 html, body {
   height: 100%;
   margin: 0px;
-  padding: 0px
+  padding: 0px;
+  overflow: hidden;
 }
 
 .map-canvas {
   height: 90%;
-  top: 40px;
   width: 100%;
 }
 
@@ -75,3 +75,4 @@ html, body {
 .clear {
   clear: both;
 }
+

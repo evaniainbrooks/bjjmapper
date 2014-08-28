@@ -14,6 +14,8 @@ class Location
   field :postal_code
   field :title
   field :description
+  field :directions
+  field :image
   belongs_to :team
   belongs_to :user
 

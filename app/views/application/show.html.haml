@@ -1,5 +1,35 @@
 .map-edit-control.template 
   %button.btn.btn-primary.btn-lg
-    Add Your School!
+    Add your school!
 
+.show-location.template
+  .container
+    %h3.title
+    %p.description
+    %p.coords
+
+.new-location.template
+  %form.form-horizontal.container{action: locations_path, method: :post}
+    %fieldset
+      / Form Name
+      %legend Create Academy
+      / Text input
+      .form-group
+        %label.col-md-4.control-label{:for => "location[name]"} Name
+        .col-md-6
+          %input.form-control.input-md{:name => "location[name]", :placeholder => "The name of your academy", :type => "text"}/
+      / Select Basic
+      .form-group
+        %label.col-md-4.control-label{:for => "location[team]"} Team
+        .col-md-6
+          %select.form-control{:name => "location[team]"}
+            %option{:value => "1"} Option one
+            %option{:value => "2"} Option two
+      / Textarea
+      .form-group
+        %label.col-md-4.control-label{:for => "location[description]"} Description
+        .col-md-6
+          %textarea.form-control{:name => "location[description]"} Description of your academy
+      %input.coordinates.form-control.input-md{:name => "location[coordinates]", :type => "hidden"}/
+      %button#singlebutton.btn.btn-primary{:type => "Submit"} Create
 %div.map-canvas
