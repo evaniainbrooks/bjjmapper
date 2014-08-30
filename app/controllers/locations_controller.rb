@@ -64,7 +64,7 @@ class LocationsController < ApplicationController
   end
 
   def create_params
-    p = params.require(:location).permit(:title, :description, :coordinates)
+    p = params.require(:location).permit(:title, :description, :coordinates, :team_id)
     p[:coordinates] = JSON.parse(p[:coordinates])
     p
   end

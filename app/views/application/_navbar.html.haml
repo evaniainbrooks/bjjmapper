@@ -12,7 +12,7 @@
     .main-navbar-collapse.collapse.navbar-collapse
       %ul.nav.navbar-nav
         %li.active
-          %a{:href => root_path} Map
+          %a{:href => root_path, :data => { :'no-turbolink' => true }} Map
         %li
           %a{:href => teams_path} Teams
         %li
