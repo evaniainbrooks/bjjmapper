@@ -7,4 +7,5 @@
 = render partial: 'show_template'
 = render partial: 'create_template'
 
-%div.map-canvas{:data => { :'search-path' => search_locations_path }} 
+%div.map-canvas{:data => { :'geocode-path' => geocode_locations_path, :'create-path' => locations_path, :'search-path' => search_locations_path }} 
+

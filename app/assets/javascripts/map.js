@@ -5,12 +5,33 @@ function mapDragEndListener(event) {
 }
 
 function mapEditModeClickListener(event) {
-  var marker = placeMarker(map, event.latLng);
   var newMapEditTemplate = template('.new-location')[0];
   $('.coordinates', newMapEditTemplate).val(JSON.stringify([event.latLng.lng(), event.latLng.lat()]));
 
-  var infoWindow = new google.maps.InfoWindow();
-  initInfoWindow(map, infoWindow, newMapEditTemplate, marker);
+  var marker = placeMarker(map, event.latLng);
+  var infoWindow = createInfoWindow(newMapEditTemplate, marker);
+  infoWindow.open(map, marker);
+
+  var geocodeUrl = $('.map-canvas').data('geocode-path');
+  $.ajax({
+    url: geocodeUrl,
+    data: {
+      location: {
+        coordinates: JSON.stringify([event.latLng.lng(), event.latLng.lat()])
+      }
+    },
+    method: 'GET',
+    success: function(data) {
+      console.log(data);
+      
+      $('.city', newMapEditTemplate).val(data.city);
+      $('.state', newMapEditTemplate).val(data.state);
+      $('.country', newMapEditTemplate).val(data.country);
+      $('.postal_code', newMapEditTemplate).val(data.postal_code);
+      $('.street', newMapEditTemplate).val(data.street);
+    }
+  });
+    
 }
 
 function mapDrawMarker(result, index) {
@@ -27,14 +48,14 @@ function mapDrawMarker(result, index) {
            new google.maps.Point(32 / 2, 35),
            new google.maps.Size(32, 35))*/
   });
-  
+ 
   var newMapShowTemplate = template('.show-location')[0];
   $('.title', newMapShowTemplate).text(result.title);
   $('.description', newMapShowTemplate).text(result.description);
-  $('.coords', newMapShowTemplate).text(result.coords);
+  $('.coords', newMapShowTemplate).text(result.coordinates);
+  $('a.more', newMapShowTemplate).attr('href', Routes.location_path(result.id));
 
-  var infoWindow = new google.maps.InfoWindow();
-  initInfoWindow(map, infoWindow, newMapShowTemplate, marker);
+  createInfoWindow(newMapShowTemplate, marker);
 }
 
 function mapSearchForCurrentView(locationCallback) {
@@ -57,7 +78,7 @@ function mapSearchForCurrentView(locationCallback) {
   });
 }
 
-function initialize() {
+function mapInitialize() {
   var mapOptions = {
     zoom: 12,
     mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -77,10 +98,7 @@ function initialize() {
   google.maps.event.addListener(map, 'dragend', mapDragEndListener);
 }
 
-google.maps.event.addDomListener(window, 'load', initialize);
-
 function geoLocate() {
-  // Try W3C Geolocation (Preferred)
   if(navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       var initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
@@ -101,15 +119,19 @@ function placeMarker(map, loc) {
   return marker;
 }
 
-function initInfoWindow(map, infoWindow, contentString, marker) {
+function createInfoWindow(contentString, marker) {
+  var infoWindow = new google.maps.InfoWindow();
+  infoWindow.setContent(contentString);
   google.maps.event.addListener(marker, 'click', function() {
-    infoWindow.setContent(contentString);
     infoWindow.open(map, marker);
   });
+  return infoWindow;
 }
 
 function mapSetLocation(initLoc) {
   map.setCenter(initLoc);
   mapSearchForCurrentView(mapDrawMarker);
 }
+
+google.maps.event.addDomListener(window, 'load', mapInitialize);
 

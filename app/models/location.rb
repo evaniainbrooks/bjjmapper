@@ -33,4 +33,9 @@ class Location
   def address
     [street, city, state, country, postal_code].compact.join(', ')
   end
+
+  def as_json args
+    # Hack around mongo ugly ids
+    super(args.merge(except: :_id)).merge({:id => self.id.to_s})
+  end
 end
