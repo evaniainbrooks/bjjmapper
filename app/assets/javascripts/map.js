@@ -8,13 +8,6 @@
   }
 
   function mapEditModeClickListener(map, event) {
-    var newMapEditTemplate = template('.new-location')[0];
-    $('.coordinates', newMapEditTemplate).val(JSON.stringify([event.latLng.lng(), event.latLng.lat()]));
-
-    var marker = placeMarker(map, event.latLng);
-    var infoWindow = createInfoWindow(map, newMapEditTemplate, marker);
-    infoWindow.open(map, marker);
-
     var geocodeUrl = $('.map-canvas').data('geocode-path');
     $.ajax({
       url: geocodeUrl,
@@ -27,14 +20,16 @@
       success: function(data) {
         console.log(data);
         
-        $('.city', newMapEditTemplate).val(data.city);
-        $('.state', newMapEditTemplate).val(data.state);
-        $('.country', newMapEditTemplate).val(data.country);
-        $('.postal_code', newMapEditTemplate).val(data.postal_code);
-        $('.street', newMapEditTemplate).val(data.street);
+        $('.city', '.new-location-modal').val(data.city);
+        $('.state', '.new-location-modal').val(data.state);
+        $('.country', '.new-location-modal').val(data.country);
+        $('.postal-code', '.new-location-modal').val(data.postal_code);
+        $('.street', '.new-location-modal').val(data.street);
+        $('.coordinates', '.new-location-modal').val(JSON.stringify([event.latLng.lng(), event.latLng.lat()]));
       }
     });
-      
+
+    $('.new-location-modal').modal('show');
   }
 
   function mapDrawMarker(map, result, index) {
@@ -87,9 +82,11 @@
     var editControl = template('.map-edit-control');
     if (editControl.length > 0) {
       google.maps.event.addDomListener(editControl[0], 'click', function() {
-        alert("Clicked!");
+        if (!window.userIsAuthenticated()) {
+          $('.login-modal').modal('show');
+        }
       });
-
+      
       editControl.index = 1;
       map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(editControl[0]);
     }

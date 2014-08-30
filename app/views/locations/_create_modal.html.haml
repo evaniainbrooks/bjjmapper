@@ -1,0 +1,48 @@
+.new-location-modal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+        %h4 Tell us about your academy
+      .modal-body
+        = form_for(Location.new, html: { class: 'form-horizontal' } ) do |f|
+          %img.img-thumbnail.academy-logo.pull-left/
+          %fieldset
+            / Text input
+            .form-group
+              %label.col-md-6.control-label{:for => "location[title]"} Name
+              .col-md-6
+                = f.text_field :title, placeholder: 'The name of your academy', class: 'form-control input-md'
+            / Select Basic
+            .form-group
+              %label.col-md-6.control-label{:for => "location[team]"} Team
+              .col-md-6
+                = f.select :team_id, Team.all.map { |team| [team.name, team.id] }, {}, class: 'form-control  input-md'
+            / Textarea
+            .form-group
+              %label.col-md-6.control-label{:for => "location[description]"} Description
+              .col-md-6
+                = f.text_area :description, placeholder: 'A brief description of your academy', class: 'form-control'
+            = f.hidden_field :coordinates, class: 'coordinates form-control'
+            %fieldset
+              .form-group
+                %label.col-md-6.control-label{:for => 'location[street]'} Street
+                .col-md-6= f.text_field :street, class: 'street form-control input-md'
+              .form-group
+                %label.col-md-6.control-label{:for => 'location[city]'} City
+                .col-md-6= f.text_field :city, class: 'city form-control input-md'
+              .form-group
+                %label.col-md-6.control-label{:for => 'location[state]'} State
+                .col-md-6= f.text_field :state, class: 'state form-control input-md'
+              .form-group
+                %label.col-md-6.control-label{:for => 'location[country]'} Country
+                .col-md-6= f.text_field :country, class: 'country form-control input-md'
+              .form-group
+                %label.col-md-6.control-label{:for => 'location[postal_code]'} Zipcode
+                .col-md-6= f.text_field :postal_code, class: 'postal-code form-control input-md'
+
+            .pull-right
+              %button.btn.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Cancel
+              %button.btn.btn-primary{:type => "submit"} Create
+              
+

@@ -3,7 +3,7 @@
     .modal-content
       .modal-header
         %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
-        %legend Sign-in or Create New Account
+        %h4 Sign-in or Create New Account
       .modal-body
         %form#openid_form{:action => signin_path, :method => "POST"}
           %input{:name => "action", :type => "hidden", :value => "verify"}/
