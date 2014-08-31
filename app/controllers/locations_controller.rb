@@ -3,7 +3,7 @@ class LocationsController < ApplicationController
 
   def show
     respond_to do |format|
-      format.json { render @location }
+      format.json { render json: @location }
       format.html 
     end
   end

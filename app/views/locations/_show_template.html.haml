@@ -1,8 +1,15 @@
 .show-location.template
   .container
-    %h3.title
-    %p.description
-    %p.coords
-    %img.image
+    .row
+      .col-md-1{:style => 'width: 120px'}
+        = image_tag 'academy-default-100.jpg', class: 'img-thumbnail'
+      .col-md-9
+        %h3
+          %span.title
+          %small
+            Team
+            %span.team-name
+        %p.description
+        %p.coords
 
-    %a.more{:href => '#', :data => { :'no-turbolink' => true }} See More
+        %a.more{:href => '#', :data => { :'no-turbolink' => true }} See More

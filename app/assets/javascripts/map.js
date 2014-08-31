@@ -34,7 +34,7 @@
 
   function mapDrawMarker(map, result, index) {
     var marker = new google.maps.Marker({
-       id: result._id,
+       id: result.id,
        map: map,
        title: result.address,
        position: new google.maps.LatLng(result.coordinates[1], result.coordinates[0]),
@@ -44,6 +44,7 @@
    
     var newMapShowTemplate = template('.show-location')[0];
     $('.title', newMapShowTemplate).text(result.title);
+    $('.team-name', newMapShowTemplate).text(result.team_name);
     $('.description', newMapShowTemplate).text(result.description);
     $('.coords', newMapShowTemplate).text(result.coordinates);
     $('a.more', newMapShowTemplate).attr('href', Routes.location_path(result.id));
