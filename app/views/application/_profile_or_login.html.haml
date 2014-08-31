@@ -1,9 +1,10 @@
-%ul.nav.nav-pills
+%ul.nav.navbar-form.navbar-right
+  %li
   - if signed_in?
     %li= link_to('Profile', user_path(current_user))
     %li= link_to('Sign out', signout_path)
   - else
     %li 
-      %button.btn.btn-primary.btn-lg{"data-target" => ".login-modal", "data-toggle" => "modal"}
+      %button.btn.btn-primary{"data-target" => ".login-modal", "data-toggle" => "modal"}
         Login or Sign up 
 

@@ -8,6 +8,7 @@ class User
   field :name, type: String
   field :email, type: String
   field :ip_address, type: String
+  field :coordinates, type: Array
 
   geocoded_by :ip_address, latitude: :lat, longitude: :lon
   after_validation :geocode

@@ -1,0 +1,12 @@
+
+/ Map Overlay Button Template
+.map-edit-control.template 
+  %button.btn.btn-success.btn-md.enable-edit-mode
+    Add an academy!
+
+= render partial: 'locations/show_template'
+= render partial: 'locations/create_modal'
+
+%div.map-canvas{:data => { :'geocode-path' => geocode_locations_path, :'create-path' => locations_path, :'search-path' => search_locations_path }} 
+:javascript
+  $('.map-canvas').mapCreate({geolocate: true, zoom: 12});

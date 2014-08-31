@@ -7,6 +7,12 @@ class ApplicationController < ActionController::Base
   helper_method :signed_in?
   helper_method :correct_user?
 
+  def map
+  end
+
+  def meta
+  end
+  
   def webstore
     render layout: 'webstore'
   end

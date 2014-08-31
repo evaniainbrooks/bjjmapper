@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   resources :users, :only => [:show, :edit, :update]
-  root 'locations#index'
+  root 'application#map'
 
   # TEMPORARY PODIUM WEBSTORE TEST REMOVE
   get '/webstore' => 'application#webstore'
@@ -16,7 +16,6 @@ Rails.application.routes.draw do
   match '/signout' => 'sessions#destroy', :as => :signout, :via => [:post, :get, :delete]
   
   get '/meta' => 'application#meta'
-  get '/teams' => 'application#teams'
   get '/people' => 'application#people'
 
   resources :locations do

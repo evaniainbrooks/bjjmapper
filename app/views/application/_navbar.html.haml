@@ -14,14 +14,13 @@
         %li.active
           %a{:href => root_path, :data => { :'no-turbolink' => true }} Map
         %li
-          %a{:href => teams_path} Teams
+          %a{:href => locations_path} Directory
         %li
           %a{:href => meta_path} About
       %form.navbar-form.navbar-left{:role => "search"}
         .form-group
           %input.form-control{:placeholder => "Search", :type => "text"}/
         %button.btn.btn-default{:type => "submit"} Submit
-      %ul.nav.navbar-nav.navbar-right
-        %li= render partial: 'profile_or_login'
+      = render partial: 'profile_or_login'
     / /.navbar-collapse
   / /.container-fluid
