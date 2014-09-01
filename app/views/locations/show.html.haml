@@ -1,9 +1,10 @@
-= render @location
+.container
+  = render @location
 
-.row
-  .col-md-9
-  .col-md-3{:style => 'height: 300px'}
-    %div.map-canvas{:data => { :'geocode-path' => geocode_locations_path, :'create-path' => locations_path, :'search-path' => search_locations_path }} 
-:javascript
-  var center = new google.maps.LatLng("#{@location.coordinates[1]}", "#{@location.coordinates[0]}");
-  $('.map-canvas').mapCreate({center: center, zoom: 15, geolocate: false});
+  .row
+    .col-md-9
+    .col-md-3{:style => 'height: 300px'}
+      %div.map-canvas{:data => { :'geocode-path' => geocode_locations_path, :'create-path' => locations_path, :'search-path' => search_locations_path }} 
+  :javascript
+    var center = new google.maps.LatLng("#{@location.coordinates[1]}", "#{@location.coordinates[0]}");
+    $('.map-canvas').mapCreate({center: center, zoom: 15, geolocate: false});

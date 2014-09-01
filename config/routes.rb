@@ -15,8 +15,9 @@ Rails.application.routes.draw do
   match '/auth/failure' => 'sessions#failure', :via => [:post, :get]
   match '/signout' => 'sessions#destroy', :as => :signout, :via => [:post, :get, :delete]
   
-  get '/meta' => 'application#meta'
+  get '/meta' => 'application#meta', :as => :meta
   get '/people' => 'application#people'
+  post '/meta' => 'application#contact', :as => :contact
 
   resources :locations do
     get :search, on: :collection

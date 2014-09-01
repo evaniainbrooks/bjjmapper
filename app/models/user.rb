@@ -10,7 +10,7 @@ class User
   field :ip_address, type: String
   field :coordinates, type: Array
 
-  geocoded_by :ip_address, latitude: :lat, longitude: :lon
+  geocoded_by :ip_address
   after_validation :geocode
 
   belongs_to :team

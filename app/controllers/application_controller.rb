@@ -10,6 +10,13 @@ class ApplicationController < ActionController::Base
   def map
   end
 
+
+  def contact
+    name = params[:name]
+    email = params[:email]
+    message = params[:message]
+  end
+
   def meta
   end
   

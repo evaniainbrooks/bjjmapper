@@ -1,13 +1,25 @@
-%h1 About
-%address
-  %strong RollFindr
-  %br/
-  12326 14th Ave NE
-  %br/
-  Seattle, WA 98125
-  %br/
-  %abbr{:title => "Phone"} P:
-  (206) 661-4210
-%address
-  %a{:href => "mailto:info+meta@rollfinder.com"} info@rollfindr.com
+%h1 About RollFindr
+%hr/
+%p.lead Blah blah blah
+%p another paragraph
+
+.container
+  .row
+    %h3 Send us a message
+    %hr/
+  .row
+    .col-md-9
+      = render partial: 'contact_form'
+    .col-md-3
+      %address
+        %strong RollFindr
+        %br/
+        12326 14th Ave NE
+        %br/
+        Seattle, WA 98125
+        %br/
+        %abbr{:title => "Phone"} P:
+        (206) 661-4210
+      %address
+        %a{:href => "mailto:info+meta@rollfinder.com"} info@rollfindr.com
 

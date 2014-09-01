@@ -4,6 +4,7 @@
       .modal-header
         %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
         %h4 Tell us about your academy
+        %p You can add additional details and upload a picture on the following page.
       .modal-body
         = form_for(Location.new, html: { class: 'form-horizontal' } ) do |f|
           %img.img-thumbnail.academy-logo.pull-left/
