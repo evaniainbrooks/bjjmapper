@@ -9,6 +9,9 @@
 
   function mapEditModeClickListener(map, event) {
     var geocodeUrl = $('.map-canvas').data('geocode-path');
+   
+    //var marker = mapDrawMarker(map, {id: 0, coordinates: [event.latLng.lng(), event.latLng.lat()]}, 0);
+
     $.ajax({
       url: geocodeUrl,
       data: {
