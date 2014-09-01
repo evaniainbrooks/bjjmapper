@@ -28,6 +28,12 @@ module ResearchMachine
     # config.i18n.default_locale = :de
     config.google_maps_api_key = 'AIzaSyDfVeMiIo8lIaMQ_UxahKftMpIutq7QQ4I'
     config.google_maps_endpoint = '//maps.googleapis.com/maps/api/js'
+
+    config.action_mailer.delivery_method = :sendmail
+    config.action_mailer.perform_deliveries = true
+    config.action_mailer.raise_delivery_errors = true
+    config.action_mailer.default_options = {from: 'no-reply@rollfindr.com'}
+
   end
 end
 

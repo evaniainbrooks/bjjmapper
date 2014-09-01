@@ -15,6 +15,11 @@ class ApplicationController < ActionController::Base
     name = params[:name]
     email = params[:email]
     message = params[:message]
+
+    mail = FeedbackMailer.feedback_email(name, email, message, current_user)
+    mail.deliver    
+
+    head :ok
   end
 
   def meta
