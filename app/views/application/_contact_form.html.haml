@@ -19,6 +19,7 @@
               %label.col-md-3.control-label{:for => "message"} Your message
               .col-md-9
                 %textarea#message.form-control{:name => "message", :placeholder => "Please enter your message here...", :rows => "5"}
+                %input{:name => 'authenticity_token', :type => 'hidden', :value => form_authenticity_token}/
             / Form actions
             .form-group
               .col-md-12.text-right

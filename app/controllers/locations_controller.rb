@@ -1,5 +1,6 @@
 class LocationsController < ApplicationController
   before_filter :set_location, only: :show
+  decorates_assigned :location
 
   def show
     respond_to do |format|

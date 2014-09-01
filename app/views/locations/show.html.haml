@@ -1,10 +1,69 @@
 .container
-  = render @location
+  .row
+    .col-md-12
+      %ol.breadcrumb
+        %li
+          %a{href: root_path} Home
+        %li
+          %a{href: locations_path} Academies
+        %li
+          %a{href: locations_path(country: location.country)}= location.country
+        %li
+          %a{href: locations_path({country: location.country, city: location.city})}= location.city
+        %li.active= location.title      
+  .row
+    .col-md-1
+      = image_tag location.image 
+    .col-md-11
+      %h1{:style => 'margin-left: 10px;'}
+        = location.title
+        %br/
+        %small= "Team #{location.team_name}"
+  .row
+    .col-md-12
+      %p= location.description
+  .row
+    .col-md-12
+      %span &nbsp;
+      = link_to 'Location', '#location', class: 'label label-default'
+      = link_to 'Head Instructor', '#instructor', class: 'label label-default'
+      = link_to 'Contact Information', '#contact', class: 'label label-default'
+      = link_to 'Schedule' , '#schedule', class: 'label label-default'
+      = link_to 'Reviews', '#reviews', class: 'label label-default'
 
   .row
-    .col-md-9
-    .col-md-3{:style => 'height: 300px'}
+    .col-md-12
+      %h3 Location
+      %a{:name => 'location'}
+  .row
+    .col-md-7
+      %address
+        = location.street
+        %br/
+        = "#{location.city}, #{location.state}"
+        %br/
+        = "#{location.postal_code} #{location.country}"
+        %br/
+        %br/
+        %small= "(#{location.coordinates[1]},#{location.coordinates[0]})"
+
+    .col-md-5.text-center{:style => 'height: 300px'}
       %div.map-canvas{:data => { :'geocode-path' => geocode_locations_path, :'create-path' => locations_path, :'search-path' => search_locations_path }} 
+      %big= link_to 'See on larger map', root_path(:center => location.coordinates)
+  .row    
+    .col-md-12
+      %h3 Head Instructor
+  .row
+    .col-md-1
+      = image_tag location.head_instructor.image
+    .col-md-11
+      %p= location.head_instructor.name
+      %p= location.head_instructor.rank_in_words
+  .row
+    .col-md-12
+      %h3 Contact
+    .col-md-12
+
   :javascript
-    var center = new google.maps.LatLng("#{@location.coordinates[1]}", "#{@location.coordinates[0]}");
+    var center = new google.maps.LatLng("#{location.coordinates[1]}", "#{location.coordinates[0]}");
     $('.map-canvas').mapCreate({center: center, zoom: 15, geolocate: false});
