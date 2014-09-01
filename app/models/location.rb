@@ -5,6 +5,8 @@ class Location
 
   include Mongoid::History::Trackable
 
+  INDEPENDENT = "Independent"
+
   track_history   :on => :all, 
                   :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier
                   :modifier_field_inverse_of => :nil, # adds an ":inverse_of" option to the "belongs_to :modifier" relation, default is not set
@@ -39,16 +41,21 @@ class Location
   field :image
   belongs_to :team
   belongs_to :user
+  belongs_to :head_instructor, class_name: 'User'
 
   def address
     [street, city, state, country, postal_code].compact.join(', ')
+  end
+
+  def team_name
+    team.try(:name) || INDEPENDENT
   end
 
   def as_json args
     # Hack around mongo ugly ids
     result = super(args.merge(except: [:_id, :team_id])).merge({
       :id => self.id.to_s,
-      :team_name => team.try(:name)
+      :team_name => team_name
     })
   end
 end
