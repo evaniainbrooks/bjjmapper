@@ -5,6 +5,11 @@ class LocationDecorator < Draper::Decorator
 
   decorates :location
 
+
+  def directions
+    object.directions || h.content_tag(:i) { 'No extra directions were provided' }
+  end
+
   def image
     object.image || 'academy-default-100.jpg'
   end

@@ -1,42 +1,30 @@
 .container
   .row
     .col-md-12
-      %ol.breadcrumb
-        %li
-          %a{href: root_path} Home
-        %li
-          %a{href: locations_path} Academies
-        %li
-          %a{href: locations_path(country: location.country)}= location.country
-        %li
-          %a{href: locations_path({country: location.country, city: location.city})}= location.city
-        %li.active= location.title      
+      = render partial: 'breadcrumb', locals: { location: location }
   .row
     .col-md-1
       = image_tag location.image 
-    .col-md-11
+    .col-md-6
       %h1{:style => 'margin-left: 10px;'}
         = location.title
         %br/
         %small= "Team #{location.team_name}"
-  .row
-    .col-md-12
       %p= location.description
+    .col-md-2
+      %p 22 Checkins
+      %p 7 Reviews
+    .col-md-2
+      = render partial: 'subnav'
+  %hr/
   .row
-    .col-md-12
-      %span &nbsp;
-      = link_to 'Location', '#location', class: 'label label-default'
-      = link_to 'Head Instructor', '#instructor', class: 'label label-default'
-      = link_to 'Contact Information', '#contact', class: 'label label-default'
-      = link_to 'Schedule' , '#schedule', class: 'label label-default'
-      = link_to 'Reviews', '#reviews', class: 'label label-default'
-
-  .row
-    .col-md-12
+    .col-md-3
       %h3 Location
       %a{:name => 'location'}
   .row
-    .col-md-7
+    .col-md-4
+      %p= location.directions
+    .col-md-2.col-md-offset-1
       %address
         = location.street
         %br/
@@ -46,23 +34,28 @@
         %br/
         %br/
         %small= "(#{location.coordinates[1]},#{location.coordinates[0]})"
-
     .col-md-5.text-center{:style => 'height: 300px'}
       %div.map-canvas{:data => { :'geocode-path' => geocode_locations_path, :'create-path' => locations_path, :'search-path' => search_locations_path }} 
-      %big= link_to 'See on larger map', root_path(:center => location.coordinates)
+      %big= link_to 'See on larger map', root_path(:center => location.coordinates), :data => { :'no-turbolink' => true }
+  %hr/
   .row    
-    .col-md-12
-      %h3 Head Instructor
+    .col-md-6
+      %h3 Head Instructors
   .row
     .col-md-1
       = image_tag location.head_instructor.image
-    .col-md-11
-      %p= location.head_instructor.name
-      %p= location.head_instructor.rank_in_words
+    .col-md-5
+      %p{:style => 'margin-left: 15px;'}
+        %span= location.head_instructor.name
+        %br/
+        %span= location.head_instructor.rank_in_words
   .row
     .col-md-12
       %h3 Contact
+
+  .row
     .col-md-12
+      %h3 Schedule
 
   :javascript
     var center = new google.maps.LatLng("#{location.coordinates[1]}", "#{location.coordinates[0]}");
