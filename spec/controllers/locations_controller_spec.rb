@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe LocationsController do
-  describe '.show' do
+  describe 'GET show' do
     let(:create_params) {{ title: 'test', description: 'test', coordinates: [122.0, 40.0] }}
     context 'with json format' do 
       let(:location) { Location.create(create_params) } 
@@ -19,4 +19,17 @@ describe LocationsController do
     end
   end
 
+  describe 'GET index' do
+    it 'renders the directory' do
+      get :index
+      response.should render_template("locations/index")
+    end
+  end
+  describe 'GET search' do
+    context 'with json format' do
+      it 'searches the viewport' do
+        pending
+      end
+    end
+  end
 end

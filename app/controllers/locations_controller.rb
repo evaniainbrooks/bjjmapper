@@ -37,12 +37,7 @@ class LocationsController < ApplicationController
   end
 
   def search
-    searchables = if term_query?
-      Location.all.to_a
-    else
-      viewport_query
-    end
-      
+    searchables = viewport_query
     respond_to do |format|
       format.json { render json: searchables }
     end
@@ -57,10 +52,6 @@ class LocationsController < ApplicationController
     # TODO Distance value
     center = params[:center]
     locations = Location.near(center, 25)
-  end
-
-  def term_query?
-    params[:q].present?
   end
 
   def create_params
