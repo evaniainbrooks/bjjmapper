@@ -5,8 +5,6 @@ class Location
 
   include Mongoid::History::Trackable
 
-  INDEPENDENT = "Independent"
-
   track_history   :on => :all, 
                   :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier
                   :modifier_field_inverse_of => :nil, # adds an ":inverse_of" option to the "belongs_to :modifier" relation, default is not set
@@ -39,6 +37,8 @@ class Location
   field :description
   field :directions
   field :image
+  field :website
+  field :phone
   belongs_to :team
   belongs_to :user
   belongs_to :head_instructor, class_name: 'User'
@@ -48,7 +48,7 @@ class Location
   end
 
   def team_name
-    team.try(:name) || INDEPENDENT
+    team.try(:name)
   end
 
   def as_json args

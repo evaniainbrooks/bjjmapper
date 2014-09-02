@@ -30,6 +30,11 @@ html, body {
   display: none;
 }
 
+.coords {
+  position: relative;
+  top: 15px;
+}
+
 .map-edit-control {
   padding-right: 5px;
   padding-bottom: 5px;

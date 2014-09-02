@@ -48,7 +48,9 @@
     var newMapShowTemplate = template('.show-location')[0];
     $('.title', newMapShowTemplate).text(result.title);
     $('.team-name', newMapShowTemplate).text(result.team_name);
-    $('.description', newMapShowTemplate).text(result.description);
+    if (result.description) {
+      $('.description', newMapShowTemplate).text(result.description);
+    }
     $('.coords', newMapShowTemplate).text(result.coordinates);
     $('a.more', newMapShowTemplate).attr('href', Routes.location_path(result.id));
     $('.updated-at', newMapShowTemplate).text(result.updated_at)

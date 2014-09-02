@@ -1,19 +1,18 @@
 .show-location.template
-  .container-fluid
+  .container-fluid{:style => 'min-width: 400px'}
     .row
-      .col-md-2
-        = image_tag 'academy-default-100.jpg', class: 'img-thumbnail pull-left'
-      .col-md-10
+      .col-md-3.pull-left.text-center
+        = image_tag 'academy-default-100.jpg', class: 'pull-left'
+        %i.pull-left.updated-at.small
+      .col-md-9.pull-left
         %h3
           %span.title
-          %small
-            Team
-            %span.team-name
-        %p.description
-        %p.coords
+          %br/
+          %small.team-name
+        .description
     .row
-      .col-md-5.col-md-offset-2
-        %i.pull-left.updated-at.small
-      .col-md-2.col-md-offset-3
+      .col-md-5
+        .small.coords{:style => 'top: 10px;'}
+      .col-md-2.col-md-offset-5
         %p
           %a.more.btn.btn-primary.btn-sm{:data => {:'no-turbolink' => true}} See more »

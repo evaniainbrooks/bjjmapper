@@ -59,7 +59,7 @@ class LocationsController < ApplicationController
   def viewport_query
     # TODO Distance value
     center = params[:center]
-    locations = Location.near(center, 25)
+    locations = Location.near(center, 25).limit(50)
   end
 
   def create_params
