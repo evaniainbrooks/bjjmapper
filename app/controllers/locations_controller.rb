@@ -40,11 +40,18 @@ class LocationsController < ApplicationController
   def search
     searchables = viewport_query
     respond_to do |format|
-      format.json { render json: searchables }
+      format.json { render json: searchables.decorate }
     end
   end
 
   def index
+    @criteria = params.slice(:city, :country) || {}
+    @locations = @criteria.present? ? Location.where(@critieria).all : []
+    
+    respond_to do |format|
+      format.html
+      format.json { render json: @locations }
+    end
   end
 
   private

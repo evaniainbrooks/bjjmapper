@@ -1,9 +1,9 @@
 .show-location.template
-  .container
+  .container-fluid
     .row
-      .col-md-1{:style => 'width: 120px'}
-        = image_tag 'academy-default-100.jpg', class: 'img-thumbnail'
-      .col-md-9
+      .col-md-2
+        = image_tag 'academy-default-100.jpg', class: 'img-thumbnail pull-left'
+      .col-md-10
         %h3
           %span.title
           %small
@@ -11,4 +11,9 @@
             %span.team-name
         %p.description
         %p.coords
-        %a.more.btn.btn-primary.btn-sm{:href => "#", :role => "button", :data => { :'no-turbolink' => true }} See more »
+    .row
+      .col-md-5.col-md-offset-2
+        %i.pull-left.updated-at.small
+      .col-md-2.col-md-offset-3
+        %p
+          %a.more.btn.btn-primary.btn-sm{:data => {:'no-turbolink' => true}} See more »

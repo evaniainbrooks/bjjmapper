@@ -51,6 +51,7 @@
     $('.description', newMapShowTemplate).text(result.description);
     $('.coords', newMapShowTemplate).text(result.coordinates);
     $('a.more', newMapShowTemplate).attr('href', Routes.location_path(result.id));
+    $('.updated-at', newMapShowTemplate).text(result.updated_at)
 
     createInfoWindow(map, newMapShowTemplate, marker);
   }

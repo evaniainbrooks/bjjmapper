@@ -1,1 +1,39 @@
-%h1 Directory
+.container
+%h1 
+  Academy Directory
+  %span.small 255 locations worldwide
+%ol.breadcrumb
+  %li
+    %a{href: root_path} Home
+  %li
+    %a{href: locations_path} Academies
+  - if (@criteria.has_key?(:country)) 
+    %li
+      %a{href: locations_path(country: @criteria[:country])}= @criteria[:country]
+    -if (@criteria.has_key?(:city)) 
+      %li
+        %a{href: locations_path({country: @criteria[:country], city: @criteria[:city]})}= @criteria[:city] 
+
+- if @locations.present?
+  %table.table.table-striped
+    %tr
+      %th
+        Name
+      %th
+        Team
+      %th
+        Address
+      %th
+        Reviews
+    - @locations.each do |location|
+      %tr
+        %td
+          = location.title
+        %td
+          = location.team_name
+        %td
+          = location.address
+        %td Reviews
+
+- else
+  = render partial: 'directory_index'

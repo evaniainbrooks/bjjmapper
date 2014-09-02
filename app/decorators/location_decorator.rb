@@ -18,10 +18,19 @@ class LocationDecorator < Draper::Decorator
   end
 
   def updated_at
-    h.time_ago_in_words object.updated_at
+    'last modified ' + h.time_ago_in_words(object.updated_at) + ' ago'
   end
 
   def created_at
-    h.time_ago_in_words object.created_at
+    'created ' + h.time_ago_in_words(object.created_at) + ' ago'
+  end
+
+  def as_json args
+    # Select which decorator methods override the defaults from object
+    object.as_json(args).merge({
+      :image => image,
+      :created_at => created_at,
+      :updated_at => updated_at
+    })
   end
 end

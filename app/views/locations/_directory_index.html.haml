@@ -1,0 +1,22 @@
+
+- tlcountries = {'Canada' => 'CAN', 'USA' => 'US', 'Brazil' => 'BR', 'Japan' => 'JP', 'South Korea' => 'KR'}
+- subcounties = {'USA' => ['Seattle', 'New York', 'San Francisco', 'Los Angeles', 'Portland'], 'Canada' => ['Vancouver', 'Halifax', 'Toronto', 'Montreal', 'Calgary', 'Edmonton', 'Winnipeg', 'Victoria'], 'Brazil' => ['Rio de Janerio', 'Sao Paulo', 'Belo Horizonte', 'Salvador'] }
+- tlteams = Team.all.sort
+
+.row
+  .col-md-6
+    %h2 Browse by Location
+    - tlcountries.each_pair do |k,v|
+      %h3= link_to k, locations_path(country: v)
+      - if (subcounties.has_key?(k))
+        %ul.list-inline
+          - subcounties[k].each do |city|
+            %li= link_to city, locations_path(country: v, city: city)
+
+  .col-md-6
+    %h2 
+      Browse by Team
+      %span.small= "#{tlteams.size} teams"
+    - Team.all.each do |t|
+      %h3= link_to t.name, locations_path(team: t.id)
+

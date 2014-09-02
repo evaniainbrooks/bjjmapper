@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   helper_method :action?
 
   def map
-    @center = params.fetch(:center, nil)
+    @center = params.fetch(:center, [])
   end
 
   def contact
