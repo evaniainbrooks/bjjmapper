@@ -5,6 +5,9 @@ class LocationDecorator < Draper::Decorator
 
   decorates :location
 
+  def description
+    object.description || h.content_tag(:i) { 'No description was provided' }
+  end
 
   def directions
     object.directions || h.content_tag(:i) { 'No extra directions were provided' }

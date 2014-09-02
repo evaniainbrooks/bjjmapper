@@ -7,9 +7,11 @@ class ApplicationController < ActionController::Base
   helper_method :signed_in?
   helper_method :correct_user?
 
-  def map
-  end
+  helper_method :action?
 
+  def map
+    @center = params.fetch(:center, nil)
+  end
 
   def contact
     name = params[:name]
@@ -30,6 +32,10 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def action?(action)
+    params.fetch(:action, :unknown).to_sym.eql?(action)
+  end
 
   def current_user
     begin

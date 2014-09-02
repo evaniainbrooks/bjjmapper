@@ -11,11 +11,11 @@
     / Collect the nav links, forms, and other content for toggling
     .main-navbar-collapse.collapse.navbar-collapse
       %ul.nav.navbar-nav
-        %li.active
+        %li{:class => action?(:map) ? 'active' : nil} 
           %a{:href => root_path, :data => { :'no-turbolink' => true }} Map
-        %li
+        %li{:class => action?(:index) ? 'active' : nil}
           %a{:href => locations_path} Academies
-        %li
+        %li{:class => action?(:meta) ? 'active' : nil}
           %a{:href => meta_path} About
       %form.navbar-form.navbar-left{:role => "search"}
         .form-group
