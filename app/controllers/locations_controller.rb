@@ -1,5 +1,6 @@
 class LocationsController < ApplicationController
   before_filter :set_location, only: :show
+  
   decorates_assigned :location
 
   def show
@@ -39,6 +40,8 @@ class LocationsController < ApplicationController
 
   def search
     searchables = viewport_query
+    render :no_content and return unless searchables.present?
+
     respond_to do |format|
       format.json { render json: searchables.decorate }
     end
@@ -58,8 +61,15 @@ class LocationsController < ApplicationController
 
   def viewport_query
     # TODO Distance value
-    center = params[:center]
+    center = params.fetch(:center, [])
+    team = params.fetch(:team, nil)
+   
+    return nil unless center.present?
+
+    # TODO Distance value
     locations = Location.near(center, 25).limit(50)
+    locations = locations.where(:team_id => team) if team.present?
+    locations
   end
 
   def create_params

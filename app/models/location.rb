@@ -39,9 +39,9 @@ class Location
   field :image
   field :website
   field :phone
-  belongs_to :team
-  belongs_to :user
-  belongs_to :head_instructor, class_name: 'User'
+  belongs_to :team, index: true
+  belongs_to :user, index: true
+  belongs_to :head_instructor, class_name: 'User', index: true
 
   def address
     [street, city, state, country, postal_code].compact.join(', ')
