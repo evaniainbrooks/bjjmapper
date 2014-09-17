@@ -40,7 +40,7 @@ class LocationsController < ApplicationController
 
   def search
     searchables = viewport_query
-    render :no_content and return unless searchables.present?
+    head :no_content and return unless searchables.present?
 
     respond_to do |format|
       format.json { render json: searchables.decorate }

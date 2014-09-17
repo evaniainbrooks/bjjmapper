@@ -26,11 +26,19 @@ describe LocationsController do
   end
   describe 'GET search' do
     context 'with json format' do
-      let(:location) { create(:location) }
-      it 'searches the viewport' do
-        pending
+      context 'with existing locations' do
+        let(:location) { create(:location, title: 'Wow super location') }
+        it 'returns the locations' do
+          get :search, { center: location.coordinates, format: 'json' }
+          response.body.should include(location.title)
+        end
       end
-
+      context 'with no locations' do
+        it 'returns no content' do
+          get :search, { center: [80.0, 80.0], format: 'json' }
+          response.status.should eq 204
+        end
+      end
       context 'with team filter' do
         let(:blue_team) { create(:team, name: 'Blue') }
         let(:red_team) { create(:team, name: 'Red') }
