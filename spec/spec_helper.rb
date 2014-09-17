@@ -32,8 +32,7 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
   config.before do
-    #Mongoid.purge!
-    
+    Mongoid.truncate!
     FactoryGirl.lint
   end
 end
