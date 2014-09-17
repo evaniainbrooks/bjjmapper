@@ -18,6 +18,7 @@
 //= require openid-jquery
 //= require openid-en
 //= require openid-init
+//= require ext
 //= require_tree .
 //= require_self
 

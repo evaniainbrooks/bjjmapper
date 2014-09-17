@@ -2,6 +2,25 @@
   "use strict";
   
   var SEATTLE =  new google.maps.LatLng(47.6097, 122.3331);
+  
+  function greatCircleDistance(map) {
+    var bounds = map.getBounds();
+    if ("undefined" === typeof bounds) {
+      return null;
+    }
+
+    var center = bounds.getCenter();
+    var ne = bounds.getNorthEast();
+    var r = 3963.0;  
+    var lat1 = center.lat().toRad();
+    var lon1 = center.lng().toRad();
+    var lat2 = ne.lat().toRad();
+    var lon2 = ne.lng().toRad();
+
+    // distance = circle radius from center to Northeast corner of bounds
+    return r * Math.acos(Math.sin(lat1) * Math.sin(lat2) + 
+      Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1));
+  }
 
   function mapDragEndListener(map, element, event) {
     mapSearchForCurrentView(map, element, mapDrawMarker);
@@ -59,11 +78,13 @@
 
     var center = map.getCenter();
     var url = $(element).data('search-path');
+    var distance = greatCircleDistance(map);
 
     $.ajax({
       url: url,
       data: {
         viewport: 1,
+        distance: distance, 
         center: [center.lat(), center.lng()]
       },
       method: 'GET',

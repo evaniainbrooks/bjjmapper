@@ -25,11 +25,17 @@ describe LocationsController do
     end
   end
   describe 'GET search' do
+    context 'with invalid params' do
+      it 'returns bad request' do
+        get :search, { format: 'json', center: 'ajdfigjfd' }
+        response.status should eq 400
+      end
+    end
     context 'with json format' do
       context 'with existing locations' do
         let(:location) { create(:location, title: 'Wow super location') }
         it 'returns the locations' do
-          get :search, { center: location.coordinates, format: 'json' }
+          get :search, { center: location.coordinates, distance: 10.0, format: 'json' }
           response.body.should include(location.title)
         end
       end
@@ -45,7 +51,7 @@ describe LocationsController do
         let(:red_location) { create(:location, team: red_team, title: 'Red location') }
         let(:blue_location) { create(:location, team: blue_team, title: 'Blue location', coordinates: red_location.coordinates) }
         it 'returns specific team locations' do
-          get :search, { center: blue_location.coordinates, team: blue_team.id, format: 'json' }
+          get :search, { center: blue_location.coordinates, distance: 10.0, team: blue_team.id, format: 'json' }
           response.body.should include(blue_location.title)
           response.body.should_not include(red_location.title)
         end

@@ -60,14 +60,13 @@ class LocationsController < ApplicationController
   private
 
   def viewport_query
-    # TODO Distance value
     center = params.fetch(:center, [])
     team = params.fetch(:team, nil)
-   
-    return nil unless center.present?
+    distance = params.fetch(:distance, 5.0)
 
-    # TODO Distance value
-    locations = Location.near(center, 25).limit(50)
+    return nil unless center.present? 
+
+    locations = Location.near(center, distance).limit(50)
     locations = locations.where(:team_id => team) if team.present?
     locations
   end
