@@ -3,15 +3,12 @@
   
   var SEATTLE =  new google.maps.LatLng(47.6097, 122.3331);
 
-  function mapDragEndListener(map, event) {
-    mapSearchForCurrentView(map, mapDrawMarker);
+  function mapDragEndListener(map, element, event) {
+    mapSearchForCurrentView(map, element, mapDrawMarker);
   }
 
-  function mapEditModeClickListener(map, event) {
-    var geocodeUrl = $('.map-canvas').data('geocode-path');
-   
-    //var marker = mapDrawMarker(map, {id: 0, coordinates: [event.latLng.lng(), event.latLng.lat()]}, 0);
-
+  function mapEditModeClickListener(map, element, event) {
+    var geocodeUrl = $(element).data('geocode-path');
     $.ajax({
       url: geocodeUrl,
       data: {
@@ -58,10 +55,10 @@
     createInfoWindow(map, newMapShowTemplate, marker);
   }
 
-  function mapSearchForCurrentView(map, locationCallback) {
+  function mapSearchForCurrentView(map, element, locationCallback) {
 
     var center = map.getCenter();
-    var url = $('.map-canvas').data('search-path');
+    var url = $(element).data('search-path');
 
     $.ajax({
       url: url,
@@ -99,24 +96,24 @@
     }
 
     if (options.geolocate) {
-      mapGeoLocate(map, options.center);
+      mapGeoLocate(map, element, options.center);
     } else {
-      mapSetLocation(map, options.center);
+      mapSetLocation(map, element, options.center);
     }
 
-    google.maps.event.addListener(map, 'click', function(event) { mapEditModeClickListener(map, event) }); 
-    google.maps.event.addListener(map, 'dragend', function(event) { mapDragEndListener(map, event) });
+    google.maps.event.addListener(map, 'click', function(event) { mapEditModeClickListener(map, element, event) }); 
+    google.maps.event.addListener(map, 'dragend', function(event) { mapDragEndListener(map, element, event) });
   
     return map;
   }
 
-  function mapGeoLocate(map, defaultLocation) {
+  function mapGeoLocate(map, element, defaultLocation) {
     if(navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
         var initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-        return mapSetLocation(map, initialLocation);
+        return mapSetLocation(map, element, initialLocation);
       }, function() {
-        return mapSetLocation(map, defaultLocation);
+        return mapSetLocation(map, element, defaultLocation);
       });
     }
   }
@@ -139,9 +136,9 @@
     return infoWindow;
   }
 
-  function mapSetLocation(map, initLoc) {
+  function mapSetLocation(map, element, initLoc) {
     map.setCenter(initLoc);
-    mapSearchForCurrentView(map, mapDrawMarker);
+    mapSearchForCurrentView(map, element, mapDrawMarker);
   }
 
   var defaults = { zoom: 12, center: SEATTLE, geolocate: true };
