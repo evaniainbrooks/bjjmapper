@@ -35,7 +35,7 @@
         %br/
         %small= "(#{location.coordinates[1]},#{location.coordinates[0]})"
     .col-md-5.text-center{:style => 'height: 300px'}
-      %div.map-canvas{:data => { :'geocode-path' => geocode_locations_path, :'create-path' => locations_path, :'search-path' => search_locations_path }} 
+      %div.map-canvas{:data => { :center => location.coordinates, :zoom => 15, :geolocate => false, :'geocode-path' => geocode_locations_path,  :'create-path' => locations_path, :'search-path' => search_locations_path }} 
       %big= link_to 'See on larger map', root_path(:center => location.coordinates), :data => { :'no-turbolink' => true }
   %hr/
   .row    
@@ -56,7 +56,3 @@
   .row
     .col-md-12
       %h3 Schedule
-
-  :javascript
-    var center = new google.maps.LatLng("#{location.coordinates[1]}", "#{location.coordinates[0]}");
-    $('.map-canvas').mapCreate({center: center, zoom: 15, geolocate: false});

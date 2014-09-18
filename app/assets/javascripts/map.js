@@ -89,9 +89,11 @@
       },
       method: 'GET',
       success: function(data) {
-        $.each(data, function(i, result) {
-          locationCallback(map, result, i);
-        });
+        if (typeof data !== "undefined") {
+          $.each(data, function(i, result) {
+            locationCallback(map, result, i);
+          });
+        }
       }
     });
   }
@@ -116,10 +118,11 @@
       map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(editControl[0]);
     }
 
+    var center = new google.maps.LatLng(options.center[1], options.center[0]); 
     if (options.geolocate) {
-      mapGeoLocate(map, element, options.center);
+      mapGeoLocate(map, element, center);
     } else {
-      mapSetLocation(map, element, options.center);
+      mapSetLocation(map, element, center);
     }
 
     google.maps.event.addListener(map, 'click', function(event) { mapEditModeClickListener(map, element, event) }); 
@@ -162,16 +165,24 @@
     mapSearchForCurrentView(map, element, mapDrawMarker);
   }
 
-  var defaults = { zoom: 12, center: SEATTLE, geolocate: true };
+  var defaults = { editable: false, zoom: 12, center: SEATTLE, geolocate: false };
 
-  $.fn.mapCreate = function(options) {
-    var settings = $.extend({}, defaults, options);
-    this.each(function(i, o) {
-      google.maps.event.addDomListener(window, 'load', function() {
-        mapInitialize(o, settings);
-      });
+  $(document).ready(function() {
+    $('div.map-canvas').each(function(i, o) {
+      var $o = $(o);
+      var options = {
+        geocodepath: $o.data('geocode-path'),
+        searchpath: $o.data('search-path'),
+        createpath: $o.data('create-path'),
+        geolocate: $o.data('geolocate'),
+        zoom: $o.data('zoom'),
+        center: $o.data('center'),
+        editable: $o.data('editable')
+      };
+
+      var settings = $.extend({}, defaults, options);
+      mapInitialize(o, settings);
     });
-  };
-
+  });
 }();
 

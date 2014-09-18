@@ -7,11 +7,4 @@
 = render partial: 'locations/show_template'
 = render partial: 'locations/create_modal'
 
-%div.map-canvas{:data => { :'geocode-path' => geocode_locations_path, :'create-path' => locations_path, :'search-path' => search_locations_path }} 
-- if @center.present?
-  :javascript
-    var center = new google.maps.LatLng(#{@center[1]}, #{@center[0]});
-    $('.map-canvas').mapCreate({zoom: 14, geolocate: false, center: center});
-- else
-  :javascript
-    $('.map-canvas').mapCreate({zoom: 12, geolocate: true});
+%div.map-canvas{:data => { :zoom => 12, :geolocate => 1, :'geocode-path' => geocode_locations_path, :'create-path' => locations_path, :'search-path' => search_locations_path }} 
