@@ -118,7 +118,7 @@
       map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(editControl[0]);
     }
 
-    var center = new google.maps.LatLng(options.center[1], options.center[0]); 
+    var center = new google.maps.LatLng(options.center[0], options.center[1]); 
     if (options.geolocate) {
       mapGeoLocate(map, element, center);
     } else {

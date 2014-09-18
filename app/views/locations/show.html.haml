@@ -33,10 +33,10 @@
         = "#{location.postal_code} #{location.country}"
         %br/
         %br/
-        %small= "(#{location.coordinates[1]},#{location.coordinates[0]})"
+        %small= location.to_coordinates
     .col-md-5.text-center{:style => 'height: 300px'}
-      %div.map-canvas{:data => { :center => location.coordinates, :zoom => 15, :geolocate => false, :'geocode-path' => geocode_locations_path,  :'create-path' => locations_path, :'search-path' => search_locations_path }} 
-      %big= link_to 'See on larger map', root_path(:center => location.coordinates), :data => { :'no-turbolink' => true }
+      %div.map-canvas{:data => { :center => location.to_coordinates, :zoom => 15, :geolocate => false, :'geocode-path' => geocode_locations_path,  :'create-path' => locations_path, :'search-path' => search_locations_path }} 
+      %big= link_to 'See on larger map', root_path(:center => location.to_coordinates), :data => { :'no-turbolink' => true }
   %hr/
   .row    
     .col-md-6
