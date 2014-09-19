@@ -18,5 +18,5 @@
       Browse by Team
       %span.small= "#{tlteams.size} teams"
     - Team.all.each do |t|
-      %h3= link_to t.name, locations_path(team: t.id)
+      %h3= link_to t.name, team_path(t)
 

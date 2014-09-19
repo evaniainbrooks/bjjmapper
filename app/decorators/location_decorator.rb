@@ -34,6 +34,10 @@ class LocationDecorator < Draper::Decorator
     object.team_name.present? ? "Team #{object.team_name}" : DEFAULT_TEAM_NAME
   end
 
+  def phone
+    h.number_to_phone(object.phone)
+  end
+
   def as_json args
     # Select which decorator methods override the defaults from object
     object.as_json(args).merge({
@@ -44,3 +48,4 @@ class LocationDecorator < Draper::Decorator
     })
   end
 end
+

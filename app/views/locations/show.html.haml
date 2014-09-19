@@ -8,7 +8,7 @@
       %h1{:style => 'margin-left: 10px;'}
         = location.title
         %br/
-        %small= location.team_name
+        %small= link_to location.team_name, team_path(location.team)
       %p= location.description
     .col-md-2
       %p 22 Checkins

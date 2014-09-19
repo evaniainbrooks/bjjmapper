@@ -30,7 +30,7 @@ class LocationsController < ApplicationController
   end
 
   def update
-    Location.find(params[:id]).tap do |location|
+    location = Location.find(params[:id]).tap do |location|
       location.update!(create_params)
     end
     respond_to do |format|
@@ -70,12 +70,12 @@ class LocationsController < ApplicationController
   private
 
   def edit_mode?
-    params.fetch(:edit_mode, 0).eql? 1
+    params.fetch(:edit_mode, 0).to_i.eql? 1
   end
 
   def create_params
     p = params.require(:location).permit(:title, :description, :coordinates, :team_id)
-    p[:coordinates] = JSON.parse(p[:coordinates])
+    p[:coordinates] = JSON.parse(p[:coordinates]) if p.has_key?(:coordinates)
     p
   end
   

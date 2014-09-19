@@ -1,0 +1,30 @@
+.container
+  .row
+    .col-md-12
+      = render partial: 'breadcrumb', locals: { team: team }
+  .row
+    .col-md-6
+      = image_tag team.image, class: 'pull-left'
+      %h1{:style => 'margin-left: 10px;'}
+        = team.name
+  .row
+    .col-md-12
+      %h2 Academies
+      %table.table.table-striped
+        %thead
+          %tr
+            %th Name
+            %th Head Instructor
+            %th Address
+            %th Phone Number
+        %tbody
+        - team.locations.each do |location|
+          %tr
+            %td
+              = link_to location.title, location_path(location)
+            %td
+              = location.instructors.try(:first).try(:name)
+            %td
+              = location.address
+            %td
+              = location.phone

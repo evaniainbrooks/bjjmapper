@@ -19,11 +19,20 @@ describe LocationsController do
   end
 
   describe 'POST update' do
-    it 'updates the location' do
-      subject { create(:location) }
-      let(:update_params) { { :location => { :title => 'New title', :description => 'New description' }}}
-      post :update, { id: subject.id, :format => 'json' }.merge(update_params)
-      response.body.should match update_params[:location][:description]
+    let(:update_params) { { :location => { :title => 'New title', :description => 'New description' }}}
+    context 'with json format' do
+      let(:location) { create(:location, description: 'xyz') }
+      it 'updates and returns the location' do
+        post :update, { id: location.id, :format => 'json' }.merge(update_params)
+        response.body.should match update_params[:location][:description]
+      end
+    end
+    context 'with html format' do
+      let(:location) { create(:location, description: 'xyz') }
+      it 'redirects to root' do
+        post :update, { id: location.id, :format => 'html' }.merge(update_params)
+        response.body.should match update_params[:location][:description]
+      end
     end
   end
 
@@ -60,7 +69,7 @@ describe LocationsController do
         let(:red_location) { create(:location, team: red_team, title: 'Red location') }
         let(:blue_location) { create(:location, team: blue_team, title: 'Blue location', coordinates: red_location.coordinates) }
         it 'returns specific team locations' do
-          get :search, { center: blue_location.coordinates, distance: 10.0, team: blue_team.id, format: 'json' }
+          get :search, { center: blue_location.coordinates, distance: 10.0, team: [blue_team.id], format: 'json' }
           response.body.should include(blue_location.title)
           response.body.should_not include(red_location.title)
         end
