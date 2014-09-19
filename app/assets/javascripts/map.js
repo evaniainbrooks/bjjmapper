@@ -2,7 +2,7 @@
   "use strict";
   
   var SEATTLE =  new google.maps.LatLng(47.6097, 122.3331);
-  
+
   function greatCircleDistance(map) {
     var bounds = map.getBounds();
     if ("undefined" === typeof bounds) {
@@ -60,18 +60,26 @@
        cursor: 'pointer',
        flat: false,
     });
+
+    map.markers.push(marker);
    
     var newMapShowTemplate = template('.show-location')[0];
     $('.title', newMapShowTemplate).text(result.title);
     $('.team-name', newMapShowTemplate).text(result.team_name);
-    if (result.description) {
-      $('.description', newMapShowTemplate).text(result.description);
-    }
+    $('.description', newMapShowTemplate).text(result.description);
     $('.coords', newMapShowTemplate).text(result.coordinates);
     $('a.more', newMapShowTemplate).attr('href', Routes.location_path(result.id));
     $('.updated-at', newMapShowTemplate).text(result.updated_at)
 
     createInfoWindow(map, newMapShowTemplate, marker);
+  }
+
+  function mapClearMarkers(map) {
+    for (var i = 0; i < map.markers.length; ++i) {
+      map.markers[i].setMap(null);
+    }
+
+    map.markers = [];
   }
 
   function mapSearchForCurrentView(map, element, locationCallback) {
@@ -83,12 +91,14 @@
     $.ajax({
       url: url,
       data: {
+        team: map.teamFilter,
         viewport: 1,
         distance: distance, 
         center: [center.lat(), center.lng()]
       },
       method: 'GET',
       success: function(data) {
+        mapClearMarkers(map);
         if (typeof data !== "undefined") {
           $.each(data, function(i, result) {
             locationCallback(map, result, i);
@@ -98,14 +108,7 @@
     });
   }
 
-  function mapInitialize(element, options) {
-    var mapOptions = {
-      zoom: options.zoom,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    
-    var map = new google.maps.Map(element, mapOptions);
-    
+  function createControls(map, element, options) {
     var editControl = template('.map-edit-control');
     if (editControl.length > 0) {
       google.maps.event.addDomListener(editControl[0], 'click', function() {
@@ -122,7 +125,29 @@
     if (teamList.length > 0) {
       teamList.index = 1;
       map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(teamList[0]);
+      $('body').delegate('input[data-team-id]', 'change', function(e) {
+        
+        // TODO: Why can't use map here?
+        map.teamFilter = [];
+        $('input[data-team-id]:checked').each(function(i, o) {
+          map.teamFilter.push($(o).data('team-id'));
+        });
+
+        mapSearchForCurrentView(map, element, mapDrawMarker); 
+      });
     }
+  }
+
+  function mapInitialize(element, options) {
+    var mapOptions = {
+      zoom: options.zoom,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    
+    var map = new google.maps.Map(element, mapOptions);
+    map.markers = [];
+    createControls(map, element);
+
 
     var center = new google.maps.LatLng(options.center[0], options.center[1]); 
     if (options.geolocate) {

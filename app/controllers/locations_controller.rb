@@ -46,7 +46,7 @@ class LocationsController < ApplicationController
     head :bad_request and return unless center.is_a?(Array) && center.present? 
 
     locations = Location.near(center, distance).limit(50)
-    locations = locations.where(:team_id => team) if team.present?
+    locations = locations.where(:team_id => { '$in' => team }) if team.present?
     locations
 
     head :no_content and return unless locations.present?

@@ -4,5 +4,5 @@
     - teams.each do |team|
       %li
         %label
-          %input{:type => 'checkbox'}<
+          %input{:data => {:'team-id' => team.id}, :type => 'checkbox'}<
           = team.name
