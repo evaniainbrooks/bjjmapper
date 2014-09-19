@@ -1,4 +1,4 @@
-.show-location.template
+.show-location.template{:data => {:oncreate => 'fillShowLocation'}}
   .container-fluid{:style => 'min-width: 400px'}
     .row
       .col-md-3.pull-left.text-center
@@ -10,6 +10,9 @@
           %br/
           %small.team-name
         .description
+    .row
+      .col-md-12
+        %span.address
     .row
       .col-md-5
         .small.coords{:style => 'top: 10px;'}

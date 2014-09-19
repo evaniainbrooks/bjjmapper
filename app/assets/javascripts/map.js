@@ -63,15 +63,8 @@
 
     map.markers.push(marker);
    
-    var newMapShowTemplate = template('.show-location')[0];
-    $('.title', newMapShowTemplate).text(result.title);
-    $('.team-name', newMapShowTemplate).text(result.team_name);
-    $('.description', newMapShowTemplate).text(result.description);
-    $('.coords', newMapShowTemplate).text(result.coordinates);
-    $('a.more', newMapShowTemplate).attr('href', Routes.location_path(result.id));
-    $('.updated-at', newMapShowTemplate).text(result.updated_at)
-
-    createInfoWindow(map, newMapShowTemplate, marker);
+    var newMapShowTemplate = Template.create('show-location', result);
+    createInfoWindow(map, newMapShowTemplate[0], marker);
   }
 
   function mapClearMarkers(map) {
@@ -109,7 +102,7 @@
   }
 
   function createControls(map, element, options) {
-    var editControl = template('.map-edit-control');
+    var editControl = Template.create('map-edit-control');
     if (editControl.length > 0) {
       google.maps.event.addDomListener(editControl[0], 'click', function() {
         if (!window.userIsAuthenticated()) {
@@ -121,7 +114,7 @@
       map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(editControl[0]);
     }
 
-    var teamList = template('.map-team-list');
+    var teamList = Template.create('map-team-list');
     if (teamList.length > 0) {
       teamList.index = 1;
       map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(teamList[0]);

@@ -19,6 +19,7 @@
 //= require openid-en
 //= require openid-init
 //= require ext
+//= require template
 //= require_tree .
 //= require_self
 
