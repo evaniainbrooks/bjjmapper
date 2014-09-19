@@ -6,7 +6,7 @@ class LocationDecorator < Draper::Decorator
 
   delegate_all
   decorates_finders
-  decorates_association :head_instructor
+  decorates_association :instructors
 
   decorates :location
 

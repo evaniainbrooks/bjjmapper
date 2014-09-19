@@ -1,11 +1,10 @@
-.container
+.container{:class => edit_mode? ? 'edit-mode' : nil}
   .row
     .col-md-12
       = render partial: 'breadcrumb', locals: { location: location }
   .row
-    .col-md-1
-      = image_tag location.image 
     .col-md-6
+      = image_tag location.image, class: 'pull-left' 
       %h1{:style => 'margin-left: 10px;'}
         = location.title
         %br/
@@ -40,15 +39,7 @@
   %hr/
   .row    
     .col-md-6
-      %h3 Head Instructors
-  .row
-    .col-md-1
-      = image_tag location.head_instructor.image
-    .col-md-5
-      %p{:style => 'margin-left: 15px;'}
-        %span= location.head_instructor.name
-        %br/
-        %span= location.head_instructor.rank_in_words
+      = render :partial => 'users/instructors', :locals => { :location => location }
   .row
     .col-md-12
       %h3 Contact

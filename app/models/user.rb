@@ -18,7 +18,7 @@ class User
   after_validation :geocode
 
   belongs_to :team
-  belongs_to :instructor, class_name: 'User'
+  has_and_belongs_to_many :locations
 
   def self.create_with_omniauth(auth, ip_address)
     create! do |user|

@@ -41,7 +41,7 @@ class Location
   field :phone
   belongs_to :team, index: true
   belongs_to :user, index: true
-  belongs_to :head_instructor, class_name: 'User', index: true
+  has_and_belongs_to_many :instructors, class_name: 'User', index: true
 
   def address
     [street, city, state, country, postal_code].compact.join(', ')

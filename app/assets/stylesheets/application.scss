@@ -40,6 +40,11 @@ html, body {
   padding: 2px 5px;
   background-color: rgba(255,255,255,0.5);
   border: 1px solid gray;
+  overflow: hidden;
+  ul {
+    max-height: 200px;
+    overflow-y: scroll;
+  }
 }
 
 .map-edit-control {

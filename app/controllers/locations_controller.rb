@@ -1,6 +1,7 @@
 class LocationsController < ApplicationController
   before_filter :set_location, only: :show
-  
+  helper_method :edit_mode?
+
   decorates_assigned :location
 
   def show
@@ -67,6 +68,10 @@ class LocationsController < ApplicationController
   end
 
   private
+
+  def edit_mode?
+    params.fetch(:edit_mode, 0).eql? 1
+  end
 
   def create_params
     p = params.require(:location).permit(:title, :description, :coordinates, :team_id)

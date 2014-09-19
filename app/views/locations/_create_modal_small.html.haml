@@ -1,0 +1,30 @@
+.new-location-modal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+        %h4 Tell us about your academy
+        %p.small You can continue editing your academy and add additional details on the following page.
+      .modal-body
+        = form_for(Location.new, html: { class: 'form-horizontal' } ) do |f|
+          %fieldset
+            / Text input
+            .form-group
+              %label.col-md-6.control-label{:for => "location[title]"} Name
+              .col-md-6
+                = f.text_field :title, placeholder: 'The name of your academy', class: 'form-control input-md'
+            / Select Basic
+            .form-group
+              %label.col-md-6.control-label{:for => "location[team]"} Team
+              .col-md-6
+                = f.select :team_id, Team.all.map { |team| [team.name, team.id] }, {}, class: 'form-control  input-md'
+            / Textarea
+            .form-group
+              %label.col-md-6.control-label{:for => "location[description]"} Description
+              .col-md-6
+                = f.text_area :description, placeholder: 'A brief description of your academy', class: 'form-control'
+            = f.hidden_field :coordinates, class: 'coordinates form-control'
+            .pull-right
+              %button.btn.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Cancel
+              %button.btn.btn-primary{:type => "submit"} Continue
+              
