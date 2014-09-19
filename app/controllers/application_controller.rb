@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
   helper_method :action?
 
   def map
+    @teams = Team.all.sort_by(&:name)
     @center = params.fetch(:center, [])
   end
 

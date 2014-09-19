@@ -1,0 +1,8 @@
+.map-team-list.template
+  %h5 Filter by Team
+  %ul.list-unstyled
+    - teams.each do |team|
+      %li
+        %label
+          %input{:type => 'checkbox'}<
+          = team.name

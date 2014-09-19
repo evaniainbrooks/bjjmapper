@@ -1,10 +1,9 @@
-
-/ Map Overlay Button Template
 .map-edit-control.template 
   %button.btn.btn-success.btn-md.enable-edit-mode
     Add an academy!
 
 = render partial: 'locations/show_template'
 = render partial: 'locations/create_modal'
+= render partial: 'teams/list_template', locals: { teams: @teams }
 
 %div.map-canvas{:data => { :zoom => @center.present? ? 15 : 12, :center => @center, :geolocate => @center.present? ? 0 : 1, :'geocode-path' => geocode_locations_path, :'create-path' => locations_path, :'search-path' => search_locations_path }} 

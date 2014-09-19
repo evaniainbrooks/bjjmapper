@@ -118,6 +118,12 @@
       map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(editControl[0]);
     }
 
+    var teamList = template('.map-team-list');
+    if (teamList.length > 0) {
+      teamList.index = 1;
+      map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(teamList[0]);
+    }
+
     var center = new google.maps.LatLng(options.center[0], options.center[1]); 
     if (options.geolocate) {
       mapGeoLocate(map, element, center);
