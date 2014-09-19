@@ -18,6 +18,15 @@ describe LocationsController do
     end
   end
 
+  describe 'POST update' do
+    it 'updates the location' do
+      subject { create(:location) }
+      let(:update_params) { { :location => { :title => 'New title', :description => 'New description' }}}
+      post :update, { id: subject.id, :format => 'json' }.merge(update_params)
+      response.body.should match update_params[:location][:description]
+    end
+  end
+
   describe 'GET index' do
     it 'renders the directory' do
       get :index
@@ -28,7 +37,7 @@ describe LocationsController do
     context 'with invalid params' do
       it 'returns bad request' do
         get :search, { format: 'json', center: 'ajdfigjfd' }
-        response.status should eq 400
+        response.status.should eq 400
       end
     end
     context 'with json format' do

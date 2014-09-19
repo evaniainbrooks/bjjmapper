@@ -1,4 +1,9 @@
 class LocationDecorator < Draper::Decorator
+  DEFAULT_DESCRIPTION = 'No description was provided'
+  DEFAULT_DIRECTIONS = 'No extra directions were provided'
+  DEFAULT_IMAGE = 'academy-default-100.jpg'
+  DEFAULT_TEAM_NAME = 'Independent'
+
   delegate_all
   decorates_finders
   decorates_association :head_instructor
@@ -6,15 +11,15 @@ class LocationDecorator < Draper::Decorator
   decorates :location
 
   def description
-    object.description || h.content_tag(:i) { 'No description was provided' }
+    object.description.present? ? object.description : h.content_tag(:i) { DEFAULT_DESCRIPTION }
   end
 
   def directions
-    object.directions || h.content_tag(:i) { 'No extra directions were provided' }
+    object.directions.present? ? object.directions :  h.content_tag(:i) { DEFAULT_DIRECTIONS }
   end
 
   def image
-    object.image || 'academy-default-100.jpg'
+    object.image.present? ? object.image : DEFAULT_IMAGE
   end
 
   def updated_at
@@ -26,7 +31,7 @@ class LocationDecorator < Draper::Decorator
   end
 
   def team_name
-    object.team_name.present? ? "Team #{object.team_name}" : "Independent"
+    object.team_name.present? ? "Team #{object.team_name}" : DEFAULT_TEAM_NAME
   end
 
   def as_json args

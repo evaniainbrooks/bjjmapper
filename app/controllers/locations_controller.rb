@@ -39,11 +39,20 @@ class LocationsController < ApplicationController
   end
 
   def search
-    searchables = viewport_query
-    head :no_content and return unless searchables.present?
+    center = params.fetch(:center, nil)
+    team = params.fetch(:team, nil)
+    distance = params.fetch(:distance, 5.0)
+
+    head :bad_request and return unless center.is_a?(Array) && center.present? 
+
+    locations = Location.near(center, distance).limit(50)
+    locations = locations.where(:team_id => team) if team.present?
+    locations
+
+    head :no_content and return unless locations.present?
 
     respond_to do |format|
-      format.json { render json: searchables.decorate }
+      format.json { render json: locations.decorate }
     end
   end
 
@@ -58,18 +67,6 @@ class LocationsController < ApplicationController
   end
 
   private
-
-  def viewport_query
-    center = params.fetch(:center, [])
-    team = params.fetch(:team, nil)
-    distance = params.fetch(:distance, 5.0)
-
-    return nil unless center.present? 
-
-    locations = Location.near(center, distance).limit(50)
-    locations = locations.where(:team_id => team) if team.present?
-    locations
-  end
 
   def create_params
     p = params.require(:location).permit(:title, :description, :coordinates, :team_id)
