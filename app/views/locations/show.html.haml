@@ -12,6 +12,8 @@
       .edit-field
         = f.label :title
         = f.text_field :title, class: 'form-control'
+        = f.label :team_id, 'Team'
+        = f.select :team_id, Team.all.map { |team| [team.name, team.id] }, {}, class: 'form-control  input-md'
         = f.label :description
         = f.text_area :description, placeholder: 'Provide a description of the academy', class: 'form-control', rows: 4
       %p.display-field= location.description
@@ -57,6 +59,7 @@
   .row    
     .col-md-6
       = render :partial => 'users/instructors', :locals => { :location => location }
+      /.edit-field= link_to 'Add Instructor', root_path
   .row
     .col-md-6
       %h3 Contact
@@ -66,13 +69,14 @@
         = f.label :email
         = f.text_field :email, class: 'form-control'
       %span.display-field= location.phone
+      %span.display-field= location.email
   .row
     .col-md-12
       %h3 Schedule
 
   .row
     .col-md-12
-      .pull-right
+      .pull-right.edit-field
         %button.btn.btn-default.btn-md{:type => 'button'} Cancel Editing
         %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes 
 
