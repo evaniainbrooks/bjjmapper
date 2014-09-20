@@ -1,21 +1,17 @@
 .show-location.template
-  .container-fluid{:style => 'min-width: 400px'}
+  .container-fluid
     .row
-      .col-md-3.pull-left.text-center
-        = image_tag 'academy-default-100.jpg', class: 'pull-left'
+      .col-md-3.text-center
+        %br/
+        = image_tag 'academy-default-100.jpg', class: 'center-block'
         %i.pull-left.updated-at.small
-      .col-md-9.pull-left
+      .col-md-9
         %h3
           %span.title
           %br/
           %small.team-name
-        .description
-    .row
-      .col-md-12
         %span.address
     .row
-      .col-md-5
-        .small.coords{:style => 'top: 10px;'}
-      .col-md-2.col-md-offset-5
-        %p
+      .col-md-12
+        %p.pull-right
           %a.more.btn.btn-primary.btn-sm{:data => {:'no-turbolink' => true}} See more »

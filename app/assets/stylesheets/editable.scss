@@ -1,0 +1,17 @@
+.editable {
+  &.edit-mode {
+    .edit-field { 
+      display: inherit;
+    }
+    .display-field {
+      display: none;
+    }
+  }
+
+  .display-field {
+    display: inherit;
+  }
+  .edit-field {
+    display: none;
+  }
+}

@@ -15,7 +15,7 @@ class LocationsController < ApplicationController
     location = Location.create(create_params)
     respond_to do |format|
       format.json { render json: location }
-      format.html { redirect_to location }
+      format.html { redirect_to location_path(location, edit: 1) }
     end
   end
 
@@ -35,7 +35,7 @@ class LocationsController < ApplicationController
     end
     respond_to do |format|
       format.json { render json: location }
-      format.html { redirect_to root_path }
+      format.html { redirect_to location_path(location, edit: 0) }
     end
   end
 
@@ -70,11 +70,11 @@ class LocationsController < ApplicationController
   private
 
   def edit_mode?
-    params.fetch(:edit_mode, 0).to_i.eql? 1
+    params.fetch(:edit, 0).to_i.eql? 1
   end
 
   def create_params
-    p = params.require(:location).permit(:title, :description, :coordinates, :team_id)
+    p = params.require(:location).permit(:title, :description, :coordinates, :team_id, :directions, :phone, :email)
     p[:coordinates] = JSON.parse(p[:coordinates]) if p.has_key?(:coordinates)
     p
   end

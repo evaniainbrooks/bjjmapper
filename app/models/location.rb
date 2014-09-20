@@ -39,6 +39,7 @@ class Location
   field :image
   field :website
   field :phone
+  field :email
   belongs_to :team, index: true
   belongs_to :user, index: true
   has_and_belongs_to_many :instructors, class_name: 'User', index: true
@@ -55,7 +56,8 @@ class Location
     # Hack around mongo ugly ids
     result = super(args.merge(except: [:_id, :team_id])).merge({
       :id => self.id.to_s,
-      :team_name => team_name
+      :team_name => team_name,
+      :address => address
     })
   end
 end

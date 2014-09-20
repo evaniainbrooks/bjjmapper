@@ -1,15 +1,20 @@
-.container{:class => edit_mode? ? 'edit-mode' : nil}
+= form_for(location, html: { class: 'form editable container ' + (edit_mode? ? 'edit-mode' : '')}) do |f|
   .row
     .col-md-12
       = render partial: 'breadcrumb', locals: { location: location }
   .row
-    .col-md-6
-      = image_tag location.image, class: 'pull-left' 
-      %h1{:style => 'margin-left: 10px;'}
+    .col-md-2
+      = image_tag location.image, class: 'center-block' 
+    .col-md-4
+      %h1.display-field
         = location.title
-        %br/
         %small= link_to location.team_name, team_path(location.team)
-      %p= location.description
+      .edit-field
+        = f.label :title
+        = f.text_field :title, class: 'form-control'
+        = f.label :description
+        = f.text_area :description, placeholder: 'Provide a description of the academy', class: 'form-control', rows: 4
+      %p.display-field= location.description
     .col-md-2
       %p 22 Checkins
       %p 7 Reviews
@@ -22,9 +27,10 @@
       %a{:name => 'location'}
   .row
     .col-md-4
-      %p= location.directions
-    .col-md-2.col-md-offset-1
-      %address
+      = f.text_area :directions, placeholder: 'Provide any extra directions to the academy (eg. signage missing; go around the back)', class: 'edit-field form-control', rows: 6 
+      %p.display-field= location.directions
+    .col-md-3
+      %address.display-field
         = location.street
         %br/
         = "#{location.city}, #{location.state}"
@@ -33,6 +39,17 @@
         %br/
         %br/
         %small= location.to_coordinates
+      .form-group.edit-field
+        = f.label :street
+        = f.text_field :street, class: 'form-control'
+        = f.label :city
+        = f.text_field :city, class: 'form-control'
+        = f.label :state
+        = f.text_field :state, class: 'form-control'
+        = f.label :country
+        = f.text_field :country, class: 'form-control'
+        = f.label :postal_code
+        = f.text_field :postal_code, class: 'form-control'
     .col-md-5.text-center{:style => 'height: 300px'}
       %div.map-canvas{:data => { :center => location.to_coordinates, :zoom => 15, :geolocate => false, :'geocode-path' => geocode_locations_path,  :'create-path' => locations_path, :'search-path' => search_locations_path }} 
       %big= link_to 'See on larger map', root_path(:center => location.to_coordinates), :data => { :'no-turbolink' => true }
@@ -41,9 +58,22 @@
     .col-md-6
       = render :partial => 'users/instructors', :locals => { :location => location }
   .row
-    .col-md-12
+    .col-md-6
       %h3 Contact
-
+      .edit-field
+        = f.label :phone
+        = f.text_field :phone, class: 'form-control'
+        = f.label :email
+        = f.text_field :email, class: 'form-control'
+      %span.display-field= location.phone
   .row
     .col-md-12
       %h3 Schedule
+
+  .row
+    .col-md-12
+      .pull-right
+        %button.btn.btn-default.btn-md{:type => 'button'} Cancel Editing
+        %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes 
+
+  %br/

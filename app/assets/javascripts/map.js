@@ -1,33 +1,29 @@
 +function() {
   "use strict";
-  
+
   var SEATTLE =  new google.maps.LatLng(47.6097, 122.3331);
 
-  function greatCircleDistance(map) {
-    var bounds = map.getBounds();
-    if ("undefined" === typeof bounds) {
-      return null;
-    }
-
-    var center = bounds.getCenter();
-    var ne = bounds.getNorthEast();
+  function greatCircleDistance(p0, p1) {
+    var center = p0;
+    var ne = p1;
     var r = 3963.0;  
     var lat1 = center.lat().toRad();
     var lon1 = center.lng().toRad();
     var lat2 = ne.lat().toRad();
     var lon2 = ne.lng().toRad();
 
-    // distance = circle radius from center to Northeast corner of bounds
     return r * Math.acos(Math.sin(lat1) * Math.sin(lat2) + 
       Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1));
   }
 
-  function mapDragEndListener(map, element, event) {
-    mapSearchForCurrentView(map, element, mapDrawMarker);
+  function isInsideCircle(p0, r0, p1, r1) {
+    var distance = greatCircleDistance(p0, p1);
+    return distance <= Math.abs(r1 - r0);
   }
 
   function mapEditModeClickListener(map, element, event) {
-    var geocodeUrl = $(element).data('geocode-path');
+    
+    /*var geocodeUrl = $(element).data('geocode-path');
     $.ajax({
       url: geocodeUrl,
       data: {
@@ -46,8 +42,12 @@
         $('.street', '.new-location-modal').val(data.street);
         $('.coordinates', '.new-location-modal').val(JSON.stringify([event.latLng.lng(), event.latLng.lat()]));
       }
-    });
+    });*/
+    if (typeof map.lastInfoWindow !== "undefined" ) {
+      map.lastInfoWindow.close();
+    }
 
+    $('.coordinates', '.new-location-modal').val(JSON.stringify([event.latLng.lng(), event.latLng.lat()]));
     $('.new-location-modal').modal('show');
   }
 
@@ -75,11 +75,18 @@
     map.markers = [];
   }
 
-  function mapSearchForCurrentView(map, element, locationCallback) {
+  function mapPopulateView(map, element, locationCallback, forceSearch) {
 
     var center = map.getCenter();
     var url = $(element).data('search-path');
-    var distance = greatCircleDistance(map);
+    var distance;
+    if ("undefined" !== typeof map.getBounds()) {
+      distance = greatCircleDistance(map.getBounds().getCenter(), map.getBounds().getNorthEast());
+    }
+
+    if (true !== forceSearch && "undefined" !== typeof map.lastCenter && isInsideCircle(map.lastCenter, map.lastDistance, center, distance)) {
+      return;
+    }
 
     $.ajax({
       url: url,
@@ -91,6 +98,9 @@
       },
       method: 'GET',
       success: function(data) {
+        map.lastCenter = center;
+        map.lastDistance = distance;
+
         mapClearMarkers(map);
         if (typeof data !== "undefined") {
           $.each(data, function(i, result) {
@@ -126,7 +136,7 @@
           map.teamFilter.push($(o).data('team-id'));
         });
 
-        mapSearchForCurrentView(map, element, mapDrawMarker); 
+        mapPopulateView(map, element, mapDrawMarker, true); 
       });
     }
   }
@@ -150,7 +160,7 @@
     }
 
     google.maps.event.addListener(map, 'click', function(event) { mapEditModeClickListener(map, element, event) }); 
-    google.maps.event.addListener(map, 'dragend', function(event) { mapDragEndListener(map, element, event) });
+    google.maps.event.addListener(map, 'idle', function(event) { mapPopulateView(map, element, mapDrawMarker); });
   
     return map;
   }
@@ -179,14 +189,19 @@
     var infoWindow = new google.maps.InfoWindow();
     infoWindow.setContent(contentString);
     google.maps.event.addListener(marker, 'click', function() {
+      //if (typeof map.lastInfoWindow !== "undefined") {
+      //  map.lastInfoWindow.close();
+      //}
+
       infoWindow.open(map, marker);
+      //map.lastInfoWindow = infoWindow;
     });
     return infoWindow;
   }
 
   function mapSetLocation(map, element, initLoc) {
     map.setCenter(initLoc);
-    mapSearchForCurrentView(map, element, mapDrawMarker);
+    mapPopulateView(map, element, mapDrawMarker);
   }
 
   var defaults = { editable: false, zoom: 12, center: SEATTLE, geolocate: false };

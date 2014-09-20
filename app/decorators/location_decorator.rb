@@ -19,7 +19,7 @@ class LocationDecorator < Draper::Decorator
   end
 
   def image
-    object.image.present? ? object.image : DEFAULT_IMAGE
+    (object.image.present? ? object.image : DEFAULT_IMAGE)
   end
 
   def updated_at
