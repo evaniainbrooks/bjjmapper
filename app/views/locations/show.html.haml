@@ -8,10 +8,11 @@
     .col-md-4
       %h1.display-field
         = location.title
+        %br/
         %small= link_to location.team_name, team_path(location.team)
       .edit-field
         = f.label :title
-        = f.text_field :title, class: 'form-control'
+        = f.text_field :title, class: 'form-control input-lg'
         = f.label :team_id, 'Team'
         = f.select :team_id, Team.all.map { |team| [team.name, team.id] }, {}, class: 'form-control  input-md'
         = f.label :description

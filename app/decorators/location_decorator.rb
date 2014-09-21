@@ -7,6 +7,7 @@ class LocationDecorator < Draper::Decorator
   delegate_all
   decorates_finders
   decorates_association :instructors
+  decorates_association :team
 
   decorates :location
 
@@ -19,7 +20,10 @@ class LocationDecorator < Draper::Decorator
   end
 
   def image
-    (object.image.present? ? object.image : DEFAULT_IMAGE)
+    img = object.image
+    img = team.object.image if img.blank? && team.present?
+    img = DEFAULT_IMAGE if img.blank?
+    h.path_to_asset(img, {type: :image})
   end
 
   def updated_at

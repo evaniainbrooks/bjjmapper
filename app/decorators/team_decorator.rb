@@ -6,4 +6,8 @@ class TeamDecorator < Draper::Decorator
   def name
     "Team #{object.name}"
   end
+
+  def image
+    h.path_to_asset(object.image, {type: :image})
+  end
 end
