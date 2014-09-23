@@ -12,6 +12,14 @@ class ApplicationController < ActionController::Base
   def map
     @teams = Team.all.sort_by(&:name)
     @center = params.fetch(:center, [])
+    @map = {
+      :zoom => (@center.present? ? 15 : 12),
+      :center => @center,
+      :geolocate => @center.present? ? 0 : 1,
+      :geocodepath => geocode_locations_path,
+      :createpath => locations_path,
+      :searchpath => search_locations_path
+    }
   end
 
   def contact

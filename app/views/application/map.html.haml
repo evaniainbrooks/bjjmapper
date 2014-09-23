@@ -6,4 +6,11 @@
 = render partial: 'locations/create_modal_small'
 = render partial: 'teams/list_template', locals: { teams: @teams }
 
-%div.map-canvas{:data => { :zoom => @center.present? ? 15 : 12, :center => @center, :geolocate => @center.present? ? 0 : 1, :'geocode-path' => geocode_locations_path, :'create-path' => locations_path, :'search-path' => search_locations_path }} 
+%div.map-canvas
+
+- content_for :scripts do
+  :javascript
+    $(document).ready(function() {
+      var mapModel = new RollFindr.Models.Map(#{@map.to_json});
+      var mapView = new RollFindr.Views.MapView({model: mapModel, el: $('.map-canvas')});
+    });
