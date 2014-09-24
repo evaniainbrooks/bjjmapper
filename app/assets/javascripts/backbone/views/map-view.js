@@ -1,6 +1,19 @@
 +function($) {
   "use strict";
 
+  var circleDistance = function(p0, p1) {
+    var center = p0;
+    var ne = p1;
+    var r = 3963.0;  
+    var lat1 = center.lat().toRad();
+    var lon1 = center.lng().toRad();
+    var lat2 = ne.lat().toRad();
+    var lon2 = ne.lng().toRad();
+    
+    return r * Math.acos(Math.sin(lat1) * Math.sin(lat2) + 
+        Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1));
+  }
+
   RollFindr.Views.MapView = Backbone.View.extend({
     tagName: 'div',
     map: null,
@@ -57,8 +70,11 @@
       var center = this.model.get('center');
       center[0] = this.map.getCenter().lat();
       center[1] = this.map.getCenter().lng();
+
+      var distance = circleDistance(this.map.getCenter(), this.map.getBounds().getNorthEast());
+
       this.model.set('center', center);
-      this.locations.fetch({remove: false, data: {center: center}});
+      this.locations.fetch({remove: false, data: {center: center, distance: distance}});
     }
   });
     
