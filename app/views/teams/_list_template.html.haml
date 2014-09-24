@@ -1,8 +1,0 @@
-.map-team-list.template
-  %h5 Filter by Team
-  %ul.list-unstyled
-    - teams.each do |team|
-      %li
-        %label
-          %input{:data => {:'team-id' => team.id}, :type => 'checkbox'}<
-          = team.name

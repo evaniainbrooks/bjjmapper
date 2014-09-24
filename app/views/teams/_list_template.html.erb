@@ -1,0 +1,16 @@
+<script type="text/template" class="team-list-template">
+  <div class="team-list">
+    <h5>Filter by Team</h5>
+    <ul class="list-unstyled">
+      <%% _.each(teams, function(team) { %>
+        <li>
+          <label>
+            <input data-team-id="<%%= team.id %>" type="checkbox" />
+            <%%= team.name %>
+          </label>
+        </li>
+      <%% }); %>
+      <li></li>
+    </ul>
+  </div>
+</script>

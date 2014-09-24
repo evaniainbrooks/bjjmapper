@@ -10,16 +10,17 @@ class ApplicationController < ActionController::Base
   helper_method :action?
 
   def map
-    @teams = Team.all.sort_by(&:name)
-    @center = params.fetch(:center, [])
+    center = params.fetch(:center, [])
     @map = {
-      :zoom => (@center.present? ? 15 : 12),
-      :center => @center,
-      :geolocate => @center.present? ? 0 : 1,
-      :geocodepath => geocode_locations_path,
-      :createpath => locations_path,
-      :searchpath => search_locations_path
+      :zoom => center.present? ? Map::ZOOM_LOCATION : Map::ZOOM_DEFAULT,
+      :center => center,
+      :geolocate => center.blank? ? 1 : 0,
+      :locations => []
     }
+
+    respond_to do |format|
+      format.html
+    end
   end
 
   def contact

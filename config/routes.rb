@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   resources :users, :only => [:show, :edit, :update]
-  resources :teams, :only => [:show]
+  resources :teams, :only => [:show, :index]
   root 'application#map'
 
   # TEMPORARY PODIUM WEBSTORE TEST REMOVE

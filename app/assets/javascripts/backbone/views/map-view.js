@@ -4,8 +4,10 @@
   RollFindr.Views.MapView = Backbone.View.extend({
     tagName: 'div',
     map: null,
+    teamListFilterView: null,
     initialize: function() {
       _.bindAll(this, 'createLocation');
+
       this.activate();
     },
     activate: function() {
@@ -31,6 +33,19 @@
       }
 
       google.maps.event.addListener(this.map, 'click', this.createLocation);
+      this.teamListFilterView = new RollFindr.Views.TeamListView();
+      this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(this.teamListFilterView.el);
+      /*    $('body').delegate('input[data-team-id]', 'change', function(e) {
+           map.teamFilter = [];
+           $('input[data-team-id]:checked').each(function(i, o) {
+             map.teamFilter.push($(o).data('team-id'));
+            });
+          mapPopulateView(map, element, mapDrawMarker, true); 
+       });
+     }
+
+    */
+
     },
     events: {
       //'click': 'createLocation'
