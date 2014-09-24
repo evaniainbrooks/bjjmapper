@@ -6,6 +6,7 @@
         %h4 Sign-in or Create New Account
       .modal-body
         %form#openid_form{:action => signin_path, :method => "POST"}
+          %input{:name => "authenticity_token",  :type => "hidden", :value => "#{form_authenticity_token}"}/
           %input{:name => "action", :type => "hidden", :value => "verify"}/
           %fieldset
             #openid_choice
@@ -22,6 +23,3 @@
                 and
                 = succeed "." do
                   %a{:href => "http://openid.net/get/"} how to get an OpenID enabled account
-      .modal-footer
-        %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Close
-        %button.btn.btn-primary{:type => "button"} Save changes

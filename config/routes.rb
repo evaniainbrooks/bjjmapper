@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   get '/webstore' => 'application#webstore'
 
   get 'search/:query' => 'application#search'
-  match '/signin' => 'sessions#new', :as => :signin, :via => [:get]
+  match '/signin' => 'sessions#new', :as => :signin, :via => [:post, :get]
   match '/auth/:provider/callback' => 'sessions#create', :via => [:post, :get]
   match '/auth/failure' => 'sessions#failure', :via => [:post, :get]
   match '/signout' => 'sessions#destroy', :as => :signout, :via => [:post, :get, :delete]
