@@ -1,9 +1,14 @@
 +function($) {
   "use strict";
   RollFindr.Views.LocationMapView = Backbone.View.extend({
-    template: _.template( $('.show-location-template').html() ),
+    template: null,
     initialize: function(options) {
       var self = this;
+
+      var templateContent = $('.show-location-template');
+      if (templateContent.length > 0) {
+        this.template = _.template( templateContent.html() );
+      }
       this.map = options.map;
       this.setFilters(options.filters);
       this.markers = {};
@@ -37,11 +42,13 @@
          flat: false,
       });
 
-      var infoWindow = new google.maps.InfoWindow();
-      infoWindow.setContent(self.template({location: loc.toJSON()}));
-      google.maps.event.addListener(self.markers[id], 'click', function() {
-        infoWindow.open(self.map, self.markers[id]);
-      });
+      if (null !== self.template) {
+        var infoWindow = new google.maps.InfoWindow();
+        infoWindow.setContent(self.template({location: loc.toJSON()}));
+        google.maps.event.addListener(self.markers[id], 'click', function() {
+          infoWindow.open(self.map, self.markers[id]);
+        });
+      }
     },
     deleteMarker: function(loc) {
       var id = loc.get('id');

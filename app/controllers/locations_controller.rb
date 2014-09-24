@@ -1,5 +1,6 @@
 class LocationsController < ApplicationController
   before_filter :set_location, only: :show
+  before_filter :set_map, only: :show
   helper_method :edit_mode?
 
   decorates_assigned :location
@@ -73,6 +74,15 @@ class LocationsController < ApplicationController
   end
 
   private
+
+  def set_map
+    @map = {
+      :zoom => Map::ZOOM_LOCATION,
+      :center => @location.to_coordinates,
+      :geolocate => 0,
+      :locations => []
+    }
+  end
 
   def edit_mode?
     params.fetch(:edit, 0).to_i.eql? 1

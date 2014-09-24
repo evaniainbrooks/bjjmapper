@@ -54,7 +54,7 @@
         = f.label :postal_code
         = f.text_field :postal_code, class: 'form-control'
     .col-md-5.text-center{:style => 'height: 300px'}
-      %div.map-canvas{:data => { :center => location.to_coordinates, :zoom => 15, :geolocate => false, :'geocode-path' => geocode_locations_path,  :'create-path' => locations_path, :'search-path' => search_locations_path }} 
+      %div.map-canvas
       %big= link_to 'See on larger map', root_path(:center => location.to_coordinates), :data => { :'no-turbolink' => true }
   %hr/
   .row    
@@ -82,3 +82,11 @@
         %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes 
 
   %br/
+
+= content_for(:scripts) do
+  :javascript
+    $(document).ready(function() {
+      var mapModel = new RollFindr.Models.Map(#{@map.to_json});
+      var mapView = new RollFindr.Views.MapView({model: mapModel, el: $('.map-canvas')});
+    });
+    

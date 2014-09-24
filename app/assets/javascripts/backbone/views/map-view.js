@@ -1,3 +1,4 @@
+//= require backbone/views/team-list-view 
 +function($) {
   "use strict";
 
