@@ -18,22 +18,17 @@
       this.map = new google.maps.Map(this.el, mapOptions);
       this.locationsView = new RollFindr.Views.LocationMapView({map: this.map, collection: this.locations});
       this.listenTo(this.teamFilter.collection, 'sync change:filter-active', this.updateFilter);
-      this.activate();
-    },
-    updateFilter: function() {
-      this.locationsView.setFilters(this.teamFilter.activeFilters());
-      this.locationsView.render();
-    },
-    activate: function() {
-      this.setCenter();
-
+      
       google.maps.event.addListener(this.map, 'click', this.createLocation);
       google.maps.event.addListener(this.map, 'idle', this.fetchViewport);
       
       this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(this.teamFilter.el);
+      
+      this.setCenter();
     },
-    events: {
-      //'click': 'createLocation'
+    updateFilter: function() {
+      this.locationsView.setFilters(this.teamFilter.activeFilters());
+      this.locationsView.render();
     },
     createLocation: function(event) {
       $('.coordinates', '.new-location-modal').val(JSON.stringify([event.latLng.lng(), event.latLng.lat()]));
@@ -59,7 +54,6 @@
       this.map.setCenter(defaultLocation);
     },
     fetchViewport: function() {
-      console.log('fetchViewport');
       var center = this.model.get('center');
       center[0] = this.map.getCenter().lat();
       center[1] = this.map.getCenter().lng();
