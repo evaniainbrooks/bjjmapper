@@ -54,8 +54,9 @@ class Location
 
   def as_json args
     # Hack around mongo ugly ids
-    result = super(args.merge(except: [:_id, :team_id])).merge({
+    result = super(args.merge(except: [:coordinates, :_id, :team_id])).merge({
       :id => self.id.to_s,
+      :coordinates => self.to_coordinates,
       :team_name => team_name,
       :address => address
     })

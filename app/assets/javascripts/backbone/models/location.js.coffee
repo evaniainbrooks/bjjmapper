@@ -16,7 +16,7 @@ class RollFindr.Models.Location extends Backbone.Model
 
 class RollFindr.Collections.LocationsCollection extends Backbone.Collection
   model: RollFindr.Models.Location
-  url: '/locations'
+  url: Routes.search_locations_path
   sort_key: 'name'
   comparator:
     (item)->
