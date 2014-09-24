@@ -12,7 +12,7 @@
       });
     },
     render: function() {
-      this.$el.append( this.template({teams: this.collection.toJSON() }) );
+      this.$el.append( this.template({teams: this.collection.sortByField('name').toJSON() }) );
     }
   });
 
