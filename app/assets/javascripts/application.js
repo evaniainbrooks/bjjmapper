@@ -19,7 +19,6 @@
 //= require openid-en
 //= require openid-init
 //= require ext
-//= require template
 //= require underscore
 //= require backbone
 //= require backbone_rails_sync
