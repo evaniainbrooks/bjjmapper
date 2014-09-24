@@ -48,5 +48,5 @@ gem 'less-rails'
 gem 'js-routes'
 gem 'wikipedia-client'
 gem 'draper'
-gem 'rails-backbone'
+gem 'rails-backbone', :git => 'git://github.com/codebrew/backbone-rails.git', :branch => :master
 #gem 'wikicloth', github: 'evaniainbrooks/wikicloth'
