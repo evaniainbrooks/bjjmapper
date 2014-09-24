@@ -56,6 +56,7 @@ class Location
     # Hack around mongo ugly ids
     result = super(args.merge(except: [:coordinates, :_id, :team_id])).merge({
       :id => self.id.to_s,
+      :team_id => self.team_id.to_s,
       :coordinates => self.to_coordinates,
       :team_name => team_name,
       :address => address

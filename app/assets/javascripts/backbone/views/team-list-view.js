@@ -12,7 +12,7 @@
       _.bindAll(this, 'changeFilter');
       
       this.collection = new RollFindr.Collections.TeamsCollection();
-      this.collection.fetch().done(function() {
+      this.collection.fetch({silent: true}).done(function() {
         self.render();
       });
     },
@@ -21,14 +21,14 @@
     },
     changeFilter: function(e) {
       var teamId = $(e.target).data('team-id');
-      var filters = this.model.get('filters');
-      if ($(e.target).is(':checked')) {
-        filters[teamId] = 1;
-      } else {
-        delete filters[teamId];
-      }
-      this.model.set('filters', filters);
-      console.log(filters);
+      var filter = this.collection.where({id: teamId})[0];
+      filter.set('filter-active', $(e.target).is(':checked'));
+    },
+    activeFilters: function() {
+      var filteredCollection = this.collection.filter(function(f) {
+        return f.get('filter-active');
+      });
+      return filteredCollection;
     }
   });
 

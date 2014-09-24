@@ -8,4 +8,3 @@ class RollFindr.Models.Map extends Backbone.Model
     geolocate: false
     geocodepath: null
     searchpath: null
-    filters: {}
