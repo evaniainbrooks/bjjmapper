@@ -44,6 +44,7 @@ gem 'factory_girl_rails', :group => :test
 gem 'mongoid-rspec', :group => :test
 gem 'guard-rspec'
 gem 'omniauth-openid'
+gem 'omniauth-google-oauth2'
 gem 'less-rails'
 gem 'js-routes'
 gem 'wikipedia-client'
