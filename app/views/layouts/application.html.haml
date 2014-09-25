@@ -24,6 +24,7 @@
       = yield
 
     = render partial: 'login_modal'
+    = render partial: 'confirm_dialog_template'
     = javascript_include_tag "application"
     = yield(:scripts) if content_for?(:scripts)
 
