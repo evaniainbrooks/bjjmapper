@@ -25,7 +25,7 @@
       = render partial: 'subnav'
   %hr/
   .row
-    .col-md-3
+    .col-md-12
       %h3 Location
       %a{:name => 'location'}
   .row
@@ -58,19 +58,30 @@
       %big= link_to 'See on larger map', root_path(:center => location.to_coordinates), :data => { :'no-turbolink' => true }
   %hr/
   .row    
-    .col-md-6
+    .col-md-12
       = render :partial => 'users/instructors', :locals => { :location => location }
       /.edit-field= link_to 'Add Instructor', root_path
   .row
-    .col-md-6
+    .col-md-12
       %h3 Contact
+  .row
+    .col-md-6
       .edit-field
         = f.label :phone
         = f.text_field :phone, class: 'form-control'
         = f.label :email
         = f.text_field :email, class: 'form-control'
-      %span.display-field= location.phone
-      %span.display-field= location.email
+        = f.label :website
+        = f.text_field :website, class: 'form-control'
+      %span.display-field
+        %b Phone
+        = location.phone
+      %span.display-field
+        %b Email
+        = location.email
+      %span.display-field
+        %b Website
+        = location.website
   .row
     .col-md-12
       %h3 Schedule
@@ -79,14 +90,12 @@
     .col-md-12
       .pull-right.edit-field
         %button.btn.btn-danger.btn-md{:type => 'button', 
-                                      :data => { :type => 'danger',
-                                                 :'delete-item' => true, 
-                                                 :id => location.id, 
+                                      :data => { :'delete-item' => true, 
                                                  :url => location_path(location), 
                                                  :title => 'Are you sure you want to delete this academy?', 
-                                                 :body => "You are performing this action as #{current_user}. Click Confirm to delete this academy. Note that this action cannot be undone." } } Delete Academy
+                                                 :body => "You are performing this action as #{current_user}. Press 'Confirm' to permanently delete this academy. Note that this action cannot be un-done." } } Delete Academy
         &nbsp;&nbsp;
-        %button.btn.btn-default.btn-md{:type => 'button'} Cancel Editing
+        %button.btn.btn-default.btn-md{:type => 'button', 'data-cancel-edit' => true} Cancel Editing
         %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes 
 
   %br/
