@@ -50,6 +50,10 @@ gem 'js-routes'
 gem 'wikipedia-client'
 gem 'draper'
 gem 'rails-backbone', :git => 'git://github.com/codebrew/backbone-rails.git', :branch => :master
+gem 'jruby-openssl'
+gem 'capistrano'
+gem 'capistrano-rails'
+gem 'capistrano-ext'
 #gem 'wikicloth', github: 'evaniainbrooks/wikicloth'
 
 group :test, :development do
