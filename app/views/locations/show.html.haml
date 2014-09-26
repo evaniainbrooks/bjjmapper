@@ -78,7 +78,13 @@
   .row
     .col-md-12
       .pull-right.edit-field
-        %button.btn.btn-danger.btn-md{:type => 'button', :data => { :id => location.id, :'delete-item' => location_path(location), :'title' => 'Are you sure you want to delete this academy?', :'body' => "You are performing this action as #{current_user}. Click Confirm to delete this academy. This action cannot be undone." } } Delete Academy
+        %button.btn.btn-danger.btn-md{:type => 'button', 
+                                      :data => { :type => 'danger',
+                                                 :'delete-item' => true, 
+                                                 :id => location.id, 
+                                                 :url => location_path(location), 
+                                                 :title => 'Are you sure you want to delete this academy?', 
+                                                 :body => "You are performing this action as #{current_user}. Click Confirm to delete this academy. Note that this action cannot be undone." } } Delete Academy
         &nbsp;&nbsp;
         %button.btn.btn-default.btn-md{:type => 'button'} Cancel Editing
         %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes 

@@ -20,19 +20,31 @@ describe LocationsController do
 
   describe 'DELETE destroy' do
     let(:location) { create(:location) }
-    it 'deletes the record'  do
-      location
-      expect {
-        delete :destroy, { id: location.id }
-        response.should redirect_to(root_path)
-      }.to change { Location.count }.by(-1)
+    
+    context 'with html format' do
+      it 'deletes the record and redirects to root'  do
+        location
+        expect {
+          delete :destroy, { id: location.id, format: 'html' }
+          response.should redirect_to(root_path)
+        }.to change { Location.count }.by(-1)
+      end
+    end
+    context 'with json format' do
+      it 'deletes the record' do
+        location
+        expect {
+          delete :destroy, { id: location.id, format: 'json' }
+          response.status.should be 200
+        }.to change { Location.count }.by(-1)
+      end
     end
   end
 
   describe 'POST create' do
     let(:create_params) { { :location => { :title => 'New title', :description => 'New description' }}}
     context 'with html format' do
-      it 'creates and redirects to a new location' do
+      it 'creates and redirects to a new location in edit mode' do
         expect {
           post :create, create_params.merge({:format => 'html'})
           response.should redirect_to(location_path(Location.first, edit: 1))

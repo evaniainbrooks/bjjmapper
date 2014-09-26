@@ -14,7 +14,10 @@ class LocationsController < ApplicationController
 
   def destroy
     location = Location.find(params[:id]).destroy
-    redirect_to root_path
+    respond_to do |format|
+      format.html { redirect_to root_path }
+      format.json { render status: :ok, json: {} } 
+    end
   end
 
   def create
