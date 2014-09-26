@@ -37,6 +37,8 @@ gem 'capistrano-ext'
 
 group :test, :development do
   gem 'konacha'
+  gem 'konacha-chai-matchers'
+  gem 'ejs'
   gem 'capybara'
   gem 'poltergeist'
   gem 'selenium-webdriver'
