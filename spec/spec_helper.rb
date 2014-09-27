@@ -27,12 +27,8 @@ Geocoder::Lookup::Test.set_default_stub(
 )
 
 RSpec.configure do |config|
-  # ## Mock Framework
-  #
-  # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
-  #
-  # config.mock_with :mocha
-  # config.mock_with :flexmock
+  config.infer_spec_type_from_file_location!
+  
   config.mock_with :rspec do |c|
     c.syntax = [:should, :expect]
   end
