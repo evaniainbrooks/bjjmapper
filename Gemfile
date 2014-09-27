@@ -32,11 +32,11 @@ gem 'rails-backbone', :git => 'git://github.com/codebrew/backbone-rails.git', :b
 gem 'jruby-openssl'
 
 group :development do
-  gem 'capistrano'
-  gem 'capistrano-puma'
-  gem 'capistrano-rails'
-  gem 'capistrano-bundler'
-  gem 'capistrano-rvm'
+  gem 'capistrano', require: false
+  gem 'capistrano3-puma', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rvm', require: false
 end
 
 group :test, :development do

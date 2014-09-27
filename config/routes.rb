@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   
   get '/meta' => 'application#meta', :as => :meta
   get '/people' => 'application#people'
-  post '/meta' => 'application#contact', :as => :contact
+  post '/contact' => 'application#contact', :as => :contact
 
   resources :locations do
     get :search, on: :collection

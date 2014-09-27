@@ -22,8 +22,7 @@ describe ApplicationController do
       FeedbackMailer.should_receive(:feedback_email).and_return(mailer)
     end
     it 'mails the message' do
-      pending 'fixme'
-      post :meta, { :name => 'bob', :email => 'job@bbbj.com', :message => 'whoahwhoah' }
+      post :contact, { :name => 'bob', :email => 'job@bbbj.com', :message => 'whoahwhoah' }
       response.should redirect_to(meta_path)
     end
   end
