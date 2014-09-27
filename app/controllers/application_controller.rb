@@ -29,9 +29,8 @@ class ApplicationController < ActionController::Base
     message = params[:message]
 
     mail = FeedbackMailer.feedback_email(name, email, message, current_user)
-    mail.deliver    
-
-    head :ok
+    result = mail.deliver   
+    redirect_to meta_path
   end
 
   def meta
