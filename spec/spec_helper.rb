@@ -33,7 +33,9 @@ RSpec.configure do |config|
   #
   # config.mock_with :mocha
   # config.mock_with :flexmock
-  config.mock_with :rspec
+  config.mock_with :rspec do |c|
+    c.syntax = [:should, :expect]
+  end
   config.include FactoryGirl::Syntax::Methods
 
   # If true, the base class of anonymous controllers will be inferred
