@@ -31,9 +31,13 @@ gem 'draper'
 gem 'rails-backbone', :git => 'git://github.com/codebrew/backbone-rails.git', :branch => :master
 gem 'jruby-openssl'
 
-gem 'capistrano'
-gem 'capistrano-rails'
-gem 'capistrano-ext'
+group :development do
+  gem 'capistrano'
+  gem 'capistrano-puma'
+  gem 'capistrano-rails'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rvm'
+end
 
 group :test, :development do
   gem 'konacha'
