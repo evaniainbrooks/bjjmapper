@@ -27,3 +27,5 @@
 //= require_tree .
 //= require_self
 
+Backbone.history.start({pushState: true, hashChange: false});
+
