@@ -1,3 +1,6 @@
+//= require 'jquery'
+//= require 'underscore'
+
 +function($,_) {
   "use strict";
 
