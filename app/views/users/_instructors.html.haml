@@ -1,9 +1,13 @@
 %h3 Instructors
 %a{:name => 'instructor'}
 - location.instructors.each do |instructor|
-  = image_tag instructor.image, class: 'pull-left'
-  %p{:style => 'margin-left: 15px;'}
-    %span= instructor.name
-    %br/
-    %span= instructor.rank_in_words
+  .container-fluid
+    .row
+      = link_to user_path(instructor) do
+        .col-md-3
+          = image_tag instructor.image, class: 'center-block'
+        .col-md-3
+          %span= instructor.name
+          %br/
+          %span= instructor.rank_in_words
 
