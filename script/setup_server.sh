@@ -2,7 +2,7 @@ echo "* Updating system"
 apt-get update
 apt-get -y upgrade
 echo "* Installing packages"
-apt-get -y install build-essential libmagickcore-dev imagemagick libmagickwand-dev libxml2-dev libxslt1-dev git-core nginx redis-server curl nodejs htop
+apt-get -y install build-essential libmagickcore-dev imagemagick libmagickwand-dev libxml2-dev libxslt1-dev git-core nginx redis-server curl nodejs htop acl nginx
 
 id -u deploy &> /dev/null
 
@@ -17,6 +17,9 @@ then
 else
   echo "* deploy user already exists"
 fi
+
+setfacl -m g:staff:rwx /home/rollfindr
+setfacl -d -m g:staff:rwx /home/rollfindr
 
 echo "* Installing rvm"
 . /etc/profile.d/rvm.sh &> /dev/null
@@ -54,9 +57,8 @@ then
   chgrp staff /home/deploy/.ssh
 fi
 
-# deepak's public key
-echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDQTjjPrdPMib0C8yejRT+S2fdAs/A2NSLyfBXbZNOFQWfUmjTi0hkAwcE/ahYJrmsxKJUgpMRJJcklCgxwZEcmMG7+W5QhASx00ayDRDYtJMCo/ZiePCntVYzZcefTr0ZOx3fYjXJ8IntcbIf3nwumG5Q/yE9nbwXwAo4DSxW5fveWwlG99c8LSKuKGKzl2fEsU/93LADrgj5yqnFIa5YdkDZCr80P5zJixMc1jzZ0+iYBVk9yc5Zph1WQG4Cq9wIQOT8TC+BSYWHguePfMPl2a0uqYu/r4guqu7q5/74dvFRdGc1lOIA28rbZdWIPp037tw0XDUYcP8/RisufLdUB evaniainbrooks@gmail.com
-" > /home/deploy/.ssh/authorized_keys
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDQTjjPrdPMib0C8yejRT+S2fdAs/A2NSLyfBXbZNOFQWfUmjTi0hkAwcE/ahYJrmsxKJUgpMRJJcklCgxwZEcmMG7+W5QhASx00ayDRDYtJMCo/ZiePCntVYzZcefTr0ZOx3fYjXJ8IntcbIf3nwumG5Q/yE9nbwXwAo4DSxW5fveWwlG99c8LSKuKGKzl2fEsU/93LADrgj5yqnFIa5YdkDZCr80P5zJixMc1jzZ0+iYBVk9yc5Zph1WQG4Cq9wIQOT8TC+BSYWHguePfMPl2a0uqYu/r4guqu7q5/74dvFRdGc1lOIA28rbZdWIPp037tw0XDUYcP8/RisufLdUB evaniainbrooks@gmail.com" > /home/deploy/.ssh/authorized_keys
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDu9E0ooFAh/6PJNQTGzr5LNGWNmZHpahKsS3WvndUNbGlvqNKkXDOreeeyYcR96zLY3RxkUBuJ5xsKF0C3HAScDxfe83qtzuLYq937GsY60xY/c/KhtLn94mvpnFe7vSCkx/FsZzo50T2nIXrhpkRR/3TL+ntiYjWitSJwPALd+lvG/aN229zE1lZb9f55Muf0o2l7fc32Aq79yKnsqfSwOpLRjJbUoTcbWeXxz0fYhwcBinibAFSIlYEHqZ8/DR4iDileEAhv3rlqKLnJkQnWowZ3wJb+3DwbiRzY4bTqlavYcJv7fVDmm7vO3zniH50F9vjfFe6ADbjC5mUlXFtJ Codeship/rollfindr/rollfindr" > /home/deploy/.ssh/authorized_keys
 
 chmod 600 /home/deploy/.ssh/authorized_keys
 chown deploy /home/deploy/.ssh/authorized_keys
