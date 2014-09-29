@@ -20,6 +20,7 @@
 //= require openid-init
 //= require ext
 //= require underscore
+//= require_tree ./templates
 //= require backbone
 //= require backbone_rails_sync
 //= require backbone_datalink

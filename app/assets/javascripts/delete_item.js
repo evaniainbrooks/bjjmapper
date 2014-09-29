@@ -1,4 +1,4 @@
-//= require confirm-dialog
+//= require confirm_dialog
 
 +function($, _) {
   

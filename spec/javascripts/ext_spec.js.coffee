@@ -1,3 +1,4 @@
+//= require spec_helper
 //= require ext
 
 describe 'Number#toRad', ->

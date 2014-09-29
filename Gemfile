@@ -21,6 +21,7 @@ gem 'mongoid-history'
 gem 'google-analytics-rails'
 gem 'puma'
 gem 'geocoder'
+gem 'ejs'
 
 gem 'omniauth-openid'
 gem 'omniauth-google-oauth2'
@@ -41,7 +42,6 @@ end
 group :test, :development do
   gem 'konacha'
   gem 'konacha-chai-matchers'
-  gem 'ejs'
   gem 'capybara'
   gem 'poltergeist'
   gem 'selenium-webdriver'

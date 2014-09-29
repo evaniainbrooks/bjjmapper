@@ -2,9 +2,9 @@
   %button.btn.btn-success.btn-md.enable-edit-mode
     Add an academy!
 
-= render partial: 'locations/show_template'
+= javascript_include_tag 'templates/locations/show'
+= javascript_include_tag 'templates/teams/index'
 = render partial: 'locations/create_modal_small'
-= render partial: 'teams/list_template'
 
 %div.map-canvas
 

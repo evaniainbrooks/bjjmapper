@@ -2,7 +2,7 @@
   "use strict";
 
   RollFindr.Views.TeamListView = Backbone.View.extend({
-    template: null,
+    template: JST['templates/teams/index'],
     events: {
       'click [type="checkbox"]': 'changeFilter',
       'click a[data-clear-filters]': 'clearFilters'
@@ -12,10 +12,6 @@
 
       _.bindAll(this, 'changeFilter', 'clearFilters');
 
-      var templateContent = $('.team-list-template');
-      if (templateContent.length > 0) {
-        this.template = _.template( templateContent.html() );
-      }
       this.collection = new RollFindr.Collections.TeamsCollection();
       this.collection.fetch({silent: true}).done(function() {
         self.render();
