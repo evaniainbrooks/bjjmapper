@@ -15,8 +15,7 @@ role :db,  %w{deploy@staging.bjjmapper.com}
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server 'staging.bjjmapper.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
-
+server 'staging.bjjmapper.com', user: 'deploy', roles: %w{web app db}
 
 # Custom SSH Options
 # ==================
