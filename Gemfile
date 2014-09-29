@@ -29,7 +29,6 @@ gem 'js-routes'
 gem 'wikipedia-client'
 gem 'draper'
 gem 'rails-backbone', :git => 'git://github.com/codebrew/backbone-rails.git', :branch => :master
-gem 'jruby-openssl'
 
 group :development do
   gem 'capistrano', require: false
