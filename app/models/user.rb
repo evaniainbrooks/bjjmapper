@@ -31,5 +31,11 @@ class User
       user.ip_address = ip_address
     end
   end
+  
+  def as_json args
+    super(args.merge(except: [:ip_address, :coordinates, :uid, :provider, :email, :_id])).merge({
+      :id => self.id.to_s
+    })
+  end
 end
 

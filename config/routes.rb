@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  resources :users, :only => [:show, :edit, :update]
+  resources :users, :only => [:show, :create, :update]
   resources :teams, :only => [:show, :index]
   root 'application#map'
 
