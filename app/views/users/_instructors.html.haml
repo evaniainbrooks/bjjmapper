@@ -1,13 +1,10 @@
 %h3 Instructors
 %a{:name => 'instructor'}
 - location.instructors.each do |instructor|
-  .container-fluid
-    .row
-      = link_to user_path(instructor) do
-        .col-md-3
-          = image_tag instructor.image, class: 'center-block'
-        .col-md-3
-          %span= instructor.name
-          %br/
-          %span= instructor.rank_in_words
+  .instructor.pull-left
+    = link_to user_path(instructor) do
+      = image_tag instructor.image
+      %span= instructor.name
+      %br/
+      = image_tag instructor.rank_image, alt: instructor.rank_in_words
 
