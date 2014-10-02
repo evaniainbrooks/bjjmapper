@@ -1,9 +1,18 @@
 class LocationsController < ApplicationController
-  before_filter :set_location, only: :show
+  before_filter :set_instructor, only: [:instructors]
+  before_filter :set_location, only: [:show, :instructors]
   before_filter :set_map, only: :show
   helper_method :edit_mode?
 
   decorates_assigned :location
+
+  def instructors
+    @location.instructors << @instructor
+    respond_to do |format|
+      format.json { render json: @location }
+      format.html { redirect_to location_path(@location, edit: 0) }
+    end
+  end
 
   def show
     respond_to do |format|
@@ -78,12 +87,18 @@ class LocationsController < ApplicationController
 
   private
 
+  def set_instructor
+    @instructor = User.find(params[:instructor_id]) if params.has_key?(:instructor_id)
+    head :not_found and return false unless @instructor.present?
+  end
+
   def set_map
     @map = {
       :zoom => Map::ZOOM_LOCATION,
       :center => @location.to_coordinates,
       :geolocate => 0,
-      :locations => []
+      :locations => [],
+      :filters => 0
     }
   end
 

@@ -40,7 +40,26 @@ describe LocationsController do
       end
     end
   end
-
+  describe 'POST instructors' do
+    let(:instructor) { create(:user) }
+    let(:location) { create(:location) }
+    let(:valid_params) { { :id => location.id, :instructor_id => instructor.id } }
+    context 'with html format' do
+      it 'adds the instructor to the location and redirects back' do
+        expect {
+          post :instructors, valid_params
+          response.should redirect_to(location_path(location, edit: 0))
+        }.to change { Location.find(location.id).instructors.count }.by(1)
+      end
+    end
+    context 'with json format' do
+      it 'adds the instructor to the location' do
+        expect {
+          post :instructors, valid_params.merge(:format => 'json')
+        }.to change { Location.find(location.id).instructors.count }.by(1)
+      end
+    end
+  end
   describe 'POST create' do
     let(:create_params) { { :location => { :title => 'New title', :description => 'New description' }}}
     context 'with html format' do
