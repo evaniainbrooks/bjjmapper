@@ -2,13 +2,12 @@ require 'spec_helper'
 require 'shared/omniauth_context'
 
 describe SessionsController do
-  render_views
   include_context 'omniauth'
   
   describe "GET new" do
     it "shows the signin page" do
       get :new
-      response.should render_template('sessions/new')
+      response.should be_success
     end
   end
   describe "POST create" do
