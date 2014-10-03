@@ -20,11 +20,9 @@
     = favicon_link_tag 'favicon.ico', :rel => 'shortcut icon'
   %body{:data => {:userid => current_user.try(:id)}}
     = render partial: 'navbar'
-    .container{style: 'height: 100%'}
-      = yield
+    = yield
 
     = render partial: 'login_modal'
     = javascript_include_tag "templates/confirm_dialog"
     = javascript_include_tag "application"
     = yield(:scripts) if content_for?(:scripts)
-
