@@ -1,6 +1,3 @@
-//= require 'jquery'
-//= require 'underscore'
-
 +function($,_) {
   "use strict";
 
@@ -19,7 +16,7 @@
       }
     });
   });
-  
+
   RollFindr.ConfirmDialog = function(data) {
     var defaults = {
       title: 'Are you sure?',

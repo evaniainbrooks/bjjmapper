@@ -1,5 +1,4 @@
-//= require spec_helper
-//= require confirm_dialog
+#= require spec_helper
 
 describe 'App#ConfirmDialog', ->
   beforeEach ->
