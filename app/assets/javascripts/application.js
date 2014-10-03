@@ -15,9 +15,6 @@
 //= require js-routes
 //= require bootstrap
 //= require turbolinks
-//= require openid-jquery
-//= require openid-en
-//= require openid-init
 //= require ext
 //= require underscore
 //= require_tree ./templates
