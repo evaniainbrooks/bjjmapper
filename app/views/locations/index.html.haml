@@ -15,25 +15,6 @@
         %a{href: locations_path({country: @criteria[:country], city: @criteria[:city]})}= @criteria[:city] 
 
 - if @locations.present?
-  %table.table.table-striped
-    %tr
-      %th
-        Name
-      %th
-        Team
-      %th
-        Address
-      %th
-        Reviews
-    - @locations.each do |location|
-      %tr
-        %td
-          = location.title
-        %td
-          = location.team_name
-        %td
-          = location.address
-        %td Reviews
-
+  = render partial: 'table', locals: { locations: @locations }
 - else
   = render partial: 'directory_index'

@@ -1,6 +1,6 @@
 +function($) {
   "use strict";
-  RollFindr.Views.LocationMapView = Backbone.View.extend({
+  RollFindr.Views.MapViewLocations = Backbone.View.extend({
     template: JST['templates/locations/show'],
     initialize: function(options) {
       var self = this;

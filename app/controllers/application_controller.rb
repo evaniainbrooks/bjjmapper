@@ -15,7 +15,8 @@ class ApplicationController < ActionController::Base
       :zoom => center.present? ? Map::ZOOM_LOCATION : Map::ZOOM_DEFAULT,
       :center => center,
       :geolocate => center.blank? ? 1 : 0,
-      :locations => []
+      :locations => [],
+      :filters => 1
     }
 
     respond_to do |format|

@@ -1,4 +1,8 @@
 
+.btn-social {
+  max-width: 300px;
+}
+
 .map-canvas img { 
     max-width: none;
 }

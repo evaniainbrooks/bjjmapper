@@ -1,0 +1,19 @@
+%table.table.table-striped
+  %tr
+    %th
+      Name
+    %th
+      Team
+    %th
+      Address
+    %th
+      Reviews
+  - locations.each do |location|
+    %tr
+      %td
+        = location.title
+      %td
+        = location.team_name
+      %td
+        = location.address
+      %td Reviews

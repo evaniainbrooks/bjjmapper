@@ -19,26 +19,39 @@
     tagName: 'div',
     map: null,
     locations: new RollFindr.Collections.LocationsCollection(),
+    template: JST['templates/locations/map-list'],
     teamFilter: null,
     locationsView: null,
     initialize: function() {
-      _.bindAll(this, 'createLocation', 'fetchViewport', 'updateFilter');
+      _.bindAll(this, 'createLocation', 'fetchViewport', 'updateLocationList', 'updateFilter');
       
-      this.teamFilter = new RollFindr.Views.TeamListView();
       var mapOptions = {
         zoom: this.model.get('zoom'),
         mapTypeId: google.maps.MapTypeId.ROADMAP
       };
-      this.map = new google.maps.Map(this.el, mapOptions);
-      this.locationsView = new RollFindr.Views.LocationMapView({map: this.map, collection: this.locations});
-      this.listenTo(this.teamFilter.collection, 'sync change:filter-active', this.updateFilter);
+
+      var mapCanvas = $('.map-canvas', this.el)[0];
+      this.map = new google.maps.Map(mapCanvas, mapOptions);
+      this.locationsView = new RollFindr.Views.MapViewLocations({map: this.map, collection: this.locations});
       
+      var shouldFilter = this.model.get('filters');
+      if (1 === shouldFilter) {
+        this.teamFilter = new RollFindr.Views.TeamListView();
+        this.listenTo(this.teamFilter.collection, 'sync change:filter-active', this.updateFilter);
+        this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(this.teamFilter.el);
+      }
+      
+      this.listenTo(this.locations, 'sync', this.updateLocationList);
+
       google.maps.event.addListener(this.map, 'click', this.createLocation);
       google.maps.event.addListener(this.map, 'idle', this.fetchViewport);
       
-      this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(this.teamFilter.el);
-      
       this.setCenter();
+    },
+    updateLocationList: function() {
+      var self = this;
+      var list = self.template({'locations': this.locations.toJSON()}); 
+      $('.location-list', this.el).html(list);  
     },
     updateFilter: function() {
       this.locationsView.setFilters(this.teamFilter.activeFilters());

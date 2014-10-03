@@ -1,16 +1,11 @@
-.map-edit-control.template 
-  %button.btn.btn-success.btn-md.enable-edit-mode
-    Add an academy!
-
-= javascript_include_tag 'templates/locations/show'
-= javascript_include_tag 'templates/teams/index'
 = render partial: 'locations/create_modal_small'
 
-%div.map-canvas
-
+.map-view
+  .map-canvas
+  .location-list
 - content_for :scripts do
   :javascript
     $(document).ready(function() {
       var mapModel = new RollFindr.Models.Map(#{@map.to_json});
-      var mapView = new RollFindr.Views.MapView({model: mapModel, el: $('.map-canvas')});
+      var mapView = new RollFindr.Views.MapView({model: mapModel, el: $('.map-view')});
     });

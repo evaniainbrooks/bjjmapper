@@ -4,7 +4,7 @@
   .instructor.pull-left
     = link_to user_path(instructor) do
       = image_tag instructor.image
-      %span= instructor.name
+      %b.small= instructor.name
       %br/
       = image_tag instructor.rank_image, alt: instructor.rank_in_words
 

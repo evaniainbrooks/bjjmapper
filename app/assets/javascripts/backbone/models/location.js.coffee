@@ -1,6 +1,6 @@
 class RollFindr.Models.Location extends Backbone.Model
   paramRoot: 'location'
-
+  urlRoot: Routes.locations_path
   defaults:
     title: null
     description: null

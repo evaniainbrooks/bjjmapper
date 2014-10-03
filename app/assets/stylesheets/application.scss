@@ -13,6 +13,8 @@
  *= require_tree .
  *= require_self
  *= require bootstrap
+ *= require font-awesome
+ *= require bootstrap-social
  */
 
 html, body {
@@ -27,13 +29,40 @@ h3, .h3 {
   padding: 2px 5px;
 }
 
-.map-canvas {
-  height: 90%;
-  width: 100%;
+.navbar {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  margin-bottom: 0px !important;
 }
 
-.template {
-  display: none;
+.show-location {
+  margin-top: 20px;
+}
+
+.map-view, .map-canvas {
+  height: 90%;
+  width: 100%;
+
+  .list-group {
+    img {
+      width: 42px;
+      height: 42px;
+      margin-right: 7px;
+    }
+  }
+}
+
+.instructor {
+  width: 110px !important;
+  padding: 2px 4px;
+  margin-right: 5px;
+}
+
+.add-instructor {
+  border: 1px solid #ccc;
+  height: 100px;
+  padding-top: 40px;
 }
 
 .coords {
