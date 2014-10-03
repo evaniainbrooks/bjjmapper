@@ -12,6 +12,9 @@ class User
   field :ip_address, type: String
   field :coordinates, type: Array
 
+  field :oauth_token, type: String
+  field :oauth_expires_at, type: Integer
+
   field :belt_rank, type: String
   field :stripe_rank, type: Integer
 
@@ -21,16 +24,15 @@ class User
   belongs_to :team
   has_and_belongs_to_many :locations
 
-  def self.create_with_omniauth(auth, ip_address)
-    create! do |user|
-      user.provider = auth['provider']
-      user.uid = auth['uid']
-      if auth['info']
-        user.name = auth['info']['name'] || ""
-        user.email = auth['info']['email'] || ""
-      end
-      user.ip_address = ip_address
-    end
+  def self.from_omniauth(auth, ip_address) 
+    User.where(:provider => auth['provider'], :uid => auth['uid'])
+        .first_or_create({
+          :name => auth.try(:[], 'info').try(:[], 'name'),
+          :email => auth.try(:[], 'info').try(:[], 'email'),
+          :ip_address => ip_address,
+          :oauth_token => auth.try(:credentials).try(:token),
+          :oauth_expires_at => Time.at(auth.try(:credentials).try(:expires_at) || 0) 
+        })
   end
   
   def as_json args

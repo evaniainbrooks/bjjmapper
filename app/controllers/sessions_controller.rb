@@ -3,14 +3,12 @@ class SessionsController < ApplicationController
   
   def create
     auth = request.env["omniauth.auth"]
-    user = User.where(:provider => auth['provider'],
-        :uid => auth['uid']).first || User.create_with_omniauth(auth, request.remote_ip)
+    user = User.from_omniauth(auth, request.remote_ip)
     session[:user_id] = user.id
     redirect_to root_url, :notice => "Signed in!"
   end
 
   def new
-    redirect_to '/auth/open_id'
   end
 
   def failure

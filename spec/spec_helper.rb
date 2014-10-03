@@ -32,6 +32,19 @@ Geocoder::Lookup::Test.set_default_stub(
   ]
 )
 
+OmniAuth.config.test_mode = true
+omniauth_mock = {
+  'provider' => 'twitter',
+  'uid' => '12345',
+  'info' => {
+      'name' => 'twitteruser',
+      'email' => 'hi@iamatwitteruser.com',
+      'nickname' => 'SomeTwitterUser'
+  }
+}
+
+OmniAuth.config.add_mock(:default, omniauth_mock)
+
 RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
   
