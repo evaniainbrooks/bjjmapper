@@ -24,7 +24,6 @@ gem 'geocoder'
 gem 'ejs'
 
 gem 'omniauth-identity'
-gem 'omniauth-openid'
 gem 'omniauth-google-oauth2'
 gem 'less-rails'
 gem 'js-routes'
