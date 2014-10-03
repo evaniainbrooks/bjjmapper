@@ -34,5 +34,6 @@ module RollFindr
     config.action_mailer.raise_delivery_errors = true
     config.action_mailer.default_options = {from: 'no-reply@rollfindr.com'}
 
+    config.assets.precompile << /\.(?:svg|eot|woff|ttf)\z/
   end
 end
