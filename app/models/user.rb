@@ -11,6 +11,7 @@ class User
   field :image, type: String
   field :ip_address, type: String
   field :coordinates, type: Array
+  field :last_seen_at, type: Integer
 
   field :oauth_token, type: String
   field :oauth_expires_at, type: Integer
@@ -31,8 +32,11 @@ class User
           :email => auth.try(:[], 'info').try(:[], 'email'),
           :ip_address => ip_address,
           :oauth_token => auth.try(:credentials).try(:token),
-          :oauth_expires_at => Time.at(auth.try(:credentials).try(:expires_at) || 0) 
+          :oauth_expires_at => Time.at(auth.try(:credentials).try(:expires_at) || 0), 
+          :last_seen_at => Time.now
         })
+    
+
   end
   
   def as_json args
