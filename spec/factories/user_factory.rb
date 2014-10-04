@@ -4,5 +4,6 @@ FactoryGirl.define do
     uid '1234'
     email 'test@rollfindr.com'
     image 'testimg.jpg'
+    provider :twitter
   end
 end
