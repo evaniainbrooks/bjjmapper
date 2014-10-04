@@ -23,6 +23,6 @@ Rails.application.routes.draw do
   resources :locations do
     get :search, on: :collection
     get :geocode, on: :collection
-    post :instructors, on: :member
+    resources :users, controller: :instructors, as: :instructors, path: '/instructors', only: [:create, :destroy]
   end
 end
