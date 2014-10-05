@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 #ruby '1.9.3', :engine => 'jruby', :engine_version => '1.7.12'
-gem 'rails', '>= 4.1.0'
+gem 'rails', '>= 4.1.2'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
 # Use Uglifier as compressor for JavaScript assets
