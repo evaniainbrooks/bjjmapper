@@ -19,34 +19,6 @@ Spork.prefork do
 
   Mongoid.load!('./config/mongoid.yml')
 
-  Geocoder.configure(:lookup => :test)
-  Geocoder::Lookup::Test.set_default_stub(
-    [
-      {
-        'latitude'     => 40.7143528,
-        'longitude'    => -74.0059731,
-        'address'      => 'New York, NY, USA',
-        'state'        => 'New York',
-        'state_code'   => 'NY',
-        'country'      => 'United States',
-        'country_code' => 'US'
-      }
-    ]
-  )
-
-  OmniAuth.config.test_mode = true
-  omniauth_mock = {
-    'provider' => 'twitter',
-    'uid' => '12345',
-    'info' => {
-        'name' => 'twitteruser',
-        'email' => 'hi@iamatwitteruser.com',
-        'nickname' => 'SomeTwitterUser'
-    }
-  }
-
-  OmniAuth.config.add_mock(:default, omniauth_mock)
-
   RSpec.configure do |config|
     config.infer_spec_type_from_file_location!
     
@@ -68,6 +40,24 @@ Spork.prefork do
     config.before do
       Mongoid.truncate!
       FactoryGirl.lint
+    end
+
+    config.before(:all) do
+      Geocoder.configure(:lookup => :test, :ip_lookup => :test)
+      Geocoder::Lookup::Test.set_default_stub(
+        [
+          {
+            'latitude'     => 40.7143528,
+            'longitude'    => -74.0059731,
+            'address'      => 'New York, NY, USA',
+            'state'        => 'New York',
+            'state_code'   => 'NY',
+            'country'      => 'United States',
+            'country_code' => 'US'
+          }
+        ]
+      )
+
     end
   end
 

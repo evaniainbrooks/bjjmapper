@@ -6,14 +6,6 @@ class LocationsController < ApplicationController
 
   decorates_assigned :location
 
-  def instructors
-    @location.instructors << @instructor
-    respond_to do |format|
-      format.json { render json: @location }
-      format.html { redirect_to location_path(@location, edit: 0) }
-    end
-  end
-
   def show
     respond_to do |format|
       format.json { render json: @location }
