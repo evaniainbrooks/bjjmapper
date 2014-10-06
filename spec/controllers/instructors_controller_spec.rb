@@ -25,10 +25,21 @@ describe InstructorsController do
     let(:location) { create(:location) }
     let(:instructor) { create(:user) }
     context 'with json format' do
-      it 'adds the instructor to the location' do
-        expect {
-          post :create, { format: 'json', id: instructor.id, location_id: location.id }
-        }.to change{ Location.find(location.id).instructors.count }.by(1)
+      context 'with a simple id' do
+        it 'adds the instructor to the location' do
+          expect {
+            post :create, { format: 'json', id: instructor.id, location_id: location.id }
+          }.to change{ Location.find(location.id).instructors.count }.by(1)
+        end
+      end
+      context 'with a user object' do
+        let(:instructor_params) { { :user => { :name => 'Test Instructor', :email => 'test1@bjjmapper.com', :belt_rank => 'brown', :stripe_rank => 1 } } }
+        it 'creates the instructor and adds them to the location' do
+          expect {
+            post :create, { format: 'json', location_id: location.id }.merge(instructor_params)
+            User.last.attributes.symbolize_keys.slice(*instructor_params[:user].keys).should eq instructor_params[:user]
+          }.to change{ Location.find(location.id).instructors.count }.by(1)
+        end
       end
     end
   end
