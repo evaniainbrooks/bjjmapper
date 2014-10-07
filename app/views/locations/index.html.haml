@@ -1,20 +1,20 @@
-.container
-%h1 
-  Academy Directory
-  %span.small 255 locations worldwide
-%ol.breadcrumb
-  %li
-    %a{href: root_path} Home
-  %li
-    %a{href: locations_path} Academies
-  - if (@criteria.has_key?(:country)) 
+.container.page
+  %h1 
+    Academy Directory
+    %span.small 255 locations worldwide
+  %ol.breadcrumb
     %li
-      %a{href: locations_path(country: @criteria[:country])}= @criteria[:country]
-    -if (@criteria.has_key?(:city)) 
+      %a{href: root_path} Home
+    %li
+      %a{href: locations_path} Academies
+    - if (@criteria.has_key?(:country)) 
       %li
-        %a{href: locations_path({country: @criteria[:country], city: @criteria[:city]})}= @criteria[:city] 
+        %a{href: locations_path(country: @criteria[:country])}= @criteria[:country]
+      -if (@criteria.has_key?(:city)) 
+        %li
+          %a{href: locations_path({country: @criteria[:country], city: @criteria[:city]})}= @criteria[:city] 
 
-- if @locations.present?
-  = render partial: 'table', locals: { locations: @locations }
-- else
-  = render partial: 'directory_index'
+  - if @locations.present?
+    = render partial: 'table', locals: { locations: @locations }
+  - else
+    = render partial: 'directory_index'
