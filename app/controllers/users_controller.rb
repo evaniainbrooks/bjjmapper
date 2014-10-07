@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_filter :set_user, only: [:show, :update]
+  decorates_assigned :user
 
   def show
     respond_to do |format|
