@@ -2,8 +2,6 @@ require 'spec_helper'
 require 'shared/omniauth_context'
 
 describe SessionsController do
-  include_context 'omniauth'
-  
   describe "GET new" do
     it "shows the signin page" do
       get :new
@@ -11,6 +9,7 @@ describe SessionsController do
     end
   end
   describe "POST create" do
+    include_context 'omniauth success'
     context 'when the user does not exist' do
       it "creates a user" do
         expect {
@@ -41,12 +40,17 @@ describe SessionsController do
       response.should redirect_to root_url
     end
   end
-  describe "DELETE destroy" do
-    before do
-      post :create, provider: omniauth_provider
+
+  describe 'GET failure' do
+    let(:error_msg) { :invalid_credentials }
+    it 'redirects to root with authentication failure message' do
+      get :failure, { :message => 'failuremsg123' }
+      response.should redirect_to root_url
     end
+  end
+  describe "DELETE destroy" do
+    before { session[:user_id] = 'loggedin12345' }
     it "should clear the session" do
-      session[:user_id].should_not be_nil
       delete :destroy
       session[:user_id].should be_nil
     end
