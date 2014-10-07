@@ -1,11 +1,12 @@
-.container.show-location
+.container.show-location.page
   = form_for(location, html: { class: 'form editable ' + (edit_mode? ? 'edit-mode' : '')}) do |f|
     .row
       .col-md-12
         = render partial: 'breadcrumb', locals: { location: location }
     .row
       .col-md-2
-        = image_tag location.image, class: 'center-block' 
+        .display-field= image_tag location.image, class: 'center-block' 
+        .edit-field= image_tag location.image, class: 'center-block edit-image' 
       .col-md-4
         %h1.display-field
           = location.title
@@ -15,7 +16,7 @@
           = f.label :title
           = f.text_field :title, class: 'form-control input-lg'
           = f.label :team_id, 'Team'
-          = f.select :team_id, Team.all.map { |team| [team.name, team.id] }, {}, class: 'form-control  input-md'
+          = f.select :team_id, options_for_select(all_teams.map { |team| [team.name, team.id, {'data-img-src' => team.image}] }), {}, class: 'form-control  input-md'
           = f.label :description
           = f.text_area :description, placeholder: 'Provide a description of the academy', class: 'form-control', rows: 4
         %p.display-field= location.description
@@ -60,10 +61,7 @@
     %hr/
     .row    
       .col-md-12
-        = render :partial => 'users/instructors', :locals => { :location => location }
-        .edit-field
-          = link_to '#instructor', class: 'instructor add-instructor pull-left' do
-            %p Add Instructor
+        = render :partial => 'locations/instructors', :locals => { :location => location }
     .row
       .col-md-12
         %h3 Contact
@@ -89,20 +87,30 @@
       .col-md-12
         %h3 Schedule
 
-    .row
+    .row.edit-field.edit-control
       .col-md-12
-        .pull-right.edit-field
+        %h3 Edit Controls
+      .col-md-12
+        %p.small= location.to_json
+        %br/
+      .col-md-12
+        .pull-right
           %button.btn.btn-danger.btn-md{:type => 'button', 
-                                        :data => { :'delete-item' => true, 
-                                                   :url => location_path(location), 
-                                                   :title => 'Are you sure you want to delete this academy?', 
-                                                   :body => "You are performing this action as #{current_user}. Press 'Confirm' to permanently delete this academy. Note that this action cannot be un-done." } } Delete Academy
+            :data => { :method => :delete,
+                       :confirm => true,
+                       :url => location_path(location), 
+                       :title => 'Are you sure you want to delete this academy?', 
+                       :body => "You are performing this action as #{current_user}. Press 'Confirm' to permanently delete this academy. Note that this action cannot be un-done." } } 
+            %i.fa.fa-trash
+            Delete Academy
+
           &nbsp;&nbsp;
           %button.btn.btn-default.btn-md{:type => 'button', 'data-cancel-edit' => true} Cancel Editing
           %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes 
 
     %br/
-
+  
+  = render :partial => 'instructors/add_instructor_dialog'
   = content_for(:scripts) do
     :javascript
       $(document).ready(function() {

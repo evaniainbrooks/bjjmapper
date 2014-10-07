@@ -7,4 +7,11 @@
       %b.small= instructor.name
       %br/
       = image_tag instructor.rank_image, alt: instructor.rank_in_words
+    %button.edit-field.btn.btn-small.btn-default.remove-instructor{:type => 'button', :data => { :id => instructor.id } }
+      %i.fa.fa-remove
+      Remove
+
+%button.edit-field.btn.btn-small.btn-primary.add-instructor{:type => 'button'}
+  %i.fa.fa-add
+  Add Instructor
 
