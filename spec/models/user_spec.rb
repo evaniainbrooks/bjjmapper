@@ -21,4 +21,15 @@ describe User do
       end
     end
   end
+
+  describe 'before_create callback' do
+    context 'when the role is instructor' do
+      before do
+        Wikipedia.stub(:find) { nil }
+      end
+      it 'populates description, summary and image from wikipedia' do
+        pending 'implement me'
+      end
+    end
+  end
 end

@@ -12,6 +12,7 @@ class User
   field :ip_address, type: String
   field :coordinates, type: Array
   field :last_seen_at, type: Integer
+  field :description, type: String
 
   field :oauth_token, type: String
   field :oauth_expires_at, type: Integer
@@ -25,6 +26,17 @@ class User
   belongs_to :team
   has_and_belongs_to_many :locations
 
+  before_create do
+    if :instructor == self.role.try(:to_sym)
+      page = Wikipedia.find(self.name)
+      if page.content.present?
+        self.image = page.image_urls.last
+        self.description = WikiCloth::Parser.new({:data => page.content}).to_html
+        self.summary = create_summary_from_description
+      end
+    end
+  end
+  
   def self.from_omniauth(auth, ip_address) 
     User.where(:provider => auth['provider'], :uid => auth['uid'])
         .first_or_create({
@@ -43,6 +55,13 @@ class User
     super(args.merge(except: [:ip_address, :coordinates, :uid, :provider, :email, :_id])).merge({
       :id => self.id.to_s
     })
+  end
+
+  private
+
+  def create_summary_from_description
+    #self.description.match /<p>(.*)<\/p>/
+    "TODO IMPLEMENT ME"
   end
 end
 
