@@ -2,7 +2,9 @@ class LocationsController < ApplicationController
   before_filter :set_instructor, only: [:instructors]
   before_filter :set_location, only: [:show, :instructors]
   before_filter :set_map, only: :show
+
   helper_method :edit_mode?
+  helper_method :all_instructors
 
   decorates_assigned :location
 
@@ -69,8 +71,14 @@ class LocationsController < ApplicationController
 
   def index
     @criteria = params.slice(:city, :country) || {}
-    @locations = @criteria.present? ? Location.where(@critieria).all : []
-    
+    @locations = if @criteria.has_key?(:city) && @criteria.has_key?(:country)
+      Location.near(@criteria.values.join(','), 30)
+    elsif @criteria.has_key?(:country)
+      Location.where(:country => @criteria[:country])
+    else
+      []
+    end
+
     respond_to do |format|
       format.html
       format.json { render json: @locations }
@@ -78,6 +86,10 @@ class LocationsController < ApplicationController
   end
 
   private
+
+  def all_instructors
+    User.where(:role => 'locked').limit(50).sort_by(&:name)
+  end
 
   def set_instructor
     @instructor = User.find(params[:instructor_id]) if params.has_key?(:instructor_id)

@@ -20,7 +20,6 @@ describe LocationsController do
 
   describe 'DELETE destroy' do
     let(:location) { create(:location) }
-    
     context 'with html format' do
       it 'deletes the record and redirects to root'  do
         location
@@ -77,9 +76,35 @@ describe LocationsController do
   end
 
   describe 'GET index' do
-    it 'renders the directory' do
-      get :index
-      response.should render_template("locations/index")
+    context 'with country and city filter' do
+      let(:filter) { { :city => 'New York', :country => 'US' } }
+      before do 
+        create(:location, filter)
+        create(:location, city: 'Paris', country: 'FR')
+      end
+      it 'renders the locations' do
+        pending 'geocoding is stubbed, need to move this to an integration test'
+        get :index, filter
+        assigns[:locations].count.should eq 1
+      end
+    end
+    context 'with country filter' do
+      let(:filter) { { :country => 'US' } }
+      before do
+        create(:location, country: 'US')
+        create(:location, country: 'BR')
+      end
+      it 'renders the directory' do
+        get :index, filter
+        assigns(:locations).count.should eq 1
+      end
+    end
+    context 'without filter' do
+      before { create(:location, country: 'BR') }
+      it 'renders the directory index' do
+        get :index
+        assigns(:locations).count.should eq 0
+      end
     end
   end
   describe 'GET search' do
