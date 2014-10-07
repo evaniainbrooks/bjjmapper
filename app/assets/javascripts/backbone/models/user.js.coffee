@@ -1,12 +1,8 @@
 class RollFindr.Models.User extends Backbone.Model
 
 class RollFindr.Models.Instructor extends RollFindr.Models.User
-  location_id: null,
   url: ->
-    Routes.instructors_location_path(this.location_id)
-  initialize: (options)->
-    _.extend(this, _.pick(options, "location_id"))
-
+    Routes.location_instructor_path(this.get('location_id'), this.get('id'))
 
 class RollFindr.Collections.UsersCollection extends Backbone.Collection
   model: RollFindr.Models.User
@@ -19,4 +15,13 @@ class RollFindr.Collections.UsersCollection extends Backbone.Collection
     (fieldName)->
       this.sort_key = fieldName
       this.sort()
+
+class RollFindr.Collections.InstructorsCollection extends RollFindr.Collections.UsersCollection
+  model: RollFindr.Models.Instructor
+  location_id: null,
+  url: ->
+    Routes.location_instructors_path(this.location_id)
+  initialize: (models, options)->
+  #  Backbone.Collection.prototype.initialize.apply(this, arguments)
+    _.extend(this, _.pick(options, "location_id"))
 

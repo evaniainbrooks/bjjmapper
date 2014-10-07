@@ -1,4 +1,15 @@
 class RollFindr.Models.Location extends Backbone.Model
+  initialize: ->
+    id = this.get('id')
+    instructors = this.get('instructors').map (obj)->
+      {
+        id: obj,
+        location_id: id
+      }
+
+    instructorsCollection = new RollFindr.Collections.InstructorsCollection(instructors, {location_id: id})
+    this.set('instructors', instructorsCollection)
+
   paramRoot: 'location'
   urlRoot: Routes.locations_path
   defaults:
@@ -13,6 +24,7 @@ class RollFindr.Models.Location extends Backbone.Model
     id: null
     team_id: null
     coordinates: []
+    instructors: []
 
 class RollFindr.Collections.LocationsCollection extends Backbone.Collection
   model: RollFindr.Models.Location
