@@ -23,7 +23,7 @@
       type: 'primary',
       confirm: 'Confirm',
       cancel: 'Cancel',
-      method: 'POST'
+      method: 'POST' 
     };
     
     var templateArgs = $.extend({}, defaults, data);

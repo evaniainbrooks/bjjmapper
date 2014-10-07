@@ -2,7 +2,7 @@
 
 +function($, _) {
   
-  $('body').delegate('[data-delete-item]', 'click', function(e) {
+  $('body').delegate('[data-method="delete"]', 'click', function(e) {
     var data = $(e.target).data();
     var deleteDefaults = {
       method: 'DELETE',

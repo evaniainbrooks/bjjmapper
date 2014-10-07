@@ -1,0 +1,11 @@
+.add-instructor-dialog.modal.fade{'aria-hidden' => 'true', 'aria-labelledby' => 'addInstructor', 'role' => 'dialog', 'tabindex' => -1}
+  .modal-dialog
+    .modal-content
+      .modal-body
+        %img.center-block.img-circle
+        = select_tag :instructor_name, options_for_select(all_instructors.map { |instructor| [instructor.name, instructor.id, {'data-img-src' => instructor.image}] }), class: 'form-control  input-md'
+      .modal-footer
+        %button.btn.btn-default{'data-dismiss' => 'modal'}
+          Cancel
+        %button.btn.btn-primary
+          Submit

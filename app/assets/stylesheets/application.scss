@@ -23,10 +23,9 @@ html, body {
   padding: 0px;
 }
 
-h3, .h3 {
-  background-color: #428bca; 
-  color: white !important;
-  padding: 2px 5px;
+.edit-control {
+  border: 1px solid #ccc;
+  padding-bottom: 10px;
 }
 
 .navbar {
@@ -36,7 +35,7 @@ h3, .h3 {
   margin-bottom: 0px !important;
 }
 
-.show-location {
+.page {
   margin-top: 20px;
 }
 
@@ -59,10 +58,11 @@ h3, .h3 {
   margin-right: 5px;
 }
 
-.add-instructor {
-  border: 1px solid #ccc;
-  height: 100px;
-  padding-top: 40px;
+.add-instructor-dialog {
+  img {
+    width: 100px;
+    height: 100px;
+  }
 }
 
 .coords {
