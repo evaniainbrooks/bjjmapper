@@ -18,7 +18,7 @@ f = File.open(options[:filename], "r")
 csv = CSV.parse(f, :headers => false)
 csv.each do |row|
   name = row[0].strip
-  team = User.where(:name => name,  :role => :locked).first_or_create(:belt_rank => row[1], :stripe_rank => row[2])
+  team = User.where(:name => name,  :role => :instructor).first_or_create(:belt_rank => row[1], :stripe_rank => row[2])
 end
 
 p options
