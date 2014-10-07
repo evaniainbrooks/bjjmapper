@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 #ruby '1.9.3', :engine => 'jruby', :engine_version => '1.7.12'
-gem 'rails', '>= 4.1.2'
+gem 'rails', '>= 4.1.6'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
 # Use Uglifier as compressor for JavaScript assets
@@ -31,6 +31,7 @@ gem 'omniauth-google-oauth2'
 gem 'less-rails'
 gem 'js-routes'
 gem 'wikipedia-client'
+gem 'wikicloth', :git => 'git://github.com/nricciar/wikicloth', :branch => :master
 gem 'draper'
 gem 'rails-backbone', :git => 'git://github.com/codebrew/backbone-rails.git', :branch => :master
 
