@@ -9,6 +9,8 @@ class ApplicationController < ActionController::Base
 
   helper_method :action?
 
+  helper_method :all_teams
+
   def map
     center = params.fetch(:center, [])
     @map = {
@@ -42,6 +44,10 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def all_teams
+    Team.all.limit(50).decorate
+  end
 
   def action?(action)
     params.fetch(:action, :unknown).to_sym.eql?(action)
