@@ -84,6 +84,12 @@ html, body {
     height: 100px;
   }
 }
+.new-location-dialog {
+  .modal-dialog {
+    margin-left: 20px !important;
+    margin-top: 80px !important;
+  }
+}
 
 .coords {
   position: relative;

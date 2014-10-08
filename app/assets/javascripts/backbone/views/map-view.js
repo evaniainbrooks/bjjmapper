@@ -58,8 +58,8 @@
       this.locationsView.render();
     },
     createLocation: function(event) {
-      $('.coordinates', '.new-location-modal').val(JSON.stringify([event.latLng.lng(), event.latLng.lat()]));
-      $('.new-location-modal').modal('show');
+      $('.coordinates', '.new-location-dialog').val(JSON.stringify([event.latLng.lng(), event.latLng.lat()]));
+      $('.new-location-dialog').modal('show');
     },
     setCenter: function() {
       var self = this;
