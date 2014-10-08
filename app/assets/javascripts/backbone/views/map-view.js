@@ -19,7 +19,6 @@
     el: $('.wrapper'),
     tagName: 'div',
     map: null,
-    locations: new RollFindr.Collections.LocationsCollection(),
     template: JST['templates/locations/map-list'],
     teamFilter: null,
     locationsView: null,
@@ -31,12 +30,13 @@
       
       var mapOptions = {
         zoom: this.model.get('zoom'),
+        minZoom: 8,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       };
 
       var mapCanvas = $('.map-canvas', this.el)[0];
       this.map = new google.maps.Map(mapCanvas, mapOptions);
-      this.locationsView = new RollFindr.Views.MapViewLocations({map: this.map, collection: this.locations});
+      this.locationsView = new RollFindr.Views.MapViewLocations({map: this.map, model: this.model});
       
       var shouldFilter = this.model.get('filters');
       if (1 === shouldFilter) {
@@ -44,7 +44,7 @@
         this.listenTo(this.teamFilter.collection, 'sync change:filter-active', this.updateFilter);
       }
       
-      this.listenTo(this.locations, 'sync', this.updateLocationList);
+      this.listenTo(this.model.get('locations'), 'sync', this.updateLocationList);
 
       google.maps.event.addListener(this.map, 'click', this.createLocation);
       google.maps.event.addListener(this.map, 'idle', this.fetchViewport);
@@ -53,7 +53,13 @@
     },
     updateLocationList: function() {
       var self = this;
-      var list = self.template({'locations': this.locations.toJSON()}); 
+      var locations = this.model.get('locations');
+      var filteredLocations = locations.filter(function(loc) {
+        var coords = loc.get('coordinates');
+        var position = new google.maps.LatLng(coords[0], coords[1]);
+        return self.map.getBounds().contains(position);
+      });
+      var list = this.template({locations: _.invoke(filteredLocations, 'toJSON')}); 
       $('.location-list', this.el).html(list);  
     },
     updateFilter: function() {
@@ -91,17 +97,11 @@
       var distance = circleDistance(this.map.getCenter(), this.map.getBounds().getNorthEast());
 
       this.model.set('center', center);
-      this.locations.fetch({remove: false, data: {center: center, distance: distance}});
+      this.model.get('locations').fetch({remove: false, data: {center: center, distance: distance}});
     },
     showFiltersOrLocations: function(e) {
-      var showFilters = $(e.currentTarget).hasClass('show-filters');
       this.$('.sidebar li').removeClass('active');
       $(e.currentTarget).parent().addClass('active');
-      if (showFilters) {
-        this.$('.sidebar').addClass('show-filters');
-      } else {
-        this.$('.sidebar').removeClass('show-filters');
-      }
     }
   });
     

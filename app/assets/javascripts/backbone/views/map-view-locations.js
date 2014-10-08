@@ -8,11 +8,13 @@
       this.map = options.map;
       this.setFilters(options.filters);
       this.markers = {};
-      this.listenTo(this.collection, 'sync', this.render);
+      this.listenTo(this.model.get('locations'), 'sync', this.render);
     },
     setFilters: function(filters) {
       if ("undefined" !== typeof(filters) && filters.length > 0) {
-        this.filters = _.object(filters.map(function(f) { return [f.get('id'), 1] }));
+        this.filters = _.object(filters.map(function(f) { 
+          return [f.get('id'), 1] 
+        }));
       } else {
         delete this.filters;
       }
@@ -55,7 +57,7 @@
     },
     render: function() {
       var self = this;
-      this.collection.each(function(loc) {
+      this.model.get('locations').each(function(loc) {
         var filtered = self.isFiltered(loc);
         if (filtered) {
           self.deleteMarker(loc);

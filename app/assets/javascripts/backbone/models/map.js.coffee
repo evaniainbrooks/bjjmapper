@@ -1,6 +1,10 @@
 class RollFindr.Models.Map extends Backbone.Model
   paramRoot: 'map'
 
+  initialize: ->
+    locationsCollection = new RollFindr.Collections.LocationsCollection()
+    this.set('locations', locationsCollection)
+
   defaults:
     zoom: 15
     center: [47.6097, -122.3331]
@@ -8,3 +12,4 @@ class RollFindr.Models.Map extends Backbone.Model
     geolocate: false
     geocodepath: null
     searchpath: null
+    locations: []

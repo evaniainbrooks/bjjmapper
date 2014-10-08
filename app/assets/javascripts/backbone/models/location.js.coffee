@@ -10,6 +10,9 @@ class RollFindr.Models.Location extends Backbone.Model
     instructorsCollection = new RollFindr.Collections.InstructorsCollection(instructors, {location_id: id})
     this.set('instructors', instructorsCollection)
 
+  isVisible: (center, radius)->
+
+
   paramRoot: 'location'
   urlRoot: Routes.locations_path
   defaults:

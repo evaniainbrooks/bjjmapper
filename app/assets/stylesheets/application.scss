@@ -73,23 +73,6 @@ html, body {
   }
 }
 
-.sidebar {
-  .location-list {
-    display: inherit;
-  }
-  .filter-list {
-    display: none;
-  }
-  &.show-filters {
-    .filter-list {
-      display: inherit;
-    }
-    .location-list {
-      display: none;
-    }
-  }
-}
-
 .page {
   margin-top: 20px;
 }

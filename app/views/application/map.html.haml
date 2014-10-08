@@ -1,14 +1,15 @@
 .col-md-8
   .map-canvas
-.col-md-4.sidebar
-  %ul.nav.nav-tabs.nav-justified{:role => 'tablist'}
+.col-md-4
+  %ul.nav.nav-tabs.nav-justified
     %li.active
-      %a.show-locations{:href => '#list'} Academies
+      %a.show-locations{:href => '#tab-pane-location-list', 'data-toggle' => 'tab'} Academies
     %li
-      %a.show-filters{:href => '#filters'} Filters
+      %a.show-filters{:href => '#tab-pane-filter-list', 'data-toggle' => 'tab'} Filters
 
-  .location-list
-  .filter-list
+  .tab-content
+    %div#tab-pane-location-list.location-list.tab-pane.fade.in.active
+    %div#tab-pane-filter-list.filter-list.tab-pane.fade.in
     
 = render partial: 'locations/create_modal_small'
 - content_for :scripts do
