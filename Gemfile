@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
 #ruby '1.9.3', :engine => 'jruby', :engine_version => '1.7.12'
-gem 'rails', '>= 4.2.0.beta2', :git => 'git://github.com/rails/rails.git', :branch => :master
+gem 'rails', '>= 4.1.0'
 # Use SCSS for stylesheets
 gem 'sass-rails', :git => 'git://github.com/rails/sass-rails', :branch => :master
-gem 'sprockets-rails', '>= 3.0.0.beta1'
+gem 'sprockets-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
@@ -32,7 +32,6 @@ gem 'omniauth-google-oauth2'
 gem 'less-rails'
 gem 'js-routes'
 gem 'wikipedia-client'
-gem 'wikicloth', :git => 'git://github.com/nricciar/wikicloth', :branch => :master
 gem 'draper'
 gem 'rails-backbone', :git => 'git://github.com/codebrew/backbone-rails.git', :branch => :master
 
