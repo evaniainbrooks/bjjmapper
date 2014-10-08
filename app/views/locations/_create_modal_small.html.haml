@@ -17,7 +17,7 @@
             .form-group
               %label.col-md-6.control-label{:for => "location[team]"} Team
               .col-md-6
-                = f.select :team_id, Team.all.map { |team| [team.name, team.id] }, {}, class: 'form-control  input-md'
+                = f.select :team_id, all_teams_select_options, {}, class: 'form-control  input-md'
             / Textarea
             .form-group
               %label.col-md-6.control-label{:for => "location[description]"} Description

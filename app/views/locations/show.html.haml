@@ -99,7 +99,6 @@
         .pull-right
           %button.btn.btn-danger.btn-md{:type => 'button', 
             :data => { :method => :delete,
-                       :confirm => true,
                        :url => location_path(location), 
                        :title => 'Are you sure you want to delete this academy?', 
                        :body => "You are performing this action as #{current_user}. Press 'Confirm' to permanently delete this academy. Note that this action cannot be un-done." } } 
