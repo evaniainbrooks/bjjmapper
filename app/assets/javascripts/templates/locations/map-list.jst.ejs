@@ -2,8 +2,10 @@
 <% _.each(locations, function(location, index) { %>
   <a href="<%= Routes.location_path(location, { ref: 'map_list' + index }) %>" class="list-group-item">
     <img src="<%= location.image %>" alt="<% location.title %> logo" class="pull-left" />
-    <h4 class="list-group-item-heading"><%= location.title %></h4>
-    <p class="list-group-item-text"><%= location.address %></p>
+    <div>
+      <h4 class="list-group-item-heading"><%= location.title %></h4>
+      <p class="list-group-item-text"><%= location.address %></p>
+    </div>
   </a>
 <% }); %>
 </div>

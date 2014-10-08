@@ -34,7 +34,7 @@ html, body {
   top:0;
   left:0;
   right:0;
-  margin-top: 50px;
+  margin-top: 52px;
   .col-md-4, .col-md-8 { 
     padding: 0px; 
     min-height: 100%;
@@ -59,11 +59,33 @@ html, body {
   .location-list {
     padding: 0px !important;
     .list-group {
+      .list-group-item-heading, .list-group-item-text {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
       img {
         width: 42px;
         height: 42px;
         margin-right: 7px;
       }
+    }
+  }
+}
+
+.sidebar {
+  .location-list {
+    display: inherit;
+  }
+  .filter-list {
+    display: none;
+  }
+  &.show-filters {
+    .filter-list {
+      display: inherit;
+    }
+    .location-list {
+      display: none;
     }
   }
 }
@@ -78,6 +100,12 @@ html, body {
   margin-right: 5px;
 }
 
+.modal {
+  .modal-dialog {
+    margin-top: 80px !important;
+  }
+}
+
 .add-instructor-dialog {
   img {
     width: 100px;
@@ -87,25 +115,12 @@ html, body {
 .new-location-dialog {
   .modal-dialog {
     margin-left: 20px !important;
-    margin-top: 80px !important;
   }
 }
 
 .coords {
   position: relative;
   top: 15px;
-}
-
-.team-list {
-  margin-left: 15px;
-  padding: 2px 5px;
-  background-color: rgba(255,255,255,0.5);
-  border: 1px solid gray;
-  overflow: hidden;
-  ul {
-    max-height: 150px;
-    overflow-y: scroll;
-  }
 }
 
 .show-location {

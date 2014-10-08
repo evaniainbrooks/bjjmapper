@@ -16,14 +16,18 @@
   }
 
   RollFindr.Views.MapView = Backbone.View.extend({
+    el: $('.wrapper'),
     tagName: 'div',
     map: null,
     locations: new RollFindr.Collections.LocationsCollection(),
     template: JST['templates/locations/map-list'],
     teamFilter: null,
     locationsView: null,
+    events: {
+      'click .sidebar li a': 'showFiltersOrLocations',
+    },
     initialize: function() {
-      _.bindAll(this, 'createLocation', 'fetchViewport', 'updateLocationList', 'updateFilter');
+      _.bindAll(this, 'showFiltersOrLocations', 'createLocation', 'fetchViewport', 'updateLocationList', 'updateFilter');
       
       var mapOptions = {
         zoom: this.model.get('zoom'),
@@ -36,9 +40,8 @@
       
       var shouldFilter = this.model.get('filters');
       if (1 === shouldFilter) {
-        this.teamFilter = new RollFindr.Views.TeamListView();
+        this.teamFilter = new RollFindr.Views.TeamListView({el: $('.filter-list')});
         this.listenTo(this.teamFilter.collection, 'sync change:filter-active', this.updateFilter);
-        this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(this.teamFilter.el);
       }
       
       this.listenTo(this.locations, 'sync', this.updateLocationList);
@@ -89,6 +92,16 @@
 
       this.model.set('center', center);
       this.locations.fetch({remove: false, data: {center: center, distance: distance}});
+    },
+    showFiltersOrLocations: function(e) {
+      var showFilters = $(e.currentTarget).hasClass('show-filters');
+      this.$('.sidebar li').removeClass('active');
+      $(e.currentTarget).parent().addClass('active');
+      if (showFilters) {
+        this.$('.sidebar').addClass('show-filters');
+      } else {
+        this.$('.sidebar').removeClass('show-filters');
+      }
     }
   });
     

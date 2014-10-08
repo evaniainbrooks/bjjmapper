@@ -1,11 +1,19 @@
-= render partial: 'locations/create_modal_small'
 .col-md-8
   .map-canvas
-.col-md-4
+.col-md-4.sidebar
+  %ul.nav.nav-tabs.nav-justified{:role => 'tablist'}
+    %li.active
+      %a.show-locations{:href => '#list'} Academies
+    %li
+      %a.show-filters{:href => '#filters'} Filters
+
   .location-list
+  .filter-list
+    
+= render partial: 'locations/create_modal_small'
 - content_for :scripts do
   :javascript
     $(document).ready(function() {
       var mapModel = new RollFindr.Models.Map(#{@map.to_json});
-      var mapView = new RollFindr.Views.MapView({model: mapModel, el: $('.map-view')});
+      var mapView = new RollFindr.Views.MapView({model: mapModel});
     });
