@@ -20,7 +20,11 @@
       %form.navbar-form.navbar-left{:role => "search"}
         .form-group
           %input.form-control{:placeholder => "Search", :type => "text"}/
-        %button.btn.btn-default{:type => "submit"} Submit
+          .input-group
+            %input.form-control{:size => '10', :placeholder => "Current View", :type => "text"}/
+            %a.input-group-addon{'data-geolocate' => 'true', :href => '#geolocate'}
+              %i.fa.fa-location-arrow
+        %button.btn.btn-default{:type => "submit"} Search
       = render partial: 'profile_or_login'
     / /.navbar-collapse
   / /.container-fluid
