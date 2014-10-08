@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include TeamsHelper
+
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
@@ -8,7 +10,6 @@ class ApplicationController < ActionController::Base
   helper_method :correct_user?
 
   helper_method :action?
-  helper_method :all_teams
 
   def map
     center = params.fetch(:center, [])
@@ -43,10 +44,6 @@ class ApplicationController < ActionController::Base
   end
   
   private
-
-  def all_teams
-    Team.all.limit(50).decorate
-  end
 
   def action?(action)
     params.fetch(:action, :unknown).to_sym.eql?(action)
