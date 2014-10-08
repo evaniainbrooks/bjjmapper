@@ -6,7 +6,7 @@ class UserDecorator < Draper::Decorator
   DEFAULT_IMAGE = 'default-user-100.png'
 
   def image
-    object.image || DEFAULT_IMAGE 
+    h.image_path(object.image || DEFAULT_IMAGE)
   end
 
   def belt_rank

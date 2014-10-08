@@ -3,7 +3,6 @@ class LocationsController < ApplicationController
   before_filter :set_location, only: [:show, :instructors]
   before_filter :set_map, only: :show
 
-  helper_method :edit_mode?
   helper_method :all_instructors
 
   decorates_assigned :location
@@ -104,10 +103,6 @@ class LocationsController < ApplicationController
       :locations => [],
       :filters => 0
     }
-  end
-
-  def edit_mode?
-    params.fetch(:edit, 0).to_i.eql? 1
   end
 
   def create_params

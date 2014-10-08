@@ -8,7 +8,6 @@ class ApplicationController < ActionController::Base
   helper_method :correct_user?
 
   helper_method :action?
-
   helper_method :all_teams
 
   def map
@@ -42,7 +41,7 @@ class ApplicationController < ActionController::Base
   def webstore
     render layout: 'webstore'
   end
-
+  
   private
 
   def all_teams

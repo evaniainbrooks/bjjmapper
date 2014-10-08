@@ -18,38 +18,58 @@
  */
 
 html, body {
-  height: 100%;
   margin: 0px;
   padding: 0px;
 }
-
+  
 .edit-control {
   border: 1px solid #ccc;
   padding-bottom: 10px;
 }
 
-.navbar {
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  margin-bottom: 0px !important;
+.wrapper {
+  position:absolute;
+  height:auto;
+  bottom:0;
+  top:0;
+  left:0;
+  right:0;
+  margin-top: 50px;
+  .col-md-4, .col-md-8 { 
+    padding: 0px; 
+    min-height: 100%;
+  }
+  
+  .map-canvas {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  
+  .navbar {
+    position: fixed !important;
+    width: 100%;
+    z-index: 10000;
+    top: 0px;
+    left: 0px;
+    margin-bottom: 0px !important;
+  }
+  .location-list {
+    padding: 0px !important;
+    .list-group {
+      img {
+        width: 42px;
+        height: 42px;
+        margin-right: 7px;
+      }
+    }
+  }
 }
 
 .page {
   margin-top: 20px;
-}
-
-.map-view, .map-canvas {
-  height: 90%;
-  width: 100%;
-
-  .list-group {
-    img {
-      width: 42px;
-      height: 42px;
-      margin-right: 7px;
-    }
-  }
 }
 
 .instructor {

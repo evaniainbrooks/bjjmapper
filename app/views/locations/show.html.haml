@@ -1,12 +1,14 @@
 .container.show-location.page
-  = form_for(location, html: { class: 'form editable ' + (edit_mode? ? 'edit-mode' : '')}) do |f|
+  = form_for(location, html: { class: 'form ' + edit_mode_classes }) do |f|
     .row
       .col-md-12
         = render partial: 'breadcrumb', locals: { location: location }
     .row
       .col-md-2
-        .display-field= image_tag location.image, class: 'center-block' 
-        .edit-field= image_tag location.image, class: 'center-block edit-image' 
+        .display-field
+          %img{:src => location.image, :class => 'center-block'}/ 
+        .edit-field
+          %img{:src => location.image, :class => 'center-block edit-image'}/
       .col-md-4
         %h1.display-field
           = location.title

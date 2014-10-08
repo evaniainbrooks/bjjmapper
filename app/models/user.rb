@@ -1,3 +1,5 @@
+require 'wikipedia'
+
 class User
   include Mongoid::Document
   include Geocoder::Model::Mongoid
@@ -13,6 +15,7 @@ class User
   field :coordinates, type: Array
   field :last_seen_at, type: Integer
   field :description, type: String
+  field :summary, type: String
 
   field :oauth_token, type: String
   field :oauth_expires_at, type: Integer
@@ -60,8 +63,8 @@ class User
   private
 
   def create_summary_from_description
-    #self.description.match /<p>(.*)<\/p>/
-    "TODO IMPLEMENT ME"
+    matchdata = self.description.match /<p>(.*)<\/p>/
+    matchdata[1] if matchdata.present?
   end
 end
 
