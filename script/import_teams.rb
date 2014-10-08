@@ -16,9 +16,11 @@ end.parse!
 
 f = File.open(options[:filename], "r")
 csv = CSV.parse(f, :headers => false)
+puts "Running as #{Rails.env}"
 csv.each do |row|
   team_name = row[0].strip
   team = Team.where(:name => team_name).first_or_create(:image => row[1], :description => row[2])
+  puts "Imported #{team.name} #{team.id}"
 end
 
 p options

@@ -16,6 +16,7 @@ end.parse!
 
 f = File.open(options[:filename], "r")
 csv = CSV.parse(f, :headers => false)
+puts "Running as #{Rails.env}"
 csv.each do |row|
   team_name = row[9].strip
   team = Team.where(:name => team_name).first_or_create
