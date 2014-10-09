@@ -16,6 +16,7 @@ class User
   field :last_seen_at, type: Integer
   field :description, type: String
   field :summary, type: String
+  field :description_src, type: String
 
   field :oauth_token, type: String
   field :oauth_expires_at, type: Integer
@@ -34,8 +35,8 @@ class User
       page = Wikipedia.find(self.name)
       if page.content.present?
         self.image = page.image_urls.last
-        self.description = WikiCloth::Parser.new({:data => page.content}).to_html
-        self.summary = create_summary_from_description
+        self.description_src = :wikipedia
+        self.description = page.content 
       end
     end
   end
@@ -50,21 +51,12 @@ class User
           :oauth_expires_at => Time.at(auth.try(:credentials).try(:expires_at) || 0), 
           :last_seen_at => Time.now
         })
-    
-
   end
   
   def as_json args
     super(args.merge(except: [:ip_address, :coordinates, :uid, :provider, :email, :_id])).merge({
       :id => self.id.to_s
     })
-  end
-
-  private
-
-  def create_summary_from_description
-    matchdata = self.description.match /<p>(.*)<\/p>/
-    matchdata[1] if matchdata.present?
   end
 end
 
