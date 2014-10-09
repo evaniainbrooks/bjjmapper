@@ -3,25 +3,11 @@
   RollFindr.Views.MapViewLocations = Backbone.View.extend({
     template: JST['templates/locations/show'],
     initialize: function(options) {
-      var self = this;
-      
+      _.bindAll(this, 'render');
+
       this.map = options.map;
-      this.setFilters(options.filters);
+      this.filters = options.filters;
       this.markers = {};
-      this.listenTo(this.model.get('locations'), 'sync', this.render);
-    },
-    setFilters: function(filters) {
-      if ("undefined" !== typeof(filters) && filters.length > 0) {
-        this.filters = _.object(filters.map(function(f) { 
-          return [f.get('id'), 1] 
-        }));
-      } else {
-        delete this.filters;
-      }
-    },
-    isFiltered: function(loc) {
-      var teamId = loc.get('team_id');
-      return "undefined" !== typeof(this.filters) && "undefined" === typeof(this.filters[teamId]);
     },
     addMarker: function(loc) {
       var self = this;
@@ -55,10 +41,13 @@
         delete this.markers[id];
       }
     },
-    render: function() {
+    render: function(filters) {
       var self = this;
-      this.model.get('locations').each(function(loc) {
-        var filtered = self.isFiltered(loc);
+
+      var activeFilters = this.filters.activeFilters();
+      this.collection.each(function(loc) {
+        var teamId = loc.get('team_id');
+        var filtered = null !== activeFilters && 1 !== activeFilters[teamId];
         if (filtered) {
           self.deleteMarker(loc);
         } else {

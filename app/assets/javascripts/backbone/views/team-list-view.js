@@ -28,10 +28,30 @@
       filter.set('filter-active', $(e.target).is(':checked'));
     },
     activeFilters: function() {
-      var filteredCollection = this.collection.filter(function(f) {
-        return f.get('filter-active');
+      var filters = _.chain(this.collection.models)
+        .filter(function(f) {
+          return f.get('filter-active');
+        })
+        .map(function(f) {
+          return [f.get('id'), 1];
+        });
+
+      if (filters.value().length <= 0) {
+        return null;
+      }
+      
+      return _.object(filters.value());
+    },
+    filterCollection: function(collectionToFilter) {
+      var activeFilters = this.activeFilters();
+      if (null == activeFilters) {
+        return collectionToFilter;
+      }
+
+      return collectionToFilter.filter(function(f) {
+        var teamId = f.get('team_id');
+        return "undefined" !== typeof(activeFilters[teamId]);
       });
-      return filteredCollection;
     },
     clearFilters: function() {
       this.$('input:checked').each(function(i, o) {

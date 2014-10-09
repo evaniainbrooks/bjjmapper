@@ -26,7 +26,7 @@
       'click .sidebar li a': 'showFiltersOrLocations',
     },
     initialize: function() {
-      _.bindAll(this, 'showFiltersOrLocations', 'createLocation', 'fetchViewport', 'updateLocationList', 'updateFilter');
+      _.bindAll(this, 'showFiltersOrLocations', 'createLocation', 'fetchViewport', 'render');
       
       var mapOptions = {
         zoom: this.model.get('zoom'),
@@ -36,34 +36,39 @@
 
       var mapCanvas = $('.map-canvas', this.el)[0];
       this.map = new google.maps.Map(mapCanvas, mapOptions);
-      this.locationsView = new RollFindr.Views.MapViewLocations({map: this.map, model: this.model});
+
+      this.teamFilter = new RollFindr.Views.TeamListView({el: $('.filter-list')});
+      this.locationsView = new RollFindr.Views.MapViewLocations(
+          {
+            map: this.map,
+            filters: this.teamFilter,
+            collection: this.model.get('locations')
+          });
       
-      var shouldFilter = this.model.get('filters');
-      if (1 === shouldFilter) {
-        this.teamFilter = new RollFindr.Views.TeamListView({el: $('.filter-list')});
-        this.listenTo(this.teamFilter.collection, 'sync change:filter-active', this.updateFilter);
-      }
-      
-      this.listenTo(this.model.get('locations'), 'sync', this.updateLocationList);
+      this.listenTo(this.teamFilter.collection, 'change:filter-active', this.render);
+      this.listenTo(this.model.get('locations'), 'sync', this.render);
 
       google.maps.event.addListener(this.map, 'click', this.createLocation);
       google.maps.event.addListener(this.map, 'idle', this.fetchViewport);
       
       this.setCenter();
     },
-    updateLocationList: function() {
+    visibleLocations: function() {
       var self = this;
-      var locations = this.model.get('locations');
-      var filteredLocations = locations.filter(function(loc) {
-        var coords = loc.get('coordinates');
-        var position = new google.maps.LatLng(coords[0], coords[1]);
-        return self.map.getBounds().contains(position);
-      });
-      var list = this.template({locations: _.invoke(filteredLocations, 'toJSON')}); 
-      $('.location-list', this.el).html(list);  
+      var locations = _.chain(this.model.get('locations').models);
+      var filteredLocations = this.teamFilter
+          .filterCollection(locations)
+          .filter(function(loc) {
+            var coords = loc.get('coordinates');
+            var position = new google.maps.LatLng(coords[0], coords[1]);
+            return self.map.getBounds().contains(position);
+          }).value();
+      return filteredLocations;
     },
-    updateFilter: function() {
-      this.locationsView.setFilters(this.teamFilter.activeFilters());
+    render: function() {
+      var list = this.template({locations: _.invoke(this.visibleLocations(), 'toJSON')}); 
+      $('.location-list', this.el).html(list); 
+
       this.locationsView.render();
     },
     createLocation: function(event) {
