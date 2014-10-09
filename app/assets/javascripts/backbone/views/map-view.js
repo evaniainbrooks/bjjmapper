@@ -22,11 +22,8 @@
     template: JST['templates/locations/map-list'],
     teamFilter: null,
     locationsView: null,
-    events: {
-      'click .sidebar li a': 'showFiltersOrLocations',
-    },
     initialize: function() {
-      _.bindAll(this, 'showFiltersOrLocations', 'createLocation', 'fetchViewport', 'render');
+      _.bindAll(this, 'createLocation', 'fetchViewport', 'render');
       
       var mapOptions = {
         zoom: this.model.get('zoom'),
@@ -103,10 +100,6 @@
 
       this.model.set('center', center);
       this.model.get('locations').fetch({remove: false, data: {center: center, distance: distance}});
-    },
-    showFiltersOrLocations: function(e) {
-      this.$('.sidebar li').removeClass('active');
-      $(e.currentTarget).parent().addClass('active');
     }
   });
     
