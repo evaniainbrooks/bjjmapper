@@ -2,7 +2,7 @@
 
 describe 'edit mode', ->
   beforeEach ->
-    e = $('body').addHtml('div', { class: 'editable edit-mode' })
+    e = $('body').addHtml('div', { 'class': 'editable edit-mode' })
     e.addHtml('a', { 'data-cancel-edit': true })
     e.addHtml('a', { 'data-begin-edit': true })
 
@@ -15,3 +15,5 @@ describe 'edit mode', ->
     $('.editable').should.not.have.class('edit-mode')
     $('[data-begin-edit]').trigger('click')
     $('.editable').should.have.class('edit-mode')
+
+
