@@ -24,11 +24,6 @@
       this.listenTo(this.model.get('instructors'), 'remove', this.instructorCollectionChanged);
     },
     addInstructor: function() {
-      var locationId = this.model.get('id');
-      var newUserModel = new RollFindr.Models.Instructor({location_id: locationId});
-      newUserModel.set('id', '541b9672afd99446c9000031');
-      newUserModel.save();
-
       $('.add-instructor-dialog').modal('show');
     },
     removeInstructor: function(e) {

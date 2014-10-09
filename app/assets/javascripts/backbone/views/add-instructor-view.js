@@ -6,7 +6,6 @@
     el: $('.add-instructor-dialog'),
     events: {
       'change [name="instructor_name"]': 'changeInstructor'
-      //'click button.
     },
     initialize: function() {
       _.bindAll(this, 'changeInstructor');

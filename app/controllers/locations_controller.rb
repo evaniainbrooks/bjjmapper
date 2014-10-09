@@ -87,7 +87,7 @@ class LocationsController < ApplicationController
   private
 
   def all_instructors
-    User.where(:role => 'locked').limit(50).sort_by(&:name)
+    User.where(:role => 'instructor').limit(50).sort_by(&:name)
   end
 
   def set_instructor
