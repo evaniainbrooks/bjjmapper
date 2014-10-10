@@ -39,10 +39,6 @@ class ApplicationController < ActionController::Base
   def meta
   end
   
-  def webstore
-    render layout: 'webstore'
-  end
-  
   private
 
   def action?(action)

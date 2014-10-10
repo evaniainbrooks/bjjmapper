@@ -7,9 +7,6 @@ Rails.application.routes.draw do
   resources :teams, :only => [:show, :index]
   root 'application#map'
 
-  # TEMPORARY PODIUM WEBSTORE TEST REMOVE
-  get '/webstore' => 'application#webstore'
-
   get 'search/:query' => 'application#search'
   match '/signin' => 'sessions#new', :as => :signin, :via => [:post, :get]
   match '/auth/:provider/callback' => 'sessions#create', :via => [:post, :get]
