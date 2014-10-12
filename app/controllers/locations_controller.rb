@@ -31,12 +31,17 @@ class LocationsController < ApplicationController
   end
 
   def geocode
-    location = Location.create(create_params)
-    location_json = location.to_json
-    location.destroy
+    search_query = params.fetch(:query, '')
+    search_result = Geocoder.search(search_query)
+
     respond_to do |format|
-      format.json { render json: location_json }
-      format.html { redirect_to root_path }
+      format.json do
+        if search_result.count > 0
+          render json: search_result[0].geometry["location"]
+        else
+          render status: :not_found, json: {}
+        end
+      end  
     end
   end
 

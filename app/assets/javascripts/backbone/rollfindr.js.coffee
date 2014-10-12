@@ -2,10 +2,9 @@
 #= require_tree ./templates
 #= require_tree ./models
 #= require_tree ./views
-#= require_tree ./routers
 
 window.RollFindr =
   Models: {}
   Collections: {}
-  Routers: {}
   Views: {}
+  GlobalEvents: _.extend({}, Backbone.Events)

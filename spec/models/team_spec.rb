@@ -1,5 +1,11 @@
 require 'spec_helper'
 
 describe Team do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it 'has a factory' do
+    build(:team).should be_present
+  end
+  
+  it 'has a decorator' do
+    Team.new.decorate.should be_decorated
+  end
 end

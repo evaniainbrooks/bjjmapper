@@ -10,6 +10,21 @@ class ApplicationController < ActionController::Base
   helper_method :correct_user?
 
   helper_method :action?
+  
+  def geocode
+    search_query = params.fetch(:query, '')
+    search_result = Geocoder.search(search_query)
+
+    respond_to do |format|
+      format.json do
+        if search_result.count > 0
+          render json: search_result[0].geometry["location"]
+        else
+          render status: :not_found, json: {}
+        end
+      end  
+    end
+  end
 
   def map
     center = params.fetch(:center, [])

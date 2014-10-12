@@ -15,11 +15,12 @@ Rails.application.routes.draw do
   
   get '/meta' => 'application#meta', :as => :meta
   get '/people' => 'application#people'
+  get '/geocode' => 'application#geocode'
   post '/contact' => 'application#contact', :as => :contact
+
 
   resources :locations do
     get :search, on: :collection
-    get :geocode, on: :collection
     resources :users, controller: :instructors, as: :instructors, path: '/instructors', only: [:create, :destroy]
   end
 end

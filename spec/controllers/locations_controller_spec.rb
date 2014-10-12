@@ -17,7 +17,6 @@ describe LocationsController do
       end
     end
   end
-
   describe 'DELETE destroy' do
     let(:location) { create(:location) }
     context 'with html format' do

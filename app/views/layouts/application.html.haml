@@ -27,3 +27,5 @@
     = javascript_include_tag "templates/confirm_dialog"
     = javascript_include_tag "application"
     = yield(:scripts) if content_for?(:scripts)
+    :coffeescript
+      nav = new RollFindr.Views.NavbarView()

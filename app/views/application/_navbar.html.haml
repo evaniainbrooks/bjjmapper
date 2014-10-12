@@ -19,9 +19,9 @@
           %a{:href => meta_path} About
       %form.navbar-form.navbar-left{:role => "search"}
         .form-group
-          %input.form-control{:placeholder => "Search", :type => "text"}/
+          %input.form-control{:name => 'query', :placeholder => "Search", :type => "text"}/
           .input-group
-            %input.form-control{:size => '10', :placeholder => "Current View", :type => "text"}/
+            %input.form-control{:name => 'location', :size => '10', :placeholder => "Current View", :type => "text"}/
             %a.input-group-addon{'data-geolocate' => 'true', :href => '#geolocate'}
               %i.fa.fa-location-arrow
         %button.btn.btn-default{:type => "submit"} Search
