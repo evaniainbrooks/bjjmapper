@@ -18,10 +18,25 @@ class UserDecorator < Draper::Decorator
   end
 
   def rank_image
-    h.path_to_asset("belts/#{belt_rank}#{stripe_rank}.png", type: :image)
+    h.image_path("belts/#{belt_rank}#{[stripe_rank, 7].min}.png")
   end
 
   def rank_in_words
     "#{belt_rank.capitalize} belt #{stripe_rank} stripes"
+  end
+
+  def description
+    if description_src.try(:to_sym).try(:eql?, :wikipedia)
+      WikiCloth::Parser.new({:data => object.description}).to_html
+    else 
+      object.description
+    end
+  end
+  
+  def summary 
+    @summary ||= if description_src.try(:to_sym).try(:eql?, :wikipedia) 
+      matchdata = description.match /<p>(.*)<\/p>/
+      matchdata[1] if matchdata.present?
+    end
   end
 end
