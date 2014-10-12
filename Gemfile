@@ -53,5 +53,6 @@ group :test, :development do
   gem 'factory_girl_rails'
   gem 'guard-rspec', '~> 4.3.1'
   gem 'simplecov'
+  gem 'rubocop'
 end
 
