@@ -12,26 +12,34 @@ class LocationDecorator < Draper::Decorator
   decorates :location
 
   def description
-    object.description.present? ? object.description : h.content_tag(:i) { DEFAULT_DESCRIPTION }
+    if object.description.present?
+      object.description
+    else
+      h.content_tag(:i) { DEFAULT_DESCRIPTION }
+    end
   end
 
   def directions
-    object.directions.present? ? object.directions :  h.content_tag(:i) { DEFAULT_DIRECTIONS }
+    if object.directions.present?
+      object.directions
+    else
+      h.content_tag(:i) { DEFAULT_DIRECTIONS }
+    end
   end
 
   def image
     img = object.image
     img = team.object.image if img.blank? && team.present?
     img = DEFAULT_IMAGE if img.blank?
-    h.path_to_asset(img, {type: :image})
+    h.image_path(img)
   end
 
   def updated_at
-    'updated ' + h.time_ago_in_words(object.updated_at) + ' ago'
+    "updated #{h.time_ago_in_words(object.updated_at)} ago"
   end
 
   def created_at
-    'created ' + h.time_ago_in_words(object.created_at) + ' ago'
+    "created #{h.time_ago_in_words(object.created_at)} ago"
   end
 
   def team_name
@@ -42,14 +50,14 @@ class LocationDecorator < Draper::Decorator
     h.number_to_phone(object.phone)
   end
 
-  def as_json args
+  def as_json(args)
     # Select which decorator methods override the defaults from object
-    object.as_json(args).merge({
-      :image => image,
-      :team_name => team_name,
-      :created_at => created_at,
-      :updated_at => updated_at
-    })
+    object.as_json(args).merge(
+      image: image,
+      team_name: team_name,
+      created_at: created_at,
+      updated_at: updated_at
+    )
   end
 end
 

@@ -4,7 +4,7 @@ describe LocationDecorator do
   describe '.description' do
     context 'with blank description' do
       subject { build(:location, description: nil).decorate }
-      it { subject.description.should match LocationDecorator::DEFAULT_DESCRIPTION }  
+      it { subject.description.should match LocationDecorator::DEFAULT_DESCRIPTION }
     end
     context 'with explicit description' do
       subject { build(:location, description: 'xyz').decorate }
@@ -16,11 +16,14 @@ describe LocationDecorator do
       context 'with no team image' do
         subject { build(:location, image: nil, team: nil).decorate }
         it 'returns the default image' do
-          subject.image.should match(LocationDecorator::DEFAULT_IMAGE) 
+          subject.image.should match(LocationDecorator::DEFAULT_IMAGE)
         end
       end
       context 'with team image' do
-        subject { build(:location, image: nil, team: build(:team, image: '123.jpg')).decorate }
+        subject do
+          team = build(:team, image: '123.jpg')
+          build(:location, image: nil, team: team).decorate
+        end
         it 'returns the team image' do
           subject.image.should match(subject.object.team.image)
         end

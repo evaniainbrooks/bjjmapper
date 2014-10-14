@@ -1,28 +1,28 @@
 class SessionsController < ApplicationController
-  skip_before_filter :verify_authenticity_token, :only => [:create]
-  
+  skip_before_action :verify_authenticity_token, only: [:create]
+
   def create
     user = User.from_omniauth(auth_info, request.remote_ip)
     user.update_attribute(:last_seen_at, Time.now)
     session[:user_id] = user.id
-    redirect_to root_url, :notice => "Signed in!"
+    redirect_to root_url, notice: 'Signed in!'
   end
 
   def new
   end
 
   def failure
-    redirect_to root_url, :alert => "Authentication error: #{params[:message].humanize}"
+    redirect_to root_url, alert: "Authentication error: #{params[:message].humanize}"
   end
 
   def destroy
     reset_session
-    redirect_to root_url, notice: "Signed Out"
+    redirect_to root_url, notice: 'Signed Out'
   end
 
   private
 
   def auth_info
-    request.env["omniauth.auth"]
+    request.env['omniauth.auth']
   end
 end

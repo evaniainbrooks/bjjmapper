@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   helper_method :correct_user?
 
   helper_method :action?
-  
+
   def geocode
     search_query = params.fetch(:query, '')
     search_result = Geocoder.search(search_query)
@@ -18,22 +18,22 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.json do
         if search_result.count > 0
-          render json: search_result[0].geometry["location"]
+          render json: search_result[0].geometry['location']
         else
           render status: :not_found, json: {}
         end
-      end  
+      end
     end
   end
 
   def map
     center = params.fetch(:center, [])
     @map = {
-      :zoom => center.present? ? Map::ZOOM_LOCATION : Map::ZOOM_DEFAULT,
-      :center => center,
-      :geolocate => center.blank? ? 1 : 0,
-      :locations => [],
-      :filters => 1
+      zoom: center.present? ? Map::ZOOM_LOCATION : Map::ZOOM_DEFAULT,
+      center: center,
+      geolocate: center.blank? ? 1 : 0,
+      locations: [],
+      filters: 1
     }
 
     respond_to do |format|
@@ -46,14 +46,13 @@ class ApplicationController < ActionController::Base
     email = params[:email]
     message = params[:message]
 
-    mail = FeedbackMailer.feedback_email(name, email, message, current_user)
-    result = mail.deliver   
+    FeedbackMailer.feedback_email(name, email, message, current_user).deliver
     redirect_to meta_path
   end
 
   def meta
   end
-  
+
   private
 
   def action?(action)
@@ -74,19 +73,21 @@ class ApplicationController < ActionController::Base
 
   def correct_user?
     @user = User.find(params[:id])
-      unless current_user == @user
-      redirect_to root_url, :alert => "Access denied."
+    unless current_user == @user
+      redirect_to root_url, :alert => 'Access denied.'
     end
   end
 
   def authenticate_user!
-    if !current_user
+    unless current_user
       redirect_to root_url, :alert => 'You need to sign in for access to this page.'
     end
   end
 
   def google_maps_api
-    "#{Rails.configuration.google_maps_endpoint}?key=#{Rails.configuration.google_maps_api_key}&v=3.exp&sensor=false"
+    ep = Rails.configuration.google_maps_endpoint
+    key = Rails.configuration.google_maps_api_key
+    "#{ep}?key=#{key}&v=3.exp&sensor=false"
   end
 end
 

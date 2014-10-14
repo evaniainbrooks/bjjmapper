@@ -1,9 +1,9 @@
 class InstructorsController < ApplicationController
-  before_filter :set_location
-  before_filter :set_instructor, only: [:destroy]
+  before_action :set_location
+  before_action :set_instructor, only: [:destroy]
 
   def create
-    @instructor = if params.has_key? :user
+    @instructor = if params.key? :user
       User.create!(create_params)
     else
       User.find(params[:id])
@@ -37,6 +37,6 @@ class InstructorsController < ApplicationController
 
   def set_instructor
     @instructor = @location.instructors.find(params[:id])
-    head :not_found and return false  unless @instructor.present?
+    head :not_found and return false unless @instructor.present?
   end
 end

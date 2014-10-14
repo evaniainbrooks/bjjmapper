@@ -2,18 +2,18 @@ require 'spec_helper'
 
 describe LocationsController do
   describe 'GET show' do
-    context 'with json format' do 
-      let(:location) { create(:location) } 
+    context 'with json format' do
+      let(:location) { create(:location) }
       it 'returns the location' do
-        get :show, { format: 'json', id: location.id }
+        get :show, format: 'json', id: location.id
         response.body.should eq location.to_json
       end
     end
     context 'with html format' do
-      let(:location) { create(:location) } 
+      let(:location) { create(:location) }
       it 'returns the location markup' do
-        get :show, { id: location.id }
-        response.should render_template("locations/show")
+        get :show, id: location.id
+        response.should render_template('locations/show')
       end
     end
   end
@@ -22,30 +22,30 @@ describe LocationsController do
     context 'with html format' do
       it 'deletes the record and redirects to root'  do
         location
-        expect {
-          delete :destroy, { id: location.id, format: 'html' }
+        expect do
+          delete :destroy, id: location.id, format: 'html'
           response.should redirect_to(root_path)
-        }.to change { Location.count }.by(-1)
+        end.to change { Location.count }.by(-1)
       end
     end
     context 'with json format' do
       it 'deletes the record' do
         location
-        expect {
+        expect do
           delete :destroy, { id: location.id, format: 'json' }
           response.status.should be 200
-        }.to change { Location.count }.by(-1)
+        end.to change { Location.count }.by(-1)
       end
     end
   end
   describe 'POST create' do
-    let(:create_params) { { :location => { :title => 'New title', :description => 'New description' }}}
+    let(:create_params) { { :location => { :title => 'New title', :description => 'New description' } } }
     context 'with html format' do
       it 'creates and redirects to a new location in edit mode' do
-        expect {
+        expect do
           post :create, create_params.merge({:format => 'html'})
           response.should redirect_to(location_path(Location.first, edit: 1))
-        }.to change { Location.count }.by(1)
+        end.to change { Location.count }.by(1)
       end
     end
     context 'with json format' do
@@ -57,7 +57,7 @@ describe LocationsController do
   end
 
   describe 'POST update' do
-    let(:update_params) { { :location => { :title => 'New title', :description => 'New description' }}}
+    let(:update_params) { { :location => { :title => 'New title', :description => 'New description' } } }
     context 'with json format' do
       let(:location) { create(:location, description: 'xyz') }
       it 'updates and returns the location' do
@@ -69,7 +69,7 @@ describe LocationsController do
       let(:location) { create(:location, description: 'xyz') }
       it 'redirects back to the location' do
         post :update, { id: location.id, :format => 'html' }.merge(update_params)
-        response.body.should redirect_to(location_path(location, edit: 0)) 
+        response.body.should redirect_to(location_path(location, edit: 0))
       end
     end
   end
@@ -77,7 +77,7 @@ describe LocationsController do
   describe 'GET index' do
     context 'with country and city filter' do
       let(:filter) { { :city => 'New York', :country => 'US' } }
-      before do 
+      before do
         create(:location, filter)
         create(:location, city: 'Paris', country: 'FR')
       end
@@ -109,7 +109,7 @@ describe LocationsController do
   describe 'GET search' do
     context 'with invalid params' do
       it 'returns bad request' do
-        get :search, { format: 'json', center: 'ajdfigjfd' }
+        get :search, format: 'json', center: 'ajdfigjfd'
         response.status.should eq 400
       end
     end
@@ -117,7 +117,7 @@ describe LocationsController do
       context 'with existing locations' do
         let(:location) { create(:location, title: 'Wow super location') }
         it 'returns the locations' do
-          get :search, { center: location.coordinates, distance: 10.0, format: 'json' }
+          get :search, center: location.coordinates, distance: 10.0, format: 'json'
           response.body.should include(location.title)
         end
       end
@@ -133,7 +133,7 @@ describe LocationsController do
         let(:red_location) { create(:location, team: red_team, title: 'Red location') }
         let(:blue_location) { create(:location, team: blue_team, title: 'Blue location', coordinates: red_location.coordinates) }
         it 'returns specific team locations' do
-          get :search, { center: blue_location.coordinates, distance: 10.0, team: [blue_team.id], format: 'json' }
+          get :search, center: blue_location.coordinates, distance: 10.0, team: [blue_team.id], format: 'json'
           response.body.should include(blue_location.title)
           response.body.should_not include(red_location.title)
         end

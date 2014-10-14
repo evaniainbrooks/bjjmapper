@@ -18,7 +18,8 @@ class Location
   after_validation :reverse_geocode
 
   reverse_geocoded_by :coordinates do |obj, results|
-    if obj.address.blank? and geo = results.first
+    geo = results.first
+    if obj.address.blank? && geo.present?
       obj.street = geo.street_address
       obj.city = geo.city
       obj.state = geo.state
@@ -52,9 +53,9 @@ class Location
     team.try(:name)
   end
 
-  def as_json args
+  def as_json(args)
     # Hack around mongo ugly ids
-    result = super(args.merge(except: [:coordinates, :_id, :team_id, :instructor_ids])).merge({
+    super(args.merge(except: [:coordinates, :_id, :team_id, :instructor_ids])).merge({
       :id => self.id.to_s,
       :team_id => self.team_id.to_s,
       :instructors => self.instructor_ids.map(&:to_s),

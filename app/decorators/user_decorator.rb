@@ -27,15 +27,15 @@ class UserDecorator < Draper::Decorator
 
   def description
     if description_src.try(:to_sym).try(:eql?, :wikipedia)
-      WikiCloth::Parser.new({:data => object.description}).to_html
-    else 
+      WikiCloth::Parser.new(data: object.description).to_html
+    else
       object.description
     end
   end
-  
-  def summary 
-    @summary ||= if description_src.try(:to_sym).try(:eql?, :wikipedia) 
-      matchdata = description.match /<p>(.*)<\/p>/
+
+  def summary
+    @summary ||= if description_src.try(:to_sym).try(:eql?, :wikipedia)
+      matchdata = description.match(/<p>(.*)<\/p>/)
       matchdata[1] if matchdata.present?
     end
   end

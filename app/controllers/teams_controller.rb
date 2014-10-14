@@ -1,13 +1,13 @@
 class TeamsController < ApplicationController
-  before_filter :set_team, only: :show
-  before_filter :set_teams, only: :index
+  before_action :set_team, only: :show
+  before_action :set_teams, only: :index
 
   decorates_assigned :team, :teams
 
   def show
     respond_to do |format|
       format.json { render json: @team }
-      format.html 
+      format.html
     end
   end
 

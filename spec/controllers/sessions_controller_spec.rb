@@ -2,19 +2,19 @@ require 'spec_helper'
 require 'shared/omniauth_context'
 
 describe SessionsController do
-  describe "GET new" do
-    it "shows the signin page" do
+  describe 'GET new' do
+    it 'shows the signin page' do
       get :new
       response.should be_success
     end
   end
-  describe "POST create" do
+  describe 'POST create' do
     include_context 'omniauth success'
     context 'when the user does not exist' do
-      it "creates a user" do
-        expect {
+      it 'creates a user' do
+        expect do
           post :create, provider: omniauth_provider
-        }.to change{ User.count }.by(1)
+        end.to change{ User.count }.by(1)
       end
       it 'creates a session with the new user' do
         session[:user_id].should be_nil
@@ -23,11 +23,13 @@ describe SessionsController do
       end
     end
     context 'when the user does exist' do
-      before { @user = create(:user, uid: omniauth_uid, provider: omniauth_provider) }
+      before do
+        @user = create(:user, uid: omniauth_uid, provider: omniauth_provider)
+      end
       it 'does not create a user' do
-        expect {
+        expect do
           post :create, provider: omniauth_provider
-        }.to change{ User.count }.by(0)
+        end.to change{ User.count }.by(0)
       end
       it 'creates a session with the existing user' do
         session[:user_id].should be_nil
@@ -35,7 +37,7 @@ describe SessionsController do
         session[:user_id].should eq @user.id
       end
     end
-    it "redirects the user to the root url" do
+    it 'redirects the user to the root url' do
       post :create, provider: omniauth_provider
       response.should redirect_to root_url
     end
@@ -48,13 +50,13 @@ describe SessionsController do
       response.should redirect_to root_url
     end
   end
-  describe "DELETE destroy" do
+  describe 'DELETE destroy' do
     before { session[:user_id] = 'loggedin12345' }
-    it "should clear the session" do
+    it 'clears the session' do
       delete :destroy
       session[:user_id].should be_nil
     end
-    it "should redirect to the home page" do
+    it 'redirects to the home page' do
       delete :destroy
       response.should redirect_to root_url
     end

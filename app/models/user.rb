@@ -31,29 +31,29 @@ class User
   has_and_belongs_to_many :locations
 
   before_create do
-    if :instructor == self.role.try(:to_sym)
-      page = Wikipedia.find(self.name)
+    if :instructor == role.try(:to_sym)
+      page = Wikipedia.find(name)
       if page.content.present?
         self.image = page.image_urls.last
         self.description_src = :wikipedia
-        self.description = page.content 
+        self.description = page.content
       end
     end
   end
-  
-  def self.from_omniauth(auth, ip_address) 
-    User.where(:provider => auth['provider'], :uid => auth['uid'])
-        .first_or_create({
-          :name => auth.try(:[], 'info').try(:[], 'name'),
-          :email => auth.try(:[], 'info').try(:[], 'email'),
-          :ip_address => ip_address,
-          :oauth_token => auth.try(:credentials).try(:token),
-          :oauth_expires_at => Time.at(auth.try(:credentials).try(:expires_at) || 0), 
-          :last_seen_at => Time.now
-        })
+
+  def self.from_omniauth(auth, ip_address)
+    User.where(provider: auth['provider'], uid: auth['uid'])
+        .first_or_create(
+          name: auth.try(:[], 'info').try(:[], 'name'),
+          email: auth.try(:[], 'info').try(:[], 'email'),
+          ip_address: ip_address,
+          oauth_token: auth.try(:credentials).try(:token),
+          oauth_expires_at: Time.at(auth.try(:credentials).try(:expires_at) || 0),
+          last_seen_at: Time.now
+        )
   end
-  
-  def as_json args
+
+  def as_json(args)
     super(args.merge(except: [:ip_address, :coordinates, :uid, :provider, :email, :_id])).merge({
       :id => self.id.to_s
     })

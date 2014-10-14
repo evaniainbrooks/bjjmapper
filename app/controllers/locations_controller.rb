@@ -1,7 +1,7 @@
 class LocationsController < ApplicationController
-  before_filter :set_instructor, only: [:instructors]
-  before_filter :set_location, only: [:show, :instructors]
-  before_filter :set_map, only: :show
+  before_action :set_instructor, only: [:instructors]
+  before_action :set_location, only: [:show, :instructors]
+  before_action :set_map, only: :show
 
   helper_method :all_instructors
 
@@ -10,7 +10,7 @@ class LocationsController < ApplicationController
   def show
     respond_to do |format|
       format.json { render json: @location }
-      format.html 
+      format.html
     end
   end
 
@@ -18,7 +18,7 @@ class LocationsController < ApplicationController
     location = Location.find(params[:id]).destroy
     respond_to do |format|
       format.html { redirect_to root_path }
-      format.json { render status: :ok, json: {} } 
+      format.json { render status: :ok, json: location }
     end
   end
 
@@ -41,13 +41,13 @@ class LocationsController < ApplicationController
         else
           render status: :not_found, json: {}
         end
-      end  
+      end
     end
   end
 
   def update
-    location = Location.find(params[:id]).tap do |location|
-      location.update!(create_params)
+    location = Location.find(params[:id]).tap do |loc|
+      loc.update!(create_params)
     end
     respond_to do |format|
       format.json { render json: location }
@@ -60,11 +60,10 @@ class LocationsController < ApplicationController
     team = params.fetch(:team, nil)
     distance = params.fetch(:distance, 5.0)
 
-    head :bad_request and return unless center.is_a?(Array) && center.present? 
+    head :bad_request and return unless center.is_a?(Array) && center.present?
 
     locations = Location.near(center, distance).limit(50)
     locations = locations.where(:team_id => { '$in' => team }) if team.present?
-    locations
 
     head :no_content and return unless locations.present?
 
@@ -75,9 +74,9 @@ class LocationsController < ApplicationController
 
   def index
     @criteria = params.slice(:city, :country) || {}
-    @locations = if @criteria.has_key?(:city) && @criteria.has_key?(:country)
+    @locations = if @criteria.key?(:city) && @criteria.key?(:country)
       Location.near(@criteria.values.join(','), 30)
-    elsif @criteria.has_key?(:country)
+    elsif @criteria.key?(:country)
       Location.where(:country => @criteria[:country])
     else
       []
@@ -96,7 +95,7 @@ class LocationsController < ApplicationController
   end
 
   def set_instructor
-    @instructor = User.find(params[:instructor_id]) if params.has_key?(:instructor_id)
+    @instructor = User.find(params[:instructor_id]) if params.key?(:instructor_id)
     head :not_found and return false unless @instructor.present?
   end
 
@@ -112,10 +111,10 @@ class LocationsController < ApplicationController
 
   def create_params
     p = params.require(:location).permit(:city, :street, :postal_code, :state, :country, :title, :description, :coordinates, :team_id, :directions, :phone, :email)
-    p[:coordinates] = JSON.parse(p[:coordinates]) if p.has_key?(:coordinates)
+    p[:coordinates] = JSON.parse(p[:coordinates]) if p.key?(:coordinates)
     p
   end
-  
+
   def set_location
     @location = Location.find(params[:id])
     render status: :not_found and return unless @location.present?
