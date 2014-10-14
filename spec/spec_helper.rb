@@ -7,7 +7,6 @@ Spork.prefork do
   # need to restart spork for it take effect.
   # This file is copied to spec/ when you run 'rails generate rspec:install'
   abort("ABORTING: specs must be run under test environment")  unless ENV["RAILS_ENV"] == 'test'
-  
   require 'simplecov'
 
   SimpleCov.minimum_coverage 95
@@ -20,15 +19,9 @@ Spork.prefork do
   require 'factory_girl'
 
   Mongoid.load!('./config/mongoid.yml')
-  #FactoryGirl.definition_file_paths = [
-  #        File.join(Rails.root, 'spec', 'factories')
-  #]
- 
-  #FactoryGirl.find_definitions
 
   RSpec.configure do |config|
     config.infer_spec_type_from_file_location!
-    
     config.mock_with :rspec do |c|
       c.syntax = [:should, :expect]
     end
@@ -73,7 +66,6 @@ end
 Spork.each_run do
   # This code will be run each time you run your specs.
   I18n.backend.reload!
- 
   Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 end
 

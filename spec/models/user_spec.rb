@@ -31,8 +31,8 @@ describe User do
   describe 'before_create callback' do
     context 'when the role is instructor' do
       # TODO Refactor into shared context
-      let (:img) { 'test_img.jpg' }
-      let (:content) { 'test content' }
+      let(:img) { 'test_img.jpg' }
+      let(:content) { 'test content' }
       before do
         page = double("wikipedia content")
         page.stub(:content) { content }

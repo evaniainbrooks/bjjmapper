@@ -3,12 +3,7 @@ class InstructorsController < ApplicationController
   before_action :set_instructor, only: [:destroy]
 
   def create
-    @instructor = if params.key? :user
-      User.create!(create_params)
-    else
-      User.find(params[:id])
-    end
-
+    @instructor = find_or_create_instructor
     @location.instructors << @instructor
     respond_to do |format|
       format.html { redirect_to location_path(@location, edit: 1) }
@@ -25,6 +20,14 @@ class InstructorsController < ApplicationController
   end
 
   private
+
+  def find_or_create_instructor
+    if params.key?(:user)
+      User.create!(create_params)
+    else
+      User.find(params[:id])
+    end
+  end
 
   def create_params
     params.require(:user).permit(:name, :email, :belt_rank, :stripe_rank)

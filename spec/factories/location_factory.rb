@@ -6,7 +6,7 @@ FactoryGirl.define do
     team
 
     factory :location_with_instructors do
-      after(:create) do |instance, evaluator|
+      after(:create) do |instance|
         3.times do
           instance.instructors << create(:user)
         end

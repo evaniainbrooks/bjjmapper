@@ -34,7 +34,7 @@ class UserDecorator < Draper::Decorator
   end
 
   def summary
-    @summary ||= if description_src.try(:to_sym).try(:eql?, :wikipedia)
+    if description_src.try(:to_sym).try(:eql?, :wikipedia)
       matchdata = description.match(/<p>(.*)<\/p>/)
       matchdata[1] if matchdata.present?
     end

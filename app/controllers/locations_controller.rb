@@ -37,7 +37,7 @@ class LocationsController < ApplicationController
     respond_to do |format|
       format.json do
         if search_result.count > 0
-          render json: search_result[0].geometry["location"]
+          render json: search_result[0].geometry['location']
         else
           render status: :not_found, json: {}
         end
@@ -74,12 +74,12 @@ class LocationsController < ApplicationController
 
   def index
     @criteria = params.slice(:city, :country) || {}
-    @locations = if @criteria.key?(:city) && @criteria.key?(:country)
-      Location.near(@criteria.values.join(','), 30)
+    if @criteria.key?(:city) && @criteria.key?(:country)
+      @locations = Location.near(@criteria.values.join(','), 30)
     elsif @criteria.key?(:country)
-      Location.where(:country => @criteria[:country])
+      @locations = Location.where(:country => @criteria[:country])
     else
-      []
+      @locations = []
     end
 
     respond_to do |format|
