@@ -3,9 +3,15 @@ class SessionsController < ApplicationController
 
   def create
     user = User.from_omniauth(auth_info, request.remote_ip)
-    user.update_attribute(:last_seen_at, Time.now)
-    session[:user_id] = user.id
-    redirect_to root_url, notice: 'Signed in!'
+    if user.new_record?
+      user.save
+      session[:user_id] = user.id
+      redirect_to user_path(user, edit: 1)
+    else
+      user.update_attribute(:last_seen_at, Time.now)
+      session[:user_id] = user.id
+      redirect_to root_url, notice: 'Signed in!'
+    end
   end
 
   def new

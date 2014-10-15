@@ -21,6 +21,10 @@ describe SessionsController do
         post :create, provider: omniauth_provider
         session[:user_id].should eq User.last.id
       end
+      it 'redirects to the edit profile page with the new user' do
+        post :create, provider: omniauth_provider
+        response.should redirect_to user_path(User.last.id, edit: 1)
+      end
     end
     context 'when the user does exist' do
       before do
@@ -36,10 +40,10 @@ describe SessionsController do
         post :create, provider: omniauth_provider
         session[:user_id].should eq @user.id
       end
-    end
-    it 'redirects the user to the root url' do
-      post :create, provider: omniauth_provider
-      response.should redirect_to root_url
+      it 'redirects the user to the root url' do
+        post :create, provider: omniauth_provider
+        response.should redirect_to root_url
+      end
     end
   end
 

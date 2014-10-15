@@ -7,10 +7,11 @@ describe User do
     let(:ip_addr) { '192.168.1.1' }
     context 'when the user does not exist' do
       subject { described_class.from_omniauth(auth_params, ip_addr) }
-      it 'creates a new user' do
-        expect {
+      it 'initializes a new user' do
+        expect do
           subject.name
-        }.to change { User.count }.by(1)
+          subject.should be_new_record
+        end.to change { User.count }.by(0)
       end
       it { subject.name.should eq auth_params['info']['name'] }
       it { subject.email.should eq auth_params['info']['email'] }

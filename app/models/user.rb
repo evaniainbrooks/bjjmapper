@@ -43,7 +43,7 @@ class User
 
   def self.from_omniauth(auth, ip_address)
     User.where(provider: auth['provider'], uid: auth['uid'])
-        .first_or_create(
+        .first_or_initialize(
           name: auth.try(:[], 'info').try(:[], 'name'),
           email: auth.try(:[], 'info').try(:[], 'email'),
           ip_address: ip_address,
