@@ -7,12 +7,12 @@
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
-      %a.navbar-brand{:href => root_path} BJJMapper
+      %a.navbar-brand{:href => root_path, :data => { :'no-turbolink' => true } } BJJMapper
     / Collect the nav links, forms, and other content for toggling
     .main-navbar-collapse.collapse.navbar-collapse
       %ul.nav.navbar-nav
         %li{:class => action?(:map) ? 'active' : nil} 
-          %a{:href => root_path, :data => { :'no-turbolink' => true }} Map
+          %a{:href => root_path, :data => { :'no-turbolink' => true } } Map
         %li{:class => action?(:index) ? 'active' : nil}
           %a{:href => locations_path} Academies
         %li{:class => action?(:meta) ? 'active' : nil}
