@@ -8,14 +8,14 @@ class RollFindr.Views.NavbarView extends Backbone.View
   initialize: ->
     _.bindAll(this, 'geolocateMap', 'search')
   geolocateMap: ->
+    @$('[name="location"]').val('')
     RollFindr.GlobalEvents.trigger('geolocate')
   search: (e)->
-    searchQuery = this.$('[name="query"]').val()
-    searchLocation = this.$('[name="location"]').val()
+    searchQuery = @$('[name="query"]').val()
+    searchLocation = @$('[name="location"]').val()
     RollFindr.GlobalEvents.trigger('search', {
       query: searchQuery
       location: searchLocation
     })
     e.preventDefault()
-
 

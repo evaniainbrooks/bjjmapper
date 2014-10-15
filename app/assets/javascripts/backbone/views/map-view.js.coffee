@@ -54,16 +54,26 @@ class RollFindr.Views.MapView extends Backbone.View
   render: ->
     list = @template({locations: _.invoke(@visibleLocations(), 'toJSON')})
     $('.location-list', @el).html(list)
-
     @locationsView.render()
+
   search: (e)->
-    alert('search called')
-    console.log(e)
+    $.ajax({
+      url: Routes.geocode_path(),
+      data: {
+        query: e.location,
+      },
+      type: 'GET',
+      dataType: 'json',
+      success: (result) =>
+        newCenter = new google.maps.LatLng(result.lat, result.lng)
+        @map.setCenter(newCenter)
+    })
+
   createLocation: (event)->
     $('.coordinates', '.new-location-dialog').val(JSON.stringify([event.latLng.lng(), event.latLng.lat()]))
     $('.new-location-dialog').modal('show')
-  setCenterGeolocate: ->
 
+  setCenterGeolocate: ->
     setLocationCallback = (position)=>
       initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude)
       @map.setCenter(initialLocation)
@@ -76,10 +86,12 @@ class RollFindr.Views.MapView extends Backbone.View
       @setCenterGeolocate()
     else
       @setDefaultCenter()
+
   setDefaultCenter: ->
     defaultCenter = @model.get('center')
     defaultLocation = new google.maps.LatLng(defaultCenter[0], defaultCenter[1])
     @map.setCenter(defaultLocation)
+
   fetchViewport: ->
     center = @model.get('center')
     center[0] = @map.getCenter().lat()
