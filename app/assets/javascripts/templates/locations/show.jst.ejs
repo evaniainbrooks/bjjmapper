@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="show-location container-fluid">
   <a href="<%= Routes.location_path(location, { ref: 'map_item' }) %>" data-no-turbolink>
     <div class="row">
       <div class="col-md-3">
@@ -15,12 +15,13 @@
       </div>
     </div>
   </a>
+  <br />
   <ul class="nav nav-pills nav-justified">
     <li>
-      <a href="#">Get directions</a>
+      <a class="report" href="#">Report this listing</a>
     </li>
     <li>
-      <a href="#">Report this listing</a>
+      <a href="#">Get directions</a>
     </li>
     <li>
       <a href="<%= Routes.location_path(location, { ref: 'map_item_link' }) %>" data-no-turbolink>See More</a>

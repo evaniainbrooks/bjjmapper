@@ -27,6 +27,8 @@ class User
   geocoded_by :ip_address
   after_validation :geocode
 
+  belongs_to :lineal_parent, class_name: 'User', inverse_of: :lineal_children
+  has_many :lineal_children, class_name: 'User', inverse_of: :lineal_parent
   belongs_to :team
   has_and_belongs_to_many :locations
 

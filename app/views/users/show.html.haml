@@ -1,2 +1,14 @@
-= user.name
-= user.description
+.container.page
+  = form_for(user, html: { class: 'form ' + edit_mode_classes }) do |f|
+    %button.display-field.btn.btn-default.btn-md{:type => 'button', 'data-begin-edit' => true} Start Editing
+    %h2.display-field= user.name
+    .edit-field.form-group
+      = f.label :name
+      = f.text_field :name, class: 'form-control input-lg'
+    .display-field= user.description
+    .edit-field.form-group
+      = f.label:description
+      = f.text_field :description, class: 'form-control'
+    .edit-field
+      %button.btn.btn-default.btn-md{:type => 'button', 'data-cancel-edit' => true} Cancel Editing
+      %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes

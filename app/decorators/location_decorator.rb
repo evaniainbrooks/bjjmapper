@@ -27,6 +27,10 @@ class LocationDecorator < Draper::Decorator
     end
   end
 
+  def address
+    object.address.split(',',2).join(h.tag(:br))
+  end
+
   def image
     img = object.image
     img = team.object.image if img.blank? && team.present?
@@ -54,6 +58,7 @@ class LocationDecorator < Draper::Decorator
     # Select which decorator methods override the defaults from object
     object.as_json(args).merge(
       image: image,
+      address: address,
       team_name: team_name,
       created_at: created_at,
       updated_at: updated_at

@@ -6,6 +6,8 @@
         %h4 Tell us about your academy
         %p.small You can continue editing your academy and add additional details on the following page.
       .modal-body
+        .pull-left
+          %img.edit-image{:alt => 'logo', :src => all_teams.first.image}/
         = form_for(Location.new, html: { class: 'form-horizontal' } ) do |f|
           %fieldset
             / Text input
@@ -17,7 +19,7 @@
             .form-group
               %label.col-md-6.control-label{:for => "location[team]"} Team
               .col-md-6
-                = f.select :team_id, all_teams_select_options, {}, class: 'form-control  input-md'
+                = f.select :team_id, options_for_select(all_teams.map { |team| [team.name, team.id, {'data-img-src' => team.image}] }), {}, class: 'form-control  input-md'
             / Textarea
             .form-group
               %label.col-md-6.control-label{:for => "location[description]"} Description
@@ -27,4 +29,8 @@
             .pull-right.edit-field
               %button.btn.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Cancel
               %button.btn.btn-primary{:type => "submit"} Continue
-              
+- content_for :scripts do
+  :coffeescript
+    $(document).ready ->
+      view = new RollFindr.Views.CreateLocationView()
+  

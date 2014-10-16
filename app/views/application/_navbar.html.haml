@@ -28,3 +28,6 @@
       = render partial: 'profile_or_login'
     / /.navbar-collapse
   / /.container-fluid
+= content_for(:scripts) do
+  :coffeescript
+    nav = new RollFindr.Views.NavbarView()
