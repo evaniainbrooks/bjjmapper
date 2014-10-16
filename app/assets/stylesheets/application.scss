@@ -21,7 +21,11 @@ html, body {
   margin: 0px;
   padding: 0px;
 }
-  
+
+.map-list {
+  margin-top: 7px;
+}
+
 .edit-control {
   border: 1px solid #ccc;
   padding-bottom: 10px;
@@ -106,8 +110,10 @@ html, body {
   top: 15px;
 }
 
-.show-location {
-  min-width: 450px;
+.col-image {
+  min-width: 100px;
+  padding: none;
+  float: left;
 }
 
 .map-edit-control {

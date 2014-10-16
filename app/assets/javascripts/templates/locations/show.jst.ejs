@@ -1,24 +1,29 @@
-<div class="show-location container-fluid">
-  <div class="row">
-    <div class="col-md-3 text-center">
-      <br />
-      <img class="center-block" src="<%= location.image %>" />
-      <i class="updated-at pull-left small"><%= location.updated_at %></i>
-    </div>
-    <div class="col-md-9">
-      <h4>
-        <span class="title"><%= location.title %></span>
+<div class="container-fluid">
+  <a href="<%= Routes.location_path(location, { ref: 'map_item' }) %>" data-no-turbolink>
+    <div class="row">
+      <div class="col-md-3">
         <br />
-        <span class="small"><%= location.team_name %></span>
-      </h4>
-      <span class="address"><%= location.address %></span>
+        <img class="center-block" src="<%= location.image %>" />
+      </div>
+      <div class="col-md-9">
+        <h4>
+          <span class="title"><%= location.title %></span>
+          <br />
+          <span class="small"><%= location.team_name %></span>
+        </h4>
+        <span class="address"><%= location.address %></span>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
-      <p class="pull-right">
-        <a href="<%= Routes.location_path(location, { ref: 'map_item' }) %>" class="more btn btn-primary btn-sm" data-no-turbolink>See More</a>
-      </p>
-    </div>
-  </div>
+  </a>
+  <ul class="nav nav-pills nav-justified">
+    <li>
+      <a href="#">Get directions</a>
+    </li>
+    <li>
+      <a href="#">Report this listing</a>
+    </li>
+    <li>
+      <a href="<%= Routes.location_path(location, { ref: 'map_item_link' }) %>" data-no-turbolink>See More</a>
+    </li>
+  </ul>
 </div>
