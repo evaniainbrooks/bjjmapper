@@ -71,8 +71,22 @@ html, body {
     margin-bottom: 0px !important;
   }
   .location-list {
+    .empty-message { 
+      padding: 12px; 
+      display: none;
+    }
+    &.empty {
+      .empty-message { display: inherit; }
+    }
     padding: 0px !important;
     .list-group {
+      .empty-message { 
+        margin: 10px 20px; 
+        display: none;
+      }
+      &.empty {
+        .empty-message { display: inherit; }
+      }
       .list-group-item-heading, .list-group-item-text {
         text-overflow: ellipsis;
         overflow: hidden;
