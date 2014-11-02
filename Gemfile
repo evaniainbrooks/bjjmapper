@@ -44,6 +44,7 @@ group :development do
 end
 
 group :test, :development do
+  gem 'dotenv-rails'
   gem 'konacha'
   gem 'konacha-chai-matchers'
   gem 'capybara'
