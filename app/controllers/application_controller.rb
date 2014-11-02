@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
     }
 
     respond_to do |format|
-      format.html
+      format.html { render layout: 'map' }
     end
   end
 
@@ -48,6 +48,20 @@ class ApplicationController < ActionController::Base
 
     FeedbackMailer.feedback_email(name, email, message, current_user).deliver
     redirect_to meta_path
+  end
+
+  def report
+    reason = params.fetch(:reason, nil)
+    description = params.fetch(:description, nil)
+    subject_url = request.referer
+    
+    render :bad_request and return false unless reason.present?
+
+    ReportMailer.report_email(subject_url, reason, description, current_user).deliver
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.json { render status: :ok, json: {} }
+    end
   end
 
   def meta

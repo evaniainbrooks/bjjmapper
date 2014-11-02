@@ -12,15 +12,18 @@ Rails.application.routes.draw do
   match '/auth/:provider/callback' => 'sessions#create', :via => [:post, :get]
   match '/auth/failure' => 'sessions#failure', :via => [:post, :get]
   match '/signout' => 'sessions#destroy', :as => :signout, :via => [:post, :get, :delete]
-  
+
+  post '/report' => 'application#report', :as => :report
   get '/meta' => 'application#meta', :as => :meta
   get '/people' => 'application#people'
   get '/geocode' => 'application#geocode'
   post '/contact' => 'application#contact', :as => :contact
 
+  get '/sitemap.xml' => 'application#sitemap', :as => :sitemap
 
   resources :locations do
     get :search, on: :collection
+    resources :events
     resources :users, controller: :instructors, as: :instructors, path: '/instructors', only: [:create, :destroy]
   end
 end
