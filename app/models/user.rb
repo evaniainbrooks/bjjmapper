@@ -4,6 +4,16 @@ class User
   include Mongoid::Document
   include Geocoder::Model::Mongoid
   include Mongoid::Timestamps
+  
+  include Mongoid::History::Trackable
+  
+  track_history   :on => :all, 
+                  :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier
+                  :modifier_field_inverse_of => :nil, # adds an ":inverse_of" option to the "belongs_to :modifier" relation, default is not set
+                  :version_field => :version,   # adds "field :version, :type => Integer" to track current version, default is :version
+                  :track_create   =>  true,    # track document creation, default is false
+                  :track_update   =>  true,     # track document updates, default is true
+                  :track_destroy  =>  true     # track document destruction, default is false
 
   field :role, type: String
   field :provider, type: String
@@ -23,6 +33,10 @@ class User
 
   field :belt_rank, type: String
   field :stripe_rank, type: Integer
+  field :birth_day, type: Integer
+  field :birth_month, type: Integer
+  field :birth_year, type: Integer
+  field :birth_place, type: String
 
   geocoded_by :ip_address
   after_validation :geocode
@@ -53,6 +67,32 @@ class User
           oauth_expires_at: Time.at(auth.try(:credentials).try(:expires_at) || 0),
           last_seen_at: Time.now
         )
+  end
+
+  def full_lineage
+    # TODO: Is this expensive? Is caching enough?
+    lineage = []
+    u = self.lineal_parent
+    while u.present?
+      lineage << u
+      u = u.lineal_parent
+    end
+    lineage
+  end
+
+  def birthdate
+    return nil unless birth_year.present? && birth_month.present? && birth_day.present?
+    Date.new(birth_year, birth_month, birth_day)
+  end
+
+  def age_in_years
+    d = Time.now
+    a = d.year - birth_year
+    a = a - 1 if (
+         birth_month >  d.month or 
+        (birth_month >= d.month and birth_day > d.day)
+    )
+    a
   end
 
   def as_json(args)

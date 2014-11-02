@@ -29,6 +29,24 @@ describe User do
     end
   end
 
+  describe '.full_lineage' do
+    context 'when there is no lineal_parent' do
+      it 'returns empty array' do
+        build(:user, lineal_parent: nil).full_lineage.should eq []
+      end
+    end
+    context 'when there is a lineal_parent' do
+      before do
+        create(:user, name: 'a')
+        create(:user, name: 'b', lineal_parent: User.last)
+      end
+      let(:expected_names) { ['b', 'a'] }
+      it 'returns a list of the ancestors' do
+        build(:user, lineal_parent: User.last).full_lineage.map(&:name).should eq expected_names
+      end
+    end
+  end
+
   describe 'before_create callback' do
     context 'when the role is instructor' do
       # TODO Refactor into shared context
