@@ -5,7 +5,7 @@ class Location
 
   include Mongoid::History::Trackable
 
-  track_history   :on => :all, 
+  track_history   :on => :all,
                   :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier
                   :modifier_field_inverse_of => :nil, # adds an ":inverse_of" option to the "belongs_to :modifier" relation, default is not set
                   :version_field => :version,   # adds "field :version, :type => Integer" to track current version, default is :version
@@ -41,9 +41,13 @@ class Location
   field :website
   field :phone
   field :email
+
+  validates :title, presence: true
+
   belongs_to :team, index: true
   belongs_to :user, index: true
   has_and_belongs_to_many :instructors, class_name: 'User', index: true
+  has_many :events
 
   def address
     [street, city, state, country, postal_code].compact.join(', ')
