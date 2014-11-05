@@ -1,0 +1,42 @@
+%table.table.table-user-information
+  %tbody
+    %tr
+      %td Name
+      %td
+        %h1.display-field= user.name
+        .edit-field.form-group
+          = f.text_field :name, class: 'form-control input-lg'
+    %tr
+      %td Rank
+      %td
+        %div.display-field.belt{:class => "belt-#{user.belt_rank}"}
+          %b.pull-left.small= user.rank_in_words
+          .grade{:class => "grade-#{user.stripe_rank}"}
+            - user.stripe_rank.times.each do
+              %span.stripe
+        .edit-field.form-group
+          = f.select :belt_rank, options_for_select(belt_ranks, user.belt_rank), {}, class: 'form-control input-md'
+        .edit-field.form-group
+          = f.select :stripe_rank, options_for_select(stripe_ranks, user.stripe_rank), {}, class: 'form-control input-md'
+    %tr
+      %td Born
+      %td
+        - if user.birthdate.present?
+          .display-field
+            = user.birthdate.strftime('%B %d, %Y')
+            &nbsp;&nbsp;
+            = "(#{user.age_in_years} years old)"
+        .edit-field.form-group.form-inline
+          = f.select :birth_day, options_for_select(select_days, user.birth_day), {}, class: 'form-control'
+          = f.select :birth_month, options_for_select(select_months, user.birth_month), {}, class: 'form-control'
+          = f.select :birth_year, options_for_select(select_years, user.birth_year), {}, class: 'form-control'
+    %tr
+      %td
+      %td
+        %span.display-field
+          = user.birth_place
+          &nbsp;
+        = f.text_field :birth_place, class: 'form-control edit-field'
+    %tr
+      %td Lineage
+      %td= render partial: 'users/lineage', locals: { :f => f, :user => user }

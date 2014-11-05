@@ -3,8 +3,6 @@ class LocationsController < ApplicationController
   before_action :set_location, only: [:show, :instructors]
   before_action :set_map, only: :show
 
-  helper_method :all_instructors
-
   decorates_assigned :location
 
   def show
@@ -60,15 +58,21 @@ class LocationsController < ApplicationController
     team = params.fetch(:team, nil)
     distance = params.fetch(:distance, 5.0)
 
+    text_filter = params.fetch(:query, nil)
+    filter_ids = Location.search_ids(text_filter).try(:to_set) if text_filter.present?
+
     head :bad_request and return unless center.is_a?(Array) && center.present?
 
     locations = Location.near(center, distance).limit(50)
-    locations = locations.where(:team_id => { '$in' => team }) if team.present?
+    locations = locations.where(:team_id.in => team) if team.present?
+    locations = locations.select do |location|
+      filter_ids.include?(location.to_param)
+    end if filter_ids.present?
 
     head :no_content and return unless locations.present?
 
     respond_to do |format|
-      format.json { render json: locations.decorate }
+      format.json { render json: LocationDecorator.decorate_collection(locations.to_a) }
     end
   end
 
@@ -89,10 +93,6 @@ class LocationsController < ApplicationController
   end
 
   private
-
-  def all_instructors
-    User.where(:role => 'instructor').limit(50).sort_by(&:name)
-  end
 
   def set_instructor
     @instructor = User.find(params[:instructor_id]) if params.key?(:instructor_id)

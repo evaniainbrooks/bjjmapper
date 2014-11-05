@@ -30,7 +30,7 @@ class InstructorsController < ApplicationController
   end
 
   def create_params
-    params.require(:user).permit(:name, :email, :belt_rank, :stripe_rank)
+    params.require(:user).permit(:name, :image, :email, :belt_rank, :stripe_rank, :birth_day, :birth_month, :birth_year, :lineal_parent, :birth_place, :description)
   end
 
   def set_location

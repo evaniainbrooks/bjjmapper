@@ -1,17 +1,7 @@
-%h3 Instructors
-%a{:name => 'instructor'}
-- location.instructors.each do |instructor|
-  .instructor.pull-left
-    = link_to user_path(instructor) do
-      %img{:src => instructor.image, :alt => instructor.name}/
-      %b.small= instructor.name
-      %br/
-      %img{:src => instructor.rank_image, :alt => instructor.rank_in_words}/
-    %button.edit-field.btn.btn-small.btn-default.remove-instructor{:type => 'button', :data => { :id => instructor.id } }
-      %i.fa.fa-remove
-      Remove
-
-%button.edit-field.btn.btn-small.btn-primary.add-instructor{:type => 'button'}
-  %i.fa.fa-add
+%h3.pull-left Instructors
+%button.navbar-btn.pull-right.edit-field.btn.btn-small.btn-success.add-instructor{:type => 'button'}
+  %i.fa.fa-plus-circle
   Add Instructor
-
+%a{:name => 'instructor'}
+.clear
+= render partial: 'users/card', collection: location.instructors, as: 'user'

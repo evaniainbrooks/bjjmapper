@@ -1,8 +1,14 @@
 %form.well.form{:role => "form", :action => "/auth/identity/callback", :method => "post", :novalidate => "noValidate"}
   .form-group
     %label{:for => "auth_key"} Login
-    %input.form-control{:name => "auth_key", :type => "text"}/
+    .input-group
+      %span.input-group-addon
+        %i.fa.fa-user
+      %input.form-control{:name => "auth_key", :type => "text"}/
   .form-group
     %label{:for => "password"} Password
-    %input.form-control{:name => "password", :type => "password"}/
-  %button.btn.btn-default.form-control{:type => "submit"} Submit
+    .input-group
+      %span.input-group-addon
+        %i.fa.fa-lock
+      %input.form-control{:name => "password", :type => "password"}/
+  %button.btn.btn-primary.input-lg.form-control{:type => "submit"} Login

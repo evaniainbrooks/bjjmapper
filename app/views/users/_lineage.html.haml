@@ -1,0 +1,6 @@
+.edit-field.form-group
+  = f.select :lineal_parent, options_for_select(select_instructors, user.lineal_parent.try(:id)), {include_blank: true}, class: 'form-control'
+- if user.lineal_parent.present?
+  %ul.display-field.list-unstyled
+    - user.full_lineage.each_with_index do |parent,i|
+      %li{:style => "font-size: #{150 - i * 15}%"}= link_to(parent.try(:name), user_path(parent))

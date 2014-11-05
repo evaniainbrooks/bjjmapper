@@ -1,14 +1,47 @@
+- new_instructor = location.object.instructors.new.decorate
 .add-instructor-dialog.modal.fade{'aria-hidden' => 'true', 'aria-labelledby' => 'addInstructor', 'role' => 'dialog', 'tabindex' => -1}
-  %form{:action => location_instructors_path(location), :method => 'POST'}
-    .modal-dialog
-      .modal-content
-        .modal-body
-          %img.center-block.img-block
-          = hidden_field_tag :location_id, location.id
-          = hidden_field_tag :authenticity_token, form_authenticity_token
-          = select_tag :id, options_for_select(all_instructors.map { |instructor| [instructor.name, instructor.id, {'data-img-src' => instructor.image}] }), class: 'form-control  input-md'
-        .modal-footer
-          %button.btn.btn-default{'data-dismiss' => 'modal'}
-            Cancel
-          %button.btn.btn-primary{:type => 'submit'}
-            Submit
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{'data-dismiss' => 'modal', 'type' => 'button'}
+          %span{'aria-hidden' => 'true'} &times;
+          %span.sr-only Close
+        %h4.modal-title Add Instructor
+      .modal-body
+        %ul.nav.nav-tabs{:role => 'tablist'}
+          %li.active
+            %a{:href => '#existing-instructor', 'role' => 'tab', 'data-toggle' => 'tab'} Existing
+          %li
+            %a{:href => '#create-instructor', 'role' => 'tab', 'data-toggle' => 'tab'} Create
+
+      .tab-content
+        %div.tab-pane#create-instructor
+          = form_for([location, new_instructor], url: location_instructors_path(location), html: { class: 'form editable edit-mode' }) do |f|
+            .container-fluid
+              .row
+                .col-md-4
+                  %div.text-center
+                    %img.center-block{:style => 'max-width: 150px', :alt => "default profile image", :src => image_path(UserDecorator::DEFAULT_IMAGE)}
+                    %button.image-caption.center-block.btn.btn-primary.btn-small{:type => 'button'} Upload Image
+                .col-md-8
+                  = render partial: 'users/table', :locals => { :f => f, :user => new_instructor }
+            .modal-footer
+              %button.btn.btn-default{'data-dismiss' => 'modal'}
+                Cancel
+              %button.btn.btn-primary{:type => 'submit'}
+                Create Instructor
+
+        %div.tab-pane.active#existing-instructor
+          %form{:action => location_instructors_path(location), :method => 'POST'}
+            .container-fluid
+              %img.center-block.img-block{'data-default-src' => image_path('default-user-250.png'), 'src' => image_path('default-user-250.png')}
+              %br/
+              = hidden_field_tag :location_id, location.id
+              = hidden_field_tag :authenticity_token, form_authenticity_token
+              = select_tag :id, options_for_select(select_instructors), include_blank: true, class: 'instructor-name form-control input-md'
+              %br/
+            .modal-footer
+              %button.btn.btn-default{'data-dismiss' => 'modal'}
+                Cancel
+              %button.btn.btn-primary{:type => 'submit'}
+                Add Instructor

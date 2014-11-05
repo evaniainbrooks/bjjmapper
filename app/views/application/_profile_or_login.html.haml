@@ -1,8 +1,11 @@
 %ul.nav.navbar-nav.navbar-right
   - if signed_in?
-    %li= link_to('Profile', user_path(current_user))
+    %li
+      = link_to(user_path(current_user)) do
+        %i.fa.fa-user
+        Profile
     %li= link_to('Sign out', signout_path, 'data-no-turbolink' => true)
   - else
     %li
-      %button.btn.btn-primary{"style" => "margin-top: 7px;", "data-target" => ".login-modal", "data-toggle" => "modal"}
+      %button.navbar-btn.btn.btn-primary{"data-target" => ".login-modal", "data-toggle" => "modal"}
         Login or Sign up

@@ -1,9 +1,13 @@
+require 'mongoid_search_ext'
+
 class Location
   include Mongoid::Document
   include Mongoid::Timestamps
   include Geocoder::Model::Mongoid
 
   include Mongoid::History::Trackable
+
+  extend MongoidSearchExt::Search
 
   track_history   :on => :all,
                   :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier
@@ -48,6 +52,38 @@ class Location
   belongs_to :user, index: true
   has_and_belongs_to_many :instructors, class_name: 'User', index: true
   has_many :events
+
+  index({
+    :street => 'text',
+    :city => 'text',
+    :state => 'text',
+    :country => 'text',
+    :postal_code => 'text',
+    :title => 'text',
+    :description => 'text',
+    :directions => 'text',
+    :image => 'text',
+    :website => 'text',
+    :phone => 'text',
+    :email => 'text'
+  },
+  {
+    :name => 'loc_text_index',
+    :weights => {
+      :street => 5,
+      :city => 5,
+      :state => 5,
+      :country => 5,
+      :postal_code => 5,
+      :title => 20,
+      :description => 15,
+      :directions => 5,
+      :image => 2,
+      :website => 10,
+      :phone => 10,
+      :email => 10
+    }
+  })
 
   def address
     [street, city, state, country, postal_code].compact.join(', ')

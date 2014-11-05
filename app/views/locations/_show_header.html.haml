@@ -1,0 +1,12 @@
+%h1.display-field
+  = location.title
+  %br/
+  %small= link_to location.team_name, team_path(location.team)
+.edit-field
+  = f.label :title
+  = f.text_field :title, class: 'form-control input-lg'
+  = f.label :team_id, 'Team'
+  = f.select :team_id, options_for_select(all_teams.map { |team| [team.name, team.id, {'data-img-src' => team.image}] }, location.team_id), {}, class: 'form-control  input-md'
+  = f.label :description
+  = f.text_area :description, placeholder: 'Provide a description of the academy', class: 'form-control', rows: 4
+%p.display-field= location.description

@@ -22,6 +22,19 @@
 
       this.model = new RollFindr.Models.Location(options.model);
       this.listenTo(this.model.get('instructors'), 'remove', this.instructorCollectionChanged);
+    
+      this.initializeCalendar();
+    },
+    initializeCalendar: function() {
+      var locationId = this.model.get('id');
+      this.$('.scheduler').fullCalendar({
+        events: Routes.location_events_path(locationId),
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'month,basicWeek,basicDay'
+        }
+      });
     },
     addInstructor: function() {
       $('.add-instructor-dialog').modal('show');

@@ -7,6 +7,7 @@ class RollFindr.Views.MapView extends Backbone.View
   template: JST['templates/locations/map-list']
   teamFilter: null
   locationsView: null
+  textFilter: null
   initialize: ->
     # TODO: Move this to a helper
     @circleDistance = (p0, p1) ->
@@ -57,17 +58,22 @@ class RollFindr.Views.MapView extends Backbone.View
     @locationsView.render()
 
   search: (e)->
-    $.ajax({
-      url: Routes.geocode_path(),
-      data: {
-        query: e.location,
-      },
-      type: 'GET',
-      dataType: 'json',
-      success: (result) =>
-        newCenter = new google.maps.LatLng(result.lat, result.lng)
-        @map.setCenter(newCenter)
-    })
+    @textFilter = e.query
+    if e.location? && e.location.length > 0
+      $.ajax({
+        url: Routes.geocode_path(),
+        data: {
+          query: e.location,
+        },
+        type: 'GET',
+        dataType: 'json',
+        success: (result) =>
+          newCenter = new google.maps.LatLng(result.lat, result.lng)
+          @map.setCenter(newCenter)
+      })
+    else
+      @fetchViewport()
+
 
   createLocation: (event)->
     $('.coordinates', '.new-location-dialog').val(JSON.stringify([event.latLng.lng(), event.latLng.lat()]))
@@ -100,5 +106,7 @@ class RollFindr.Views.MapView extends Backbone.View
     distance = @circleDistance(@map.getCenter(), @map.getBounds().getNorthEast())
 
     @model.set('center', center)
-    @model.get('locations').fetch({remove: false, data: {center: center, distance: distance}})
+
+    remove = @textFilter? && @textFilter.length > 0
+    @model.get('locations').fetch({remove: remove, data: {query: @textFilter, center: center, distance: distance}})
 

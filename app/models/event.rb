@@ -11,9 +11,9 @@ class Event
   field :is_all_day, type: Boolean
   field :recurrence, type: String
 
-  scope :before, ->(time) { where(:ending.gte => time) }
-  scope :after, ->(time) { where(:starting.lte => time) }
-  scope :between, ->(start_time, end_time) { where(:starting.gte => start_time, :starting.lte => end_time) }
+  scope :before_time, ->(time) { where(:ending.gte => time) }
+  scope :after_time, ->(time) { where(:starting.lte => time) }
+  scope :between_time, ->(start_time, end_time) { where(:starting.gte => start_time, :starting.lte => end_time) }
 
   belongs_to :location
   belongs_to :instructor, class_name: 'User'

@@ -1,17 +1,26 @@
 .container.page
   .row
-    %h1 About BJJMapper 
-    %hr/
-    %p.lead Blah blah blah
-    %p another paragraph
+    .col-md-9.col-md-offset-1.jumbotron
+      %h1 About BJJMapper
+      %p 
+        %strong BJJMapper is an attempt to harnesses the passionate fires of the Brazilian Jiu-Jitsu community, 
+        to create the authorative repository for accurate and up-to-date information about this magnificent sport. Anyone can add and modify content. We are all caretakers of this knowledge.
+      %ul
+        %li Want to learn Jiu-Jitsu and need to find an academy?
+        %li Passing through a new city and looking for a place to train?
+        %li Ever wonder where Robson Moura teaches? Or who he received his black belt from? 
+        %li Does Buchecha has any upcoming seminars near me? 
+        %li Just how many Gracie Barra locations are there in the world? 
+      %p We hope BJJMapper can help you answer these questions, and more.
 
+  %hr/
   .row
-    %h3 Send us a message
-    %hr/
+    .col-md-12
+      %h2 Send us a message
   .row
-    .col-md-9
+    .col-md-7
       = render partial: 'contact_form'
-    .col-md-3
+    .col-md-2
       %address
         %strong BJJMapper
         %br/
@@ -23,4 +32,9 @@
         (206) 661-4210
       %address
         %a{:href => "mailto:info+meta@bjjmapper.com"} info@bjjmapper.com
+    .col-md-2.col-md-offset-1
+      %img{:src => image_path('evan-150.png')}/
+      %p.small
+        %strong Hi, my name is Evan and I created BJJMapper because I love BJJ.
+        I saw a problem with the organization and dissemination of information about training Brazilian Jiu-Jitsu. This is my answer.
 

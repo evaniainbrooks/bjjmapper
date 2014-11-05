@@ -1,0 +1,29 @@
+%h3 Contact
+.edit-field
+  = f.label :phone
+  = f.text_field :phone, class: 'form-control'
+  = f.label :email
+  = f.text_field :email, class: 'form-control'
+  = f.label :website
+  = f.text_field :website, class: 'form-control'
+- if location.phone.present?
+  %span.display-field.form-group
+    %b Phone
+    %br/
+    %a{:href => "tel:#{location.phone}"}
+      = location.phone
+      %i.fa.fa-phone
+- if location.email.present?
+  %span.display-field.form-group
+    %b Email
+    %br/
+    = link_to 'mailto:' + location.email do
+      = location.email
+      %i.fa.fa-envelope
+- if location.website.present?
+  %span.display-field.form-group
+    %b Website
+    %br/
+    = link_to 'http://' + location.website do
+      = location.website
+      %i.fa.fa-external-link

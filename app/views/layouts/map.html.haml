@@ -18,11 +18,12 @@
     = favicon_link_tag 'apple-touch-icon-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png'
     = favicon_link_tag 'favicon.ico', :rel => 'shortcut icon'
   %body{:data => {:userid => current_user.try(:id)}}
-    = render partial: 'navbar'
-    = yield
+    .wrapper
+      = render partial: 'navbar'
+      = yield
 
     = render partial: 'report_modal'
     = render partial: 'login_modal'
-    = javascript_include_tag 'application'
-    = render partial: 'application/footer'
+    = javascript_include_tag "templates/confirm_dialog"
+    = javascript_include_tag "application"
     = yield(:scripts) if content_for?(:scripts)

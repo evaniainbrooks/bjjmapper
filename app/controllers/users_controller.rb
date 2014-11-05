@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update]
   decorates_assigned :user
+  
+  helper_method :welcome?
 
   def show
     respond_to do |format|
@@ -27,8 +29,12 @@ class UsersController < ApplicationController
 
   private
 
+  def welcome?
+    params.fetch(:welcome, 0).to_i.eql?(1)
+  end
+
   def create_params
-    params.require(:user).permit(:name, :image, :email, :belt_rank, :stripe_rank)
+    params.require(:user).permit(:name, :image, :email, :belt_rank, :stripe_rank, :birth_day, :birth_month, :birth_year, :lineal_parent, :birth_place, :description)
   end
 
   def set_user

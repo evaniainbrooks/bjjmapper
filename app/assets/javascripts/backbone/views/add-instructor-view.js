@@ -5,7 +5,7 @@
   RollFindr.Views.AddInstructorView = Backbone.View.extend({
     el: $('.add-instructor-dialog'),
     events: {
-      'change [name="instructor_name"]': 'changeInstructor'
+      'change .instructor-name': 'changeInstructor'
     },
     initialize: function() {
       _.bindAll(this, 'changeInstructor');
@@ -15,7 +15,11 @@
       var img = selected.data('img-src');
       var imgElem = this.$('img');
 
-      imgElem.attr('src', img);
+      if ("undefined" !== typeof(img)) {
+        imgElem.attr('src', img);
+      } else {
+        imgElem.attr('src', imgElem.data('default-src'));
+      }
     }
   });
 }(jQuery);

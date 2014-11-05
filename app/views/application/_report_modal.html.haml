@@ -1,0 +1,20 @@
+.report-dialog.modal.fade{'aria-hidden' => 'true', 'aria-labelledby' => 'reportDialog', 'role' => 'dialog', 'tabindex' => '-1'}
+  %form{:action => report_path, :method => 'post'}
+    .modal-dialog
+      .modal-content
+        .modal-body
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+          .form-group
+            %label{:for => 'reason'} Reason
+            %select.form-control.input-md{:name => 'reason'}
+              %option{:value => 'Spam'}This is spam
+              %option{:value => 'Innacurate'}This is inaccurate
+              %option{:value => 'Owner'}I am the owner
+              %option{:value => 'Other'}Other
+          .form-group
+            %label{:for => 'description'} Additional information (optional)
+            %textarea.form-control.input-md{:name => 'description'}
+            %input{:name => 'authenticity_token', :type => 'hidden', :value => form_authenticity_token}/
+        .modal-footer
+          %button.btn.btn-default{'data-dismiss' => 'modal', 'type' => 'button'} Cancel
+          %button.btn.btn-primary{'type' => 'submit'} Send Report

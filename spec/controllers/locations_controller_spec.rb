@@ -44,7 +44,7 @@ describe LocationsController do
       it 'creates and redirects to a new location in edit mode' do
         expect do
           post :create, create_params.merge({:format => 'html'})
-          response.should redirect_to(location_path(Location.first, edit: 1))
+          response.should redirect_to(location_path(Location.last, edit: 1))
         end.to change { Location.count }.by(1)
       end
     end
@@ -90,6 +90,7 @@ describe LocationsController do
     context 'with country filter' do
       let(:filter) { { :country => 'US' } }
       before do
+        Location.destroy_all
         create(:location, country: 'US')
         create(:location, country: 'BR')
       end
@@ -122,6 +123,7 @@ describe LocationsController do
         end
       end
       context 'with no locations' do
+        before { Location.destroy_all }
         it 'returns no content' do
           get :search, { center: [80.0, 80.0], format: 'json' }
           response.status.should eq 204

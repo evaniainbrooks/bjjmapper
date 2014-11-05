@@ -12,6 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require moment
+//= require fullcalendar
+//= require lang-all
 //= require js-routes
 //= require bootstrap
 //= require turbolinks

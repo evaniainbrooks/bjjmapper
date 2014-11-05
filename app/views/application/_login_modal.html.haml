@@ -3,11 +3,12 @@
     .modal-content
       .modal-header
         %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
-        %strong BJJMapper Account
+        %strong BJJMapper Login
       .modal-body
-        %h4.text-center Login with one of these services:
-        .text-center.center-block
-          = render partial: 'sessions/service_buttons'
-        %h4.text-center Don't use these services? Login below or
-        %h4.text-center= link_to 'Click here to register a new account', url_for(controller: :sessions, action: :new, anchor: 'register', ref: 'logindialog')
+        = render partial: 'sessions/service_buttons'
+        %hr/
+        %p
+          %strong Don't use these services? 
+          Login below or
+          = link_to 'click here to register a new account', url_for(controller: :sessions, action: :new, anchor: 'register', ref: 'logindialog')
         = render partial: 'sessions/identity_login_form'

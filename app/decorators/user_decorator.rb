@@ -1,9 +1,20 @@
 class UserDecorator < Draper::Decorator
   delegate_all
   decorates_finders
-  decorates :location
+  decorates :user
+  decorates_association :lineal_parent
+  decorates_association :lineal_children
 
-  DEFAULT_IMAGE = 'default-user-100.png'
+  DEFAULT_IMAGE = 'default-user-250.png'
+  DEFAULT_DESCRIPTION = 'No description was provided'
+
+  def description
+    if object.description.present?
+      object.description
+    else
+      h.content_tag(:i) { DEFAULT_DESCRIPTION }
+    end
+  end
 
   def image
     h.image_path(object.image || DEFAULT_IMAGE)
@@ -22,15 +33,15 @@ class UserDecorator < Draper::Decorator
   end
 
   def rank_in_words
-    "#{belt_rank.capitalize} belt #{stripe_rank} stripes"
+    "#{belt_rank.capitalize} belt" #{stripe_rank} stripes"
   end
 
   def description
-    if description_src.try(:to_sym).try(:eql?, :wikipedia)
-      WikiCloth::Parser.new(data: object.description).to_html
-    else
+    #if description_src.try(:to_sym).try(:eql?, :wikipedia)
+    #  WikiCloth::Parser.new(data: object.description).to_html
+    #else
       object.description
-    end
+    #end
   end
 
   def summary
