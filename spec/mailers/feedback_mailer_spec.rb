@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe FeedbackMailer do
-  describe 'instructions' do
+  describe '#feedback_email' do
     let(:from_name) { 'Helio Gracie' }
     let(:from_email) { 'helio@gracie.com' }
     let(:message) { 'this is the message' }

@@ -1,7 +1,7 @@
 class FeedbackMailer < ActionMailer::Base
-  DEFAULT_TO = "evaniainbrooks@gmail.com"
+  DEFAULT_TO = "evan@bjjmapper.com"
   
-  default from: "no-reply@rollfindr.com"
+  default from: "no-reply@bjjmapper.com"
   default to: DEFAULT_TO
 
   def feedback_email(from, email, message, user = nil)
