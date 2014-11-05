@@ -49,4 +49,17 @@ describe ApplicationController do
       response.should redirect_to(meta_path)
     end
   end
+  describe 'POST report' do
+    before do
+      mailer = double
+      mailer.should_receive(:deliver)
+      ReportMailer.should_receive(:report_email).and_return(mailer)
+    end
+    context 'with json format' do
+      it 'mails the report' do
+        post :report, format: 'json', reason: 'boo', description: 'test'
+        response.should be_ok
+      end
+    end
+  end
 end
