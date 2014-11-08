@@ -140,6 +140,21 @@ describe LocationsController do
           response.body.should_not include(red_location.title)
         end
       end
+      context 'with term filter (query)' do
+        context 'with no results' do
+          it 'returns 404' do
+            pending 'implement me'
+            false.should eq true
+          end
+        end
+
+        context 'with some results' do
+          it 'returns the matching locations' do
+            pending 'implement me'
+            false.should eq true
+          end
+        end
+      end
     end
   end
 end

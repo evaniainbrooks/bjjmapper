@@ -3,14 +3,35 @@
 .col-md-4.map-list-view
   %ul.nav.nav-tabs.nav-justified.map-list
     %li.active
-      %a.show-locations{:href => '#tab-pane-location-list', 'data-toggle' => 'tab'} Academies
+      %a.show-locations{:href => '#tab-pane-location-list', 'data-toggle' => 'tab'} 
+        %strong Academies
     %li
-      %a.show-filters{:href => '#tab-pane-filter-list', 'data-toggle' => 'tab'} Filters
+      %a.show-filters{:href => '#tab-pane-filter-list', 'data-toggle' => 'tab'} 
+        %strong Options &amp; Filters
 
   .tab-content
+    %br/
     %div#tab-pane-location-list.location-list.tab-pane.fade.in.active
     %div#tab-pane-filter-list.filter-list.tab-pane.fade.in
-    
+      .term-filter.container-fluid
+        %h4 Search terms
+        .input-group
+          %input.form-control{:placeholder => 'Search', :name => 'search'}
+          %a.input-group-addon{:href => '#'}
+            %i.fa.fa-search
+        %br/
+      .sort-order.container-fluid
+        %h4 Order by 
+        %select.form-control{:name => 'sort_order'}
+          %option{:value => 'Most Relevant'} Most Relevant
+          %option{:value => 'Closest'} Closest
+          %option{:value => 'Highest Rating'} Highest Rated
+        %br/
+      .team-list
+        -# This is filled in by team-list template
+      .container-fluid
+        %br/
+        %a.btn.btn-primary.pull-right Apply 
 = render partial: 'locations/create_modal_small'
 - content_for :scripts do
   :javascript

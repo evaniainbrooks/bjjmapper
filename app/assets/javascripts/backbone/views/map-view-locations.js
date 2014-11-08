@@ -5,10 +5,12 @@
     initialize: function(options) {
       _.bindAll(this, 'render');
 
+      this.listenTo(this.collection, 'reset', this.render);
+
       this.map = options.map;
-      this.filters = options.filters;
       this.markers = {};
     },
+    infoWindow: null,
     addMarker: function(loc) {
       var self = this;
       var id = loc.get('id');
@@ -16,7 +18,7 @@
       if (markerExists) {
         return;
       }
-      
+
       self.markers[id] = new google.maps.Marker({
          id: id,
          map: self.map,
@@ -27,33 +29,35 @@
       });
 
       if (null !== self.template) {
-        var infoWindow = new google.maps.InfoWindow();
-        infoWindow.setContent(self.template({location: loc.toJSON()}));
+        this.infoWindow = new google.maps.InfoWindow();
         google.maps.event.addListener(self.markers[id], 'click', function() {
-          infoWindow.open(self.map, self.markers[id]);
+          self.infoWindow.setContent(self.template({location: loc.toJSON()}));
+          self.infoWindow.open(self.map, self.markers[id]);
         });
       }
     },
-    deleteMarker: function(loc) {
-      var id = loc.get('id');
+    deleteMarker: function(id) {
+      //var id = loc.get('id');
       if ("undefined" !== typeof(this.markers[id])) {
         this.markers[id].setMap(null);
         delete this.markers[id];
       }
     },
-    render: function(filters) {
+    render: function() {
       var self = this;
-
-      var activeFilters = this.filters.activeFilters();
+      var newMarkerSet = {};
       this.collection.each(function(loc) {
-        var teamId = loc.get('team_id');
-        var filtered = null !== activeFilters && 1 !== activeFilters[teamId];
-        if (filtered) {
-          self.deleteMarker(loc);
-        } else {
-          self.addMarker(loc);
-        }
+        self.addMarker(loc);
+        newMarkerSet[loc.get('id')] = 1;
       });
+
+      for (var marker in this.markers) {
+        // TODO: Don't delete markers we are just going to add again
+        var markerStillExists = newMarkerSet[marker]; 
+        if (!markerStillExists) {
+          self.deleteMarker(marker);
+        }
+      }
     }
   });
 

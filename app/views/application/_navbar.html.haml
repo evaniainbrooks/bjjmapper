@@ -18,8 +18,10 @@
         %li{:class => action?(:meta) ? 'active' : nil}
           %a{:href => meta_path} About
       %form.navbar-form.navbar-left{:role => "search"}
+        .form-group.has-feedback
+          %input.clear-input.form-control{:name => 'query', :placeholder => "Search", :type => "text"}/
+          %span.clear-input-button.form-control-feedback.fa.fa-times-circle
         .form-group
-          %input.form-control{:name => 'query', :placeholder => "Search", :type => "text"}/
           .input-group
             %input.form-control{:name => 'location', :size => '10', :placeholder => "Current View", :type => "text"}/
             %a.input-group-addon{'data-geolocate' => 'true', :href => '#geolocate'}

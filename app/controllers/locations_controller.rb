@@ -67,7 +67,7 @@ class LocationsController < ApplicationController
     locations = locations.where(:team_id.in => team) if team.present?
     locations = locations.select do |location|
       filter_ids.include?(location.to_param)
-    end if filter_ids.present?
+    end if text_filter.present?
 
     head :no_content and return unless locations.present?
 

@@ -17,7 +17,6 @@
 //= require lang-all
 //= require js-routes
 //= require bootstrap
-//= require turbolinks
 //= require ext
 //= require underscore
 //= require_tree ./templates
