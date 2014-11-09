@@ -21,11 +21,12 @@
             %i.fa.fa-search
         %br/
       .sort-order.container-fluid
-        %h4 Order by 
+        %h4 Order by
         %select.form-control{:name => 'sort_order'}
-          %option{:value => 'Most Relevant'} Most Relevant
-          %option{:value => 'Closest'} Closest
-          %option{:value => 'Highest Rating'} Highest Rated
+          %option{:value => 'id'} Most Relevant
+          %option{:value => 'title'} Alphabetic
+          %option{:value => 'distance'} Closest Distance
+          %option{:value => 'rating'} Highest Rated
         %br/
       .team-list
         -# This is filled in by team-list template

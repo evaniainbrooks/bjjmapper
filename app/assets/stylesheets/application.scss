@@ -47,6 +47,12 @@ html, body {
   color: red;
 }
 
+.show-user {
+  img {
+    max-width: 300px;
+  }
+}
+
 .show-location {
   &>a {
     color: black;

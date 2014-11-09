@@ -34,7 +34,7 @@
         %div.tab-pane.active#existing-instructor
           %form{:action => location_instructors_path(location), :method => 'POST'}
             .container-fluid
-              %img.center-block.img-block{'data-default-src' => image_path('default-user-250.png'), 'src' => image_path('default-user-250.png')}
+              %img.center-block.img-block{:style => 'max-width: 300px', 'data-default-src' => image_path('default-user-250.png'), 'src' => image_path('default-user-250.png')}
               %br/
               = hidden_field_tag :location_id, location.id
               = hidden_field_tag :authenticity_token, form_authenticity_token

@@ -11,6 +11,8 @@ class LocationDecorator < Draper::Decorator
 
   decorates :location
 
+  attr_accessor :distance
+
   def description
     if object.description.present?
       object.description
@@ -61,7 +63,8 @@ class LocationDecorator < Draper::Decorator
       address: address,
       team_name: team_name,
       created_at: created_at,
-      updated_at: updated_at
+      updated_at: updated_at,
+      distance: distance
     )
   end
 end

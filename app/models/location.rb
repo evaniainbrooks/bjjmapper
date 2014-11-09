@@ -49,7 +49,6 @@ class Location
   validates :title, presence: true
 
   belongs_to :team, index: true
-  belongs_to :user, index: true
   has_and_belongs_to_many :instructors, class_name: 'User', index: true
   has_many :events
 
@@ -95,9 +94,10 @@ class Location
 
   def as_json(args)
     # Hack around mongo ugly ids
-    super(args.merge(except: [:coordinates, :_id, :team_id, :instructor_ids])).merge({
+    super(args.merge(except: [:coordinates, :_id, :modifier_id, :team_id, :instructor_ids])).merge({
       :id => self.id.to_s,
       :team_id => self.team_id.to_s,
+      :modifier_id => self.modifier_id.to_s,
       :instructors => self.instructor_ids.map(&:to_s),
       :coordinates => self.to_coordinates,
       :team_name => team_name,

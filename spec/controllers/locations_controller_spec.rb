@@ -18,58 +18,88 @@ describe LocationsController do
     end
   end
   describe 'DELETE destroy' do
-    let(:location) { create(:location) }
-    context 'with html format' do
-      it 'deletes the record and redirects to root'  do
-        location
+    before { @location = create(:location) }
+    context 'when not signed in' do
+      it 'returns not_authorized'  do
         expect do
-          delete :destroy, id: location.id, format: 'html'
-          response.should redirect_to(root_path)
-        end.to change { Location.count }.by(-1)
+          delete :destroy, id: @location.id, format: 'json'
+          response.status.should eq 401
+        end.to change { Location.count }.by(0)
       end
     end
-    context 'with json format' do
-      it 'deletes the record' do
-        location
-        expect do
-          delete :destroy, { id: location.id, format: 'json' }
-          response.status.should be 200
-        end.to change { Location.count }.by(-1)
+    context 'when signed in' do
+      let(:session_params) { { user_id: create(:user).id } }
+      context 'with html format' do
+        it 'deletes the record and redirects to root'  do
+          expect do
+            delete :destroy, {id: @location.id, format: 'html'}, session_params
+            response.should redirect_to(root_path)
+          end.to change { Location.count }.by(-1)
+        end
+      end
+      context 'with json format' do
+        it 'deletes the record' do
+          expect do
+            delete :destroy, {id: @location.id, format: 'json'}, session_params
+            response.status.should be 200
+          end.to change { Location.count }.by(-1)
+        end
       end
     end
   end
   describe 'POST create' do
     let(:create_params) { { :location => { :title => 'New title', :description => 'New description' } } }
-    context 'with html format' do
-      it 'creates and redirects to a new location in edit mode' do
+    context 'when not signed in' do
+      it 'returns not_authorized' do
         expect do
-          post :create, create_params.merge({:format => 'html'})
-          response.should redirect_to(location_path(Location.last, edit: 1))
-        end.to change { Location.count }.by(1)
+          post :create, create_params.merge({:format => 'json'})
+          response.status.should eq 401
+        end.to change { Location.count }.by(0)
       end
     end
-    context 'with json format' do
-      it 'creates and returns a new location' do
-        post :create, create_params.merge({:format => 'json'})
-        response.body.should match(create_params[:location][:description])
+    context 'when signed in' do
+      let(:session_params) { { user_id: create(:user).id } }
+      context 'with html format' do
+        it 'creates and redirects to a new location in edit mode' do
+          expect do
+            post :create, create_params.merge({:format => 'html'}), session_params
+            response.should redirect_to(location_path(Location.last, edit: 1, create: 1))
+          end.to change { Location.count }.by(1)
+        end
+      end
+      context 'with json format' do
+        it 'creates and returns a new location' do
+          post :create, create_params.merge({:format => 'json'}), session_params
+          response.body.should match(create_params[:location][:description])
+        end
       end
     end
   end
 
   describe 'POST update' do
     let(:update_params) { { :location => { :title => 'New title', :description => 'New description' } } }
-    context 'with json format' do
-      let(:location) { create(:location, description: 'xyz') }
-      it 'updates and returns the location' do
+    let(:original_description) { 'xyz' }
+    let(:location) { create(:location, description: original_description) }
+    context 'when not signed in' do
+      it 'returns not_authorized' do
         post :update, { id: location.id, :format => 'json' }.merge(update_params)
-        response.body.should match update_params[:location][:description]
+        location.reload.description.should eq original_description
+        response.status.should eq 401
       end
     end
-    context 'with html format' do
-      let(:location) { create(:location, description: 'xyz') }
-      it 'redirects back to the location' do
-        post :update, { id: location.id, :format => 'html' }.merge(update_params)
-        response.body.should redirect_to(location_path(location, edit: 0))
+    context 'when signed in' do
+      let(:session_params) { { user_id: create(:user).id } }
+      context 'with json format' do
+        it 'updates and returns the location' do
+          post :update, { id: location.id, :format => 'json' }.merge(update_params), session_params
+          response.body.should match update_params[:location][:description]
+        end
+      end
+      context 'with html format' do
+        it 'redirects back to the location' do
+          post :update, { id: location.id, :format => 'html' }.merge(update_params), session_params
+          response.body.should redirect_to(location_path(location, edit: 0))
+        end
       end
     end
   end

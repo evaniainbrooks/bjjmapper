@@ -2,8 +2,10 @@ class LocationsController < ApplicationController
   before_action :set_instructor, only: [:instructors]
   before_action :set_location, only: [:show, :instructors]
   before_action :set_map, only: :show
-
+  before_action :ensure_signed_in, only: [:destroy, :create, :update]
   decorates_assigned :location
+
+  helper_method :created?
 
   def show
     respond_to do |format|
@@ -24,7 +26,7 @@ class LocationsController < ApplicationController
     location = Location.create(create_params)
     respond_to do |format|
       format.json { render json: location }
-      format.html { redirect_to location_path(location, edit: 1) }
+      format.html { redirect_to location_path(location, edit: 1, create: 1) }
     end
   end
 
@@ -71,8 +73,13 @@ class LocationsController < ApplicationController
 
     head :no_content and return unless locations.present?
 
+    decorated_locations = LocationDecorator.decorate_collection(locations.to_a)
+    decorated_locations.each do |loc|
+      loc.distance = Geocoder::Calculations.distance_between(loc.to_coordinates, center)
+    end
+
     respond_to do |format|
-      format.json { render json: LocationDecorator.decorate_collection(locations.to_a) }
+      format.json { render json: decorated_locations }
     end
   end
 
@@ -94,6 +101,10 @@ class LocationsController < ApplicationController
 
   private
 
+  def created?
+    return params.fetch(:create, 0).to_i.eql?(1)
+  end
+
   def set_instructor
     @instructor = User.find(params[:instructor_id]) if params.key?(:instructor_id)
     head :not_found and return false unless @instructor.present?
@@ -112,6 +123,7 @@ class LocationsController < ApplicationController
   def create_params
     p = params.require(:location).permit(:city, :street, :postal_code, :state, :country, :title, :description, :coordinates, :team_id, :directions, :phone, :email, :website)
     p[:coordinates] = JSON.parse(p[:coordinates]) if p.key?(:coordinates)
+    p[:modifier] = current_user if signed_in?
     p
   end
 

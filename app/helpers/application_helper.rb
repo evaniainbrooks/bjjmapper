@@ -26,7 +26,7 @@ module ApplicationHelper
   end
   
   def select_instructors
-    all_instructors.map { |instructor| [instructor.name, instructor.id, {'data-img-src' => instructor.image}] }
+    all_instructors.map { |instructor| [instructor.name, instructor.id, {'data-img-src' => image_path(instructor.image)}] }
   end  
 
   def edit_mode_classes

@@ -65,6 +65,15 @@ class ApplicationController < ActionController::Base
   end
 
   def meta
+
+  end
+
+  protected
+  def ensure_signed_in
+    respond_to do |format|
+      format.html { redirect_to '/signin' }
+      format.json { render status: :unauthorized,  json: {} }
+    end unless signed_in?
   end
 
   private
@@ -89,12 +98,6 @@ class ApplicationController < ActionController::Base
     @user = User.find(params[:id])
     unless current_user == @user
       redirect_to root_url, :alert => 'Access denied.'
-    end
-  end
-
-  def authenticate_user!
-    unless current_user
-      redirect_to root_url, :alert => 'You need to sign in for access to this page.'
     end
   end
 

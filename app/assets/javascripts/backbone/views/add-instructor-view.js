@@ -15,10 +15,11 @@
       var img = selected.data('img-src');
       var imgElem = this.$('img');
 
-      if ("undefined" !== typeof(img)) {
+      if ("undefined" !== typeof(img) && img.length > 0) {
         imgElem.attr('src', img);
       } else {
-        imgElem.attr('src', imgElem.data('default-src'));
+        var defaultSrc = imgElem.data('default-src');
+        imgElem.attr('src', defaultSrc);
       }
     }
   });

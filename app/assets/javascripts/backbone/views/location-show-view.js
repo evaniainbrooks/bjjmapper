@@ -8,7 +8,7 @@
     addInstructorView: null,
     events: {
       'click .add-instructor': 'addInstructor',
-      'click .remove-instructor': 'removeInstructor',
+      'click .remove-user': 'removeInstructor',
       'change [name="location[team_id]"]': 'changeTeam'
     },
     initialize: function(options) {

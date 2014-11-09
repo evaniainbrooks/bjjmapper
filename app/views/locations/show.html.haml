@@ -3,6 +3,7 @@
     .row
       .col-md-12
         = render partial: 'breadcrumb', locals: { location: location }
+        = render partial: 'create_message' if created?
     .row
       .col-md-2
         .display-field

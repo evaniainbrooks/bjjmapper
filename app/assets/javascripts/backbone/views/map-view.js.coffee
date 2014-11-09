@@ -10,6 +10,9 @@ class RollFindr.Views.MapView extends Backbone.View
   termFilter: new TermFilter()
   locationsView: null
   filteredLocations: new RollFindr.Collections.LocationsCollection()
+  events: {
+    'change [name="sort_order"]': 'sortOrderChanged'
+  }
   initialize: ->
     # TODO: Move this to a helper
     @circleDistance = (p0, p1) ->
@@ -37,7 +40,7 @@ class RollFindr.Views.MapView extends Backbone.View
 
     @listenTo(@teamFilter.collection, 'change:filter-active', @filtersChanged)
     @listenTo(@termFilter.collection, 'sync reset', @filtersChanged)
-    @listenTo(@model.get('locations'), 'sync', @filtersChanged)
+    @listenTo(@model.get('locations'), 'sort sync reset', @filtersChanged)
 
     google.maps.event.addListener(@map, 'click', @createLocation)
     google.maps.event.addListener(@map, 'idle', @fetchViewport)
@@ -54,6 +57,9 @@ class RollFindr.Views.MapView extends Backbone.View
         position = new google.maps.LatLng(coords[0], coords[1])
         return this.map.getBounds().contains(position)
     )
+  sortOrderChanged: (e)->
+    selectedSort = $('option:selected', e.currentTarget)
+    @model.get('locations').sortByField(selectedSort.val())
 
   filtersChanged: ->
     locations = @model.get('locations')
