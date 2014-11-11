@@ -20,7 +20,7 @@ describe EventsController do
       end
       context 'with no matching events in date range' do
         it 'returns 204 no content' do
-          get :index, { location_id: location.id, format: 'json', start: 99.hours.ago, end: 100.hours.ago }
+          get :index, { location_id: location.id, format: 'json', start: 99.hours.ago.iso8601, end: 100.hours.ago.iso8601 }
           response.status.should eq 204
         end
       end

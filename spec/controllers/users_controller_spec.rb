@@ -22,7 +22,7 @@ describe UsersController do
       it 'creates and redirects to a new user in edit mode' do
         expect do
           post :create, create_params.merge({:format => 'html'})
-          response.should redirect_to(user_path(User.first, edit: 1))
+          response.should redirect_to(user_path(User.last, edit: 1))
         end.to change { User.count }.by(1)
       end
     end
