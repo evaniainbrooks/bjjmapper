@@ -40,6 +40,9 @@ describe Event do
     it 'is invalid without a location' do
       build(:event, location: nil).should_not be_valid
     end
+    it 'is invalid without a user' do
+      build(:event, user: nil).should_not be_valid
+    end
   end
   describe '.as_json' do
 

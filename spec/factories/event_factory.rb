@@ -5,5 +5,6 @@ FactoryGirl.define do
     starting 2.hours.ago
     ending 1.hours.ago
     location
+    user
   end
 end
