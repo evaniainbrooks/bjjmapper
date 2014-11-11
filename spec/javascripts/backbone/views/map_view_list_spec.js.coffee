@@ -8,13 +8,13 @@ describe 'Views.MapViewList', ->
   beforeEach ->
     view = new RollFindr.Views.MapViewList({el: $('body'), filteredCount: 99, collection: collection})
 
-  it 'renders itself on initialize' ->
+  it 'renders itself on initialize', ->
 
-  it 'displays the count and filtered count' ->
+  it 'displays the count and filtered count', ->
 
   describe 'when there are no locations', ->
-    it 'adds the empty class to the container and displays an error message' ->
+    it 'adds the empty class to the container and displays an error message', ->
 
   describe 'when there are locations', ->
-    it 'renders the map list template for each item in the collection' ->
+    it 'renders the map list template for each item in the collection', ->
 
