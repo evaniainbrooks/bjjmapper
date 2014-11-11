@@ -65,6 +65,7 @@
     %br/
 
   = render :partial => 'instructors/add_instructor_dialog'
+  = render :partial => 'events/add_event_modal', locals: { location: location }
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->

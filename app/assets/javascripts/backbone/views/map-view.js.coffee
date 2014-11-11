@@ -1,3 +1,4 @@
+#= require distance
 #= require term-filter
 #= require backbone/views/team-list-view
 
@@ -5,26 +6,17 @@ class RollFindr.Views.MapView extends Backbone.View
   el: $('.wrapper')
   tagName: 'div'
   map: null
-  template: JST['templates/locations/map-list']
   teamFilter: null
-  termFilter: new TermFilter()
+  termFilter: null
   locationsView: null
+  listView: null
   filteredLocations: new RollFindr.Collections.LocationsCollection()
   events: {
     'change [name="sort_order"]': 'sortOrderChanged'
+    'click .location-list a': 'listItemClicked'
   }
   initialize: ->
-    # TODO: Move this to a helper
-    @circleDistance = (p0, p1) ->
-      r = 3963.0
-      lat1 = p0.lat().toRad()
-      lon1 = p0.lng().toRad()
-      lat2 = p1.lat().toRad()
-      lon2 = p1.lng().toRad()
-
-      return r * Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1))
-
-    _.bindAll(this, 'search', 'setDefaultCenter', 'setCenter', 'setCenterGeolocate', 'createLocation', 'fetchViewport', 'render', 'filtersChanged')
+    _.bindAll(this, 'activeMarkerChanged', 'search', 'setDefaultCenter', 'listItemClicked', 'setCenter', 'setCenterGeolocate', 'createLocation', 'fetchViewport', 'render', 'filtersChanged')
 
     mapOptions = {
       zoom: @model.get('zoom')
@@ -35,6 +27,7 @@ class RollFindr.Views.MapView extends Backbone.View
     mapCanvas = @$('.map-canvas')[0]
     @map = new google.maps.Map(mapCanvas, mapOptions)
 
+    @termFilter = new TermFilter()
     @teamFilter = new RollFindr.Views.TeamListView({el: @$('.filter-list .team-list')})
     @locationsView = new RollFindr.Views.MapViewLocations({map: @map, collection: @filteredLocations})
 
@@ -47,8 +40,22 @@ class RollFindr.Views.MapView extends Backbone.View
 
     RollFindr.GlobalEvents.on('geolocate', @setCenterGeolocate)
     RollFindr.GlobalEvents.on('search', @search)
+    RollFindr.GlobalEvents.on('markerActive', @activeMarkerChanged)
 
     @setCenter()
+
+  activeMarkerChanged: (e)->
+    # Set active marker in list
+
+  listItemClicked: (e)->
+    id = $(e.currentTarget).data('id')
+    locationModel = @filteredLocations.findWhere({id: id})
+    coordinates = locationModel.get('coordinates')
+    newCenter = new google.maps.LatLng(coordinates[0], coordinates[1])
+
+    @map.setCenter(newCenter)
+    RollFindr.GlobalEvents.trigger('markerActive', {id: id})
+    e.preventDefault();
 
   visibleLocations: ->
     @filteredLocations.filter(
@@ -70,8 +77,13 @@ class RollFindr.Views.MapView extends Backbone.View
     @render()
 
   render: ->
-    list = @template({locations: _.invoke(@visibleLocations(), 'toJSON')})
-    $('.location-list', @el).html(list)
+    filteredCount = @model.get('locations').models.length - @filteredLocations.models.length
+    @listView = new RollFindr.Views.MapViewList({
+      el: @$('.location-list')
+      collection: @visibleLocations()
+      filteredCount: filteredCount
+    })
+
     @locationsView.render()
 
   search: (e)->
@@ -89,7 +101,7 @@ class RollFindr.Views.MapView extends Backbone.View
       })
 
     center = [@map.getCenter().lat(), @map.getCenter().lng()]
-    distance = @circleDistance(@map.getCenter(), @map.getBounds().getNorthEast())
+    distance = Math.circleDistance(@map.getCenter(), @map.getBounds().getNorthEast())
     distance *= 5
     @termFilter.setQuery(e.query, center, distance)
 
@@ -121,7 +133,7 @@ class RollFindr.Views.MapView extends Backbone.View
     center[0] = @map.getCenter().lat()
     center[1] = @map.getCenter().lng()
 
-    distance = @circleDistance(@map.getCenter(), @map.getBounds().getNorthEast())
+    distance = Math.circleDistance(@map.getCenter(), @map.getBounds().getNorthEast())
 
     @model.set('center', center)
     @model.get('locations').fetch({remove: false, data: {center: center, distance: distance}})

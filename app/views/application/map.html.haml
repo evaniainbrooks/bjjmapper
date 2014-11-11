@@ -11,7 +11,9 @@
 
   .tab-content
     %br/
-    %div#tab-pane-location-list.location-list.tab-pane.fade.in.active
+    %div#tab-pane-location-list.tab-pane.location-list.fade.in.active
+      = render partial: 'locations/map_list'
+
     %div#tab-pane-filter-list.filter-list.tab-pane.fade.in
       .term-filter.container-fluid
         %h4 Search terms
@@ -23,10 +25,10 @@
       .sort-order.container-fluid
         %h4 Order by
         %select.form-control{:name => 'sort_order'}
-          %option{:value => 'id'} Most Relevant
-          %option{:value => 'title'} Alphabetic
-          %option{:value => 'distance'} Closest Distance
-          %option{:value => 'rating'} Highest Rated
+          %option{:value => 'id'} Relevance
+          %option{:value => 'title'} A-Z
+          %option{:value => 'distance'} Distance
+          %option{:value => 'rating'} Rating
         %br/
       .team-list
         -# This is filled in by team-list template

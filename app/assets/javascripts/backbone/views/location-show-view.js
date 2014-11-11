@@ -9,10 +9,17 @@
     events: {
       'click .add-instructor': 'addInstructor',
       'click .remove-user': 'removeInstructor',
+      //'click .edit-mode .fc-day': 'addEvent',
       'change [name="location[team_id]"]': 'changeTeam'
     },
     initialize: function(options) {
-      _.bindAll(this, 'addInstructor', 'removeInstructor', 'instructorCollectionChanged', 'changeTeam');
+      _.bindAll(this,
+        'addInstructor',
+        'removeInstructor',
+        'instructorCollectionChanged',
+        'changeTeam',
+        'calendarSelected',
+        'calendarEventRender');
 
       this.addInstructorView = new RollFindr.Views.AddInstructorView();
       if (undefined !== options.mapModel) {
@@ -22,21 +29,31 @@
 
       this.model = new RollFindr.Models.Location(options.model);
       this.listenTo(this.model.get('instructors'), 'remove', this.instructorCollectionChanged);
-    
       this.initializeCalendar();
+    },
+    calendarSelected: function() {
+      $('.add-event-dialog').modal('show');
+    },
+    calendarEventRender: function(event, element) {
+      alert('calenderEventRender');
+      console.log(event);
+      console.log(element);
     },
     initializeCalendar: function() {
       var locationId = this.model.get('id');
       this.$('.scheduler').fullCalendar({
         events: Routes.location_events_path(locationId),
+        editable: true,
+        selectable: true,
+        select: this.calendarSelected,
         header: {
           left: 'prev,next today',
           center: 'title',
-          right: 'month,basicWeek,basicDay'
+          right: 'month,agendaWeek,basicDay'
         }
       });
     },
-    addInstructor: function() {
+    addInstructor: function(start, end, allDay) {
       $('.add-instructor-dialog').modal('show');
     },
     removeInstructor: function(e) {
@@ -59,7 +76,6 @@
     changeTeam: function(e) {
       var teamImg = $('option:selected', e.currentTarget).data('img-src');
       var imgElem = this.$('.edit-image');
-      
       imgElem.attr('src', teamImg);
     }
   });

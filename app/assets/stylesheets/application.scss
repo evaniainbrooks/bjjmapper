@@ -23,6 +23,24 @@ html, body {
   padding: 0px;
 }
 
+.location-list {
+  .list-index {
+    padding: 7px;
+    height: 100%;
+    float: left;
+    margin-right: 7px;
+    span {
+      font-size: 150%;
+    }
+  }
+
+  .distance {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+}
+
 .team-list ul {
   max-height: 200px;
   overflow-y: scroll;
