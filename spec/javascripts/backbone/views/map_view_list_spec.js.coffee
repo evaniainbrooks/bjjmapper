@@ -8,13 +8,21 @@ describe 'Views.MapViewList', ->
   beforeEach ->
     view = new RollFindr.Views.MapViewList({el: $('body'), filteredCount: 99, collection: collection})
 
-  it 'renders itself on initialize', ->
+  it 'listens on the global markerActive event', ->
 
-  it 'displays the count and filtered count', ->
+  it 'displays the visible count and filtered count', ->
 
   describe 'when there are no locations', ->
-    it 'adds the empty class to the container and displays an error message', ->
+    it 'adds the empty class to the container', ->
 
   describe 'when there are locations', ->
+    it 'removes the empty class', ->
+
     it 'renders the map list template for each item in the collection', ->
+
+  describe 'click .location-list-item', ->
+    it 'adds the active class', ->
+
+    it 'triggers the global markerActive event', ->
+
 

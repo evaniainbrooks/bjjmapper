@@ -1,0 +1,5 @@
+%div.belt{:class => "belt-#{user.belt_rank}"}
+  %b.pull-left.small= user.rank_in_words
+  .grade{:class => "grade-#{user.stripe_rank}"}
+    - user.stripe_rank.times.each do
+      %span.stripe

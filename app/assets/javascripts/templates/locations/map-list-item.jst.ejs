@@ -1,11 +1,25 @@
-<a href="<%= Routes.location_path(location, { ref: 'map_list' + location.marker_id }) %>" data-id="<%= location.id %>" class="list-group-item">
+<div data-id="<%= location.id %>" class="location-list-item <%= active ? 'marker-active' : ''%> list-group-item">
   <div class="list-index">
-    <span class="text-muted pull-left"><%= location.marker_id %></span>
+    <span class="text-muted"><%= location.marker_id %></span>
   </div>
   <img src="<%= location.image %>" alt="<% location.title %> logo" class="pull-left" />
   <div>
-    <h4 class="text-primary list-group-item-heading"><%= location.title %></h4>
+    <a href="<%= Routes.location_path(location) %>"><h4 class="text-primary list-group-item-heading"><%= location.title %></h4></a>
     <p class="text-muted list-group-item-text small"><%= location.address %></p>
   </div>
+  <div class="active-content">
+    <br/>
+    <ul class="small list-unstyled">
+      <% if (null !== location.phone && location.phone.length > 0) { %>
+        <li><span class="col-md-offset-1 label">Phone</span> <a href="tel:<%= location.phone %>"><%= location.phone %></a></li>
+      <% } %>
+      <% if (null !== location.email && location.email.length > 0) { %>
+        <li><span class="col-md-offset-1 label">Email</span> <a href="mailto:<%= location.email %>"><%= location.email %></a></li>
+      <% } %>
+      <% if (null !== location.website && location.website.length > 0) { %>
+        <li><span class="col-md-offset-1 label">Website</span> <a href="http://<%= location.website %>"><%= location.website %></a></li>
+      <% } %>
+    </ul>
+  </div>
   <span class="text-info distance small"><%= location.distance.toFixed(2) %>mi</span>
-</a>
+</div>

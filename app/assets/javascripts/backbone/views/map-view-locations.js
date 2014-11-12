@@ -39,6 +39,7 @@
 
       if (null !== self.template) {
         google.maps.event.addListener(self.markers[id], 'click', function() {
+          console.log('triggering markerActive from marker click')
           RollFindr.GlobalEvents.trigger('markerActive', {id: id});
         });
       }

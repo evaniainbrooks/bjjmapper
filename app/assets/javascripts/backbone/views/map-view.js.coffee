@@ -13,49 +13,65 @@ class RollFindr.Views.MapView extends Backbone.View
   filteredLocations: new RollFindr.Collections.LocationsCollection()
   events: {
     'change [name="sort_order"]': 'sortOrderChanged'
-    'click .location-list a': 'listItemClicked'
+    'click .refresh-button': 'fetchViewport'
   }
   initialize: ->
-    _.bindAll(this, 'activeMarkerChanged', 'search', 'setDefaultCenter', 'listItemClicked', 'setCenter', 'setCenterGeolocate', 'createLocation', 'fetchViewport', 'render', 'filtersChanged')
+    _.bindAll(this,
+      'activeMarkerChanged',
+      'search',
+      'setDefaultCenter',
+      'setCenter',
+      'setCenterGeolocate',
+      'createLocation',
+      'fetchViewport',
+      'geolocate',
+      'render',
+      'filtersChanged')
 
+    @setupGoogleMap()
+
+    @termFilter = new TermFilter()
+    @teamFilter = new RollFindr.Views.TeamListView({el: @$('.filter-list .team-list')})
+
+    @locationsView = new RollFindr.Views.MapViewLocations({map: @map, collection: @filteredLocations})
+    @listView = new RollFindr.Views.MapViewList({
+      el: @$('.location-list')
+      collection: @filteredLocations
+      filteredCount: 0
+    })
+
+    @setupEventListeners()
+    @setCenter()
+
+  setupGoogleMap: ->
     mapOptions = {
       zoom: @model.get('zoom')
       minZoom: 8
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
-
     mapCanvas = @$('.map-canvas')[0]
     @map = new google.maps.Map(mapCanvas, mapOptions)
 
-    @termFilter = new TermFilter()
-    @teamFilter = new RollFindr.Views.TeamListView({el: @$('.filter-list .team-list')})
-    @locationsView = new RollFindr.Views.MapViewLocations({map: @map, collection: @filteredLocations})
+    refreshButton = JST['templates/refresh_button']()
+    @map.controls[google.maps.ControlPosition.TOP_LEFT].push($(refreshButton)[0])
 
+  setupEventListeners: ->
     @listenTo(@teamFilter.collection, 'change:filter-active', @filtersChanged)
     @listenTo(@termFilter.collection, 'sync reset', @filtersChanged)
     @listenTo(@model.get('locations'), 'sort sync reset', @filtersChanged)
 
     google.maps.event.addListener(@map, 'click', @createLocation)
-    google.maps.event.addListener(@map, 'idle', @fetchViewport)
+    google.maps.event.addListenerOnce(@map, 'idle', @fetchViewport)
 
-    RollFindr.GlobalEvents.on('geolocate', @setCenterGeolocate)
+    RollFindr.GlobalEvents.on('geolocate', @geolocate)
     RollFindr.GlobalEvents.on('search', @search)
     RollFindr.GlobalEvents.on('markerActive', @activeMarkerChanged)
 
-    @setCenter()
-
   activeMarkerChanged: (e)->
-    # Set active marker in list
-
-  listItemClicked: (e)->
-    id = $(e.currentTarget).data('id')
-    locationModel = @filteredLocations.findWhere({id: id})
+    locationModel = @filteredLocations.findWhere({id: e.id})
     coordinates = locationModel.get('coordinates')
     newCenter = new google.maps.LatLng(coordinates[0], coordinates[1])
-
     @map.setCenter(newCenter)
-    RollFindr.GlobalEvents.trigger('markerActive', {id: id})
-    e.preventDefault();
 
   visibleLocations: ->
     @filteredLocations.filter(
@@ -78,12 +94,7 @@ class RollFindr.Views.MapView extends Backbone.View
 
   render: ->
     filteredCount = @model.get('locations').models.length - @filteredLocations.models.length
-    @listView = new RollFindr.Views.MapViewList({
-      el: @$('.location-list')
-      collection: @visibleLocations()
-      filteredCount: filteredCount
-    })
-
+    @listView.render(filteredCount)
     @locationsView.render()
 
   search: (e)->
@@ -109,10 +120,15 @@ class RollFindr.Views.MapView extends Backbone.View
     $('.coordinates', '.new-location-dialog').val(JSON.stringify([event.latLng.lng(), event.latLng.lat()]))
     $('.new-location-dialog').modal('show')
 
-  setCenterGeolocate: ->
+  geolocate: ->
+    @setCenterGelocate =>
+      @fetchViewport()
+
+  setCenterGeolocate: (doneCallback)->
     setLocationCallback = (position)=>
       initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude)
       @map.setCenter(initialLocation)
+      doneCallback() if doneCallback?
 
     navigator.geolocation.getCurrentPosition(setLocationCallback, @setDefaultCenter) if navigator? && navigator.geolocation?
 
@@ -136,5 +152,6 @@ class RollFindr.Views.MapView extends Backbone.View
     distance = Math.circleDistance(@map.getCenter(), @map.getBounds().getNorthEast())
 
     @model.set('center', center)
-    @model.get('locations').fetch({remove: false, data: {center: center, distance: distance}})
-
+    @$('.refresh-button .fa').addClass('fa-spin')
+    @model.get('locations').fetch({data: {center: center, distance: distance}}).done =>
+      @$('.refresh-button .fa').removeClass('fa-spin')

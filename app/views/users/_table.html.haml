@@ -9,11 +9,8 @@
     %tr
       %td Rank
       %td
-        %div.display-field.belt{:class => "belt-#{user.belt_rank}"}
-          %b.pull-left.small= user.rank_in_words
-          .grade{:class => "grade-#{user.stripe_rank}"}
-            - user.stripe_rank.times.each do
-              %span.stripe
+        .display-field
+          = render partial: 'users/belt', locals: { user: user }
         .edit-field.form-group
           = f.select :belt_rank, options_for_select(belt_ranks, user.belt_rank), {}, class: 'form-control input-md'
         .edit-field.form-group
