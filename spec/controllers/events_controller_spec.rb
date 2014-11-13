@@ -1,6 +1,66 @@
 require 'spec_helper'
 
 describe EventsController do
+  describe 'POST create' do
+    context 'with json format' do
+      context 'with valid params' do
+        let(:location) { create(:location_with_instructors) }
+        let(:valid_params) do 
+          {
+            location_id: location.to_param,
+            format: 'json', 
+            event: { 
+              location_id: location.to_param,
+              instructor_id: location.instructors.first.to_param, 
+              starting: 10.hours.ago.to_i,
+              ending: 9.hours.ago.to_i,
+              title: 'test title',
+              description: 'test description'
+            }
+          }
+        end
+        context 'when logged in' do
+          let(:user) { create(:user) }
+          let(:session_params) { { user_id: user.id } }
+          it 'creates a new event' do
+            expect do
+              post :create, valid_params, session_params
+              response.should be_ok
+            end.to change { Event.count }.by(1)
+          end
+        end
+        context 'when not logged in' do
+          it 'returns not_authorized' do
+            expect do
+              post :create, valid_params, {}
+              response.status.should eq 401
+            end.to change { Event.count }.by(0)
+          end
+        end
+      end
+      context 'with invalid params' do
+        let(:user) { create(:user) }
+        let(:session_params) { { user_id: user.id } }
+        let(:location) { create(:location_with_instructors) }
+        let(:invalid_params) do
+          { 
+            location_id: location.to_param, 
+            format: 'json', 
+            event: { 
+              description: 'test description' 
+            } 
+          } 
+        end
+        it 'returns bad request' do
+          expect do
+            post :create, invalid_params, session_params
+            response.status.should eq 400
+          end.to change { Event.count }.by(0)
+        end
+      end
+    end
+  end
+  
   describe 'GET index' do
     let(:start_date) { 5.hours.ago.iso8601 }
     let(:end_date) { Time.now.iso8601 }

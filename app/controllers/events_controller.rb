@@ -1,5 +1,16 @@
 class EventsController < ApplicationController
   before_action :set_location
+  before_action :ensure_signed_in, only: [:destroy, :create, :update]
+
+  def create
+    @event = Event.new(create_params)
+    @location.events << @event
+
+    status = @event.valid? ? :ok : :bad_request
+    respond_to do |format|
+      format.json { render status: status, json: @event }
+    end
+  end
 
   def index
     start_param = params.fetch(:start, nil)
@@ -38,6 +49,12 @@ class EventsController < ApplicationController
   end
 
 private
+
+  def create_params
+    p = params.require(:event).permit(:starting, :ending, :recurrence, :title, :description, :instructor, :location)
+    p[:user] = current_user if signed_in?
+    p
+  end
 
   def set_location
     @location = Location.find(params[:location_id])
