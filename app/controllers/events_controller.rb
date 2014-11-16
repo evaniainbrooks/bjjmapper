@@ -25,7 +25,7 @@ class EventsController < ApplicationController
 
     status = @events.count == 0 ? :no_content : :ok
     respond_to do |format|
-      format.json { render status: status, json: @events }
+      format.json { render status: status, json: @events.decorate }
     end
   end
 
@@ -52,7 +52,7 @@ private
 
   def create_params
     p = params.require(:event).permit(:starting, :ending, :recurrence, :title, :description, :instructor, :location)
-    p[:user] = current_user if signed_in?
+    p[:modifier] = current_user if signed_in?
     p
   end
 

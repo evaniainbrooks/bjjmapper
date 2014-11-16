@@ -7,16 +7,16 @@
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
-      %a.navbar-brand{:href => root_path, :data => { :'no-turbolink' => true } } BJJMapper
+      %a.navbar-brand{:href => root_path(ref: 'navbar_title'), :data => { :'no-turbolink' => true } } BJJMapper
     / Collect the nav links, forms, and other content for toggling
     .main-navbar-collapse.collapse.navbar-collapse
       %ul.nav.navbar-nav
-        %li{:class => action?(:map) ? 'active' : nil} 
-          %a{:href => root_path, :data => { :'no-turbolink' => true } } Map
+        %li{:class => action?(:map) ? 'active' : nil}
+          %a{:href => root_path(ref: 'navbar'), :data => { :'no-turbolink' => true } } Map
         %li{:class => action?(:index) ? 'active' : nil}
-          %a{:href => locations_path} Academies
+          %a{:href => locations_path(ref: 'navbar')} Academies
         %li{:class => action?(:meta) ? 'active' : nil}
-          %a{:href => meta_path} About
+          %a{:href => meta_path(ref: 'navbar')} About
       %form.navbar-form.navbar-left{:role => "search"}
         .form-group.has-feedback
           %input.clear-input.form-control{:name => 'query', :placeholder => "Search", :type => "text"}/

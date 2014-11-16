@@ -26,6 +26,7 @@ class RollFindr.Views.MapViewList extends Backbone.View
 
   activeMarkerChanged: (e)->
     @activeMarkerId = e.id
+    @render()
 
   listItemClicked: (e)->
     id = $(e.currentTarget).data('id')

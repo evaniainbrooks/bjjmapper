@@ -180,12 +180,15 @@ html, body {
   margin-top: 20px;
 }
 
-.instructor {
+.instructor-card {
   .thumbnail {
     img {
-      max-height: 250px;
+      width: 100px;
     }
-    height: 420px;
+    .caption {
+      margin-left: 100px;
+    }
+    height: 150px;
     overflow: hidden;
     text-overflow: ellipsis;
   }

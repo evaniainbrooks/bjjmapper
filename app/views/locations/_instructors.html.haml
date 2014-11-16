@@ -4,4 +4,4 @@
   Add Instructor
 %a{:name => 'instructor'}
 .clear
-= render partial: 'users/card', collection: location.instructors, as: 'user'
+= render partial: 'users/card', collection: location.instructors, as: 'user', locals: { color_key: true }

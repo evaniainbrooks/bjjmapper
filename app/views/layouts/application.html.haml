@@ -23,6 +23,7 @@
 
     = render partial: 'report_modal'
     = render partial: 'login_modal'
-    = javascript_include_tag 'application'
     = render partial: 'application/footer'
+      mixpanel.init("#{Rails.configuration.mixpanel_key}");
+    = javascript_include_tag 'application'
     = yield(:scripts) if content_for?(:scripts)

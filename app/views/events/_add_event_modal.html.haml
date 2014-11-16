@@ -6,7 +6,7 @@
           %button.close{'data-dismiss' => 'modal', 'type' => 'button'}
             %span{'aria-hidden' => 'true'} &times;
             %span.sr-only Close
-          %h4 Create Academy Event
+          %h4 Create Event
         .modal-body
           %ul.nav.nav-tabs{:role => 'tablist'}
             %li.active
@@ -17,31 +17,7 @@
               %a{:href => '#tournament-event', 'role' => 'tab', 'data-toggle' => 'tab'} Tournament
           .tab-content
             .tab-pane#special-event
-              %br/
-              .form-group
-                %label.col-md-4.control-label{:for => "event[title]"} Title
-                .col-md-8
-                  = f.text_field :title, placeholder: 'eg. Rickson Gracie Seminar', class: 'form-control input-md'
-              .form-group
-                %label.col-md-4.control-label{:for => "event[instructor]"} Guest Instructor
-                .col-md-8
-                  = f.select :instructor, options_for_select(select_instructors), {}, class: 'form-control input-md'
-              .form-group
-                %label.col-md-4.control-label{:for => "event[starting]"} Start
-                .col-md-8
-                  = select_hour(0, {field_name: 'event_starting', ampm: true}, {class: 'form-control input-md'})
-              .form-group
-                %label.col-md-4.control-label{:for => "event[ending]"} End
-                .col-md-8
-                  = select_hour(1, {field_name: 'event_ending', ampm: true}, {class: 'form-control input-md'})
-              .form-group
-                %label.col-md-4.control-label{:for => "event[price]"} Price
-                .col-md-8
-                  = f.text_field :price, class: 'form-control input-md'
-              .form-group
-                %label.col-md-4.control-label{:for => "event[description]"} Description
-                .col-md-8
-                  = f.text_area :description, class: 'form-control input-md'
+              %h4.text-danger Coming soon :)
             .tab-pane#tournament-event
               %h4.text-danger Coming soon :)
             .active.tab-pane#class-event
@@ -55,27 +31,35 @@
                         %label.col-md-4.control-label{:for => "event[title]"} Title
                         .col-md-8
                           = f.text_field :title, placeholder: 'eg. BJJ Beginners, Competition Class', class: 'form-control input-md'
+                          = f.hidden_field :starting
+                          = f.hidden_field :ending
                       .form-group
                         %label.col-md-4.control-label{:for => "event[instructor]"} Instructor
                         .col-md-8
                           = f.select :instructor, location.instructors.map{|o| [o.name, o.id]}, {}, class: 'form-control input-md'
                       .form-group
-                        %label.col-md-4.control-label{:for => "event[starting]"} Start
-                        .col-md-8
-                          = select_hour(0, {field_name: 'event_starting', ampm: true}, {class: 'form-control input-md'})
+                        %label.col-md-4.control-label
+                          Start
+                        .col-md-8.form-inline
+                          = select_hour(0, {start_hour: 1, end_hour: 12, field_name: 'start_hours'}, {class: 'form-control input-md'})
+                          = select_minute(0, {minute_step: 15, field_name: 'start_minutes'}, {class: 'form-control input-md'})
+                          = select_tag :date_start_am_pm, options_for_select([['AM', 'am'],['PM','pm']]), class: 'form-control input-md'
                       .form-group
-                        %label.col-md-4.control-label{:for => "event[ending]"} End
-                        .col-md-8
-                          = select_hour(1, {field_name: 'event_ending', ampm: true}, {class: 'form-control input-md'})
+                        %label.col-md-4.control-label
+                          End
+                        .col-md-8.form-inline
+                          = select_hour(1, {start_hour: 1, end_hour: 12, field_name: 'end_hours'}, {class: 'form-control input-md'})
+                          = select_minute(0, {minute_step: 15, field_name: 'end_minutes'}, {class: 'form-control input-md'})
+                          = select_tag :date_end_am_pm, options_for_select([['AM', 'am'],['PM','pm']]), class: 'form-control input-md'
                       .form-group
                         .checkbox.col-md-offset-4
                           %label.control-label
-                            = f.check_box :is_all_day
+                            = check_box_tag 'event[is_all_day]'
                             %strong All Day Event
                       .form-group
                         %label.col-md-4.control-label{:for => "event[recurrence]"} Repeat
                         .col-md-8
-                          = f.select :recurrence, [['None', 0],['Daily', 1],['Every second day', 2], ['Weekly', 7], ['Bi-weekly', 14]], {}, class: 'form-control input-md'
+                          = f.select :recurrence, select_recurrence, {}, class: 'form-control input-md'
         .modal-footer
           %button.btn.btn-default{:type => 'button', 'data-dismiss' => 'modal'} Cancel
           %button.btn.btn-primary{:type => 'submit'} Create Event

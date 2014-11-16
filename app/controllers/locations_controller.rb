@@ -1,6 +1,6 @@
 class LocationsController < ApplicationController
   before_action :set_instructor, only: [:instructors]
-  before_action :set_location, only: [:show, :instructors]
+  before_action :set_location, only: [:destroy, :show, :update, :instructors]
   before_action :set_map, only: :show
   before_action :ensure_signed_in, only: [:destroy, :create, :update]
   decorates_assigned :location
@@ -8,6 +8,10 @@ class LocationsController < ApplicationController
   helper_method :created?
 
   def show
+    tracker.track('showLocation',
+      id: @location.to_param
+    )
+
     respond_to do |format|
       format.json { render json: @location }
       format.html
@@ -15,42 +19,43 @@ class LocationsController < ApplicationController
   end
 
   def destroy
-    location = Location.find(params[:id]).destroy
+    tracker.track('deleteLocation',
+      id: @location.to_param,
+      location: @location.as_json({})
+    )
+
+    @location.destroy
+
     respond_to do |format|
       format.html { redirect_to root_path }
-      format.json { render status: :ok, json: location }
+      format.json { render status: :ok, json: @location }
     end
   end
 
   def create
     location = Location.create(create_params)
+
+    tracker.track('createLocation',
+      location: location.as_json({})
+    )
+
     respond_to do |format|
       format.json { render json: location }
       format.html { redirect_to location_path(location, edit: 1, create: 1) }
     end
   end
 
-  def geocode
-    search_query = params.fetch(:query, '')
-    search_result = Geocoder.search(search_query)
-
-    respond_to do |format|
-      format.json do
-        if search_result.count > 0
-          render json: search_result[0].geometry['location']
-        else
-          render status: :not_found, json: {}
-        end
-      end
-    end
-  end
-
   def update
-    location = Location.find(params[:id]).tap do |loc|
-      loc.update!(create_params)
-    end
+    tracker.track('updateLocation',
+      id: @location.to_param,
+      location: @location.as_json({}),
+      updates: create_params
+    )
+
+    @location.update!(create_params)
+
     respond_to do |format|
-      format.json { render json: location }
+      format.json { render json: @location }
       format.html { redirect_to location_path(location, edit: 0) }
     end
   end
@@ -78,6 +83,15 @@ class LocationsController < ApplicationController
       loc.distance = Geocoder::Calculations.distance_between(loc.to_coordinates, center)
     end
 
+    tracker.track('searchLocations',
+      center: center,
+      team: team,
+      distance: distance,
+      text_filter: text_filter,
+      results: decorated_locations.count,
+      location: location.as_json({})
+    )
+
     respond_to do |format|
       format.json { render json: decorated_locations }
     end
@@ -92,6 +106,12 @@ class LocationsController < ApplicationController
     else
       @locations = []
     end
+
+    tracker.track('showLocationsIndex',
+      city: @criteria[:city],
+      country: @criteria[:country],
+      count: @locations.count,
+    )
 
     respond_to do |format|
       format.html

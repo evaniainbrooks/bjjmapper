@@ -21,6 +21,10 @@ module ApplicationHelper
     (1900..2010)
   end
   
+  def select_recurrence
+    [['None', 0],['Daily', 1],['Every second day', 2], ['Weekly', 7], ['Bi-weekly', 14]]
+  end
+
   def all_instructors
     User.where(:role => 'instructor').limit(200).sort_by(&:name)
   end
