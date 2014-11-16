@@ -1,6 +1,28 @@
 require 'spec_helper'
 
 describe ApplicationController do
+  describe '.current_user' do
+    context 'when there is no session user' do
+      it 'returns a new anonymous user' do
+        expect do
+          get :meta, {}, {}
+          controller.send(:current_user).should be_anonymous
+          controller.send(:signed_in?).should be_falsey
+        end.to change { User.count }.by(1)
+      end
+    end
+    context 'when there is a session user' do
+      let(:user) { create(:user) }
+      it 'returns the session user' do
+        expect do
+          get :meta, {}, { user_id: user.to_param }
+          controller.send(:current_user).should eq user
+          controller.send(:signed_in?).should be_truthy
+        end.to change { User.count }.by(1)
+      end
+    end
+  end
+  
   describe 'GET geocode' do
     context 'with json format' do
       context 'when the geocoder service returns results' do

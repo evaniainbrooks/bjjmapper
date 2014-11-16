@@ -1,4 +1,7 @@
+require 'analyzable'
+
 class ApplicationController < ActionController::Base
+  include RollFindr::Analyzable
   include TeamsHelper
 
   # Prevent CSRF attacks by raising an exception.
@@ -15,6 +18,11 @@ class ApplicationController < ActionController::Base
     search_query = params.fetch(:query, '')
     search_result = Geocoder.search(search_query)
 
+    tracker.track('geocodeQuery',
+      query: search_query,
+      resultCount: search_result.count
+    )
+
     respond_to do |format|
       format.json do
         if search_result.count > 0
@@ -28,13 +36,21 @@ class ApplicationController < ActionController::Base
 
   def map
     center = params.fetch(:center, [])
+    geolocate = center.present? ? 0 : 1
+    zoom = center.present? ? Map::ZOOM_LOCATION : Map::ZOOM_DEFAULT
     @map = {
-      zoom: center.present? ? Map::ZOOM_LOCATION : Map::ZOOM_DEFAULT,
+      zoom: zoom,
       center: center,
-      geolocate: center.blank? ? 1 : 0,
+      geolocate: geolocate,
       locations: [],
       filters: 1
     }
+
+    tracker.track('showMap',
+      zoom: zoom,
+      center: center,
+      geolocate: geolocate
+    )
 
     respond_to do |format|
       format.html { render layout: 'map' }
@@ -46,6 +62,12 @@ class ApplicationController < ActionController::Base
     email = params[:email]
     message = params[:message]
 
+    tracker.track('metaSendMessage',
+      name: name,
+      email: email,
+      message: message
+    )
+
     FeedbackMailer.feedback_email(name, email, message, current_user).deliver
     redirect_to meta_path
   end
@@ -54,7 +76,13 @@ class ApplicationController < ActionController::Base
     reason = params.fetch(:reason, nil)
     description = params.fetch(:description, nil)
     subject_url = request.referer
-    
+
+    tracker.track('metaSendReport',
+      reason: reason,
+      description: description,
+      subject_url: request.referer
+    )
+
     render :bad_request and return false unless reason.present?
 
     ReportMailer.report_email(subject_url, reason, description, current_user).deliver
@@ -69,6 +97,7 @@ class ApplicationController < ActionController::Base
   end
 
   protected
+
   def ensure_signed_in
     respond_to do |format|
       format.html { redirect_to '/signin' }
@@ -85,13 +114,18 @@ class ApplicationController < ActionController::Base
   def current_user
     begin
       @current_user ||= User.find(session[:user_id]) if session[:user_id]
+      @current_user ||= anonymous_user
     rescue Mongoid::Errors::DocumentNotFound
       nil
     end
   end
 
+  def anonymous_user
+    User.create_anonymous(request.remote_ip)
+  end
+
   def signed_in?
-    return true if current_user
+    return true if current_user && !current_user.anonymous?
   end
 
   def correct_user?
