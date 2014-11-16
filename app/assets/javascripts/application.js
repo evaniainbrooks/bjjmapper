@@ -12,6 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require mixpanel
+//= require mixpanel_init
+//= require mixpanel_track_links
 //= require moment
 //= require fullcalendar
 //= require lang-all
