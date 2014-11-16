@@ -77,6 +77,7 @@ Rails.application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+  config.mixpanel_key = 'd9b1efad53ec5080e617727027653d9c'
 end
 
-GA.tracker = 'UA-24220947-1'
+GA.tracker = 'UA-56774786-1'
