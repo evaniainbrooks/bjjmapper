@@ -5,13 +5,12 @@ describe EventsController do
     context 'with json format' do
       context 'with valid params' do
         let(:location) { create(:location_with_instructors) }
-        let(:valid_params) do 
+        let(:valid_params) do
           {
             location_id: location.to_param,
-            format: 'json', 
-            event: { 
-              location_id: location.to_param,
-              instructor_id: location.instructors.first.to_param, 
+            format: 'json',
+            event: {
+              instructor: location.instructors.first.to_param,
               starting: 10.hours.ago.to_i,
               ending: 9.hours.ago.to_i,
               title: 'test title',
@@ -43,13 +42,13 @@ describe EventsController do
         let(:session_params) { { user_id: user.id } }
         let(:location) { create(:location_with_instructors) }
         let(:invalid_params) do
-          { 
-            location_id: location.to_param, 
-            format: 'json', 
-            event: { 
-              description: 'test description' 
-            } 
-          } 
+          {
+            location_id: location.to_param,
+            format: 'json',
+            event: {
+              description: 'test description'
+            }
+          }
         end
         it 'returns bad request' do
           expect do
@@ -60,7 +59,7 @@ describe EventsController do
       end
     end
   end
-  
+
   describe 'GET index' do
     let(:start_date) { 5.hours.ago.iso8601 }
     let(:end_date) { Time.now.iso8601 }
@@ -71,7 +70,7 @@ describe EventsController do
           create(:event, location: location, title: 'included event 123', starting: 2.hours.ago.to_i, ending: 1.hours.ago.to_i)
           create(:event, location: location, title: 'excluded event 456', starting: 10.hours.ago.to_i, ending: 9.hours.ago.to_i)
         end
-        it 'returns events that are within the date range' do     
+        it 'returns events that are within the date range' do
           get :index, { location_id: location.id, format: 'json', start: start_date, end: end_date }
           assigns(:events).count.should eq 1
           response.body.should match('included event 123')

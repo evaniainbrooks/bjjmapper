@@ -8,6 +8,7 @@ describe ApplicationController do
         before do
           search_result = double('search result')
           search_result.stub('geometry') { { 'location' => location } }
+          search_result.stub('coordinates') { [location['lat'], location['lng']] }
           Geocoder.stub('search') { [search_result, search_result] }
         end
         it 'returns the location of the first search result' do

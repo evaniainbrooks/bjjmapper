@@ -5,6 +5,7 @@ FactoryGirl.define do
     starting 2.hours.ago
     ending 1.hours.ago
     location
-    user
+    association :modifier, factory: :user
+    association :instructor, factory: :user
   end
 end
