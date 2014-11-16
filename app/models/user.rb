@@ -57,6 +57,10 @@ class User
     end
   end
 
+  def self.create_anonymous(ip_address)
+    User.create(provider: 'anonymous', role: 'anonymous', ip_address: ip_address, name: "Anonymous #{ip_address}", last_seen_at: Time.now)
+  end
+
   def self.from_omniauth(auth, ip_address)
     User.where(provider: auth['provider'], uid: auth['uid'])
         .first_or_initialize(
@@ -67,6 +71,10 @@ class User
           oauth_expires_at: Time.at(auth.try(:credentials).try(:expires_at) || 0),
           last_seen_at: Time.now
         )
+  end
+
+  def anonymous?
+    self.role.try(:to_s).try(:eql?, 'anonymous')
   end
 
   def full_lineage

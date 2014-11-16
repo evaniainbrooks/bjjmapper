@@ -2,6 +2,15 @@ require 'spec_helper'
 require 'wikipedia'
 
 describe User do
+  describe '#create_anonymous' do
+    let(:ip_addr) { '192.168.1.1' }
+    it 'creates a new anonymous user' do
+      expect do
+        anon_user = described_class.create_anonymous(ip_addr)
+        anon_user.should be_anonymous
+      end.to change { User.count }.by(1)
+    end
+  end
   describe '#from_omniauth' do
     let(:auth_params) { { 'provider' => 'google', 'uid' => '12345', 'info' => { 'name' => 'testname', 'email' => 'testemail' } } }
     let(:ip_addr) { '192.168.1.1' }
@@ -28,7 +37,14 @@ describe User do
       end
     end
   end
-
+  describe '.anonymous?' do
+    it 'returns false when not anonymous' do
+      build(:user, role: 'bogus').should_not be_anonymous
+    end
+    it 'returns true when anonymous' do
+      build(:user, role: 'anonymous').should be_anonymous
+    end
+  end
   describe '.full_lineage' do
     context 'when there is no lineal_parent' do
       it 'returns empty array' do
