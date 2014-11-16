@@ -18,7 +18,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spork-rails'
 gem 'haml-rails'
 gem 'pry'
-gem 'mongoid', '~> 4.0.0.beta' 
+gem 'mongoid', '~> 4.0.0.beta'
 gem 'mongoid-history'
 gem 'google-analytics-rails'
 gem 'puma'
@@ -34,6 +34,7 @@ gem 'js-routes'
 gem 'wikipedia-client'
 gem 'draper'
 gem 'rails-backbone', :git => 'git://github.com/codebrew/backbone-rails.git', :branch => :master
+gem 'mixpanel-ruby'
 
 group :development do
   gem 'capistrano', require: false
