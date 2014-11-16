@@ -85,10 +85,10 @@ var defaults = {
 	},
 
 	buttonIcons: {
-		prev: 'left-single-arrow',
-		next: 'right-single-arrow',
-		prevYear: 'left-double-arrow',
-		nextYear: 'right-double-arrow'
+		prev: 'left',
+		next: 'right',
+		prevYear: 'backward',
+		nextYear: 'forward'
 	},
 	
 	// jquery-ui theming
@@ -1150,7 +1150,7 @@ function Header(calendar, options) {
 								innerHtml = "<span class='ui-icon ui-icon-" + themeIcon + "'></span>";
 							}
 							else if (normalIcon && !options.theme) {
-								innerHtml = "<span class='fc-icon fc-icon-" + normalIcon + "'></span>";
+								innerHtml = "<span class='fa fa-2x fa-caret-" + normalIcon + "'></span>";
 							}
 							else {
 								innerHtml = htmlEscape(defaultText || buttonName);
@@ -1158,7 +1158,10 @@ function Header(calendar, options) {
 
 							classes = [
 								'fc-' + buttonName + '-button',
-								tm + '-button',
+								'btn',
+                'btn-lg',
+                'btn-default',
+                //tm + '-button',
 								tm + '-state-default'
 							];
 
@@ -1227,6 +1230,7 @@ function Header(calendar, options) {
 					groupEl = $('<div/>');
 					if (isOnlyButtons) {
 						groupEl.addClass('fc-button-group');
+						groupEl.addClass('btn-group');
 					}
 					groupEl.append(groupChildren);
 					sectionEl.append(groupEl);
