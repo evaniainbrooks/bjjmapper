@@ -1,3 +1,5 @@
+//= require backbone/views/add-instructor-view
+//= require backbone/views/calendar-view
 //= require backbone/views/map-view
 
 +function($) {
@@ -6,6 +8,7 @@
   RollFindr.Views.LocationShowView = Backbone.View.extend({
     mapView: null,
     addInstructorView: null,
+    calendarView: null,
     events: {
       'click .add-instructor': 'addInstructor',
       'click .remove-user': 'removeInstructor',
@@ -17,43 +20,19 @@
         'addInstructor',
         'removeInstructor',
         'instructorCollectionChanged',
-        'changeTeam',
-        'calendarSelected',
-        'calendarEventRender');
+        'changeTeam');
 
+      this.model = new RollFindr.Models.Location(options.model);
       this.addInstructorView = new RollFindr.Views.AddInstructorView();
+      this.calendarView = new RollFindr.Views.CalendarView({model: this.model});
       if (undefined !== options.mapModel) {
         var mapModel = new RollFindr.Models.Map(options.mapModel);
         this.mapView = new RollFindr.Views.MapView({model: mapModel, el: this.el});
       }
 
-      this.model = new RollFindr.Models.Location(options.model);
       this.listenTo(this.model.get('instructors'), 'remove', this.instructorCollectionChanged);
-      this.initializeCalendar();
     },
-    calendarSelected: function() {
-      $('.add-event-dialog').modal('show');
-    },
-    calendarEventRender: function(event, element) {
-      alert('calenderEventRender');
-      console.log(event);
-      console.log(element);
-    },
-    initializeCalendar: function() {
-      var locationId = this.model.get('id');
-      this.$('.scheduler').fullCalendar({
-        events: Routes.location_events_path(locationId),
-        editable: true,
-        selectable: true,
-        select: this.calendarSelected,
-        header: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'month,agendaWeek,basicDay'
-        }
-      });
-    },
-    addInstructor: function(start, end, allDay) {
+    addInstructor: function() {
       $('.add-instructor-dialog').modal('show');
     },
     removeInstructor: function(e) {
