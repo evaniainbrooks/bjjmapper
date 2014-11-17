@@ -45,6 +45,7 @@ class Location
   field :website
   field :phone
   field :email
+  field :facebook
 
   validates :title, presence: true
 

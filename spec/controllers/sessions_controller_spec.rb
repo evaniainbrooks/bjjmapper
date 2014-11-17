@@ -9,21 +9,30 @@ describe SessionsController do
     end
   end
   describe 'POST create' do
+    let(:anonymous_user) { create(:user, role: 'anonymous') }
+    let(:session_params) { { :user_id => anonymous_user.to_param } }
     include_context 'omniauth success'
+    
+    before do
+      RollFindr::Tracker
+        .any_instance
+        .should_receive(:alias)
+        .with(an_instance_of(String), session_params[:user_id])
+    end
     context 'when the user does not exist' do
       it 'creates a user' do
         expect do
-          post :create, provider: omniauth_provider
+          post :create, { provider: omniauth_provider }, session_params
         end.to change{ User.count }.by(1)
       end
       it 'creates a session with the new user' do
         session[:user_id].should be_nil
-        post :create, provider: omniauth_provider
-        session[:user_id].should eq User.last.id
+        post :create, { provider: omniauth_provider }, session_params
+        session[:user_id].should eq User.last.to_param
       end
       it 'redirects to the edit profile page with the new user' do
-        post :create, provider: omniauth_provider
-        response.should redirect_to user_path(User.last.id, edit: 1)
+        post :create, { provider: omniauth_provider }, session_params
+        response.should redirect_to user_path(User.last.to_param, edit: 1)
       end
     end
     context 'when the user does exist' do
@@ -32,16 +41,16 @@ describe SessionsController do
       end
       it 'does not create a user' do
         expect do
-          post :create, provider: omniauth_provider
+          post :create, { provider: omniauth_provider }, session_params
         end.to change{ User.count }.by(0)
       end
       it 'creates a session with the existing user' do
         session[:user_id].should be_nil
-        post :create, provider: omniauth_provider
-        session[:user_id].should eq @user.id
+        post :create, { provider: omniauth_provider }, session_params
+        session[:user_id].should eq @user.to_param
       end
       it 'redirects the user to the root url' do
-        post :create, provider: omniauth_provider
+        post :create, { provider: omniauth_provider }, session_params
         response.should redirect_to root_url
       end
     end

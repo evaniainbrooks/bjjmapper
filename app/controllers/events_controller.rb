@@ -52,7 +52,7 @@ private
 
   def create_params
     p = params.require(:event).permit(:starting, :ending, :recurrence, :title, :description, :instructor, :location)
-    p[:modifier] = current_user if signed_in?
+    p[:modifier_id] = current_user.to_param if signed_in?
     p
   end
 

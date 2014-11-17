@@ -6,6 +6,8 @@
   = f.text_field :email, class: 'form-control'
   = f.label :website
   = f.text_field :website, class: 'form-control'
+  = f.label :facebook
+  = f.text_field :facebook, class: 'form-control'
 - if location.phone.present?
   %span.display-field.form-group
     %b Phone
@@ -27,3 +29,7 @@
     = link_to 'http://' + location.website, class: 'website' do
       = location.website
       %i.fa.fa-external-link
+- if location.facebook.present?
+  %span.display-field.form-group
+    = link_to 'http://facebook.com/' + location.facebook, class: 'facebook' do
+      %i.fa.fa-facebook-square.fa-3x

@@ -5,6 +5,13 @@ class InstructorsController < ApplicationController
   def create
     @instructor = find_or_create_instructor
     @location.instructors << @instructor
+
+    tracker.track('createInstructor',
+      location: @location.to_param,
+      id: @instructor.to_param,
+      createdNewUser: params.key?(:user)
+    )
+
     respond_to do |format|
       format.html { redirect_to location_path(@location, edit: 1) }
       format.json { render :json => {}, :status => :ok }
@@ -12,7 +19,13 @@ class InstructorsController < ApplicationController
   end
 
   def destroy
+    tracker.track('deleteInstructor',
+      id: @location.to_param,
+      location: @location.as_json({})
+    )
+
     @location.instructors.delete(@instructor)
+
     respond_to do |format|
       format.html { redirect_to location_path(@location, edit: 1) }
       format.json { render :json => {}, :status => :ok }

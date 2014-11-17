@@ -1,17 +1,21 @@
 require 'rails_helper'
 
 describe InstructorsController do
+  let(:anonymous_user) { create(:user, role: 'anonymous') }
+  let(:session_params) { { :user_id => anonymous_user.to_param } }
   describe 'DELETE destroy' do
     context 'with json format' do
       before { @location = create(:location_with_instructors) }
       it 'removes the instructor from the location' do
+        anonymous_user
         expect do
-          delete :destroy, format: 'json', id: @location.instructors.first.id, location_id: @location.id
+          delete :destroy, { format: 'json', id: @location.instructors.first.id, location_id: @location.id }, session_params
         end.to change{ Location.find(@location.id).instructors.count }.by(-1)
       end
       it 'does not delete the instructor' do
+        anonymous_user
         expect do
-          delete :destroy, format: 'json', id: @location.instructors.first.id, location_id: @location.id
+          delete :destroy, { format: 'json', id: @location.instructors.first.id, location_id: @location.id }, session_params
         end.to change{ User.count }.by(0)
       end
     end
@@ -23,7 +27,7 @@ describe InstructorsController do
       context 'with a simple id' do
         it 'adds the instructor to the location' do
           expect do
-            post :create, format: 'json', id: instructor.id, location_id: location.id
+            post :create, { format: 'json', id: instructor.id, location_id: location.id }, session_params
           end.to change{ Location.find(location.id).instructors.count }.by(1)
         end
       end
@@ -40,7 +44,7 @@ describe InstructorsController do
         end
         it 'creates the instructor and adds them to the location' do
           expect do
-            post :create, { format: 'json', location_id: location.id }.merge(instructor_params)
+            post :create, { format: 'json', location_id: location.id }.merge(instructor_params), session_params
             User.last.attributes.symbolize_keys.slice(*instructor_params[:user].keys).should eq instructor_params[:user]
           end.to change{ Location.find(location.id).instructors.count }.by(1)
         end

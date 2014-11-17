@@ -1,7 +1,7 @@
 .container.page
   %h1 
     Academy Directory
-    %span.small 255 locations worldwide
+    %span.small= "#{Location.count} locations worldwide"
   %ol.breadcrumb
     %li
       %a{href: root_path} Home

@@ -141,9 +141,24 @@ class LocationsController < ApplicationController
   end
 
   def create_params
-    p = params.require(:location).permit(:city, :street, :postal_code, :state, :country, :title, :description, :coordinates, :team_id, :directions, :phone, :email, :website)
+    p = params.require(:location).permit(
+      :city,
+      :street,
+      :postal_code,
+      :state,
+      :country,
+      :title,
+      :description,
+      :coordinates,
+      :team_id,
+      :directions,
+      :phone,
+      :email,
+      :website,
+      :facebook)
+
     p[:coordinates] = JSON.parse(p[:coordinates]) if p.key?(:coordinates)
-    p[:modifier] = current_user if signed_in?
+    p[:modifier_id] = current_user.to_param if signed_in?
     p
   end
 

@@ -17,18 +17,21 @@ describe UsersController do
     end
   end
   describe 'POST create' do
+    let(:anonymous_user) { create(:user, role: 'anonymous') }
+    let(:session_params) { { :user_id => anonymous_user.to_param } }
     let(:create_params) { { :user => { :name => 'Buddy', :email => 'buddy@hotmale.com', :belt_rank => 'purple', :stripe_rank => 3 } } }
     context 'with html format' do
       it 'creates and redirects to a new user in edit mode' do
+        anonymous_user
         expect do
-          post :create, create_params.merge({:format => 'html'})
-          response.should redirect_to(user_path(User.last, edit: 1))
+          post :create, create_params.merge({:format => 'html'}), session_params
+          response.should redirect_to(user_path(assigns(:user), edit: 1))
         end.to change { User.count }.by(1)
       end
     end
     context 'with json format' do
       it 'creates and returns a new user' do
-        post :create, create_params.merge({:format => 'json'})
+        post :create, create_params.merge({:format => 'json'}), session_params
         response.body.should match(create_params[:user][:name])
       end
     end

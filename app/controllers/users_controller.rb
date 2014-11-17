@@ -1,10 +1,14 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update]
   decorates_assigned :user
-  
+
   helper_method :welcome?
 
   def show
+    tracker.track('showUser',
+      id: @user.to_param
+    )
+
     respond_to do |format|
       format.json { render json: @user }
       format.html
@@ -13,6 +17,11 @@ class UsersController < ApplicationController
 
   def create
     @user = User.create(create_params)
+
+    tracker.track('createUser',
+      user: @user.as_json({})
+    )
+
     respond_to do |format|
       format.json { render json: @user }
       format.html { redirect_to user_path(@user, edit: 1) }
@@ -20,7 +29,14 @@ class UsersController < ApplicationController
   end
 
   def update
+    tracker.track('updateUser',
+      id: @user.to_param,
+      user: @user.as_json({}),
+      updates: create_params
+    )
+
     @user.update!(create_params)
+
     respond_to do |format|
       format.json { render json: @user }
       format.html { redirect_to user_path(@user, edit: 0) }

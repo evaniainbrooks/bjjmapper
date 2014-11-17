@@ -121,7 +121,9 @@ class ApplicationController < ActionController::Base
   end
 
   def anonymous_user
-    User.create_anonymous(request.remote_ip)
+    anon = User.create_anonymous(request.remote_ip)
+    session[:user_id] = anon.to_param
+    anon
   end
 
   def signed_in?

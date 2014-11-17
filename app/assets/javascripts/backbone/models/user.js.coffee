@@ -1,4 +1,10 @@
 class RollFindr.Models.User extends Backbone.Model
+  defaults:
+    name: null
+    role: 'anonymous'
+
+  isAnonymous: ->
+    @get('role') == 'anonymous'
 
 class RollFindr.Models.Instructor extends RollFindr.Models.User
   url: ->
