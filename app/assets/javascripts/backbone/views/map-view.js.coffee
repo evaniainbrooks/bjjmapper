@@ -145,6 +145,8 @@ class RollFindr.Views.MapView extends Backbone.View
     @map.setCenter(defaultLocation)
 
   fetchViewport: ->
+    return if (undefined == @map.getCenter())
+
     center = @model.get('center')
     center[0] = @map.getCenter().lat()
     center[1] = @map.getCenter().lng()
