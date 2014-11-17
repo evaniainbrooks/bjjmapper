@@ -1,4 +1,5 @@
 #= require spec_helper
+#= require application
 
 describe 'App#ConfirmDialog', ->
   beforeEach ->

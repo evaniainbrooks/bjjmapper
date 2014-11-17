@@ -1,4 +1,5 @@
 #= require spec_helper
+#= require backbone/rollfindr
 
 describe "Application", ->
   it "creates a global variable for the application namespace", ->

@@ -1,4 +1,4 @@
-//= require application
+//= require jquery
 //= require sinon
 //= require chai-changes
 //= require js-factories
@@ -16,11 +16,18 @@ $.fn.addHtml = function(element_type, opt) {
 window.stubGoogleMapsApi = function() {
   return window.google = {
     maps: {
+      ControlPosition: {
+        TOP_LEFT: 0
+      },
       event: {
-        addListener: function() {}
+        addListener: function() {},
+        addListenerOnce: function() {}
+      },
+      InfoWindow: function() {
+
       },
       LatLng: function() {
-        return {}; 
+        return {};
       },
       LatLngBounds: function() {
         return {
@@ -33,6 +40,7 @@ window.stubGoogleMapsApi = function() {
       },
       Map: function() {
         return {
+          controls: [{ push: function() {} }],
           getBounds: function(){},
           setCenter: function(){},
           setTilt: function(){},
@@ -64,3 +72,17 @@ window.stubGoogleMapsApi = function() {
     }
   };
 };
+
+// Stub CurrentUser
+window.stubCurrentUser = function() {
+  RollFindr.CurrentUser = new RollFindr.Models.User();
+  RollFindr.CurrentUser.set('role', 'super_user');
+};
+
+window.stubAnonymousUser = function() {
+  RollFindr.CurrentUser = new RollFindr.Models.User();
+  RollFindr.CurrentUser.set('role', 'anonymous');
+};
+
+window.stubGoogleMapsApi();
+

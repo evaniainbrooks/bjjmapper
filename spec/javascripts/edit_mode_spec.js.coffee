@@ -1,4 +1,5 @@
 #= require spec_helper
+#= require application
 
 describe 'edit mode', ->
   beforeEach ->
@@ -13,7 +14,7 @@ describe 'edit mode', ->
 
   describe 'when authenticated', ->
     beforeEach ->
-      $('body').data('userid', '12345')
+      stubCurrentUser()
 
     it '[data-begin-edit] adds the edit-mode class when clicked', ->
       $('.editable').removeClass('edit-mode')
@@ -22,7 +23,7 @@ describe 'edit mode', ->
 
   describe 'when not authenticated', ->
     beforeEach ->
-      $('body').removeData('userid')
+      stubAnonymousUser()
 
     it '[data-begin-edit] shows the login dialog', ->
       $('[data-begin-edit]').trigger('click')

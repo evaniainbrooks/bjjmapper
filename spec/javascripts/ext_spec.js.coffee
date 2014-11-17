@@ -1,4 +1,5 @@
 #= require spec_helper
+#= require ext
 
 describe 'Number#toRad', ->
   it "converts to radians", ->

@@ -1,4 +1,5 @@
 #= require spec_helper
+#= require distance
 #= require ext
 
 describe 'Math#circleDistance', ->
@@ -12,7 +13,7 @@ describe 'Math#circleDistance', ->
     lat: ->
       47.620973
     lng: ->
-      122.347276
+      -122.347276
   }
   it 'returns the distance between two points', ->
     distance = Math.circleDistance(p0, p1)
