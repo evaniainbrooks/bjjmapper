@@ -164,10 +164,14 @@ html, body {
       margin: 10px 20px;
       display: none;
     }
-    .list-group-item-heading, .list-group-item-text {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
+    a .list-group-item-heading, a .list-group-item-text {
+        display: block;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    .list-group-item-text {
+      margin-left: 90px;
     }
     img {
       width: 42px;
