@@ -24,9 +24,9 @@
             &nbsp;&nbsp;
             = "(#{user.age_in_years} years old)"
         .edit-field.form-group.form-inline
-          = f.select :birth_day, options_for_select(select_days, user.birth_day), {}, class: 'form-control'
-          = f.select :birth_month, options_for_select(select_months, user.birth_month), {}, class: 'form-control'
-          = f.select :birth_year, options_for_select(select_years, user.birth_year), {}, class: 'form-control'
+          = f.select :birth_day, options_for_select(select_days, user.birth_day), { include_blank: true }, class: 'form-control'
+          = f.select :birth_month, options_for_select(select_months, user.birth_month), { include_blank: true }, class: 'form-control'
+          = f.select :birth_year, options_for_select(select_years, user.birth_year), { include_blank: true }, class: 'form-control'
     %tr
       %td
       %td
