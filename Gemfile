@@ -36,6 +36,9 @@ gem 'draper'
 gem 'rails-backbone', :git => 'git://github.com/codebrew/backbone-rails.git', :branch => :master
 gem 'mixpanel-ruby'
 gem 'yui-compressor'
+gem 'dotenv-rails'
+gem 'dotenv-deployment', require: 'dotenv/deployment'
+
 
 group :development do
   gem 'capistrano', require: false
@@ -46,7 +49,6 @@ group :development do
 end
 
 group :test, :development do
-  gem 'dotenv-rails'
   gem 'konacha'
   gem 'konacha-chai-matchers'
   gem 'capybara'
