@@ -23,7 +23,7 @@ set :log_level, :debug
 set :pty, true
 
 # Default value for :linked_files is []
-# set :linked_files, %w{config/database.yml}
+set :linked_files, %w{config/mongoid.yml .env}
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
@@ -59,13 +59,20 @@ namespace :puma do
     end
   end
 
+  task :source_env do
+    on roles(:app) do
+      execute "source /var/www/rollfindr/.env"
+    end
+  end
+
   task :fix_socket_permissions do
     on roles(:app) do
-      excute "chmod 777 #{shared_path}/tmp/sockets/puma.sock"
+      execute "chmod 777 #{shared_path}/tmp/sockets/puma.sock"
     end
   end
 
   before :start, :make_dirs
+  before :start, :source_env
   after :start, :fix_socket_permissions
 end
 
