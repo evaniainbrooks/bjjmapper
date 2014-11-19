@@ -35,6 +35,7 @@ gem 'wikipedia-client'
 gem 'draper'
 gem 'rails-backbone', :git => 'git://github.com/codebrew/backbone-rails.git', :branch => :master
 gem 'mixpanel-ruby'
+gem 'yui-compressor'
 
 group :development do
   gem 'capistrano', require: false
