@@ -1,7 +1,11 @@
 require 'analyzable'
+require 'analyzable_user_super_properties'
+require 'analyzable_robot_properties'
 
 class ApplicationController < ActionController::Base
   include RollFindr::Analyzable
+  include RollFindr::AnalyzableUserSuperProperties
+  include RollFindr::AnalyzableRobotProperties
   include TeamsHelper
 
   # Prevent CSRF attacks by raising an exception.
