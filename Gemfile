@@ -38,7 +38,7 @@ gem 'mixpanel-ruby'
 gem 'yui-compressor'
 gem 'dotenv-rails'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
-
+gem 'user-agent'
 
 group :development do
   gem 'capistrano', require: false
