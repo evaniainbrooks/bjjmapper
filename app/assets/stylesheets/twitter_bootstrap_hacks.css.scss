@@ -3,6 +3,10 @@ html {
   overflow-y: scroll;
 }
 
+.toast-info {
+  background-color: #449d44 !important;
+}
+
 .table-user-information {
   tr:first-child {
     height: 62px;
@@ -28,4 +32,5 @@ a.thumbnail:hover {
 
 .map-canvas label { 
   width: auto; display:inline; 
-} 
+}
+
