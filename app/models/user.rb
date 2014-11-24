@@ -39,7 +39,7 @@ class User
   field :birth_place, type: String
 
   geocoded_by :ip_address
-  after_validation :geocode
+  after_validation :safe_geocode
 
   belongs_to :lineal_parent, class_name: 'User', inverse_of: :lineal_children
   has_many :lineal_children, class_name: 'User', inverse_of: :lineal_parent
@@ -107,6 +107,16 @@ class User
     super(args.merge(except: [:ip_address, :coordinates, :uid, :provider, :email, :_id])).merge({
       :id => self.id.to_s
     })
+  end
+
+  private
+
+  def safe_geocode
+    begin
+      geocode
+    rescue StandardError => e
+      Rails.logger.error(e)
+    end
   end
 end
 

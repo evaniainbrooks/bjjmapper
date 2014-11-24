@@ -4,11 +4,24 @@ require 'wikipedia'
 describe User do
   describe '#create_anonymous' do
     let(:ip_addr) { '192.168.1.1' }
-    it 'creates a new anonymous user' do
-      expect do
-        anon_user = described_class.create_anonymous(ip_addr)
-        anon_user.should be_anonymous
-      end.to change { User.count }.by(1)
+    context 'when geocoding succeeds' do
+      it 'creates a new anonymous user' do
+        expect do
+          anon_user = described_class.create_anonymous(ip_addr)
+          anon_user.should be_anonymous
+        end.to change { User.count }.by(1)
+      end
+    end
+    context 'when geocoding fails' do
+      before do
+        Geocoder.stub(:search).and_raise(StandardError)
+      end
+      it 'creates a new anonymous user' do
+        expect do
+          anon_user = described_class.create_anonymous(ip_addr)
+          anon_user.should be_anonymous
+        end.to change { User.count }.by(1)
+      end
     end
   end
   describe '#from_omniauth' do
