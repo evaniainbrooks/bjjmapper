@@ -17,9 +17,9 @@
               %a{:href => '#tournament-event', 'role' => 'tab', 'data-toggle' => 'tab'} Tournament
           .tab-content
             .tab-pane#special-event
-              %h4.text-danger Coming soon :)
+              %h4.text-danger Coming soon
             .tab-pane#tournament-event
-              %h4.text-danger Coming soon :)
+              %h4.text-danger Coming soon
             .active.tab-pane#class-event
               .container-fluid
                 .row
@@ -30,7 +30,7 @@
                       .form-group
                         %label.col-md-4.control-label{:for => "event[title]"} Title
                         .col-md-8
-                          = f.text_field :title, placeholder: 'eg. BJJ Beginners, Competition Class', class: 'form-control input-md'
+                          = f.text_field :title, placeholder: 'eg. BJJ Beginners, Competition Class', class: 'form-control input-lg'
                           = f.hidden_field :starting
                           = f.hidden_field :ending
                       .form-group
