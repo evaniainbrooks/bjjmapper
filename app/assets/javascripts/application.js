@@ -19,6 +19,8 @@
 //= require fullcalendar
 //= require lang-all
 //= require js-routes
+//= require toastr
+//= require toastr_bootstrap
 //= require bootstrap
 //= require ext
 //= require underscore

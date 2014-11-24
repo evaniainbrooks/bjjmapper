@@ -16,7 +16,8 @@
  *= require bootstrap
  *= require font-awesome
  *= require bootstrap-social
- */
+ *= require toastr
+*/
 
 html, body {
   margin: 0px;
@@ -109,6 +110,29 @@ html, body {
   right: 0;
   bottom: 0;
 }
+
+.wrapper {
+  .map-canvas {
+    border: 3px solid transparent;
+  }
+  .add-academy {
+    margin-top: 0px !important;
+    display: inherit;
+  }
+  .cancel-add-academy { display: none; }
+  &.map-edit-mode {
+    .map-canvas {
+      border: 3px dashed #449d44;
+    }
+    
+    .cancel-add-academy {
+      margin-top: 0px !important;
+      display: inherit;
+    }
+    .add-academy { display: none; }
+  }
+}
+
 
 .wrapper {
   position:absolute;
@@ -209,17 +233,6 @@ html, body {
   img {
     width: 100px;
     height: 100px;
-  }
-}
-.new-location-dialog {
-  .modal-dialog {
-    margin-left: 20px !important;
-  }
-}
-
-.add-location-dialog {
-  img {
-    width: 250px;
   }
 }
 
