@@ -14,12 +14,12 @@
         %li{:class => action?(:map) ? 'active' : nil}
           %a{:href => root_path(ref: 'navbar'), :data => { :'no-turbolink' => true } } Map
         %li{:class => action?(:index) ? 'active' : nil}
-          %a{:href => locations_path(ref: 'navbar')} Academies
+          %a{:href => locations_path(ref: 'navbar')} Index 
         %li{:class => action?(:meta) ? 'active' : nil}
-          %a{:href => meta_path(ref: 'navbar')} About
+          %a{:href => meta_path(ref: 'navbar')} Meta
       %form.navbar-form.navbar-left{:role => "search"}
         .form-group.has-feedback
-          %input.clear-input.form-control{:name => 'query', :placeholder => "Search", :type => "text"}/
+          %input.clear-input.form-control{:name => 'query', :size => '8', :placeholder => "Search", :type => "text"}/
           %span.clear-input-button.form-control-feedback.fa.fa-times-circle
         .form-group
           .input-group
