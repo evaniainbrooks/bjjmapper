@@ -15,6 +15,7 @@
 //= require mixpanel
 //= require mixpanel_init
 //= require mixpanel_track_links
+//= require exception_logger
 //= require moment
 //= require fullcalendar
 //= require lang-all
