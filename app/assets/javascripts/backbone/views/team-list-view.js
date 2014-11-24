@@ -13,9 +13,11 @@
       _.bindAll(this, 'changeFilter', 'clearFilters');
 
       this.collection = new RollFindr.Collections.TeamsCollection();
-      this.collection.fetch({silent: true}).done(function() {
+      this.collection.fetch({silent: true, success: function() {
         self.render();
-      });
+      }, error: function() {
+        toastr.error('Failed to fetch filters');
+      }});
     },
     render: function() {
       if (null !== this.template) {
@@ -39,7 +41,7 @@
       if (filters.value().length <= 0) {
         return null;
       }
-      
+
       return _.object(filters.value());
     },
     filterCollection: function(collectionToFilter) {

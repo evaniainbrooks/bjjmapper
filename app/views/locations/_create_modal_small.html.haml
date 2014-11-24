@@ -3,34 +3,37 @@
     .modal-content
       .modal-header
         %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
-        %h4 Tell us about your academy
+        %h4 
+          %i.fa.fa-map-marker
+          Tell us about your academy
         %p.small You can continue editing your academy and add additional details on the following page.
       .modal-body
         .container-fluid
           .col-md-2.col-md-offset-1
-            %img.edit-image{'data-default-src' => image_path(LocationDecorator::DEFAULT_IMAGE), :alt => 'logo', :src => all_teams.first.image}/
+            %img.edit-image{'data-default-src' => image_path(LocationDecorator::DEFAULT_IMAGE), :alt => 'logo', :src => image_path(LocationDecorator::DEFAULT_IMAGE)}/
           .col-md-9
             = form_for(Location.new, html: { class: 'form-horizontal' } ) do |f|
               %fieldset
                 / Text input
                 .form-group
-                  %label.col-md-4.control-label{:for => "location[title]"} Name
+                  %label.col-md-4.control-label{:for => "location[title]"} Name*
                   .col-md-8
                     = f.text_field :title, placeholder: 'The name of your academy', class: 'form-control input-md'
                 / Select Basic
                 .form-group
-                  %label.col-md-4.control-label{:for => "location[team]"} Team
+                  %label.col-md-4.control-label{:for => "location[team]"} Team*
                   .col-md-8
-                    = f.select :team_id, options_for_select(all_teams.map { |team| [team.name, team.id, {'data-img-src' => team.image}] }), {}, class: 'form-control  input-md'
+                    = f.select :team_id, options_for_select(all_teams.map { |team| [team.name, team.id, {'data-img-src' => team.image}] }), { include_blank: true }, class: 'form-control  input-md'
                 / Textarea
                 .form-group
                   %label.col-md-4.control-label{:for => "location[description]"} Description
                   .col-md-8
-                    = f.text_area :description, placeholder: 'A brief description of your academy', class: 'form-control'
+                    = f.text_area :description, rows: 4, placeholder: 'A brief description of your academy', class: 'form-control'
                 = f.hidden_field :coordinates, class: 'coordinates form-control'
+                %span.small.clear *Required field
                 .pull-right.edit-field
                   %button.btn.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Cancel
-                  %button.btn.btn-primary{:type => "submit"} Continue
+                  %button.btn.btn-success{:disabled => true, :type => "submit"} Create &amp; Continue &raquo;
 - content_for :scripts do
   :coffeescript
     $(document).ready ->

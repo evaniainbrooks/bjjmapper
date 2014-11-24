@@ -14,6 +14,8 @@ class RollFindr.Views.MapView extends Backbone.View
   events: {
     'change [name="sort_order"]': 'sortOrderChanged'
     'click .refresh-button': 'fetchViewport'
+    'click .add-academy': 'addAcademyClicked'
+    'click .cancel-add-academy': 'cancelAddAcademyClicked'
   }
   initialize: ->
     _.bindAll(this,
@@ -22,7 +24,8 @@ class RollFindr.Views.MapView extends Backbone.View
       'setDefaultCenter',
       'setCenter',
       'setCenterGeolocate',
-      'createLocation',
+      'addAcademyClicked',
+      'cancelAddAcademyClicked',
       'fetchViewport',
       'geolocate',
       'render',
@@ -60,7 +63,7 @@ class RollFindr.Views.MapView extends Backbone.View
     @listenTo(@termFilter.collection, 'sync reset', @filtersChanged)
     @listenTo(@model.get('locations'), 'sort sync reset', @filtersChanged)
 
-    google.maps.event.addListener(@map, 'click', @createLocation)
+    #google.maps.event.addListener(@map, 'click', @createLocation)
     google.maps.event.addListenerOnce(@map, 'idle', @fetchViewport)
 
     RollFindr.GlobalEvents.on('geolocate', @geolocate)
@@ -116,9 +119,35 @@ class RollFindr.Views.MapView extends Backbone.View
     distance *= 5
     @termFilter.setQuery(e.query, center, distance)
 
-  createLocation: (event)->
-    $('.coordinates', '.new-location-dialog').val(JSON.stringify([event.latLng.lng(), event.latLng.lat()]))
-    $('.new-location-dialog').modal('show')
+  cancelAddAcademyClicked: (event)->
+    mixpanel.track('clickCancelAddAcademy')
+
+    toastr.clear()
+
+    @$el.removeClass('map-edit-mode')
+    google.maps.event.removeListener(@mapClickHandler) if @mapClickHandler?
+
+    @editModeToast = null
+    @mapClickHandler = null
+
+  addAcademyClicked: (event)->
+    mixpanel.track('clickAddAcademy')
+
+    if RollFindr.CurrentUser.isAnonymous()
+      $('.login-modal').modal('show')
+      return false
+
+    @editModeToast = toastr.info('Just click on the map at the approximate location', 'To add a new academy')
+    @$el.addClass('map-edit-mode')
+    @mapClickHandler = google.maps.event.addListener @map, 'click', (event)=>
+      mixpanel.track('clickMap', {
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng()
+      })
+
+      toastr.clear()
+      $('.coordinates', '.new-location-dialog').val(JSON.stringify([event.latLng.lng(), event.latLng.lat()]))
+      $('.new-location-dialog').modal('show')
 
   geolocate: ->
     @setCenterGelocate =>
@@ -135,7 +164,8 @@ class RollFindr.Views.MapView extends Backbone.View
   setCenter: ->
     shouldGeolocate = @model.get('geolocate')
     if (shouldGeolocate && navigator.geolocation)
-      @setCenterGeolocate()
+      @setCenterGeolocate =>
+        @fetchViewport()
     else
       @setDefaultCenter()
 
@@ -145,7 +175,8 @@ class RollFindr.Views.MapView extends Backbone.View
     @map.setCenter(defaultLocation)
 
   fetchViewport: ->
-    return if (undefined == @map.getCenter())
+    if (undefined == @map.getCenter() || undefined == @map.getBounds())
+      return
 
     center = @model.get('center')
     center[0] = @map.getCenter().lat()
@@ -155,5 +186,12 @@ class RollFindr.Views.MapView extends Backbone.View
 
     @model.set('center', center)
     @$('.refresh-button .fa').addClass('fa-spin')
-    @model.get('locations').fetch({data: {center: center, distance: distance}}).done =>
-      @$('.refresh-button .fa').removeClass('fa-spin')
+    @model.get('locations').fetch({
+      data:
+        center: center
+        distance: distance
+      complete: =>
+        @$('.refresh-button .fa').removeClass('fa-spin')
+      error: =>
+        toastr.error('Failed to refresh map')
+    })

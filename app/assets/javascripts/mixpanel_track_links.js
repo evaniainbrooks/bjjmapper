@@ -1,24 +1,26 @@
+//= require user_helper
+
 +function($) {
   "use strict";
 
-  setTimeout(function() {
-    if ("undefined" !== window.mixpanel) {
+  $(document).ready(function() {
       mixpanel.register({
-        "user_id": $('body').data('userid'),
-        "url": window.location
+        "user_id": currentUserId(),
+        "logged_in": isLoggedIn(),
+        "url": window.location.href
       });
 
-      mixpanel.track_links('a.phone', 'linkPhoneClick', function(element) {
+      mixpanel.track_links('a.phone', 'clickPhoneLink', function(element) {
         return { 'href':  $(element).attr('href') };
       });
-
-      mixpanel.track_links('a.email', 'linkEmailClick', function(element) {
+      mixpanel.track_links('a.email', 'clickEmailLink', function(element) {
         return { 'href':  $(element).attr('href') };
       });
-
-      mixpanel.track_links('a.website', 'linkWebsiteClick', function(element) {
+      mixpanel.track_links('a.website', 'clickWebsiteLink', function(element) {
         return { 'href':  $(element).attr('href') };
       });
-    }
-  }, 500);
+      mixpanel.track_links('a.facebook', 'clickFacebookLink', function(element) {
+        return { 'href':  $(element).attr('href') };
+      });
+  });
 }(jQuery);
