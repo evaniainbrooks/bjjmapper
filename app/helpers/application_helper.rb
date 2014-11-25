@@ -20,23 +20,23 @@ module ApplicationHelper
   def select_years
     (1900..2010)
   end
-  
+
   def select_recurrence
     [['None', 0],['Daily', 1],['Every second day', 2], ['Weekly', 7], ['Bi-weekly', 14]]
   end
 
   def all_instructors
-    User.where(:role => 'instructor').limit(200).sort_by(&:name)
+    User.jitsukas.limit(500).sort_by(&:name)
   end
-  
+
   def select_instructors
     all_instructors.map { |instructor| [instructor.name, instructor.id, {'data-img-src' => image_path(instructor.image)}] }
-  end  
+  end
 
   def edit_mode_classes
     'editable' + (edit_mode? ? ' edit-mode' : '')
   end
-  
+
   def edit_mode?
     current_user.present? && params.fetch(:edit, 0).to_i.eql?(1)
   end
