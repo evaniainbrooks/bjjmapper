@@ -7,17 +7,26 @@ describe RollFindr::Tracker do
     let(:event) { 'SomeEvent' }
     let(:params) { { 'key' => 'value' } }
     describe '.track' do
-      let(:super_property) { { 'superProp' => 'value2' } }
-      subject { RollFindr::Tracker.new(uid, super_property) }
       context 'with super properties' do
-        before { Mixpanel::Tracker.any_instance.should_receive(:track).with(uid, event, super_property.merge(params)) }
-        it 'calls track with all merged properties' do
-          subject.track(event, params)
+        let(:super_property) { { 'param' => 'value' } }
+        context 'when the __skip_tracking property is true' do
+          subject { RollFindr::Tracker.new(uid, super_property.merge(__skip_tracking: true)) }
+          before { Mixpanel::Tracker.any_instance.stub(:track).and_raise(StandardError) }
+          it 'does not call track' do
+            subject.track(event, params)
+          end
+        end
+        context 'when the __skip_tracking property is false' do
+          subject { RollFindr::Tracker.new(uid, super_property.merge(__skip_tracking: false)) }
+          before { Mixpanel::Tracker.any_instance.should_receive(:track).with(uid, event, hash_including(super_property.merge(params))) }
+          it 'calls track with all merged properties' do
+            subject.track(event, params)
+          end
         end
       end
       context 'without super properties' do
         subject { RollFindr::Tracker.new(uid) }
-        before { Mixpanel::Tracker.any_instance.should_receive(:track).with(uid, event, params) }
+        before { Mixpanel::Tracker.any_instance.should_receive(:track).with(uid, event, hash_including(params)) }
         it 'calls track with the properties' do
           subject.track(event, params)
         end

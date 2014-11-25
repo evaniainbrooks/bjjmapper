@@ -13,10 +13,15 @@ describe RollFindr::Analyzable do
   let(:ua_parser) { Agent.new(ua_string) }
 
   subject { test_class.new }
-  before do
-    RollFindr::Tracker.should_receive(:new).with(subject.current_user.to_param, {})
+  describe '.tracker' do
+    before do
+      RollFindr::Tracker.should_receive(:new).with(subject.current_user.to_param, anything)
+    end
+    it 'initializes and returns a tracker impl' do
+      subject.send(:tracker)
+    end
   end
-  it 'has a tracker' do
-    subject.send(:tracker)
+  it 'has a super property named __skip_tracking' do
+    subject.send(:analytics_super_properties).should have_key(:__skip_tracking)
   end
 end

@@ -1,5 +1,4 @@
 require 'tracker'
-require 'user-agent'
 
 module RollFindr
   module Analyzable
@@ -10,7 +9,7 @@ module RollFindr
     end
 
     def analytics_super_properties
-      {}
+      { __skip_tracking: current_user.try(:internal) }
     end
 
     def user_id

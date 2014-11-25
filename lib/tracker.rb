@@ -6,11 +6,10 @@ module RollFindr
     end
 
     def track(event, params = {})
-      tracker.track(@user_id, event, @super_properties.merge(params))
-    end
-
-    def register(params)
-      @super_properties.merge!(params)
+      props = @super_properties.merge(params)
+      unless props.fetch(:__skip_tracking, false)
+        tracker.track(@user_id, event, props.except(:__skip_tracking))
+      end
     end
 
     def alias(new_id, old_id)
