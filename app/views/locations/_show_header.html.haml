@@ -1,7 +1,7 @@
 %h1.display-field
   = location.title
   %br/
-  %small= link_to location.team_name, team_path(location.team)
+  %small= link_to location.team_name, team_path(location.team, ref: 'loc_title')
 .edit-field
   = f.label :title
   = f.text_field :title, class: 'form-control input-lg'
@@ -10,3 +10,4 @@
   = f.label :description
   = f.text_area :description, placeholder: 'Provide a description of the academy', class: 'form-control', rows: 4
 %p.display-field= location.description
+

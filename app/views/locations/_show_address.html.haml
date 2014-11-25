@@ -5,7 +5,7 @@
   %br/
   = "#{location.postal_code} #{location.country}"
 .display-field
-  %small= location.to_coordinates
+  %span.text-info.small= "GPS: #{location.gps}"
   %br/
   %br/
 .form-group.edit-field

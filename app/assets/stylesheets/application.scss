@@ -156,7 +156,6 @@ html, body {
     .location-list-item {
       h4 {
         display: inline-block;
-        color: black;
       }
       .label {
         color: black;
@@ -220,6 +219,17 @@ html, body {
     height: 150px;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+}
+
+.location-card {
+  .thumbnail {
+    padding: 0px;
+    margin-bottom: 7px;
+    .caption { 
+      p { margin: 0 0 2px; }
+      padding: 2px 5px; 
+    }
   }
 }
 

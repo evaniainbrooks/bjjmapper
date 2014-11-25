@@ -1,0 +1,10 @@
+%li.location-card
+  %a.thumbnail{:href => location_path(location, ref: "card#{location_counter}")}
+    .caption
+      %p.text-primary= location.title
+      %b.small= location.team_name
+      %p
+        %span.small.text-muted= location.street
+        %span.small.text-info.distance.pull-right
+          = surround '(', ')' do
+            = location.distance
