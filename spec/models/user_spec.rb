@@ -2,6 +2,16 @@ require 'spec_helper'
 require 'wikipedia'
 
 describe User do
+  describe '#jitsukas' do
+    before do
+      create(:user, name: 'included', belt_rank: 'white')
+      create(:user, name: 'excluded', belt_rank: nil)
+    end
+    it 'returns only users with a rank' do
+      User.jitsukas.count.should eq 1
+      User.jitsukas.first.name.should eq 'included'
+    end
+  end
   describe '#create_anonymous' do
     let(:ip_addr) { '192.168.1.1' }
     context 'when geocoding succeeds' do
@@ -48,6 +58,16 @@ describe User do
         user
         subject.id.should eq user.id
       end
+    end
+  end
+  describe '.jitsuka?' do
+    context 'when the user has a rank' do
+      subject { build(:user, belt_rank: 'white') }
+      it { subject.should be_jitsuka }
+    end
+    context 'when the user does not have a rank' do
+      subject { build(:user, belt_rank: nil) }
+      it { subject.should_not be_jitsuka }
     end
   end
   describe '.anonymous?' do

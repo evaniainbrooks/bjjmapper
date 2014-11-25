@@ -4,10 +4,10 @@ class User
   include Mongoid::Document
   include Geocoder::Model::Mongoid
   include Mongoid::Timestamps
-  
+
   include Mongoid::History::Trackable
-  
-  track_history   :on => :all, 
+
+  track_history   :on => :all,
                   :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier
                   :modifier_field_inverse_of => :nil, # adds an ":inverse_of" option to the "belongs_to :modifier" relation, default is not set
                   :version_field => :version,   # adds "field :version, :type => Integer" to track current version, default is :version
@@ -37,6 +37,7 @@ class User
   field :birth_month, type: Integer
   field :birth_year, type: Integer
   field :birth_place, type: String
+  field :internal, type: Boolean
 
   geocoded_by :ip_address
   after_validation :safe_geocode
@@ -55,6 +56,12 @@ class User
         self.description = page.content
       end
     end
+  end
+
+  scope :jitsukas, -> { where(:belt_rank.ne => nil) }
+
+  def jitsuka?
+    self.belt_rank.present?
   end
 
   def self.create_anonymous(ip_address)
