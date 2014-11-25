@@ -17,7 +17,9 @@ class RollFindr.Views.MapViewList extends Backbone.View
     else
       @$el.removeClass('empty')
 
-    @$('.list-count').text("Displaying #{@collection.length} locations (#{filteredCount} filtered)")
+    if (undefined != filteredCount)
+      @$('.list-count').text("Displaying #{@collection.length} locations (#{filteredCount} filtered)")
+
     @$('.items').empty()
     _.each @collection.models, (loc)=>
       id = loc.get('id')
