@@ -4,6 +4,8 @@ class LocationDecorator < Draper::Decorator
   DEFAULT_IMAGE = 'academy-default-100.jpg'
   DEFAULT_TEAM_NAME = 'Independent'
 
+  EMPTY_HASH = {}.freeze
+
   delegate_all
   decorates_finders
   decorates_association :instructors
@@ -11,13 +13,23 @@ class LocationDecorator < Draper::Decorator
 
   decorates :location
 
-  attr_accessor :distance
+  def initialize(object, options = EMPTY_HASH)
+    super(object, options)
+    @distance = Geocoder::Calculations.distance_between(
+      object.to_coordinates,
+      context[:center]
+    ) if context.key?(:center)
+  end
+
+  def distance
+    @distance.present? ? "#{h.number_with_precision(@distance, precision: 2)}mi" : nil
+  end
 
   def description
     if object.description.present?
       object.description
     else
-      h.content_tag(:i) { DEFAULT_DESCRIPTION }
+      h.content_tag(:i, class: 'text-muted') { DEFAULT_DESCRIPTION }
     end
   end
 
@@ -25,8 +37,12 @@ class LocationDecorator < Draper::Decorator
     if object.directions.present?
       object.directions
     else
-      h.content_tag(:i) { DEFAULT_DIRECTIONS }
+      h.content_tag(:i, class: 'text-muted') { DEFAULT_DIRECTIONS }
     end
+  end
+
+  def gps
+    object.to_coordinates.map{|e| h.number_with_precision(e, precision: 4)}.join(", ")
   end
 
   def address
@@ -60,7 +76,7 @@ class LocationDecorator < Draper::Decorator
     # Select which decorator methods override the defaults from object
     object.as_json(args).merge(
       image: image,
-      address: address,
+      #address: address,
       team_name: team_name,
       created_at: created_at,
       updated_at: updated_at,

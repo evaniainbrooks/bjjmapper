@@ -1,6 +1,18 @@
 require 'spec_helper'
 
 describe LocationDecorator do
+  describe '.distance' do
+    context 'when the context has a center point' do
+      let(:context) { { center: [80.0, 80.0] } }
+      subject { build(:location).decorate(context: context) }
+      before { Geocoder::Calculations.stub(:distance_between).and_return(123.0123) }
+      it { subject.distance.should eq '123.01mi' }
+    end
+    context 'when the context has no center point' do
+      subject { build(:location).decorate }
+      it { subject.distance.should_not be_present } 
+    end
+  end
   describe '.description' do
     context 'with blank description' do
       subject { build(:location, description: nil).decorate }
