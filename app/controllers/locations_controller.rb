@@ -14,7 +14,11 @@ class LocationsController < ApplicationController
 
     respond_to do |format|
       format.json { render json: @location }
-      format.html
+      format.html do
+        @nearby_locations = Location.near(@location.to_coordinates, 5).limit(5).drop(1).to_a
+        @nearby_locations = decorated_locations_with_distance_to_center(@nearby_locations, @location.to_coordinates)
+        render
+      end
     end
   end
 
@@ -78,10 +82,7 @@ class LocationsController < ApplicationController
 
     head :no_content and return unless locations.present?
 
-    decorated_locations = LocationDecorator.decorate_collection(locations.to_a)
-    decorated_locations.each do |loc|
-      loc.distance = Geocoder::Calculations.distance_between(loc.to_coordinates, center)
-    end
+    decorated_locations = decorated_locations_with_distance_to_center(locations, center)
 
     tracker.track('searchLocations',
       center: center,
@@ -117,6 +118,13 @@ class LocationsController < ApplicationController
       format.html
       format.json { render json: @locations }
     end
+  end
+
+
+  private
+
+  def decorated_locations_with_distance_to_center(locations, center)
+    LocationDecorator.decorate_collection(locations, context: { center: center })
   end
 
   private
