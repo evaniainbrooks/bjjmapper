@@ -1,13 +1,13 @@
 %table.table.table-user-information
   %tbody
     %tr
-      %td Name
+      %td.text-muted Name
       %td
         %h1.display-field= user.name
         .edit-field.form-group
           = f.text_field :name, class: 'form-control input-lg'
     %tr
-      %td Rank
+      %td.text-muted Rank
       %td
         .display-field
           = render partial: 'users/belt', locals: { user: user }
@@ -16,7 +16,7 @@
         .edit-field.form-group
           = f.select :stripe_rank, options_for_select(stripe_ranks, user.stripe_rank), {}, class: 'form-control input-md'
     %tr
-      %td Born
+      %td.text-muted Born
       %td
         - if user.birthdate.present?
           .display-field
@@ -35,5 +35,5 @@
           &nbsp;
         = f.text_field :birth_place, class: 'form-control edit-field'
     %tr
-      %td Lineage
+      %td.text-muted Lineage
       %td= render partial: 'users/lineage', locals: { :f => f, :user => user }

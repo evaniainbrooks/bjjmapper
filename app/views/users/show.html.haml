@@ -13,29 +13,25 @@
         = render partial: 'users/subnav', locals: { :user => user }
     %hr/
     .row
-      .col-md-12
+      .col-md-8
         %h3 Biography
         .display-field= user.description
         .edit-field.form-group
           -#= f.label:description
           = f.text_area :description, rows: 10, class: 'form-control'
-    %hr/
-    .row
-      .col-md-12
-        %h3 Locations
+      .col-md-4
+        %h3 Teaching at
         %ul.list-unstyled
-          - user.locations.each do |location|
-            %li= link_to(location.title, location_path(location))
+          - user.locations.each_with_index do |location, i|
+            %li= render partial: 'locations/card', object: location, as: 'location', locals: { location_counter: i }
     %hr/
     .row
       .col-md-12
         %h3 Students
-        = render partial: 'users/card', collection: user.lineal_children, as: 'user' 
-    %hr/
-    .row
-      .col-md-12
-        %h3 Seminars
-        Coming soon 
+        .row
+          - user.lineal_children.each_with_index do |student, i|
+            .col-md-4
+              = render partial: 'users/card', object: student, as: 'user', locals: { user_counter: i }
     %hr.edit-field/
     .row.edit-field
       .col-md-12

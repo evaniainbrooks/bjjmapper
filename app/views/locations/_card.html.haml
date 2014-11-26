@@ -6,5 +6,6 @@
       %p
         %span.small.text-muted= location.street
         %span.small.text-info.distance.pull-right
-          = surround '(', ')' do
-            = location.distance
+          - if location.distance.present?
+            = surround '(', ')' do
+              = location.distance

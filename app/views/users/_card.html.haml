@@ -8,4 +8,5 @@
       %h3= user.name
       = render partial: 'users/belt', locals: { user: user }
       %p= user.summary
-      %div.color-legend
+      - if local_assigns[:color_key]
+        %div.color-legend

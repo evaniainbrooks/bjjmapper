@@ -4,6 +4,7 @@ class UserDecorator < Draper::Decorator
   decorates :user
   decorates_association :lineal_parent
   decorates_association :lineal_children
+  decorates_association :locations
 
   DEFAULT_IMAGE = 'default-user-250.png'
   DEFAULT_DESCRIPTION = 'No description was provided'
