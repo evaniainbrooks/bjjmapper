@@ -1,7 +1,11 @@
 %h1.display-field
   = location.title
   %br/
-  %small= link_to location.team_name, team_path(location.team, ref: 'loc_title')
+  %small
+    - if location.team.present?
+      = link_to location.team_name, team_path(location.team, ref: 'loc_title')
+    - else
+      = location.team_name
 .edit-field
   = f.label :title
   = f.text_field :title, class: 'form-control input-lg'

@@ -55,8 +55,9 @@ class RollFindr.Views.MapView extends Backbone.View
     mapCanvas = @$('.map-canvas')[0]
     @map = new google.maps.Map(mapCanvas, mapOptions)
 
-    refreshButton = JST['templates/refresh_button']()
-    @map.controls[google.maps.ControlPosition.TOP_LEFT].push($(refreshButton)[0])
+    if @model.get('refresh')
+      refreshButton = JST['templates/refresh_button']()
+      @map.controls[google.maps.ControlPosition.TOP_LEFT].push($(refreshButton)[0])
 
   setupEventListeners: ->
     @listenTo(@teamFilter.collection, 'change:filter-active', @filtersChanged)
@@ -110,6 +111,8 @@ class RollFindr.Views.MapView extends Backbone.View
         type: 'GET',
         dataType: 'json',
         success: (result) =>
+          google.maps.event.addListenerOnce(@map, 'idle', @fetchViewport)
+
           newCenter = new google.maps.LatLng(result.lat, result.lng)
           @map.setCenter(newCenter)
       })

@@ -47,7 +47,7 @@ class ApplicationController < ActionController::Base
       center: center,
       geolocate: geolocate,
       locations: [],
-      filters: 1
+      refresh: 1
     }
 
     tracker.track('showMap',

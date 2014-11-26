@@ -15,12 +15,9 @@ class RollFindr.Views.CreateLocationView extends Backbone.View
 
     @enableSubmit()
 
-  isTeamSelected: ->
-    @$('option:selected').length > 0
-
   isNameEntered: ->
     @$('input[name="location[title]"]').val().length > 0
 
   enableSubmit: ->
-    if @isNameEntered() && @isTeamSelected()
+    if @isNameEntered()
       @$('[type="submit"]').removeAttr('disabled')

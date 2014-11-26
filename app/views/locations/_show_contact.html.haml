@@ -1,13 +1,13 @@
 %h3 Contact
 .edit-field
   = f.label :phone
-  = f.text_field :phone, class: 'form-control'
+  = f.text_field :phone, class: 'input-sm form-control'
   = f.label :email
-  = f.text_field :email, class: 'form-control'
+  = f.text_field :email, class: 'input-sm form-control'
   = f.label :website
-  = f.text_field :website, class: 'form-control'
+  = f.text_field :website, class: 'input-sm form-control'
   = f.label :facebook
-  = f.text_field :facebook, class: 'form-control'
+  = f.text_field :facebook, class: 'input-sm form-control'
 - if location.phone.present?
   %span.display-field.form-group
     %b Phone

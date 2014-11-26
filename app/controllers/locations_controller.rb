@@ -144,7 +144,7 @@ class LocationsController < ApplicationController
       :center => @location.to_coordinates,
       :geolocate => 0,
       :locations => [],
-      :filters => 0
+      :refresh => 0
     }
   end
 
