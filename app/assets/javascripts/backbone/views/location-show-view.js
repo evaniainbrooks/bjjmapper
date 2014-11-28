@@ -1,5 +1,6 @@
 //= require backbone/views/add-instructor-view
 //= require backbone/views/calendar-view
+//= require backbone/views/location-nearby-view
 //= require backbone/views/map-view
 
 +function($) {
@@ -25,6 +26,7 @@
       this.model = new RollFindr.Models.Location(options.model);
       this.addInstructorView = new RollFindr.Views.AddInstructorView();
       this.calendarView = new RollFindr.Views.CalendarView({model: this.model});
+      this.nearbyView = new RollFindr.Views.LocationNearbyView({model: this.model});
       if (undefined !== options.mapModel) {
         var mapModel = new RollFindr.Models.Map(options.mapModel);
         this.mapView = new RollFindr.Views.MapView({model: mapModel, el: this.el});

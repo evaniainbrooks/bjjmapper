@@ -115,21 +115,10 @@ html, body {
   .map-canvas {
     border: 3px solid transparent;
   }
-  .add-academy {
-    margin-top: 0px !important;
-    display: inherit;
-  }
-  .cancel-add-academy { display: none; }
   &.map-edit-mode {
     .map-canvas {
       border: 3px dashed #449d44;
     }
-    
-    .cancel-add-academy {
-      margin-top: 0px !important;
-      display: inherit;
-    }
-    .add-academy { display: none; }
   }
 }
 
@@ -239,7 +228,7 @@ html, body {
   }
 }
 
-.new-location-dialog {
+.create-location-dialog {
   img {
     width: 100px;
     height: 100px;

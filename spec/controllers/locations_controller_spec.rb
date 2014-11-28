@@ -11,7 +11,8 @@ describe LocationsController do
       end
       it 'returns the nearby locations' do
         get :nearby, format: 'json', id: location
-        response.body.should eq other_location.to_json
+        response.body.should_not include(location.title)
+        response.body.should include(other_location.title)
       end
     end
   end

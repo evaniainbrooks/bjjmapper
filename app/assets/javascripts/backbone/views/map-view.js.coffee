@@ -1,6 +1,7 @@
 #= require distance
 #= require term-filter
 #= require backbone/views/team-list-view
+#= require backbone/views/map-create-location-view
 
 class RollFindr.Views.MapView extends Backbone.View
   el: $('.wrapper')
@@ -14,8 +15,6 @@ class RollFindr.Views.MapView extends Backbone.View
   events: {
     'change [name="sort_order"]': 'sortOrderChanged'
     'click .refresh-button': 'fetchViewport'
-    'click .add-academy': 'addAcademyClicked'
-    'click .cancel-add-academy': 'cancelAddAcademyClicked'
   }
   initialize: ->
     _.bindAll(this,
@@ -24,8 +23,6 @@ class RollFindr.Views.MapView extends Backbone.View
       'setDefaultCenter',
       'setCenter',
       'setCenterGeolocate',
-      'addAcademyClicked',
-      'cancelAddAcademyClicked',
       'fetchViewport',
       'geolocate',
       'render',
@@ -58,6 +55,8 @@ class RollFindr.Views.MapView extends Backbone.View
     if @model.get('refresh')
       refreshButton = JST['templates/refresh_button']()
       @map.controls[google.maps.ControlPosition.TOP_LEFT].push($(refreshButton)[0])
+
+      @createLocationView = new RollFindr.Views.MapCreateLocationView({map: @map})
 
   setupEventListeners: ->
     @listenTo(@teamFilter.collection, 'change:filter-active', @filtersChanged)
@@ -119,38 +118,8 @@ class RollFindr.Views.MapView extends Backbone.View
 
     center = [@map.getCenter().lat(), @map.getCenter().lng()]
     distance = Math.circleDistance(@map.getCenter(), @map.getBounds().getNorthEast())
-    distance *= 5
+    distance *= 3
     @termFilter.setQuery(e.query, center, distance)
-
-  cancelAddAcademyClicked: (event)->
-    mixpanel.track('clickCancelAddAcademy')
-
-    toastr.clear()
-
-    @$el.removeClass('map-edit-mode')
-    google.maps.event.removeListener(@mapClickHandler) if @mapClickHandler?
-
-    @editModeToast = null
-    @mapClickHandler = null
-
-  addAcademyClicked: (event)->
-    mixpanel.track('clickAddAcademy')
-
-    if RollFindr.CurrentUser.isAnonymous()
-      $('.login-modal').modal('show')
-      return false
-
-    @editModeToast = toastr.info('Just click on the map at the approximate location', 'To add a new academy')
-    @$el.addClass('map-edit-mode')
-    @mapClickHandler = google.maps.event.addListener @map, 'click', (event)=>
-      mixpanel.track('clickMap', {
-        lat: event.latLng.lat(),
-        lng: event.latLng.lng()
-      })
-
-      toastr.clear()
-      $('.coordinates', '.new-location-dialog').val(JSON.stringify([event.latLng.lng(), event.latLng.lat()]))
-      $('.new-location-dialog').modal('show')
 
   geolocate: ->
     @setCenterGelocate =>
@@ -162,7 +131,11 @@ class RollFindr.Views.MapView extends Backbone.View
       @map.setCenter(initialLocation)
       doneCallback() if doneCallback?
 
-    navigator.geolocation.getCurrentPosition(setLocationCallback, @setDefaultCenter) if navigator? && navigator.geolocation?
+    geolocateFailedCallback = ->
+      toastr.error('Could not pinpoint your location', 'Error')
+      @setDefaultCenter()
+
+    navigator.geolocation.getCurrentPosition(setLocationCallback, geolocateFailedCallback) if navigator? && navigator.geolocation?
 
   setCenter: ->
     shouldGeolocate = @model.get('geolocate')

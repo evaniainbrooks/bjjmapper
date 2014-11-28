@@ -1,24 +1,24 @@
-.new-location-dialog.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
-  .modal-dialog
-    .modal-content
-      .modal-header
-        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
-        %h4 
-          %i.fa.fa-map-marker
-          What is the name of the academy?
-        %p.small You can continue editing and add additional details on the following page.
-      .modal-body
-        .container-fluid
-          .col-md-2.col-md-offset-1
-            %img.edit-image{'data-default-src' => image_path(LocationDecorator::DEFAULT_IMAGE), :alt => 'logo', :src => image_path(LocationDecorator::DEFAULT_IMAGE)}/
-          .col-md-9
-            = form_for(Location.new, html: { class: 'form-horizontal' } ) do |f|
+.create-location-dialog.create-location-quick-dialog.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "createLocationQuick", :role => "dialog", :tabindex => "-1"}
+  = form_for(Location.new, html: { class: 'form-horizontal' } ) do |f|
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+          %h4 
+            %i.fa.fa-map-marker
+            What is the name of the academy?
+          %p.small You can continue editing and add additional details on the following page.
+        .modal-body
+          .container-fluid
+            .col-md-2.col-md-offset-1
+              %img.edit-image{'data-default-src' => image_path(LocationDecorator::DEFAULT_IMAGE), :alt => 'logo', :src => image_path(LocationDecorator::DEFAULT_IMAGE)}/
+            .col-md-9
               %fieldset
                 / Text input
                 .form-group
                   %label.col-md-4.control-label{:for => "location[title]"} Name*
                   .col-md-8
-                    = f.text_field :title, placeholder: 'The name of the academy', class: 'form-control input-lg'
+                    = f.text_field :title, placeholder: 'The name of the academy', class: 'form-control input-md'
                 / Select Basic
                 .form-group
                   %label.col-md-4.control-label{:for => "location[team]"} Team
@@ -30,12 +30,15 @@
                   .col-md-8
                     = f.text_area :description, rows: 4, placeholder: 'A brief description of the academy', class: 'form-control'
                 = f.hidden_field :coordinates, class: 'coordinates form-control'
-                %span.small.clear *Required field
-                .pull-right.edit-field
-                  %button.btn.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Cancel
-                  %button.btn.btn-success{:disabled => true, :type => "submit"} Create &amp; Continue &raquo;
-- content_for :scripts do
+
+        .modal-footer
+          %span.pull-left.small.clear *Denotes required field
+          .pull-right.edit-field
+            %button.btn.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Cancel
+            %button.btn.btn-success{:disabled => true, :type => "submit"} Create &amp; Continue &raquo;
+
+= content_for(:scripts) do
   :coffeescript
     $(document).ready ->
-      view = new RollFindr.Views.CreateLocationView()
-  
+      mapView = new RollFindr.Views.CreateLocationDialogView({ el: $('.create-location-quick-dialog') })
+

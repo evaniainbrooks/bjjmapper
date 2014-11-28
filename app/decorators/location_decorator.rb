@@ -15,10 +15,44 @@ class LocationDecorator < Draper::Decorator
 
   def initialize(object, options = EMPTY_HASH)
     super(object, options)
-    @distance = Geocoder::Calculations.distance_between(
-      object.to_coordinates,
-      context[:center]
-    ) if context.key?(:center)
+    if (context.key?(:center))
+      @distance = Geocoder::Calculations.distance_between(
+        object.to_coordinates,
+        context[:center]
+      )
+
+      @bearing = Geocoder::Calculations.bearing_between(
+        object.to_coordinates,
+        context[:center],
+        method: :linear
+      )
+    end
+  end
+
+  def bearing_direction
+    return nil unless bearing.present?
+
+    @bearing_direction ||= if (bearing >= 337.5 || bearing < 22.5)
+      :north
+    elsif (bearing >= 22.5 && bearing < 67.5)
+      :'north-east'
+    elsif (bearing >= 67.5 && bearing < 112.5)
+      :east
+    elsif (bearing >= 112.5 && bearing < 157.5)
+      :'south-east'
+    elsif (bearing >= 157.5 && bearing < 202.5)
+      :south
+    elsif (bearing >= 202.5 && bearing < 247.5)
+      :'south-west'
+    elsif (bearing >= 247.5 && bearing < 292.5)
+      :west
+    else
+      :'north-west'
+    end
+  end
+
+  def bearing
+    @bearing
   end
 
   def distance
@@ -57,11 +91,11 @@ class LocationDecorator < Draper::Decorator
   end
 
   def updated_at
-    "updated #{h.time_ago_in_words(object.updated_at)} ago"
+    object.updated_at.present? ? "updated #{h.time_ago_in_words(object.updated_at)} ago" : nil
   end
 
   def created_at
-    "created #{h.time_ago_in_words(object.created_at)} ago"
+    object.created_at.present? ? "created #{h.time_ago_in_words(object.created_at)} ago" : nil
   end
 
   def team_name
@@ -77,10 +111,13 @@ class LocationDecorator < Draper::Decorator
     object.as_json(args).merge(
       image: image,
       #address: address,
+      phone: phone,
       team_name: team_name,
       created_at: created_at,
       updated_at: updated_at,
-      distance: distance
+      distance: distance,
+      bearing: bearing,
+      bearing_direction: bearing_direction
     )
   end
 end

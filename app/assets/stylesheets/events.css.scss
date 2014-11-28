@@ -37,7 +37,8 @@ $colors: $color0, $color1, $color2, $color3;
 
   .schedule-color-#{$i - 1} {
     .color-legend {
-      background-color: nth($colors, $i);
+      background-color: lighten(nth($colors, $i), 40%);
+      border-color: nth($colors, $i) !important;
     }
   }
 }

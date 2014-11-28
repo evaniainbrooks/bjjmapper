@@ -21,11 +21,12 @@
         = render partial: 'show_address', locals: { location: location, f: f }
       .col-md-5{:style => 'height: 300px'}
         %div.map-canvas
+        -# This is filled in by google maps
       .col-md-3.col-md-offset-1
-        - if @nearby_locations.present?
+        %div.nearby-locations
+          -# This is filled in by locations/nearby template
           %h3 Nearby Academies
-          %ul.list-unstyled
-            = render partial: 'locations/card', collection: @nearby_locations, as: :location
+          %ul.list-unstyled.items
     .row.display-field
       .col-md-5.col-md-offset-3.text-center
         %big= link_to 'See on larger map', root_path(:center => location.to_coordinates), :data => { :'no-turbolink' => true }

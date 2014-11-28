@@ -1,0 +1,21 @@
+<li class="location-card">
+  <a class="thumbnail" href="<%= Routes.location_path(location) %>">
+    <div class="caption">
+      <p class="text-primary">
+        <%= location.title %>
+      </p>
+      <b class="small">
+        <%= location.team_name %>
+      </b>
+      <p>
+        <span class="small text-muted">
+          <%= location.street %>
+        </span>
+        <span class="small text-info distance pull-right">
+          <%= location.bearing_name %> (<%= location.distance %>)
+        </span>
+      </p>
+    </div>
+  </a>
+</li>
+

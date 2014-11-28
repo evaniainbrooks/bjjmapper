@@ -8,7 +8,6 @@ window.onerror = function(errorMessage, url, lineNumber) {
     line_number: lineNumber
   });
 
-  console.log(errorMessage);
-  return true;
+  return false;
 };
 

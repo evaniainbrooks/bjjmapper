@@ -1,12 +1,12 @@
 %h3 Contact
 .edit-field
-  = f.label :phone
+  = f.label :phone, class: 'small'
   = f.text_field :phone, class: 'input-sm form-control'
-  = f.label :email
+  = f.label :email, class: 'small'
   = f.text_field :email, class: 'input-sm form-control'
-  = f.label :website
+  = f.label :website, class: 'small'
   = f.text_field :website, class: 'input-sm form-control'
-  = f.label :facebook
+  = f.label :facebook, class: 'small'
   = f.text_field :facebook, class: 'input-sm form-control'
 - if location.phone.present?
   %span.display-field.form-group

@@ -41,3 +41,9 @@ class RollFindr.Collections.LocationsCollection extends Backbone.Collection
       this.sort_key = fieldName
       this.sort()
 
+class RollFindr.Collections.NearbyLocationsCollection extends Backbone.Collection
+  initialize: (options)->
+    @location = options.location
+
+  url: =>
+    Routes.nearby_location_path(@location)

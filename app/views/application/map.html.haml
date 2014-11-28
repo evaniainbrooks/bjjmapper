@@ -34,8 +34,9 @@
         -# This is filled in by team-list template
       .container-fluid
         %br/
-        %a.btn.btn-primary.pull-right Apply 
+        %a.btn.btn-primary.pull-right Apply
 = render partial: 'locations/create_modal_small'
+= render partial: 'locations/create_modal'
 - content_for :scripts do
   :javascript
     $(document).ready(function() {

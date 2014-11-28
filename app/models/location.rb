@@ -85,6 +85,10 @@ class Location
     }
   })
 
+  def to_param
+    [id, title.parameterize].join('-')
+  end
+
   def address
     [street, city, state, country, postal_code].compact.join(', ')
   end

@@ -57,7 +57,8 @@ private
   end
 
   def set_location
-    @location = Location.find(params[:location_id])
+    id_param = params.fetch(:location_id, '').split('-', 2).first
+    @location = Location.find(id_param)
     head :bad_request and return false unless @location.present?
   end
 end
