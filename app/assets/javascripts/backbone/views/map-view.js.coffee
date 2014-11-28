@@ -122,7 +122,7 @@ class RollFindr.Views.MapView extends Backbone.View
     @termFilter.setQuery(e.query, center, distance)
 
   geolocate: ->
-    @setCenterGelocate =>
+    @setCenterGeolocate =>
       @fetchViewport()
 
   setCenterGeolocate: (doneCallback)->
