@@ -30,7 +30,7 @@ set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 # Default value for default_env is {}
 set :default_env, {
   'EXECJS_RUNTIME' => 'Node',
-  'JRUBY_OPTS' => '-J-d32 -X-C'
+  'JRUBY_OPTS' => '"-J-d32 -X-C"'
 }
 
 # Default value for keep_releases is 5
