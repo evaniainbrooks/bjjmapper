@@ -17,13 +17,13 @@ class LocationDecorator < Draper::Decorator
     super(object, options)
     if (context.key?(:center))
       @distance = Geocoder::Calculations.distance_between(
-        object.to_coordinates,
-        context[:center]
+        context[:center],
+        object.to_coordinates
       )
 
       @bearing = Geocoder::Calculations.bearing_between(
-        object.to_coordinates,
         context[:center],
+        object.to_coordinates,
         method: :linear
       )
     end

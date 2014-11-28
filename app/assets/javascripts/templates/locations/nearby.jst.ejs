@@ -1,21 +1,27 @@
 <li class="location-card">
   <a class="thumbnail" href="<%= Routes.location_path(location) %>">
-    <div class="caption">
-      <p class="text-primary">
-        <%= location.title %>
-      </p>
-      <b class="small">
-        <%= location.team_name %>
-      </b>
-      <p>
-        <span class="small text-muted">
-          <%= location.street %>
-        </span>
-        <span class="small text-info distance pull-right">
-          <%= location.bearing_name %> (<%= location.distance %>)
-        </span>
-      </p>
+    <div class="text-center col-md-3">
+      <i class="center-block fa-3x fa fa-arrow-up direction-<%= location.bearing_direction %>"></i>
+      <span class="small text-info distance">
+        <%= location.bearing_name %> (<%= location.distance %>)
+      </span>
     </div>
+    <div class="col-md-9">
+      <div class="caption">
+        <p class="text-primary">
+          <%= location.title %>
+        </p>
+        <b class="small">
+          <%= location.team_name %>
+        </b>
+        <p>
+          <span class="small text-muted">
+            <%= location.street %>
+          </span>
+        </p>
+      </div>
+    </div>
+    <div class="clear"></div>
   </a>
 </li>
 
