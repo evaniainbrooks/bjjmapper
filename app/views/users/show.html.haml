@@ -3,10 +3,7 @@
     = render partial: 'welcome_message' if welcome?
     .row
       .col-md-4
-        %img.center-block.display-field{:alt => "#{user.name} profile image", :src => user.image}
-        %div.edit-field.text-center
-          %img.center-block{:alt => "#{user.name} profile image", :src => user.image}
-          %button.image-caption.center-block.btn.btn-primary.btn-small{:type => 'button'} Upload Image
+        %img.center-block{:alt => "#{user.name} profile image", :src => user.image}
       .col-md-5
         = render partial: 'users/table', locals: { :f => f, :user => user }
       .col-md-3
