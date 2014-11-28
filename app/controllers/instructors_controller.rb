@@ -47,7 +47,8 @@ class InstructorsController < ApplicationController
   end
 
   def set_location
-    @location = Location.find(params[:location_id])
+    id_param = params.fetch(:location_id, '').split('-', 2).first
+    @location = Location.find(id_param)
     head :not_found and return false unless @location.present?
   end
 
