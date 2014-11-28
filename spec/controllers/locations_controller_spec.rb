@@ -1,18 +1,32 @@
 require 'spec_helper'
 
 describe LocationsController do
+  describe 'GET nearby' do
+    context 'with json format' do
+      let(:location) { build(:location, title: 'self location') }
+      let(:other_location) { build(:location, title: 'near you location') }
+      before do
+        Location.stub(:find).and_return(location)
+        Location.stub_chain(:near, :limit, :to_a).and_return([other_location])
+      end
+      it 'returns the nearby locations' do
+        get :nearby, format: 'json', id: location
+        response.body.should eq other_location.to_json
+      end
+    end
+  end
   describe 'GET show' do
     context 'with json format' do
       let(:location) { create(:location) }
       it 'returns the location' do
-        get :show, format: 'json', id: location.id
+        get :show, format: 'json', id: location
         response.body.should eq location.to_json
       end
     end
     context 'with html format' do
       let(:location) { create(:location) }
       it 'returns the location markup' do
-        get :show, id: location.id
+        get :show, id: location
         response.should render_template('locations/show')
       end
     end
@@ -22,7 +36,7 @@ describe LocationsController do
     context 'when not signed in' do
       it 'returns not_authorized'  do
         expect do
-          delete :destroy, id: @location.id, format: 'json'
+          delete :destroy, id: @location, format: 'json'
           response.status.should eq 401
         end.to change { Location.count }.by(0)
       end
@@ -32,7 +46,7 @@ describe LocationsController do
       context 'with html format' do
         it 'deletes the record and redirects to root'  do
           expect do
-            delete :destroy, {id: @location.id, format: 'html'}, session_params
+            delete :destroy, {id: @location, format: 'html'}, session_params
             response.should redirect_to(root_path)
           end.to change { Location.count }.by(-1)
         end
@@ -40,7 +54,7 @@ describe LocationsController do
       context 'with json format' do
         it 'deletes the record' do
           expect do
-            delete :destroy, {id: @location.id, format: 'json'}, session_params
+            delete :destroy, {id: @location, format: 'json'}, session_params
             response.status.should be 200
           end.to change { Location.count }.by(-1)
         end
@@ -58,7 +72,7 @@ describe LocationsController do
       end
     end
     context 'when signed in' do
-      let(:session_params) { { user_id: create(:user).id } }
+      let(:session_params) { { user_id: create(:user).to_param } }
       context 'with html format' do
         it 'creates and redirects to a new location in edit mode' do
           expect do
@@ -88,7 +102,7 @@ describe LocationsController do
       end
     end
     context 'when signed in' do
-      let(:session_params) { { user_id: create(:user).id } }
+      let(:session_params) { { user_id: create(:user).to_param } }
       context 'with json format' do
         it 'updates and returns the location' do
           post :update, { id: location.id, :format => 'json' }.merge(update_params), session_params
@@ -97,8 +111,8 @@ describe LocationsController do
       end
       context 'with html format' do
         it 'redirects back to the location' do
-          post :update, { id: location.id, :format => 'html' }.merge(update_params), session_params
-          response.body.should redirect_to(location_path(location, edit: 0))
+          post :update, { id: location.to_param, :format => 'html' }.merge(update_params), session_params
+          response.body.should redirect_to(location_path(assigns[:location], edit: 0))
         end
       end
     end
@@ -165,7 +179,7 @@ describe LocationsController do
         let(:red_location) { create(:location, team: red_team, title: 'Red location') }
         let(:blue_location) { create(:location, team: blue_team, title: 'Blue location', coordinates: red_location.coordinates) }
         it 'returns specific team locations' do
-          get :search, center: blue_location.coordinates, distance: 10.0, team: [blue_team.id], format: 'json'
+          get :search, center: blue_location.coordinates, distance: 10.0, team: [blue_team.to_param], format: 'json'
           response.body.should include(blue_location.title)
           response.body.should_not include(red_location.title)
         end

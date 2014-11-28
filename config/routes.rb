@@ -23,6 +23,7 @@ Rails.application.routes.draw do
 
   resources :locations do
     get :search, on: :collection
+    get :nearby, on: :member
     resources :events
     resources :users, controller: :instructors, as: :instructors, path: '/instructors', only: [:create, :destroy]
   end

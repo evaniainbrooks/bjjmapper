@@ -1,6 +1,5 @@
 class LocationsController < ApplicationController
-  before_action :set_instructor, only: [:instructors]
-  before_action :set_location, only: [:destroy, :show, :update, :instructors]
+  before_action :set_location, only: [:destroy, :show, :update, :nearby]
   before_action :set_map, only: :show
   before_action :ensure_signed_in, only: [:destroy, :create, :update]
   decorates_assigned :location
@@ -14,11 +13,21 @@ class LocationsController < ApplicationController
 
     respond_to do |format|
       format.json { render json: @location }
-      format.html do
-        @nearby_locations = Location.near(@location.to_coordinates, 5).limit(5).drop(1).to_a
-        @nearby_locations = decorated_locations_with_distance_to_center(@nearby_locations, @location.to_coordinates)
-        render
-      end
+      format.html
+    end
+  end
+
+  def nearby
+    distance = params.fetch(:distance, 5).to_i
+    count = params.fetch(:count, 5).to_i
+
+    @nearby_locations = Location.near(@location.to_coordinates, distance).limit(count+1).to_a
+    @nearby_locations.reject!{|loc| loc.to_param.eql?(@location.to_param)}
+    @nearby_locations = decorated_locations_with_distance_to_center(@nearby_locations, @location.to_coordinates)
+
+    respond_to do |format|
+      format.html
+      format.json { render status: :ok, json: @nearby_locations }
     end
   end
 
@@ -133,11 +142,6 @@ class LocationsController < ApplicationController
     return params.fetch(:create, 0).to_i.eql?(1)
   end
 
-  def set_instructor
-    @instructor = User.find(params[:instructor_id]) if params.key?(:instructor_id)
-    head :not_found and return false unless @instructor.present?
-  end
-
   def set_map
     @map = {
       :zoom => Map::ZOOM_LOCATION,
@@ -165,13 +169,15 @@ class LocationsController < ApplicationController
       :website,
       :facebook)
 
-    p[:coordinates] = JSON.parse(p[:coordinates]) if p.key?(:coordinates)
+    p[:coordinates] = JSON.parse(p[:coordinates]) if p[:coordinates].present?
     p[:modifier_id] = current_user.to_param if signed_in?
     p
   end
 
   def set_location
-    @location = Location.find(params[:id])
+    id_param = params.fetch(:id, '').split('-', 2).first
+    @location = Location.find(id_param)
+
     render status: :not_found and return unless @location.present?
   end
 end
