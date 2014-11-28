@@ -21,7 +21,6 @@
                   .form-group
                     %label.control-label{:for => "location[team]"} Team
                     = f.select :team_id, options_for_select(all_teams.map { |team| [team.name, team.id, {'data-img-src' => team.image}] }), { include_blank: true }, class: 'form-control  input-md'
-                  = f.hidden_field :coordinates, class: 'coordinates form-control'
               .col-md-4.col-md-offset-1
                 %fieldset
                   .form-group
