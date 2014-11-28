@@ -24,7 +24,6 @@
 //= require toastr_bootstrap
 //= require bootstrap
 //= require ext
-//= require bearing
 //= require underscore
 //= require_tree ./templates
 //= require backbone
