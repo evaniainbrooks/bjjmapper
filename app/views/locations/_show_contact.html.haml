@@ -5,26 +5,29 @@
   = f.label :email, class: 'small'
   = f.text_field :email, class: 'input-sm form-control'
   = f.label :website, class: 'small'
-  = f.text_field :website, class: 'input-sm form-control'
-  = f.label :facebook, class: 'small'
-  = f.text_field :facebook, class: 'input-sm form-control'
+  .input-group
+    %span.input-group-addon http://
+    = f.text_field :website, class: 'input-sm form-control'
+  .input-group
+    %span.input-group-addon http://facebook.com/
+    = f.text_field :facebook, class: 'input-sm form-control'
 - if location.phone.present?
   %span.display-field.form-group
-    %b Phone
+    %b.small Phone
     %br/
     %a{:class => 'phone', :href => "tel:#{location.phone}"}
       = location.phone
       %i.fa.fa-phone
 - if location.email.present?
   %span.display-field.form-group
-    %b Email
+    %b.small Email
     %br/
     = link_to 'mailto:' + location.email, class: 'email' do
       = location.email
       %i.fa.fa-envelope
 - if location.website.present?
   %span.display-field.form-group
-    %b Website
+    %b.small Website
     %br/
     = link_to 'http://' + location.website, class: 'website' do
       = location.website
