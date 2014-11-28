@@ -28,7 +28,10 @@ set :pty, true
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 # Default value for default_env is {}
-# set :default_env, { path: "/opt/ruby/bin:$PATH" }
+set :default_env, {
+  'EXECJS_RUNTIME' => 'Node',
+  'JRUBY_OPTS' => '-X-C'
+}
 
 # Default value for keep_releases is 5
 set :keep_releases, 3
