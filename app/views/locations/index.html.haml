@@ -1,18 +1,24 @@
 .container.page
-  %h1 
-    Academy Directory
-    %span.small= "#{Location.count} locations worldwide"
+  %h1
+    Brazilian Jiu-Jitsu Academy Directory
+    - if @locations.blank?
+      %span.small= "#{Location.count} academies worldwide"
+    - elsif @criteria[:city].present?
+      %span.small= "#{pluralize(@locations.count, 'academy')} near #{@criteria[:city]}"
+    - else
+      %span.small= "#{pluralize(@locations.count, 'academy')} in #{@criteria[:country]}"
+
   %ol.breadcrumb
     %li
       %a{href: root_path} Home
     %li
       %a{href: locations_path} Academies
-    - if (@criteria.has_key?(:country)) 
+    - if (@criteria.has_key?(:country))
       %li
         %a{href: locations_path(country: @criteria[:country])}= @criteria[:country]
-      -if (@criteria.has_key?(:city)) 
+      -if (@criteria.has_key?(:city))
         %li
-          %a{href: locations_path({country: @criteria[:country], city: @criteria[:city]})}= @criteria[:city] 
+          %a{href: locations_path({country: @criteria[:country], city: @criteria[:city]})}= @criteria[:city]
 
   - if @locations.present?
     = render partial: 'table', locals: { locations: @locations }
