@@ -1,3 +1,5 @@
+= content_for(:title) do
+  = location.title
 .container.show-location.page
   = form_for(location, html: { class: 'form ' + edit_mode_classes }) do |f|
     .row
