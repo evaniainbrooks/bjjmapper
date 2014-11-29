@@ -12,8 +12,8 @@ class LocationsController < ApplicationController
     )
 
     respond_to do |format|
-      format.json { render json: @location }
       format.html
+      format.json { render json: @location }
     end
   end
 

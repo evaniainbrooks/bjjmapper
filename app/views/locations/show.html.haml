@@ -71,3 +71,6 @@
     $(document).ready ->
       mapView = new RollFindr.Views.LocationShowView({ model: #{location.to_json}, mapModel: #{@map.to_json}, el: $('.show-location')})
 
+= content_for(:head) do
+  = render partial: 'opengraph_tags', locals: { location: location }
+

@@ -17,6 +17,11 @@
     = favicon_link_tag 'apple-touch-icon-72x72-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '72x72'
     = favicon_link_tag 'apple-touch-icon-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png'
     = favicon_link_tag 'favicon.ico', :rel => 'shortcut icon'
+    %meta{:property => 'og:app_id', :content => '1566945533528111'}/ 
+    %meta{:property => 'og:type', :content => 'website'}/
+    %meta{:property => 'og:title', :content => 'BJJMapper'}/
+    %meta{:property => 'og:description', :content => 'The Authorative Brazilian Jiu-Jitsu Gym Finder'}/ 
+    = yield(:head) if content_for(:head)
   %body{:data => {:userid => current_user.id}}
     .wrapper
       = render partial: 'navbar'

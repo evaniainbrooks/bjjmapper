@@ -90,6 +90,15 @@ class LocationDecorator < Draper::Decorator
     h.image_path(img)
   end
 
+  # This is a hack and needs to be fixed...
+  def opengraph_image
+    image.gsub('100.', '300.')
+  end
+
+  def opengraph_updated_at
+    object.updated_at.to_i
+  end
+
   def updated_at
     object.updated_at.present? ? "updated #{h.time_ago_in_words(object.updated_at)} ago" : nil
   end
@@ -117,7 +126,9 @@ class LocationDecorator < Draper::Decorator
       updated_at: updated_at,
       distance: distance,
       bearing: bearing,
-      bearing_direction: bearing_direction
+      bearing_direction: bearing_direction,
+      opengraph_updated_at: opengraph_updated_at,
+      opengraph_image: opengraph_image
     )
   end
 end

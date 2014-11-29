@@ -22,4 +22,5 @@
 .form-group.edit-field
   = f.label :directions
   = f.text_area :directions, placeholder: 'Provide any extra directions to the academy (eg. signage missing; go around the back)', class: 'form-control', rows: 6
-%p.display-field= location.directions
+%p.display-field
+  = location.directions
