@@ -15,7 +15,7 @@ module RollFindr
     private
 
     def request_is_robot?
-      request.env['HTTP_USER_AGENT'].try(:match, /\(.*https?:\/\/.*\)/).present?
+      request.env['HTTP_USER_AGENT'].try(:match, /\(.*https?:\/\/.*\)|Wget|Bot|Robot/).present?
     end
   end
 end
