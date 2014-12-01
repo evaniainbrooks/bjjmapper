@@ -13,7 +13,7 @@ require "rails/test_unit/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module RollFindr 
+module RollFindr
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -29,11 +29,19 @@ module RollFindr
     config.google_maps_api_key = 'AIzaSyDfVeMiIo8lIaMQ_UxahKftMpIutq7QQ4I'
     config.google_maps_endpoint = '//maps.googleapis.com/maps/api/js'
 
-    config.action_mailer.delivery_method = :sendmail
     config.action_mailer.perform_deliveries = true
     config.action_mailer.raise_delivery_errors = true
-    config.action_mailer.default_options = {from: 'no-reply@rollfindr.com'}
+    config.action_mailer.default_options = {from: 'info@bjjmapper.com'}
 
     config.assets.precompile << /\.(?:svg|eot|woff|ttf)\z/
+
+    config.lograge.enabled = true
+
+    config.lograge.custom_options = lambda do |event|
+      unwanted_keys = %w[format action controller]
+      params = event.payload[:params].reject { |key,_| unwanted_keys.include? key }
+
+      {:params => params }
+    end
   end
 end
