@@ -23,10 +23,12 @@ class LocationsController < ApplicationController
 
     @nearby_locations = Location.near(@location.to_coordinates, distance).limit(count+1).to_a
     @nearby_locations.reject!{|loc| loc.to_param.eql?(@location.to_param)}
+
+    head :no_content and return false unless @nearby_locations.present?
+
     @nearby_locations = decorated_locations_with_distance_to_center(@nearby_locations, @location.to_coordinates)
 
     respond_to do |format|
-      format.html
       format.json { render status: :ok, json: @nearby_locations }
     end
   end
@@ -110,9 +112,9 @@ class LocationsController < ApplicationController
   def index
     @criteria = params.slice(:city, :country) || {}
     if @criteria.key?(:city) && @criteria.key?(:country)
-      @locations = Location.near(@criteria.values.join(','), 30)
+      @locations = Location.near(@criteria.values.join(','), 30).decorate
     elsif @criteria.key?(:country)
-      @locations = Location.where(:country => @criteria[:country])
+      @locations = Location.where(:country => @criteria[:country]).decorate
     else
       @locations = []
     end
@@ -122,6 +124,31 @@ class LocationsController < ApplicationController
       country: @criteria[:country],
       count: @locations.count,
     )
+    
+    @countries = {
+      'Canada' => 'CA',
+      'Germany' => 'DE',
+      'USA' => 'US', 
+      'Brazil' => 'BR', 
+      'Japan' => 'JP', 
+      'South Korea' => 'KR'
+    }
+    @cities = {
+      'USA' => ['Seattle', 'New York', 'San Francisco', 'Los Angeles', 'Portland'], 
+      'Canada' => ['Vancouver', 'Halifax', 'Toronto', 'Montreal', 'Calgary', 'Edmonton', 'Winnipeg', 'Victoria'],
+      'Japan' => ['Tokyo', 'Osaka'],
+      'South Korea' => ['Seoul'],
+      'Germany' => ['Berlin', 'Frankfurt', 'Munich'],
+      'Brazil' => ['Rio de Janerio', 'Sao Paulo', 'Belo Horizonte', 'Salvador'] 
+    }
+    
+    @map = {
+      :zoom => Map::ZOOM_CITY,
+      :center => @locations.first.to_coordinates,
+      :geolocate => 0,
+      :locations => [],
+      :refresh => 0
+    } if @locations.present?
 
     respond_to do |format|
       format.html

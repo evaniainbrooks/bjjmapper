@@ -13,8 +13,17 @@
       %ul.nav.navbar-nav
         %li{:class => action?(:map) ? 'active' : nil}
           %a{:href => root_path(ref: 'navbar'), :data => { :'no-turbolink' => true } } Map
-        %li{:class => action?(:index) ? 'active' : nil}
-          %a{:href => locations_path(ref: 'navbar')} Index 
+        %li.dropdown
+          %a.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+            Directory
+            %span.caret
+          %ul.dropdown-menu{:role => "menu"}
+            %li
+              %a{:href => locations_path} Academies
+            %li
+              %a{:href => users_path} People
+            %li
+              %a{:href => '#'} Events
         %li{:class => action?(:meta) ? 'active' : nil}
           %a{:href => meta_path(ref: 'navbar')} Meta
       %form.navbar-form.navbar-left{:role => "search"}

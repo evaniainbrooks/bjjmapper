@@ -1,26 +1,48 @@
 .container.page
-  %h1
-    Brazilian Jiu-Jitsu Academy Directory
-    - if @locations.blank?
-      %span.small= "#{Location.count} academies worldwide"
-    - elsif @criteria[:city].present?
-      %span.small= "#{pluralize(@locations.count, 'academy')} near #{@criteria[:city]}"
-    - else
-      %span.small= "#{pluralize(@locations.count, 'academy')} in #{@criteria[:country]}"
+  .row
+    .col-md-12
+      %h1
+        Brazilian Jiu-Jitsu Academy Directory
+        - if @locations.blank?
+          %span.small= "#{Location.count} academies worldwide"
 
-  %ol.breadcrumb
-    %li
-      %a{href: root_path} Home
-    %li
-      %a{href: locations_path} Academies
-    - if (@criteria.has_key?(:country))
-      %li
-        %a{href: locations_path(country: @criteria[:country])}= @criteria[:country]
-      -if (@criteria.has_key?(:city))
+  .row
+    .col-md-12
+      %ol.breadcrumb
         %li
-          %a{href: locations_path({country: @criteria[:country], city: @criteria[:city]})}= @criteria[:city]
+          %a{href: root_path} Home
+        %li
+          %a{href: locations_path} Academies
+        - if (@criteria.has_key?(:country))
+          %li
+            %a{href: locations_path(country: @criteria[:country])}= @criteria[:country]
+          -if (@criteria.has_key?(:city))
+            %li
+              %a{href: locations_path({country: @criteria[:country], city: @criteria[:city]})}= @criteria[:city]
 
   - if @locations.present?
-    = render partial: 'table', locals: { locations: @locations }
+    .row
+      .col-md-5
+        .map-canvas{:style => 'height: 300px'}
+      .col-md-7
+        - if @criteria[:city].present?
+          %h3= "Found #{pluralize(@locations.count, 'academy')} near #{@criteria[:city]}, #{@criteria[:country]}"
+        - else
+          %h3= "Found #{pluralize(@locations.count, 'academy')} in #{@criteria[:country]}"
+        %span.small.text-info= "GPS: #{@locations.first.gps}"
+        %br/
+        %br/
+        %div
+          %big= link_to 'See on map view', root_path(zoom: Map::ZOOM_CITY, center: @locations.first.to_coordinates)
+    %br/
+    .row 
+      .col-md-12
+        = render partial: 'table', locals: { locations: @locations }
   - else
     = render partial: 'directory_index'
+
+= content_for(:scripts) do
+  :coffeescript
+    $(document).ready ->
+      mapModel = new RollFindr.Models.Map(#{@map.to_json})
+      mapView = new RollFindr.Views.MapView({ model: mapModel, el: $('.container')})

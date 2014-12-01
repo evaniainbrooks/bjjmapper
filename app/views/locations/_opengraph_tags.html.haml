@@ -1,6 +1,11 @@
+-description = "Address: #{location.object.address}, #{"Part of #{location.team_name}," if location.team?} Instructors: #{location.instructors.collect{|x| "#{x.belt_rank} belt #{x.name}" }.join(', ')}"
+
+%meta{:name => 'description', :content => description}/
 %meta{:property => 'og:title', :content => location.title}/
-%meta{:property => 'og:description', :content => location.address}/
+%meta{:property => 'og:description', :content => description}/
 %meta{:property => 'og:updated_at', :content => location.opengraph_updated_at}/
 %meta{:property => 'og:image', :content => "#{request.protocol}#{request.host}:#{request.port}#{location.opengraph_image}"}/
 %meta{:property => 'og:image:width', :content => 300}/
 %meta{:property => 'og:image:height', :content => 300}/
+%meta{:property => 'place:location:latitude', :content => location.to_coordinates[0]}/
+%meta{:property => 'place:location:longitude', :content => location.to_coordinates[1]}/

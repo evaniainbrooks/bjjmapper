@@ -2,17 +2,24 @@ require 'spec_helper'
 
 describe LocationsController do
   describe 'GET nearby' do
+    let(:location) { build(:location, title: 'self location') }
+    before { Location.stub(:find).and_return(location) }
     context 'with json format' do
-      let(:location) { build(:location, title: 'self location') }
-      let(:other_location) { build(:location, title: 'near you location') }
-      before do
-        Location.stub(:find).and_return(location)
-        Location.stub_chain(:near, :limit, :to_a).and_return([other_location])
+      context 'when there are locations nearby' do
+        let(:other_location) { build(:location, title: 'near you location') }
+        before { Location.stub_chain(:near, :limit, :to_a).and_return([other_location]) }
+        it 'returns the nearby locations' do
+          get :nearby, format: 'json', id: location
+          response.body.should_not include(location.title)
+          response.body.should include(other_location.title)
+        end
       end
-      it 'returns the nearby locations' do
-        get :nearby, format: 'json', id: location
-        response.body.should_not include(location.title)
-        response.body.should include(other_location.title)
+      context 'when there are no locations nearby' do
+        before { Location.stub_chain(:near, :limit, :to_a).and_return([]) }
+        it 'returns 204 no content' do
+          get :nearby, format: 'json', id: location
+          response.status.should eq 204 
+        end
       end
     end
   end

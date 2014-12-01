@@ -1,22 +1,19 @@
-
-- tlcountries = {'Canada' => 'CA', 'USA' => 'US', 'Brazil' => 'BR', 'Japan' => 'JP', 'South Korea' => 'KR'}
-- subcounties = {'USA' => ['Seattle', 'New York', 'San Francisco', 'Los Angeles', 'Portland'], 'Canada' => ['Vancouver', 'Halifax', 'Toronto', 'Montreal', 'Calgary', 'Edmonton', 'Winnipeg', 'Victoria'], 'Brazil' => ['Rio de Janerio', 'Sao Paulo', 'Belo Horizonte', 'Salvador'] }
-- tlteams = Team.all.sort
-
 .row
   .col-md-6
     %h2 Browse by Location
-    - tlcountries.each_pair do |k,v|
+    - @countries.each_pair do |k,v|
       %h3= link_to k, locations_path(country: v)
-      - if (subcounties.has_key?(k))
+      - if (@cities.has_key?(k))
         %ul.list-inline
-          - subcounties[k].each do |city|
-            %li= link_to city, locations_path(country: v, city: city)
+          - @cities[k].sort.each do |city|
+            %li.small= link_to city, locations_path(country: v, city: city), title: "Brazilian Jiu-Jitsu academies in #{city}"
 
   .col-md-6
     %h2 
       Browse by Team
-      %span.small= "#{tlteams.size} teams"
-    - Team.all.each do |t|
-      %h3= link_to t.name, team_path(t)
+      %span.small= "#{all_teams.size} teams"
+    %ul.list-unstyled
+      - all_teams.each do |t|
+        %li
+          %h4= link_to t.name, team_path(t), title: "#{t.name} Brazilian Jiu-Jitsu academies"
 

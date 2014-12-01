@@ -41,7 +41,8 @@ class ApplicationController < ActionController::Base
   def map
     center = params.fetch(:center, [])
     geolocate = center.present? ? 0 : 1
-    zoom = center.present? ? Map::ZOOM_LOCATION : Map::ZOOM_DEFAULT
+    zoom = params.fetch(:zoom, nil).try(:to_i)
+    zoom ||= center.present? ? Map::ZOOM_LOCATION : Map::ZOOM_DEFAULT
     @map = {
       zoom: zoom,
       center: center,
