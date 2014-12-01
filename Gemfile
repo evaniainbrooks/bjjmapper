@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 #ruby '1.9.3', :engine => 'jruby', :engine_version => '1.7.12'
 gem 'rails', '>= 4.1.0'
+gem 'i18n', '>= 0.7.0.beta1 '
 # Use SCSS for stylesheets
 gem 'sass-rails', :git => 'git://github.com/rails/sass-rails', :branch => :master
 gem 'sprockets-rails'
@@ -39,6 +40,8 @@ gem 'yui-compressor'
 gem 'dotenv-rails'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
 gem 'user-agent'
+gem 'exception_notification'
+gem 'lograge'
 
 group :development do
   gem 'capistrano', require: false
@@ -59,5 +62,7 @@ group :test, :development do
   gem 'guard-rspec', '~> 4.3.1'
   gem 'simplecov'
   gem 'rubocop'
+  gem 'letter_opener'
 end
+
 
