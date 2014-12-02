@@ -17,11 +17,6 @@ xml.tag! 'urlset', 'xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9' do
       xml.changefreq("daily")
       xml.priority(0.9)
   }
-  xml.url{
-      xml.loc("http://myapp.com/series")
-      xml.changefreq("daily")
-      xml.priority(0.9)
-  }
   locations.each do |loc|
     xml.url {
       xml.loc "#{location_url(loc)}"
