@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   get '/geocode' => 'application#geocode'
   post '/contact' => 'application#contact', :as => :contact
 
-  get '/sitemap.xml' => 'application#sitemap', :as => :sitemap
+  get '/sitemap.xml' => 'sitemaps#index', :format => 'xml', :as => :sitemap
 
   resources :locations do
     get :search, on: :collection

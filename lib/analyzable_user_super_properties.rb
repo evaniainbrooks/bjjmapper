@@ -5,7 +5,7 @@ module RollFindr
     protected
 
     def analytics_super_properties
-      agent = Agent.new(request.user_agent)
+      agent = Agent.new(request.user_agent || "")
       props = {
         browser_name: agent.name,
         browser_version: agent.version,
