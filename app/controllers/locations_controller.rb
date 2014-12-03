@@ -85,27 +85,30 @@ class LocationsController < ApplicationController
 
     head :bad_request and return unless center.is_a?(Array) && center.present?
 
-    locations = Location.near(center, distance).limit(50)
-    locations = locations.where(:team_id.in => team) if team.present?
-    locations = locations.select do |location|
-      filter_ids.include?(location.to_param)
-    end if text_filter.present?
+    @locations = Location.near(center, distance)
+    @locations = @locations.where(:team_id.in => team) if team.present?
+    @locations = @locations.to_a
 
-    head :no_content and return unless locations.present?
-
-    decorated_locations = decorated_locations_with_distance_to_center(locations, center)
+    if text_filter.present?
+      @locations.select! do |location|
+        filter_ids.include?(location.id.to_s)
+      end
+    end
 
     tracker.track('searchLocations',
       center: center,
       team: team,
       distance: distance,
       text_filter: text_filter,
-      results: decorated_locations.count,
-      location: location.as_json({})
+      filter_ids: filter_ids.try(:count),
+      results: @locations.count
     )
 
+    head :no_content and return unless @locations.present?
+
+    @locations = decorated_locations_with_distance_to_center(@locations, center)
     respond_to do |format|
-      format.json { render json: decorated_locations }
+      format.json { render json: @locations }
     end
   end
 
