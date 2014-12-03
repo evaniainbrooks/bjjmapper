@@ -1,5 +1,27 @@
 +function($) {
   "use strict";
+
+  var IdFactory = function() {
+    return {
+      markerCount: 0,
+      idQueue: [],
+      nextId: function() {
+        if (this.idQueue.length > 0) {
+          return this.idQueue.shift();
+        } else {
+          return ++this.markerCount;
+        }
+      },
+      reclaimId: function(id) {
+        this.idQueue.push(id);
+        if (this.idQueue.length == this.markerCount) {
+          this.markerCount = 0;
+          this.idQueue = [];
+        }
+      },
+    }
+  };
+
   RollFindr.Views.MapViewLocations = Backbone.View.extend({
     template: JST['templates/locations/show'],
     initialize: function(options) {
@@ -9,9 +31,9 @@
 
       this.map = options.map;
       this.markers = {};
-      this.markerCount = 0;
+      this.idFactory = new IdFactory();
 
-      RollFindr.GlobalEvents.on('markerActive', this.activeMarkerChanged)
+      RollFindr.GlobalEvents.on('markerActive', this.activeMarkerChanged);
     },
     infoWindow: new google.maps.InfoWindow(),
     addMarker: function(loc, index) {
@@ -24,21 +46,24 @@
         return;
       }
 
-      loc.attributes['marker_id'] = ++this.markerCount;
-      icon = "/assets/markers/number_" + this.markerCount + ".png";
+      loc.attributes['marker_id'] = this.idFactory.nextId();
+      icon = "/assets/markers/number_" + loc.get('marker_id') + ".png";
       position = new google.maps.LatLng(loc.get('coordinates')[0], loc.get('coordinates')[1]),
-      self.markers[id] = new google.maps.Marker({
-         id: id,
-         map: self.map,
-         title: loc.get('address'),
-         position: position,
-         icon: icon,
-         cursor: 'pointer',
-         flat: false,
-      });
+      self.markers[id] = {
+        marker_id: loc.get('marker_id'),
+        marker: new google.maps.Marker({
+           id: id,
+           map: self.map,
+           title: loc.get('address'),
+           position: position,
+           icon: icon,
+           cursor: 'pointer',
+           flat: false,
+        })
+      };
 
       if (null !== self.template) {
-        google.maps.event.addListener(self.markers[id], 'click', function() {
+        google.maps.event.addListener(self.markers[id].marker, 'click', function() {
           RollFindr.GlobalEvents.trigger('markerActive', {id: id});
         });
       }
@@ -46,13 +71,14 @@
     openInfoWindow: function(loc) {
       var self = this;
       self.infoWindow.setContent(self.template({location: loc.toJSON()}));
-      self.infoWindow.open(self.map, self.markers[loc.get('id')]);
+      self.infoWindow.open(self.map, self.markers[loc.get('id')].marker);
     },
     deleteMarker: function(id) {
       if ("undefined" !== typeof(this.markers[id])) {
-        this.markers[id].setMap(null);
+        this.markers[id].marker.setMap(null);
+        this.idFactory.reclaimId(this.markers[id].marker_id);
+        delete this.markers[id].marker;
         delete this.markers[id];
-        --this.markerCount;
       }
     },
     activeMarkerChanged: function(e) {
