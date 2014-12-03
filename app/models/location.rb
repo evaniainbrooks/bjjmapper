@@ -32,6 +32,10 @@ class Location
     end
   end
 
+  before_save :canonicalize_phone
+  before_save :canonicalize_website
+  before_save :canonicalize_facebook
+
   field :coordinates, :type => Array
   field :street
   field :city
@@ -108,5 +112,20 @@ class Location
       :team_name => team_name,
       :address => address
     })
+  end
+
+
+  private
+
+  def canonicalize_website
+    self.website.gsub!(/^https?:\/\//, '') if self.website_changed?
+  end
+
+  def canonicalize_facebook
+    self.facebook.gsub!(/(^https?:\/\/(www\.)?)|facebook\.com\/|fb\.com\//, '') if self.facebook_changed?
+  end
+
+  def canonicalize_phone
+    self.phone.gsub!(/[^\d]/, '') if self.phone_changed?
   end
 end
