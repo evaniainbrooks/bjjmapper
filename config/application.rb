@@ -34,7 +34,7 @@ module RollFindr
     config.action_mailer.default_options = {from: 'info@bjjmapper.com'}
 
     config.assets.precompile << /\.(?:svg|eot|woff|ttf)\z/
-
+    config.unfingerprint_assets = ["*.svg", "*.eot", "*.woff", "*.ttf", "markers/*"]
     config.lograge.enabled = true
 
     config.lograge.custom_options = lambda do |event|
