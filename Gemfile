@@ -42,6 +42,7 @@ gem 'dotenv-deployment', require: 'dotenv/deployment'
 gem 'user-agent'
 gem 'exception_notification'
 gem 'lograge'
+gem 'mongoid-paperclip', require: 'mongoid_paperclip' 
 
 group :development do
   gem 'capistrano', require: false
