@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   resources :users, :only => [:show, :create, :update]
-  resources :teams, :only => [:show, :index]
+  resources :teams, :only => [:show, :index, :update]
   root 'application#map'
 
   get 'search/:query' => 'application#search'
