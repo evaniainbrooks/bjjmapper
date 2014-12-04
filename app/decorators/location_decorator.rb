@@ -117,7 +117,7 @@ class LocationDecorator < Draper::Decorator
 
   def as_json(args)
     # Select which decorator methods override the defaults from object
-    object.as_json(args).merge(
+    object.as_json(args).symbolize_keys.merge(
       image: image,
       #address: address,
       phone: phone,

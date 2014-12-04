@@ -12,4 +12,20 @@ class TeamDecorator < Draper::Decorator
   def image
     h.image_path(object.image)
   end
+  
+  def updated_at
+    object.updated_at.present? ? "updated #{h.time_ago_in_words(object.updated_at)} ago" : nil
+  end
+
+  def created_at
+    object.created_at.present? ? "created #{h.time_ago_in_words(object.created_at)} ago" : nil
+  end
+
+  def as_json(args)
+    object.as_json(args).symbolize_keys.merge(
+      image: image,
+      created_at: created_at,
+      updated_at: updated_at
+    )
+  end
 end
