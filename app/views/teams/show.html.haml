@@ -1,32 +1,56 @@
 .container.page
-  = form_for(team, html: { class: 'form ' + edit_mode_classes }) do |f|
+  = form_for(team, html: { multipart: true, class: 'form ' + edit_mode_classes }) do |f|
     .row
       .col-md-12
         = render partial: 'breadcrumb', locals: { team: team }
     .row
       .col-md-2
         .display-field
-          %img.center-block{:src => team.image}
+          %img.center-block{:src => team.avatar.url(:thumb)}
         .edit-field
-          %img.center-block.edit-image{:src => team.image}
+          %img.center-block.edit-image{:src => team.avatar.url(:thumb)}
+          = f.file_field :avatar, class: 'input-md form-control'
       .col-md-6
-        %h1
+        .edit-field
+          = f.label :name, class: 'small'
+          = f.text_field :name, placeholder: 'Name of the team/association (eg. Alliance)', class: 'form-control input-lg'
+        %h1.display-field
           = team.name
           - if team.parent_team.present?
             %br/
             %small= link_to "Part of #{team.parent_team.name}", team_path(team.parent_team)
         .edit-field
-          = f.label :description
+          = f.label :parent_team_id, class: 'small'
+          = f.select :parent_team_id, options_for_select(all_teams.map { |team| [team.name, team.id, {'data-img-src' => team.image}] }, team.parent_team_id), {:include_blank => true}, class: 'form-control  input-md'
+          = f.label :description, class: 'small'
           = f.text_area :description, placeholder: 'Provide a description of the team/association', class: 'form-control', rows: 4
         %p.display-field= team.description
+      .col-md-2
+        = render partial: 'subnav', locals: { team: team }
     %hr/
     .row
       .col-md-12
         %h3= "#{pluralize(team.locations.count, 'Academy')}"
         = render partial: 'locations/table', locals: { locations: team.locations }
 
-    %hr/
-    .row
+    .row.edit-field.edit-control
       .col-md-12
-        %h3 Members
+        %h3 Edit Controls
+      .col-md-12
+        %pre.small= JSON.pretty_generate(team.as_json({}))
+        %br/
+      .col-md-12
+        .pull-right
+          %button.delete-field.btn.btn-danger.btn-md{:type => 'button',
+            :data => { :method => :delete,
+                       :url => team_path(team),
+                       :title => 'Are you sure you want to delete this team?',
+                       :body => "You are performing this action as <b>#{current_user.try(:name)}</b>. Press 'Confirm' to permanently delete this team. Note that this action cannot be un-done." } }
+            %i.fa.fa-trash
+            Delete Team
+
+          &nbsp;&nbsp;
+          %button.btn.btn-default.btn-md{:type => 'button', 'data-cancel-edit' => true} Cancel Editing
+          %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes
+
 
