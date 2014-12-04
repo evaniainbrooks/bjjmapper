@@ -187,7 +187,7 @@ describe LocationsController do
         let(:red_location) { create(:location, team: red_team, title: 'Red location') }
         let(:blue_location) { create(:location, team: blue_team, title: 'Blue location', coordinates: red_location.coordinates) }
         it 'returns specific team locations' do
-          get :search, center: blue_location.coordinates, distance: 10.0, team: [blue_team.to_param], format: 'json'
+          get :search, center: blue_location.coordinates, distance: 10.0, team: [blue_team.id], format: 'json'
           response.body.should include(blue_location.title)
           response.body.should_not include(red_location.title)
         end

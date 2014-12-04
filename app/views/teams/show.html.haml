@@ -1,3 +1,11 @@
+= content_for(:title) do
+  = "#{team.name} - Brazilian Jiu-Jitsu Academy Directory"
+= content_for(:head) do
+  %meta{:name => 'description', :content => team.description || "Brazilian Jiu-Jitsu Academy Directory"}/
+  %meta{:property => 'og:title', :content => team.name}/
+  %meta{:property => 'og:description', :content => team.description || "Brazilian Jiu-Jitsu Academy Directory"}/
+  %meta{:property => 'og:image', :content => "#{request.protocol}#{request.host}:#{request.port}#{team.image}"}/
+
 .container.page
   = form_for(team, html: { multipart: true, class: 'form ' + edit_mode_classes }) do |f|
     .row

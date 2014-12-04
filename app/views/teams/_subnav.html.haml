@@ -1,0 +1,4 @@
+%ul.nav.small
+  %li.display-field= link_to 'Edit Team', team_path(team, edit: 1), data: { :'begin-edit' => true }
+  %li.edit-field= link_to 'Cancel Editing', team_path(team, edit: 0), data: { :'cancel-edit' => true }
+  %li= link_to 'Report', '#', class: 'report', 'data-report-item' => true
