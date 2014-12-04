@@ -23,13 +23,14 @@
       type: 'primary',
       confirm: 'Confirm',
       cancel: 'Cancel',
-      method: 'POST' 
+      method: 'POST'
     };
-    
+
     var templateArgs = $.extend({}, defaults, data);
     var dialog = template(templateArgs);
-    
-    $('body').append(dialog);
+
+
+    $('.confirm-dialog').remove();
     $(dialog).modal('show');
   };
 }(jQuery, _);
