@@ -1,10 +1,11 @@
 .container-fluid.footer
   .row
-    .col-md-12.text-left
+    .col-md-6.text-left.small
       &copy; 2014 BJJMapper
       %span &#124;
       = link_to 'Contact Us', meta_path
       %span &#124;
       = link_to 'Sitemap', sitemap_path
-      .pull-right= render partial: 'mixpanel_partner'
+    .col-md-6.text-right
+      = render partial: 'mixpanel_partner'
 
