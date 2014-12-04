@@ -7,11 +7,11 @@
     - else
       = location.team_name
 .edit-field
-  = f.label :title
+  = f.label :title, class: 'small'
   = f.text_field :title, class: 'form-control input-lg'
-  = f.label :team_id, 'Team'
+  = f.label :team_id, 'Team', class: 'small'
   = f.select :team_id, options_for_select(all_teams.map { |team| [team.name, team.id, {'data-img-src' => team.image}] }, location.team_id), {:include_blank => true}, class: 'form-control  input-md'
-  = f.label :description
-  = f.text_area :description, placeholder: 'Provide a description of the academy', class: 'form-control', rows: 4
+  = f.label :description, class: 'small'
+  = f.text_area :description, placeholder: 'Provide a description of the academy', class: 'form-control', rows: 3
 %p.display-field= location.description
 

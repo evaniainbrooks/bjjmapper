@@ -48,7 +48,7 @@
       .col-md-12
         %h3 Edit Controls
       .col-md-12
-        %p.small= location.to_json
+        %pre.small= JSON.pretty_generate(location.as_json({}))
         %br/
       .col-md-12
         .pull-right
