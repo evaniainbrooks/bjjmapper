@@ -22,6 +22,7 @@
 html, body {
   margin: 0px;
   padding: 0px;
+  height: 100%;
 }
 
 .location-list {
@@ -164,6 +165,10 @@ html, body {
         .active-content {
           display: inherit;
         }
+
+        img {
+          opacity: 1.0;
+        }
       }
     }
     .distance {
@@ -192,6 +197,7 @@ html, body {
       margin-left: 90px;
     }
     img {
+      opacity: 0.5;
       width: 42px;
       height: 42px;
       margin-right: 7px;
