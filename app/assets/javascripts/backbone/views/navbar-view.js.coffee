@@ -17,5 +17,7 @@ class RollFindr.Views.NavbarView extends Backbone.View
       query: searchQuery
       location: searchLocation
     })
+
+    @$('[name="location"]').val('')
     e.preventDefault()
 

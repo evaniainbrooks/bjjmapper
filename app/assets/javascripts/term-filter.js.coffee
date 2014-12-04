@@ -1,10 +1,12 @@
 #= require backbone/models/location
 class TermFilter
   setQuery: (q, center, distance)->
-    @collection.reset() if @isEmpty()
-
     if (@query != q)
       @query = q
+
+    if @isEmpty()
+      @collection.reset()
+    else
       @collection.fetch({data: {center: center, distance: distance, query: @query}})
 
   query: ""

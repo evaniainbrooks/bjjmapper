@@ -94,7 +94,7 @@ class Location
   end
 
   def address
-    [street, city, state, country, postal_code].compact.join(', ')
+    [street, city, state, country, postal_code].select(&:present?).join(', ')
   end
 
   def team_name

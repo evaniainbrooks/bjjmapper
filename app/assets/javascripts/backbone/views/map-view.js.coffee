@@ -114,12 +114,16 @@ class RollFindr.Views.MapView extends Backbone.View
 
           newCenter = new google.maps.LatLng(result.lat, result.lng)
           @map.setCenter(newCenter)
+          @setTermFilterQuery(e.query)
       })
+    else
+      @setTermFilterQuery(e.query)
 
-    center = [@map.getCenter().lat(), @map.getCenter().lng()]
-    distance = Math.circleDistance(@map.getCenter(), @map.getBounds().getNorthEast())
-    distance *= 3
-    @termFilter.setQuery(e.query, center, distance)
+  setTermFilterQuery: (query)->
+      center = [@map.getCenter().lat(), @map.getCenter().lng()]
+      distance = Math.circleDistance(@map.getCenter(), @map.getBounds().getNorthEast())
+      distance *= 3
+      @termFilter.setQuery(query, center, distance)
 
   geolocate: ->
     @setCenterGeolocate =>
