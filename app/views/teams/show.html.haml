@@ -14,10 +14,10 @@
     .row
       .col-md-2
         .display-field
-          %img.center-block{:src => team.avatar.url(:thumb)}
+          %img.center-block{:src => team.image}
         .edit-field
-          %img.center-block.edit-image{:src => team.avatar.url(:thumb)}
-          = f.file_field :avatar, class: 'input-md form-control'
+          %img.center-block.edit-image{:src => team.image}
+          -#= f.file_field :avatar, class: 'input-md form-control'
       .col-md-6
         .edit-field
           = f.label :name, class: 'small'
