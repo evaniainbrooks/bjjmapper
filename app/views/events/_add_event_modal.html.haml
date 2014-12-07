@@ -57,9 +57,9 @@
                             = check_box_tag 'event[is_all_day]'
                             %strong All Day Event
                       .form-group
-                        %label.col-md-4.control-label{:for => "event[recurrence]"} Repeat
+                        %label.col-md-4.control-label{:for => "event[event_recurrence]"} Repeat
                         .col-md-8
-                          = f.select :recurrence, select_recurrence, {}, class: 'form-control input-md'
+                          = f.select :event_recurrence, select_recurrence, {}, class: 'form-control input-md'
         .modal-footer
           %button.btn.btn-default{:type => 'button', 'data-dismiss' => 'modal'} Cancel
           %button.btn.btn-primary{:type => 'submit'} Create Event
