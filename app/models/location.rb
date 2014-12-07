@@ -113,7 +113,10 @@ class Location
       :address => address
     })
   end
-
+  
+  def schedule
+    @location_schedule ||= LocationSchedule.new(self.id)
+  end
 
   private
 

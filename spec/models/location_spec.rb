@@ -9,6 +9,14 @@ describe Location do
     Location.new.decorate.should be_decorated
   end
 
+  describe '.schedule' do
+    subject { create(:location) }
+    before { LocationSchedule.should_receive(:new).with(subject.id) }
+    it 'lazy initializes the LocationSchedule with our id' do
+      subject.schedule
+    end
+  end
+
   describe '.as_json' do
     it 'returns the object as json' do
       json = build(:location).as_json({})
@@ -21,7 +29,6 @@ describe Location do
       build(:location, title: nil).should_not be_valid
     end
   end
-
 
   describe 'before save callback' do
     subject { build(:location, phone: '(902)', website: 'http://test.com', facebook: 'http://www.facebook.com/page') }
