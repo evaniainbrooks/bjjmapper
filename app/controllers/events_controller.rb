@@ -15,17 +15,17 @@ class EventsController < ApplicationController
   def index
     start_param = params.fetch(:start, nil)
     head :bad_request and return false unless start_param.present?
-    start_param = DateTime.parse(start_param)
+    start_param = DateTime.parse(start_param).to_time
 
     end_param = params.fetch(:end, nil)
     head :bad_request and return false unless end_param.present?
-    end_param = DateTime.parse(end_param)
+    end_param = DateTime.parse(end_param).to_time
 
-    @events = @location.events.between_time(start_param, end_param)
+    @events = @location.schedule.events_between_time(start_param, end_param)
 
     status = @events.count == 0 ? :no_content : :ok
     respond_to do |format|
-      format.json { render status: status, json: @events.decorate }
+      format.json { render status: status, json: EventDecorator.decorate_collection(@events) }
     end
   end
 
