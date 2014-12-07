@@ -46,6 +46,15 @@ describe Event do
     it 'is invalid without an instructor' do
       build(:event, instructor: nil).should_not be_valid
     end
+    it 'is invalid without a start time' do
+      build(:event, starting: nil).should_not be_valid
+    end
+    it 'is invalid without an end time' do
+      build(:event, ending: nil).should_not be_valid
+    end
+    it 'is invalid if end time is before start time' do
+      build(:event, starting: 1.hour.ago, ending: 2.hours.ago).should_not be_valid
+    end
   end
   describe '.as_json' do
 
