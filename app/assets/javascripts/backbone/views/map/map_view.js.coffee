@@ -1,7 +1,7 @@
 #= require distance
 #= require term-filter
 #= require backbone/views/team-list-view
-#= require backbone/views/map-create-location-view
+#= require backbone/views/map/create_location_view
 
 class RollFindr.Views.MapView extends Backbone.View
   el: $('.wrapper')
@@ -33,8 +33,8 @@ class RollFindr.Views.MapView extends Backbone.View
     @termFilter = new TermFilter()
     @teamFilter = new RollFindr.Views.TeamListView({el: @$('.filter-list .team-list')})
 
-    @locationsView = new RollFindr.Views.MapViewLocations({map: @map, collection: @filteredLocations})
-    @listView = new RollFindr.Views.MapViewList({
+    @locationsView = new RollFindr.Views.MapMarkerView({map: @map, collection: @filteredLocations})
+    @listView = new RollFindr.Views.MapLocationsListView({
       el: @$('.location-list')
       collection: @filteredLocations
       filteredCount: 0
@@ -175,3 +175,4 @@ class RollFindr.Views.MapView extends Backbone.View
       error: =>
         toastr.error('Failed to refresh map')
     })
+

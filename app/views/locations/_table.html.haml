@@ -11,10 +11,10 @@
   - locations.each_with_index do |location, i|
     %tr
       %td
-        = link_to(location.title, location_path(location, ref: "index#{i}"))
+        = link_to(location.title, location_path(location, ref: "index#{i}"), title: location.title)
       %td
         - if location.team.present?
-          = link_to(location.team_name, team_path(location.team, ref: "index#{i}"))
+          = link_to(location.team_name, team_path(location.team, ref: "index#{i}"), title: "#{location.team_name} gyms")
         - else
           = location.team_name
       %td

@@ -22,7 +22,7 @@
     }
   };
 
-  RollFindr.Views.MapViewLocations = Backbone.View.extend({
+  RollFindr.Views.MapMarkerView = Backbone.View.extend({
     template: JST['templates/locations/show'],
     initialize: function(options) {
       _.bindAll(this, 'render', 'activeMarkerChanged');

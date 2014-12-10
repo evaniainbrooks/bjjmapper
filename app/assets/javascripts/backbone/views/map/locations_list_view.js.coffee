@@ -1,4 +1,4 @@
-class RollFindr.Views.MapViewList extends Backbone.View
+class RollFindr.Views.MapLocationsListView extends Backbone.View
   el: $('.location-list')
   tagName: 'div'
   template: JST['templates/locations/map-list-item']

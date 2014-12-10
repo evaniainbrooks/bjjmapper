@@ -1,19 +1,34 @@
 .row
   .col-md-6
     %h2 Browse by Location
+  .col-md-6
+    %h2
+      Browse by Team
+      %span.small= "#{all_teams.size} teams"
+
+.row
+  .col-md-6.col-md-offset-6
+    - all_teams.select{|x|x.image}.each do |team|
+      = link_to team_path(team), title: "#{team.name} gym locations", class: 'link-unstyled' do
+        = image_tag team.image, alt: "#{team.name} logo", style: 'border: 1px solid #ccc; width: 30px; height: 30px; margin-bottom: 5px;'
+.row
+  .col-md-6
     - @countries.each_pair do |k,v|
-      %h3= link_to k, locations_path(country: v)
+      %h3= link_to k, locations_path(country: v), title: "List of Brazilian Jiu-Jitsu gyms in #{k}"
       - if (@cities.has_key?(k))
         %ul.list-inline
           - @cities[k].sort.each do |city|
-            %li.small= link_to city, locations_path(country: v, city: city), title: "Brazilian Jiu-Jitsu academies in #{city}"
+            %li.small= link_to city, locations_path(country: v, city: city), title: "List of Brazilian Jiu-Jitsu gyms in #{city}, #{k}"
 
-  .col-md-6
-    %h2 
-      Browse by Team
-      %span.small= "#{all_teams.size} teams"
-    %ul.list-unstyled
-      - all_teams.each do |t|
+  - groups = all_teams_groups
+  - groups[nil].each_slice(groups[nil].size/2).each do |teams|
+    %ul.col-md-3.list-unstyled
+      - teams.each do |team|
         %li
-          %h4= link_to t.name, team_path(t), title: "#{t.name} Brazilian Jiu-Jitsu academies"
-
+          - if groups[team]
+            %h3= link_to(team.name, team_path(team), title: "List #{team.name} Brazilian Jiu-Jitsu gyms")
+            %ul.list-inline
+              - groups[team].each do |t|
+                %li.small= link_to(t.name, team_path(t), title: "List #{t.name} Brazilian Jiu-Jitsu gyms")
+          - else
+            %h3= link_to(team.name, team_path(team), title: "List #{team.name} Brazilian Jiu-Jitsu gyms")

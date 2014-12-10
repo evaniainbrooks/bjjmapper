@@ -1,7 +1,7 @@
 //= require backbone/views/add-instructor-view
 //= require backbone/views/calendar-view
 //= require backbone/views/location-nearby-view
-//= require backbone/views/map-view
+//= require backbone/views/map/map_view
 
 +function($) {
   "use strict";

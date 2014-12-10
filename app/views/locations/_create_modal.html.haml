@@ -1,27 +1,25 @@
 .create-location-dialog.create-location-full-dialog.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "createLocation", :role => "dialog", :tabindex => "-1"}
   = form_for(Location.new, html: { class: 'form-horizontal' } ) do |f|
-    .modal-dialog.modal-lg
+    .modal-dialog
       .modal-content
         .modal-header
           %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
           %h4
             %i.fa.fa-map-marker
             Tell us about the academy
-          %p.small You can add additional details and upload a picture on the following page.
         .modal-body
           .container-fluid
             .row
-              .col-md-2.col-md-offset-1
-                %img.edit-image{'data-default-src' => image_path(LocationDecorator::DEFAULT_IMAGE), :alt => 'logo', :src => image_path(LocationDecorator::DEFAULT_IMAGE)}/
-              .col-md-4
+              .col-md-3
+                %img.center-block.edit-image{'data-default-src' => image_path(LocationDecorator::DEFAULT_IMAGE), :alt => 'logo', :src => image_path(LocationDecorator::DEFAULT_IMAGE)}/
+              .col-md-8
                 %fieldset
                   .form-group
                     %label.control-label{:for => "location[title]"} Name*
-                    = f.text_field :title, placeholder: 'The name of the academy', class: 'form-control input-md'
+                    = f.text_field :title, placeholder: 'The name of the academy', class: 'form-control input-lg'
                   .form-group
                     %label.control-label{:for => "location[team]"} Team
-                    = f.select :team_id, options_for_select(all_teams.map { |team| [team.name, team.id, {'data-img-src' => team.image}] }), { include_blank: true }, class: 'form-control  input-md'
-              .col-md-4.col-md-offset-1
+                    = f.select :team_id, grouped_options_for_select(all_teams_select_groups), { include_blank: true }, { class: 'form-control  input-md' }
                 %fieldset
                   .form-group
                     %label.control-label{:for => 'location[street]'} Street*
@@ -30,12 +28,6 @@
                     %label.control-label{:for => 'location[postal_code]'} Postal code*
                     = f.text_field :postal_code, class: 'postal-code form-control input-md'
 
-            .row
-              .col-md-offset-3.col-md-9
-                %fieldset
-                  .form-group
-                    %label.control-label{:for => "location[description]"} Description
-                    = f.text_area :description, placeholder: 'A brief description of your academy', class: 'form-control'
         .modal-footer
           %span.pull-left.small.clear *Denotes required field
           %button.btn.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Cancel
