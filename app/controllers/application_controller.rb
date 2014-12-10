@@ -74,7 +74,7 @@ class ApplicationController < ActionController::Base
     )
 
     FeedbackMailer.feedback_email(name, email, message, current_user).deliver
-    redirect_to meta_path
+    redirect_to meta_path(contacted: 1)
   end
 
   def report
@@ -97,8 +97,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def meta
-
+  def meta 
   end
 
   protected

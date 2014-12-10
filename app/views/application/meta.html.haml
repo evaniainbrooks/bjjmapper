@@ -15,16 +15,9 @@
         %li How many tournaments is the IBJJF hosting in Canada this year?
       %p We hope BJJMapper can help you answer these questions, and more.
 
-  %hr/
   .row
-    .col-md-12
-      %h2.text-success We need your help to make BJJMapper a success!
-      %p
-        Do you have skills on and off the mat? BJJMapper is looking for help with:
-        %ul
-          %li Front-End Web Development
-          %li UX/Graphic Design
-  %hr/
+    = render partial: 'meta_contact_message' if params.key?(:contacted)
+
   .row
     .col-md-12
       %h2 Send us a message
