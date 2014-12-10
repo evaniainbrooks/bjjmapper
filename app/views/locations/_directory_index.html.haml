@@ -1,34 +1,42 @@
 .row
-  .col-md-6
+  .col-md-12
     %h2 Browse by Location
-  .col-md-6
+.row
+  - @countries.keys.sort.each_slice(@countries.size/2).each do |countries|
+    .col-md-6
+      - countries.each do |country|
+        %h3= link_to country, locations_path(country: @countries[country]), title: "List of Brazilian Jiu-Jitsu gyms in #{country}"
+        - if (@cities.has_key?(country))
+          %ul.list-inline
+            - @cities[country].sort.each do |city|
+              %li.small= link_to city, locations_path(country: country, city: city), title: "List of Brazilian Jiu-Jitsu gyms in #{city}, #{country}"
+%hr/
+.row
+  .col-md-12
     %h2
       Browse by Team
       %span.small= "#{all_teams.size} teams"
-
-.row
-  .col-md-6.col-md-offset-6
     - all_teams.select{|x|x.image}.each do |team|
       = link_to team_path(team), title: "#{team.name} gym locations", class: 'link-unstyled' do
         = image_tag team.image, alt: "#{team.name} logo", style: 'border: 1px solid #ccc; width: 30px; height: 30px; margin-bottom: 5px;'
-.row
-  .col-md-6
-    - @countries.each_pair do |k,v|
-      %h3= link_to k, locations_path(country: v), title: "List of Brazilian Jiu-Jitsu gyms in #{k}"
-      - if (@cities.has_key?(k))
-        %ul.list-inline
-          - @cities[k].sort.each do |city|
-            %li.small= link_to city, locations_path(country: v, city: city), title: "List of Brazilian Jiu-Jitsu gyms in #{city}, #{k}"
 
   - groups = all_teams_groups
-  - groups[nil].each_slice(groups[nil].size/2).each do |teams|
+  - groups[nil].each_slice(groups[nil].size/4).each do |teams|
     %ul.col-md-3.list-unstyled
       - teams.each do |team|
         %li
           - if groups[team]
-            %h3= link_to(team.name, team_path(team), title: "List #{team.name} Brazilian Jiu-Jitsu gyms")
+            %h3
+              = link_to(team.name, team_path(team), title: "List #{team.name} Brazilian Jiu-Jitsu gyms")
+              %span.small
+                = surround '(', ')' do
+                  = team.locations.count
             %ul.list-inline
               - groups[team].each do |t|
                 %li.small= link_to(t.name, team_path(t), title: "List #{t.name} Brazilian Jiu-Jitsu gyms")
           - else
-            %h3= link_to(team.name, team_path(team), title: "List #{team.name} Brazilian Jiu-Jitsu gyms")
+            %h3
+              = link_to(team.name, team_path(team), title: "List #{team.name} Brazilian Jiu-Jitsu gyms")
+              %span.small
+                = surround '(', ')' do
+                  = team.locations.count
