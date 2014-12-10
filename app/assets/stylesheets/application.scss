@@ -110,16 +110,16 @@ html, body {
 
 .wrapper {
   .map-canvas {
-    position: absolute !important;
-    top: 0;
+    position: fixed !important;
+    top: 50px;
+    right: 33.3333%;
+    @media screen and (max-width: 1000px) {
+      position: absolute !important;
+      top: 0;
+      right: 0;
+    }
     left: 0;
-    right: 0;
     bottom: 0;
-  }
-}
-
-.wrapper {
-  .map-canvas {
     border: 3px solid transparent;
   }
   &.map-edit-mode {
@@ -128,7 +128,6 @@ html, body {
     }
   }
 }
-
 
 .wrapper {
   position:absolute;
