@@ -69,7 +69,7 @@ describe ApplicationController do
     end
     it 'mails the message' do
       post :contact, name: 'bob', email: 'job@bbbj.com', message: 'whoahwhoah'
-      response.should redirect_to(meta_path, contacted: 1)
+      response.should redirect_to(meta_path(contacted: 1))
     end
   end
   describe 'POST report' do
