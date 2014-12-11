@@ -1,6 +1,7 @@
 class EventsController < ApplicationController
   before_action :set_location
   before_action :ensure_signed_in, only: [:destroy, :create, :update]
+  decorates_assigned :event, :events
 
   def create
     @event = Event.new(create_params)
@@ -8,7 +9,7 @@ class EventsController < ApplicationController
 
     status = @event.valid? ? :ok : :bad_request
     respond_to do |format|
-      format.json { render status: status, json: @event }
+      format.json { render status: status, json: event }
     end
   end
 
@@ -25,7 +26,7 @@ class EventsController < ApplicationController
 
     status = @events.count == 0 ? :no_content : :ok
     respond_to do |format|
-      format.json { render status: status, json: EventDecorator.decorate_collection(@events) }
+      format.json { render status: status, json: events }
     end
   end
 

@@ -1,5 +1,5 @@
 - color_count = 3
-.col-md-12.instructor-card{:class => local_assigns[:color_key] ? "schedule-color-#{user_counter}" : nil}
+.instructor-card{:class => local_assigns[:color_key] ? "schedule-color-#{user_counter}" : nil}
   .container-fluid
     %button.edit-field.close.remove-user{"aria-hidden" => "true", :type => "button", "data-id" => user.id} &times;
   %a.thumbnail{'data-color-ordinal' => user_counter, 'data-user-id' => user.to_param, :href => user_path(user, ref: "card#{user_counter}"), :class => local_assigns[:color_key] ? "schedule-color-#{user_counter}" : nil}
@@ -9,4 +9,6 @@
       = render partial: 'users/belt', locals: { user: user }
       %p= user.summary
       - if local_assigns[:color_key]
-        %div.color-legend
+        .color-legend.text-right
+          %span.small.text-muted Legend
+          %div

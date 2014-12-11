@@ -1,12 +1,12 @@
 <li class="location-card">
   <a class="thumbnail" href="<%= Routes.location_path(location) %>">
-    <div class="text-center col-md-3">
+    <div class="text-center pull-left">
       <i class="center-block fa-3x fa fa-arrow-up direction-<%= location.bearing_direction %>"></i>
-      <span class="small text-info distance">
+      <p style="padding-left: 5px;" class="small text-info distance">
         <%= location.bearing_name %> (<%= location.distance %>)
-      </span>
+      </p>
     </div>
-    <div class="col-md-9">
+    <div class="pull-left">
       <div class="caption">
         <p class="text-primary">
           <%= location.title %>

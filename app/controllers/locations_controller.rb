@@ -19,7 +19,7 @@ class LocationsController < ApplicationController
 
   def nearby
     distance = params.fetch(:distance, 5).to_i
-    count = params.fetch(:count, 5).to_i
+    count = params.fetch(:count, 4).to_i
 
     @nearby_locations = Location.near(@location.to_coordinates, distance).limit(count+1).to_a
     @nearby_locations.reject!{|loc| loc.to_param.eql?(@location.to_param)}

@@ -3,8 +3,8 @@ class EventDecorator < Draper::Decorator
   decorates_finders
 
   def duration
-    s = object.starting.strftime('%l:%M%p').strip()
-    e = object.ending.strftime('%l:%M%p').strip()
+    s = object.starting.try(:strftime, '%l:%M%p').try(:strip)
+    e = object.ending.try(:strftime, '%l:%M%p').try(:strip)
     "#{s}-#{e}"
   end
 

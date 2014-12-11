@@ -6,7 +6,9 @@
           %button.close{'data-dismiss' => 'modal', 'type' => 'button'}
             %span{'aria-hidden' => 'true'} &times;
             %span.sr-only Close
-          %h4 Create Event
+          %h4 
+            %i.fa.fa-calendar
+            Create Event
         .modal-body
           %ul.nav.nav-tabs{:role => 'tablist'}
             %li.active
@@ -62,4 +64,4 @@
                           = f.select :event_recurrence, select_recurrence, {}, class: 'form-control input-md'
         .modal-footer
           %button.btn.btn-default{:type => 'button', 'data-dismiss' => 'modal'} Cancel
-          %button.btn.btn-primary{:type => 'submit'} Create Event
+          %button.btn.btn-success{:disabled => true, :type => 'submit'} Create Event

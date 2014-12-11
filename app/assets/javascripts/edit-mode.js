@@ -10,8 +10,13 @@
       } else {
         $('.login-modal').modal('show');
       }
-      e.preventDefault();
-      return false;
+
+      if (!e.currentTarget.data('follow-href')) {
+        e.preventDefault();
+        return false;
+      } else {
+        return true;
+      }
     });
   });
 }(_,jQuery);

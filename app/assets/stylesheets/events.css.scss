@@ -6,12 +6,16 @@
   margin: 0px !important;
 }
 
-.color-legend {
-  float: right;
-  position: relative;
+.color-legend div {
+  display: inline-block;
   width: 20px;
   height: 20px;
   border: 1px solid #ccc;
+}
+
+.color-legend span {
+  vertical-align: text-top;
+  line-height: 1.0em;
 }
 
 $color0: hsl(200%, 70%, 50%);
@@ -36,7 +40,7 @@ $colors: $color0, $color1, $color2, $color3;
   }
 
   .schedule-color-#{$i - 1} {
-    .color-legend {
+    .color-legend div {
       background-color: lighten(nth($colors, $i), 40%);
       border-color: nth($colors, $i) !important;
     }

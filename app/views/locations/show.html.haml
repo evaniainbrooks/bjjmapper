@@ -4,10 +4,26 @@
 .container.show-location.page
   = form_for(location, html: { class: 'form ' + edit_mode_classes }) do |f|
     .row
-      .col-md-12
+      .col-md-10
         = render partial: 'breadcrumb', locals: { location: location }
-        = render partial: 'create_message' if created?
+      .col-md-2.text-right
+        .btn-group.display-field.pull-right{:style => 'margin-left: 5px;'}
+          %button.btn.btn-default.btn-sm{:type => "button", 'data-begin-edit' => true} Edit
+          %button.btn.btn-default.btn-sm.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", :type => "button"}
+            %span.caret
+            %span.sr-only Toggle Dropdown
+          %ul.dropdown-menu{:role => "menu"}
+            %li
+              %a.add-instructor{:href => "#instructor"} Add Instructor
+            %li
+              %a{:href => "#schedule", 'data-follow-href' => true, 'data-begin-edit' => true} Add Event
+        %button.pull-right.btn.btn-default.edit-field.btn-sm{:style => 'margin-left: 5px', :'data-cancel-edit' => true } Cancel
+        %button.pull-right.btn.btn-default.btn-sm{'data-report-item' => true}
+          %span.report Report
     .row
+      .col-md-12
+        = render partial: 'create_message' if created?
+    .row{:style => 'min-height: 258px;'}
       .col-md-2
         .display-field
           %img{:src => location.image, :class => 'center-block'}/
@@ -22,17 +38,15 @@
         %h3 Location
         %a{:name => 'location'}
         = render partial: 'show_address', locals: { location: location, f: f }
-      .col-md-5{:style => 'height: 300px'}
-        %div.map-canvas
+      .col-md-5
+        %div.map-canvas{:style => 'height: 300px'}
         -# This is filled in by google maps
-      .col-md-4.col-md-offs
+        %h4.text-center= link_to 'See on larger map', root_path(:center => location.to_coordinates), :data => { :'no-turbolink' => true }
+      .col-md-4
         %div.nearby-locations
           -# This is filled in by locations/nearby template
           %h3 Nearby Academies
           %ul.list-unstyled.items
-    .row.display-field
-      .col-md-5.col-md-offset-3.text-center
-        %big= link_to 'See on larger map', root_path(:center => location.to_coordinates), :data => { :'no-turbolink' => true }
     %hr/
     .row
       .col-md-4

@@ -2,7 +2,21 @@ class RollFindr.Views.CreateEventView extends Backbone.View
   el: $('.add-event-dialog'),
   events: {
     'submit form': 'formSubmit'
+    'keyup [name="event[title]"]': 'enableSubmit'
   }
+  enableSubmit: ->
+    btn = @$('button[type="submit"]')
+    if @hasTitle() && @isEndAfterStart()
+      btn.removeAttr('disabled')
+    else
+      btn.attr('disabled', true)
+
+  hasTitle: ->
+    @$('[name="event[title]"]').val().length > 0
+
+  isEndAfterStart: ->
+    true
+
   formSubmit: (e)->
     e.preventDefault()
 
@@ -24,12 +38,14 @@ class RollFindr.Views.CreateEventView extends Backbone.View
       type: method,
       url: action,
       data: data,
-      success: =>
+      success: (eventData)=>
         @$el.modal('hide')
+        $('.scheduler').fullCalendar('addEventSource', [eventData])
+        toastr.success("Successfully added event to the calendar.")
     })
 
   initialize: ->
-    _.bindAll(this, 'formSubmit')
+    _.bindAll(this, 'enableSubmit', 'formSubmit')
 
   render: (start, end)->
     @start = start
