@@ -1,4 +1,4 @@
-.login-modal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+.login-modal.modal.fade{"aria-hidden" => "true", :role => "dialog", :tabindex => "-1"}
   .modal-dialog
     .modal-content
       .modal-header
@@ -8,7 +8,6 @@
         = render partial: 'sessions/service_buttons'
         %hr/
         %p
-          %strong Don't use these services? 
-          Login below or
-          = link_to 'click here to register a new account', url_for(controller: :sessions, action: :new, anchor: 'register', ref: 'logindialog')
+          Don't use these services? Login below or
+          %strong= link_to 'click here to register a new account', url_for(controller: :sessions, action: :new, anchor: 'register', ref: 'logindialog')
         = render partial: 'sessions/identity_login_form'
