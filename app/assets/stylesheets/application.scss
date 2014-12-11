@@ -104,6 +104,13 @@ html, body {
   min-height: 100% !important;
 }
 
+.map-list-view {
+  background-color: #eee;
+  .tab-content {
+    background-color: white;
+  }
+}
+
 .map-canvas {
   height: 100%;
 }
@@ -120,11 +127,11 @@ html, body {
     }
     left: 0;
     bottom: 0;
-    border: 3px solid transparent;
+    border: 2px solid transparent;
   }
   &.map-edit-mode {
     .map-canvas {
-      border: 3px dashed #449d44;
+      border: 2px dashed #449d44;
     }
   }
 }
@@ -160,11 +167,13 @@ html, body {
       }
       .active-content { display: none; }
       &.marker-active {
-        background-color: #ffffcc;
+        background-color: #D7F0FF;
         .active-content {
           display: inherit;
         }
-
+        .list-group-item-heading {
+          color: black;
+        }
         img {
           opacity: 1.0;
         }
