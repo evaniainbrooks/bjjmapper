@@ -22,5 +22,16 @@
       mixpanel.track_links('a.facebook', 'clickFacebookLink', function(element) {
         return { 'href':  $(element).attr('href') };
       });
+
+
+      mixpanel.track_links('a.facebook-login-btn', 'clickRegisterExternal', function(element) {
+        return { 'href':  $(element).attr('href'), 'service': 'facebook' };
+      });
+      mixpanel.track_links('a.google-login-btn', 'clickRegisterExternal', function(element) {
+        return { 'href':  $(element).attr('href'), 'service': 'google' };
+      });
+      mixpanel.track_links('a.twitter-login-btn', 'clickRegisterExternal', function(element) {
+        return { 'href':  $(element).attr('href'), 'service': 'twitter' };
+      });
   });
 }(jQuery);

@@ -40,8 +40,9 @@ class RollFindr.Views.MapView extends Backbone.View
       filteredCount: 0
     })
 
-    @setupEventListeners()
-    @setCenter()
+    if @map?
+      @setupEventListeners()
+      @setCenter()
 
   setupGoogleMap: ->
     mapOptions = {
@@ -50,6 +51,8 @@ class RollFindr.Views.MapView extends Backbone.View
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
     mapCanvas = @$('.map-canvas')[0]
+    return false unless mapCanvas?
+
     @map = new google.maps.Map(mapCanvas, mapOptions)
 
     if @model.get('refresh')
