@@ -3,7 +3,3 @@
   %li= link_to 'Instructors', '#instructor'
   %li= link_to 'Schedule' , '#schedule'
   %li= link_to 'Reviews', '#reviews'
-  %li.nav-divider
-  %li.display-field= link_to 'Edit Academy', location_path(location, edit: 1), data: { :'begin-edit' => true }
-  %li.edit-field= link_to 'Cancel Editing', location_path(location, edit: 0), data: { :'cancel-edit' => true }
-  %li= link_to 'Report', '#', class: 'report', 'data-report-item' => true
