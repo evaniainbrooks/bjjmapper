@@ -43,8 +43,8 @@ describe Event do
     it 'is invalid without a modifier' do
       build(:event, modifier: nil).should_not be_valid
     end
-    it 'is invalid without an instructor' do
-      build(:event, instructor: nil).should_not be_valid
+    it 'is valid without an instructor' do
+      build(:event, instructor: nil).should be_valid
     end
     it 'is invalid without a start time' do
       build(:event, starting: nil).should_not be_valid
