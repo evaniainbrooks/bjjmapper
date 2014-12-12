@@ -9,8 +9,13 @@
 .container.page
   = form_for(team, html: { multipart: true, class: 'form ' + edit_mode_classes }) do |f|
     .row
-      .col-md-12
+      .col-md-10
         = render partial: 'breadcrumb', locals: { team: team }
+      .col-md-2.text-right
+        %button.pull-right.btn.btn-default.display-field.btn-sm{:style => 'margin-left: 5px', :type => "button", 'data-begin-edit' => true} Edit
+        %button.pull-right.btn.btn-default.edit-field.btn-sm{:style => 'margin-left: 5px', :'data-cancel-edit' => true } Cancel
+        %button.pull-right.btn.btn-default.btn-sm{'data-report-item' => true}
+          %span.report Report
     .row
       .col-md-2
         .display-field
@@ -33,8 +38,6 @@
           = f.label :description, class: 'small'
           = f.text_area :description, placeholder: 'Provide a description of the team/association', class: 'form-control', rows: 4
         %p.display-field= team.description
-      .col-md-2
-        = render partial: 'subnav', locals: { team: team }
     %hr/
     .row
       .col-md-12
