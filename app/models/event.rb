@@ -24,7 +24,6 @@ class Event
   validates :title, :presence => true
   validates :location, :presence => true
   validates :modifier, :presence => true
-  validates :instructor, :presence => true
 
   validates :starting, :presence => true
   validates :ending, :presence => true

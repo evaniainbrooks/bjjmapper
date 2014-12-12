@@ -90,9 +90,8 @@ class LocationDecorator < Draper::Decorator
     h.image_path(img)
   end
 
-  # This is a hack and needs to be fixed...
   def opengraph_image
-    image.gsub('100.', '300.')
+    object.team.try(:image_large)
   end
 
   def opengraph_updated_at

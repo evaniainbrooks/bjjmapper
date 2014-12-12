@@ -38,7 +38,7 @@
                       .form-group
                         %label.col-md-4.control-label{:for => "event[instructor]"} Instructor
                         .col-md-8
-                          = f.select :instructor, location.instructors.map{|o| [o.name, o.id]}, {}, class: 'form-control input-md'
+                          = f.select :instructor, location.instructors.map{|o| [o.name, o.id]}, {include_blank: true}, class: 'form-control input-md'
                       .form-group
                         %label.col-md-4.control-label
                           Start

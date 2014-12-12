@@ -65,12 +65,12 @@ class RollFindr.Views.MapView extends Backbone.View
       @createLocationView = new RollFindr.Views.MapCreateLocationView({map: @map})
 
   setupEventListeners: ->
-    @listenTo(@teamFilter.collection, 'change:filter-active', @filtersChanged)
+    @listenTo(@teamFilter.collection, 'change:filter-active sync', @filtersChanged)
     @listenTo(@termFilter.collection, 'sync reset', @filtersChanged)
     @listenTo(@model.get('locations'), 'sort sync reset', @filtersChanged)
 
     #google.maps.event.addListener(@map, 'click', @createLocation)
-    google.maps.event.addListenerOnce(@map, 'idle', @fetchViewport)
+    #google.maps.event.addListenerOnce(@map, 'idle', @fetchViewport)
 
     RollFindr.GlobalEvents.on('geolocate', @geolocate)
     RollFindr.GlobalEvents.on('search', @search)
@@ -137,11 +137,11 @@ class RollFindr.Views.MapView extends Backbone.View
 
   setCenterGeolocate: (doneCallback)->
     setLocationCallback = (position)=>
-      initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude)
+      initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
       @map.setCenter(initialLocation)
       doneCallback() if doneCallback?
 
-    geolocateFailedCallback = ->
+    geolocateFailedCallback = =>
       toastr.error('Could not pinpoint your location', 'Error')
       @setDefaultCenter()
 
@@ -157,7 +157,10 @@ class RollFindr.Views.MapView extends Backbone.View
 
   setDefaultCenter: ->
     defaultCenter = @model.get('center')
+    defaultCenter = [47.718415099999994, -122.31384220000001] if defaultCenter.length < 2
+
     defaultLocation = new google.maps.LatLng(defaultCenter[0], defaultCenter[1])
+    google.maps.event.addListenerOnce(@map, 'idle', @fetchViewport)
     @map.setCenter(defaultLocation)
 
   fetchViewport: ->
@@ -179,7 +182,7 @@ class RollFindr.Views.MapView extends Backbone.View
       complete: =>
         @$('.refresh-button .fa').removeClass('fa-spin')
       error: =>
-        toastr.error('Failed to refresh map')
+        toastr.error('Failed to refresh map', 'Error')
     })
 
   getDirections: (e)->

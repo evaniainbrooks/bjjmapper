@@ -13,6 +13,7 @@ class Team
   field :name, type: String
   field :description, type: String
   field :image, type: String
+  field :image_large, type: String
   field :primary_color_index, type: String
   has_many :locations
   has_many :users
