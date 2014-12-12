@@ -22,7 +22,7 @@
   <br />
   <ul class="text-center nav">
     <li>
-      <a href="#">Get directions</a>
+      <a data-lat="<%= location.coordinates[0] %>" data-lng="<%= location.coordinates[1] %>" class="directions" href="#">Get directions</a>
     </li>
     <li>
       <a href="<%= Routes.location_path(location, { ref: 'map_item_link' }) %>" data-no-turbolink>See More</a>

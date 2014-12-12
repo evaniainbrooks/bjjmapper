@@ -4,6 +4,8 @@
 #= require backbone/views/map/create_location_view
 
 class RollFindr.Views.MapView extends Backbone.View
+  directionsDisplay: new google.maps.DirectionsRenderer()
+  directionsService: new google.maps.DirectionsService()
   el: $('.wrapper')
   tagName: 'div'
   map: null
@@ -15,6 +17,7 @@ class RollFindr.Views.MapView extends Backbone.View
   events: {
     'change [name="sort_order"]': 'sortOrderChanged'
     'click .refresh-button': 'fetchViewport'
+    'click a.directions': 'getDirections'
   }
   initialize: ->
     _.bindAll(this,
@@ -178,4 +181,24 @@ class RollFindr.Views.MapView extends Backbone.View
       error: =>
         toastr.error('Failed to refresh map')
     })
+
+  getDirections: (e)->
+    startLat = @model.get('center')[0]
+    startLng = @model.get('center')[1]
+    startPoint = new google.maps.LatLng(startLat, startLng)
+    endLat = $(e.currentTarget).data('lat')
+    endLng = $(e.currentTarget).data('lng')
+    endPoint = new google.maps.LatLng(endLat, endLng)
+
+    @directionsService.route({
+      origin: startPoint,
+      destination: endPoint,
+      travelMode: google.maps.TravelMode.DRIVING
+    }, (result, status)=>
+      if (status == google.maps.DirectionsStatus.OK)
+        @directionsDisplay.setDirections(result)
+        @directionsDisplay.setMap(@map)
+      else
+        toastr.error('Failed to request directions', 'Error')
+    )
 
