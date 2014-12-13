@@ -165,6 +165,7 @@ class RollFindr.Views.MapView extends Backbone.View
 
   fetchViewport: ->
     if (undefined == @map.getCenter() || undefined == @map.getBounds())
+      google.maps.event.addListenerOnce(@map, 'idle', @fetchViewport)
       return
 
     center = @model.get('center')
