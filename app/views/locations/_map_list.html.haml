@@ -1,12 +1,13 @@
 .list-group
   %p.small.text-muted.text-center.list-count
-  .bg-danger.empty-message
-    %h4
-      %i.fa.fa-exclamation-circle
-      Sorry, we have nothing to show you
-    %span{:style => 'margin-bottom: 20px'}
-      Try zooming out or using the search bar at the top of the page.
-      %br/
-      If you are using filters, try clearing them.
+  .empty-message
+    .bg-danger
+      %h4
+        %i.fa.fa-exclamation-circle
+        Sorry, we have nothing to show you
+      %span{:style => 'margin-bottom: 20px'}
+        Try zooming out or using the search bar at the top of the page.
+        %br/
+        If you are using filters, try clearing them.
+    %br/
   .items
-  %br/

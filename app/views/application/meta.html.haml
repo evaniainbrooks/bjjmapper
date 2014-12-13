@@ -19,25 +19,18 @@
     = render partial: 'meta_contact_message' if params.key?(:contacted)
 
   .row
-    .col-md-12
-      %h2 Send us a message
+    .col-md-11.col-md-offset-1
+      %h2
+        Send us a message
+        %address.small
+          %a{:href => "mailto:info+meta@bjjmapper.com"} info@bjjmapper.com
   .row
-    .col-md-7
+    .col-md-7.col-md-offset-1
       = render partial: 'contact_form'
     .col-md-2
-      %address
-        %strong BJJMapper
-        %br/
-        12326 14th Ave NE
-        %br/
-        Seattle, WA 98125
-        %br/
-        %abbr{:title => "Phone"} P:
-        (206) 661-4210
-      %address
-        %a{:href => "mailto:info+meta@bjjmapper.com"} info@bjjmapper.com
-    .col-md-2.col-md-offset-1
       %img{:src => image_path('evan-150.png')}/
       %p.small
-        %strong My name is Evan and I created BJJMapper because I love BJJ.
-        Please reach out to me with any questions, comments, or feature requests.
+        %strong I created BJJMapper because I love BJJ.
+        Please reach out to me if you have any questions or comments. I'd love to hear what you think.
+
+        %small= "-Evan"

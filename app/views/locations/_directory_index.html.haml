@@ -16,18 +16,20 @@
     %h2
       Browse by Team
       %span.small= "#{all_teams.size} teams"
-    - all_teams.select{|x|x.image}.each do |team|
-      = link_to team_path(team), title: "#{team.name} gym locations", class: 'link-unstyled' do
-        = image_tag team.image, alt: "#{team.name} logo", style: 'border: 1px solid #ccc; width: 30px; height: 30px; margin-bottom: 5px;'
 
   - groups = all_teams_groups
   - groups[nil].each_slice(groups[nil].size/4).each do |teams|
-    %ul.col-md-3.list-unstyled
+    %ul.col-md-3.list-unstyled.team-index
       - teams.each do |team|
         %li
           - if groups[team]
             %h3
-              = link_to(team.name, team_path(team), title: "List #{team.name} Brazilian Jiu-Jitsu gyms")
+              = link_to(team_path(team), title: "List #{team.name} Brazilian Jiu-Jitsu gyms") do
+                - if team.image.present?
+                  = image_tag team.image, alt: "#{team.name} logo", class: 'logo'
+                - else
+                  %span.logo
+                = team.name
               %span.small
                 = surround '(', ')' do
                   = team.locations.count
@@ -36,7 +38,12 @@
                 %li.small= link_to(t.name, team_path(t), title: "List #{t.name} Brazilian Jiu-Jitsu gyms")
           - else
             %h3
-              = link_to(team.name, team_path(team), title: "List #{team.name} Brazilian Jiu-Jitsu gyms")
+              = link_to(team_path(team), title: "List #{team.name} Brazilian Jiu-Jitsu gyms") do
+                - if team.image.present?
+                  = image_tag team.image, alt: "#{team.name} logo", class: 'logo'
+                - else
+                  .logo
+                = team.name
               %span.small
                 = surround '(', ')' do
                   = team.locations.count

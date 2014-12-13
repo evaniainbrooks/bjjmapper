@@ -1,13 +1,13 @@
 - seo_name = [@criteria[:city], @criteria[:country]].compact.join(", ")
 = content_for :title do
-  = @locations.present? ? "Brazilian Jiu-Jitsu Academies in #{seo_name}" : "Brazilian Jiu-Jitsu Academy Directory"
+  = locations.present? ? "Brazilian Jiu-Jitsu Academies in #{seo_name}" : "Brazilian Jiu-Jitsu Academy Directory"
 
 .container.page
   .row
     .col-md-12
       %h1
         Brazilian Jiu-Jitsu Academy Directory
-        - if @locations.blank?
+        - if locations.blank?
           %span.small= "#{Location.count} academies worldwide"
 
   .row
@@ -24,24 +24,24 @@
             %li
               %a{href: locations_path({country: @criteria[:country], city: @criteria[:city]}), title: "List of Brazilian Jiu-Jitsu gyms in #{seo_name}"}= @criteria[:city]
 
-  - if @locations.present?
+  - if locations.present?
     .row
       .col-md-5
         .map-canvas{:style => 'height: 300px'}
       .col-md-7
         - if @criteria[:city].present?
-          %h3= "Found #{pluralize(@locations.count, 'academy')} near #{@criteria[:city]}, #{@criteria[:country]}"
+          %h3= "Found #{pluralize(locations.count, 'academy')} near #{@criteria[:city]}, #{@criteria[:country]}"
         - else
-          %h3= "Found #{pluralize(@locations.count, 'academy')} in #{@criteria[:country]}"
-        %span.small.text-info= "GPS: #{@locations.first.gps}"
+          %h3= "Found #{pluralize(locations.count, 'academy')} in #{@criteria[:country]}"
+        %span.small.text-info= "GPS: #{locations.first.gps}"
         %br/
         %br/
         %div
-          %big= link_to "See on map view", root_path(zoom: Map::ZOOM_CITY, center: @locations.first.to_coordinates), title: "See map of Brazilian Jiu-Jitsu gyms in #{seo_name}"
+          %big= link_to "See on map view", root_path(zoom: Map::ZOOM_CITY, center: locations.first.to_coordinates), title: "See map of Brazilian Jiu-Jitsu gyms in #{seo_name}"
     %br/
     .row 
       .col-md-12
-        = render partial: 'table', locals: { locations: @locations }
+        = render partial: 'table', locals: { locations: locations }
   - else
     = render partial: 'directory_index'
 

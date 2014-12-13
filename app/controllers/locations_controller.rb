@@ -2,7 +2,7 @@ class LocationsController < ApplicationController
   before_action :set_location, only: [:destroy, :show, :update, :nearby]
   before_action :set_map, only: :show
   before_action :ensure_signed_in, only: [:destroy, :create, :update]
-  decorates_assigned :location
+  decorates_assigned :location, :locations
 
   helper_method :created?
 
@@ -159,7 +159,7 @@ class LocationsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: @locations }
+      format.json { render json: locations }
     end
   end
 
