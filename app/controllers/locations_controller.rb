@@ -1,10 +1,20 @@
 class LocationsController < ApplicationController
-  before_action :set_location, only: [:destroy, :show, :update, :nearby]
+  before_action :set_location, only: [:schedule, :destroy, :show, :update, :nearby]
   before_action :set_map, only: :show
   before_action :ensure_signed_in, only: [:destroy, :create, :update]
   decorates_assigned :location, :locations
 
   helper_method :created?
+
+  def schedule
+    tracker.track('showSchedule',
+      id: @location.to_param
+    )
+
+    respond_to do |format|
+      format.html
+    end
+  end
 
   def show
     tracker.track('showLocation',

@@ -1,6 +1,15 @@
 class InstructorsController < ApplicationController
   before_action :set_location
   before_action :set_instructor, only: [:destroy]
+  before_action :set_instructors, only: [:index]
+
+  decorates_assigned :instructors
+
+  def index
+    respond_to do |format|
+      format.json { render status: :ok, json: instructors }
+    end
+  end
 
   def create
     @instructor = find_or_create_instructor
@@ -21,7 +30,7 @@ class InstructorsController < ApplicationController
   def destroy
     tracker.track('deleteInstructor',
       id: @location.to_param,
-      location: @location.as_json({})
+      location: @location.to_param
     )
 
     @location.instructors.delete(@instructor)
@@ -33,6 +42,11 @@ class InstructorsController < ApplicationController
   end
 
   private
+
+  def set_instructors
+    @instructors = @location.instructors
+    render(status: :no_content, json: {}) and return false if @instructors.empty?
+  end
 
   def find_or_create_instructor
     if params.key?(:user)

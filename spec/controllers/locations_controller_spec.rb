@@ -1,6 +1,15 @@
 require 'spec_helper'
 
 describe LocationsController do
+  describe 'GET schedule' do
+    context 'with html format' do
+      let(:location) { create(:location) }
+      it 'returns the location schedule page' do
+        get :schedule, format: 'html', id: location
+        response.should be_ok
+      end
+    end
+  end
   describe 'GET nearby' do
     let(:location) { build(:location, title: 'self location') }
     before { Location.stub(:find).and_return(location) }
