@@ -53,7 +53,6 @@ set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh
 
 
 set :default_shell, '/bin/bash -l'
-default_run_options[:shell] = '/bin/bash -l'
 
 namespace :puma do
   desc 'Create Directories for Puma Pids and Socket'
