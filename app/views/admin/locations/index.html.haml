@@ -1,0 +1,19 @@
+.container
+  %h3 Last 50 Locations
+  %table.table.table-striped
+    %tr
+      %th
+      %th Modifier
+      %th Metadata
+      %th Time
+
+    - @locations.each do |loc|
+      %tr
+        %td
+          = link_to(loc.title, loc)
+          = link_to('(admin)', meta_admin_location_path(loc))
+        %td
+          = link_to(loc.modifier.try(:name), loc.modifier)
+        %td
+          = JSON.pretty_generate(loc.as_json({}))
+        %td= time_ago_in_words(loc.created_at)

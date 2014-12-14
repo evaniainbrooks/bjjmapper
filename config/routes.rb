@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
+  namespace :admin do
+    resources :locations, only: [:index] do
+      get :meta, on: :member
+    end
+  end
 
-  # You can have the root of your site routed with "root"
   resources :users, :only => [:show, :create, :update] do
     resources :users, controller: :students, as: :students, path: '/students', only: [:create, :destroy, :index]
   end
