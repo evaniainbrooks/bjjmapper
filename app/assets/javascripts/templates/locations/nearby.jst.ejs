@@ -1,4 +1,4 @@
-<li class="location-card">
+<li class="card nearby-card">
   <a class="thumbnail" href="<%= Routes.location_path(location) %>">
     <div class="text-center pull-left">
       <i class="center-block fa-3x fa fa-arrow-up direction-<%= location.bearing_direction %>"></i>
@@ -6,7 +6,6 @@
         <%= location.bearing_name %> (<%= location.distance %>)
       </p>
     </div>
-    <div class="pull-left">
       <div class="caption">
         <p class="text-primary">
           <%= location.title %>
@@ -20,7 +19,6 @@
           </span>
         </p>
       </div>
-    </div>
     <div class="clear"></div>
   </a>
 </li>
