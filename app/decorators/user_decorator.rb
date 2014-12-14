@@ -18,7 +18,7 @@ class UserDecorator < Draper::Decorator
   end
 
   def image
-    h.image_path(object.image || DEFAULT_IMAGE)
+    h.image_url(object.image || DEFAULT_IMAGE)
   end
 
   def belt_rank
@@ -34,7 +34,7 @@ class UserDecorator < Draper::Decorator
   end
 
   def rank_in_words
-    "#{belt_rank.capitalize} belt" #{stripe_rank} stripes"
+    "#{belt_rank.capitalize} belt"
   end
 
   def description
@@ -50,5 +50,12 @@ class UserDecorator < Draper::Decorator
       matchdata = description.match(/<p>(.*)<\/p>/)
       matchdata[1] if matchdata.present?
     end
+  end
+
+  def as_json(args)
+    object.as_json(args).symbolize_keys.merge(
+      image: image,
+      rank_in_words: rank_in_words
+    )
   end
 end
