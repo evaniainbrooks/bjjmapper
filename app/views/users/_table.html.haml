@@ -34,6 +34,9 @@
           = user.birth_place
           &nbsp;
         = f.text_field :birth_place, placeholder: 'Place of birth', class: 'form-control edit-field'
-    %tr
-      %td.text-muted Lineage
-      %td= render partial: 'users/lineage', locals: { :f => f, :user => user }
+    - if local_assigns.key?(:force_lineal_parent) && force_lineal_parent
+      = f.hidden_field :lineal_parent, value: force_lineal_parent
+    - else 
+      %tr
+        %td.text-muted Lineage
+        %td= render partial: 'users/lineage', locals: { :f => f, :user => user }

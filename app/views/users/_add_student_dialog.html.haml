@@ -1,0 +1,50 @@
+- new_student = User.new(lineal_parent_id: instructor).decorate
+.add-student-dialog.modal.fade{'aria-hidden' => 'true', 'aria-labelledby' => 'addstudent', 'role' => 'dialog', 'tabindex' => -1}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{'data-dismiss' => 'modal', 'type' => 'button'}
+          %span{'aria-hidden' => 'true'} &times;
+          %span.sr-only Close
+        %h4.modal-title
+          %i.fa.fa-plus-circle
+          Add Student
+        %span.small.text-info Note that this will change the student's lineage.
+      .modal-body
+        %ul.nav.nav-tabs{:role => 'tablist'}
+          %li.active
+            %a{:href => '#existing-student', 'role' => 'tab', 'data-toggle' => 'tab'} Existing
+          %li
+            %a{:href => '#create-student', 'role' => 'tab', 'data-toggle' => 'tab'} Create
+
+      .tab-content
+        %div.tab-pane#create-student
+          = form_for([instructor, new_student], url: user_students_path(instructor), html: { class: 'form editable edit-mode' }) do |f|
+            .container-fluid
+              .row
+                .col-md-4
+                  %div.text-center
+                    %img.center-block{:style => 'max-width: 150px', :alt => "default profile image", :src => image_path(UserDecorator::DEFAULT_IMAGE)}
+                    %button.image-caption.center-block.btn.btn-primary.btn-small{:type => 'button'} Upload Image
+                .col-md-8
+                  = render partial: 'users/table', :locals => { :force_lineal_parent => instructor, :f => f, :user => new_student }
+            .modal-footer
+              %button.btn.btn-default{'data-dismiss' => 'modal'}
+                Cancel
+              %button.btn.btn-primary{:type => 'submit'}
+                Create student
+
+        %div.tab-pane.active#existing-student
+          %form{:action => user_students_path(instructor), :method => 'POST'}
+            .container-fluid
+              %img.center-block.img-block{:style => 'max-width: 300px', 'data-default-src' => image_path('default-user-250.png'), 'src' => image_path('default-user-250.png')}
+              %br/
+              = hidden_field_tag :user_id, instructor.id
+              = hidden_field_tag :authenticity_token, form_authenticity_token
+              = select_tag :id, options_for_select(select_instructors), include_blank: true, class: 'student-name form-control input-md'
+              %br/
+            .modal-footer
+              %button.btn.btn-default{'data-dismiss' => 'modal'}
+                Cancel
+              %button.btn.btn-primary{:type => 'submit'}
+                Add student

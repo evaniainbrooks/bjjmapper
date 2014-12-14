@@ -22,13 +22,14 @@
           - user.locations.each_with_index do |location, i|
             %li= render partial: 'locations/card', object: location, as: 'location', locals: { location_counter: i }
     %hr/
-    .row
+    .row.students
+      .col-md-4
+        %h3.pull-left Students
+        %button.pull-right.edit-field.btn.btn-small.btn-default.add-student{:style => 'margin-top: -5px', :type => 'button'}
+          %i.fa.fa-plus-circle
+          Add Student 
       .col-md-12
-        %h3 Students
-        .row
-          - user.lineal_children.each_with_index do |student, i|
-            .col-md-4
-              = render partial: 'users/card', object: student, as: 'user', locals: { user_counter: i }
+        .row.items.clear
     %hr.edit-field/
     .row.edit-field
       .col-md-12
@@ -54,3 +55,11 @@
             Delete User
           %button.btn.btn-default.btn-md{:type => 'button', 'data-cancel-edit' => true} Cancel Editing
           %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes
+
+  = render :partial => 'users/add_student_dialog', locals: { instructor: user }
+
+= content_for(:scripts) do
+  :coffeescript
+    $(document).ready ->
+      model = new RollFindr.Models.User(#{user.to_json})
+      studentsView = new RollFindr.Views.UserStudentsView({ model: model })
