@@ -107,13 +107,12 @@ class Location
       :id => self.id.to_s,
       :team_id => self.team_id.to_s,
       :modifier_id => self.modifier_id.to_s,
-      :instructors => self.instructor_ids.map(&:to_s),
       :coordinates => self.to_coordinates,
       :team_name => team_name,
       :address => address
     })
   end
-  
+
   def schedule
     @location_schedule ||= LocationSchedule.new(self.id)
   end
