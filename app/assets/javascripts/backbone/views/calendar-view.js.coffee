@@ -11,6 +11,7 @@ class RollFindr.Views.CalendarView extends Backbone.View
     @$el.fullCalendar({
       events: Routes.location_events_path(locationId),
       editable: true,
+      height: 'auto',
       selectable: true,
       select: this.calendarSelected,
       eventRender: this.calendarEventRender,
@@ -18,9 +19,9 @@ class RollFindr.Views.CalendarView extends Backbone.View
       header: {
         left: 'prev,next today',
         center: 'title',
-        right: 'agendaWeek,agendaDay'
+        right: 'basicWeek,basicDay'
       },
-      defaultView: 'agendaDay'
+      defaultView: 'basicDay'
     });
 
     @createEventView = new RollFindr.Views.CreateEventView()
