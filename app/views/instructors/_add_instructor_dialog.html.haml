@@ -1,4 +1,4 @@
-- new_instructor = location.object.instructors.new.decorate
+- new_instructor = User.new(locations: [location]).decorate
 .add-instructor-dialog.modal.fade{'aria-hidden' => 'true', 'aria-labelledby' => 'addInstructor', 'role' => 'dialog', 'tabindex' => -1}
   .modal-dialog
     .modal-content
