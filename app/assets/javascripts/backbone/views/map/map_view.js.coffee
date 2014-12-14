@@ -50,7 +50,7 @@ class RollFindr.Views.MapView extends Backbone.View
   setupGoogleMap: ->
     mapOptions = {
       zoom: @model.get('zoom')
-      minZoom: 8
+      minZoom: 6
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
     mapCanvas = @$('.map-canvas')[0]
