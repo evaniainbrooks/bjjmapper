@@ -1,13 +1,20 @@
 .list-group
   %p.small.text-muted.text-center.list-count
   .empty-message
-    .bg-danger
-      %h4
+    %div
+      %h5.text-danger
         %i.fa.fa-exclamation-circle
         Sorry, we have nothing to show you
-      %span{:style => 'margin-bottom: 20px'}
+      %span.small.text-danger{:style => 'margin-bottom: 20px'}
         Try zooming out or using the search bar at the top of the page.
         %br/
         If you are using filters, try clearing them.
+    %br/
+    %div
+      %a.btn.btn-success.add-academy{:href => '#', :style => 'display: block;'}
+        %h4
+          %i.fa.fa.fa-map-marker
+          %span Where is my academy?
+        %small Click here to add your academy to the map.
     %br/
   .items

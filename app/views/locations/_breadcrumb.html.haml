@@ -7,4 +7,9 @@
     %a{href: locations_path(country: location.country)}= location.country
   %li
     %a{href: locations_path({country: location.country, city: location.city})}= location.city
-  %li.active= location.title      
+  - if local_assigns.key?(:sub)
+    %li
+      %a{href: location_path(location)}= location.title
+    %li.active= sub
+  - else
+    %li.active= location.title 

@@ -1,0 +1,38 @@
+= content_for(:title) do
+  = "Schedule for #{location.title}"
+
+.container.show-location.page
+  = form_for(location, html: { class: 'form ' + edit_mode_classes }) do |f|
+    .row
+      .col-md-10
+        = render partial: 'breadcrumb', locals: { location: location, sub: 'Schedule' }
+      .col-md-2.text-right
+        %button.pull-right.btn.btn-default.btn-sm.display-field{:style => 'margin-left: 5px', :type => "button", 'data-begin-edit' => true} Edit
+        %button.pull-right.btn.btn-default.edit-field.btn-sm{:style => 'margin-left: 5px', :'data-cancel-edit' => true } Cancel
+        %button.pull-right.btn.btn-default.btn-sm{'data-report-item' => true}
+          %span.report Report
+    .row
+      .col-md-2
+        %img{:src => location.image, :class => 'center-block'}/
+      .col-md-5
+        %h1
+          = link_to location.title, location_path(location, ref: 'loc_sched_title')
+          %br/
+          %small
+            - if location.team.present?
+              = link_to location.team_name, team_path(location.team, ref: 'loc_sched_title')
+            - else
+              = location.team_name
+
+    %hr/
+    .row
+      .col-md-12
+        %h3
+          %span Schedule
+          %small.pull-right.text-info.edit-field To add an event to the schedule, click the time/day that the event falls on.
+        %a{:name => 'schedule'}
+        .scheduler.clear
+= content_for(:scripts) do
+  :coffeescript
+    $(document).ready ->
+      mapView = new RollFindr.Views.LocationShowView({ model: #{location.to_json}, mapModel: #{@map.to_json}, el: $('.show-location')})

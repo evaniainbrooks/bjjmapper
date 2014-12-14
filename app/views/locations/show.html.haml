@@ -41,7 +41,7 @@
       .col-md-5
         %div.map-canvas{:style => 'height: 300px'}
         -# This is filled in by google maps
-        %h4.text-center= link_to 'See on larger map', root_path(:center => location.to_coordinates), :data => { :'no-turbolink' => true }
+        %h4.text-center= link_to 'See on larger map', root_path(:center => location.to_coordinates, :ref => 'loc_map_full'), :data => { :'no-turbolink' => true }
       .col-md-4
         %div.nearby-locations
           -# This is filled in by locations/nearby template
@@ -49,17 +49,28 @@
           %ul.list-unstyled.items
     %hr/
     .row
-      .col-md-4
-        = render :partial => 'locations/instructors', :locals => { :location => location }
+      .col-md-4.instructors
+        %h3.pull-left Instructors
+        %button.pull-right.edit-field.btn.btn-small.btn-default.add-instructor{:style => 'margin-top: -5px', :type => 'button'}
+          %i.fa.fa-plus-circle
+          Add Instructor
+        .clear.items 
+        %br/
+        -#= render :partial => 'locations/instructors', :locals => { :location => location }
       .col-md-8
-        %h3 Schedule
+        %h3
+          %span Schedule
+          %span.small
+            = surround '(', ')' do
+              = link_to 'view full schedule', schedule_location_path(location, ref: 'loc_sched_full')
         %a{:name => 'schedule'}
-        .scheduler
+        .scheduler.clear
     %hr/
     .row
-      .col-md-12
+      .col-md-4
         = render :partial => 'locations/show_reviews', :locals => { :location => location }
-    .row.edit-field.edit-control
+    %hr.edit-field/
+    .row.edit-field
       .col-md-12
         %h3 Edit Controls
       .col-md-12
