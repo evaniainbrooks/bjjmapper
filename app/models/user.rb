@@ -25,7 +25,6 @@ class User
   field :coordinates, type: Array
   field :last_seen_at, type: Integer
   field :description, type: String
-  field :summary, type: String
   field :description_src, type: String
 
   field :oauth_token, type: String
@@ -58,7 +57,7 @@ class User
     end
   end
 
-  scope :jitsukas, -> { where(:belt_rank.ne => nil) }
+  scope :jitsukas, -> { where(:belt_rank.in => ['blue', 'purple', 'brown', 'black']) }
 
   def jitsuka?
     self.belt_rank.present?
@@ -110,9 +109,12 @@ class User
     a
   end
 
-  def as_json(args)
+  def as_json(args={})
     super(args.merge(except: [:ip_address, :coordinates, :uid, :provider, :email, :_id])).merge({
-      :id => self.id.to_s
+      :id => self.id.to_s,
+      :full_lineage => self.full_lineage.take(2).reverse.map do |u|
+        { :id => u.to_param, :name => u.name }
+      end
     })
   end
 

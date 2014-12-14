@@ -4,8 +4,8 @@ require 'wikipedia'
 describe User do
   describe '#jitsukas' do
     before do
-      create(:user, name: 'included', belt_rank: 'white')
-      create(:user, name: 'excluded', belt_rank: nil)
+      create(:user, name: 'included', belt_rank: 'black')
+      create(:user, name: 'excluded', belt_rank: 'white')
     end
     it 'returns only users with a rank' do
       User.jitsukas.count.should eq 1
