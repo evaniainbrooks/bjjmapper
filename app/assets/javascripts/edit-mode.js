@@ -11,7 +11,7 @@
         $('.login-modal').modal('show');
       }
 
-      if (!e.currentTarget.data('follow-href')) {
+      if (!$(e.currentTarget).data('follow-href')) {
         e.preventDefault();
         return false;
       } else {
