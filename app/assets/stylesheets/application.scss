@@ -74,12 +74,15 @@ html, body {
   }
 }
 
-.show-location {
+.show-location, .show-user {
   &>a {
     color: black;
   }
-  h1, h3 {
+  h3 {
     margin-top: 0px !important;
+  }
+  h1 {
+    margin-top: 5px !important;
   }
 }
 
@@ -92,11 +95,6 @@ html, body {
 
 .map-list {
   margin-top: 7px;
-}
-
-.edit-control {
-  border: 1px solid #ccc;
-  padding-bottom: 10px;
 }
 
 .map-view, .map-list-view {
@@ -217,33 +215,42 @@ html, body {
   margin-top: 20px;
 }
 
-.instructor-card {
-  .thumbnail {
-    img {
-      width: 100px;
-    }
-    .caption {
-      margin-left: 100px;
-    }
-    height: 150px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.card {
+  .close {
+    padding: 2px 5px !important;
   }
-}
-
-.location-card {
-  .fa {
-    color: #333;
-  }
-
   .thumbnail {
     padding: 0px;
     margin-bottom: 7px;
-    .caption { 
+    .caption {
       p { margin: 0 0 2px; }
-      padding: 2px 5px; 
+      padding: 2px 5px;
+      margin-left: 100px;
     }
+    h3 {
+      color: black;
+      margin-top: 3px;
+      margin-bottom: 0px;
+    }
+    .avatar {
+      width: 100px;
+      height: 100px;
+    }
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
+
+  .fa {
+    color: #333;
+  }
+}
+
+.card.nearby-card .thumbnail .caption {
+  margin-left: 55px;
+}
+
+.card.location-card .thumbnail .caption {
+  margin-left: 0px;
 }
 
 .modal {
