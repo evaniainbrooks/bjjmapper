@@ -1,0 +1,11 @@
+%ol.breadcrumb
+  %li
+    %a{href: root_path} Home
+  %li
+    %a{href: '#'} People
+  - if local_assigns.key?(:sub)
+    %li
+      %a{href: user_path(user)}= user.name
+    %li.active= sub
+  - else
+    %li.active= user.name 

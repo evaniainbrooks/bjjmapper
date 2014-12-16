@@ -1,11 +1,7 @@
 %ul.nav.small
   %li
     %a{:href => '#biography'} Biography
+  %li  
     %a{:href => '#locations'} Locations
+  %li  
     %a{:href => '#students'} Students
-  %li.nav-divider
-  %li
-    %a.display-field{:href => user_path(user, edit: 1), :type => 'button', 'data-begin-edit' => true} Start Editing
-  %li
-    %a.edit-field{:href => user_path(user, edit: 0), :type => 'button', 'data-cancel-edit' => true} Cancel Editing
-  %li= link_to 'Report', '#', class: 'report', 'data-report-item' => true

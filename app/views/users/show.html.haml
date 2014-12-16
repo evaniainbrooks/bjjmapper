@@ -1,5 +1,13 @@
 .container.page.show-user
   = form_for(user, html: { class: 'form ' + edit_mode_classes }) do |f|
+    .row
+      .col-md-10
+        = render partial: 'breadcrumb', locals: { user: user }
+      .col-md-2.text-right
+        %button.pull-right.btn.btn-default.display-field.btn-sm{:style => 'margin-left: 5px', :type => "button", 'data-begin-edit' => true} Edit
+        %button.pull-right.btn.btn-default.edit-field.btn-sm{:style => 'margin-left: 5px', :'data-cancel-edit' => true } Cancel
+        %button.pull-right.btn.btn-default.btn-sm{'data-report-item' => true}
+          %span.report Report
     = render partial: 'welcome_message' if welcome?
     .row
       .col-md-4
