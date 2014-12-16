@@ -1,0 +1,7 @@
+.container.page
+  - ['white', 'blue', 'purple', 'brown', 'black'].each do |belt|
+    %h3= "#{belt.capitalize} Belt"
+    - if @users.key?(belt)
+      %ul
+        - @users[belt].each do |user|
+          %li= link_to(user.name, user)
