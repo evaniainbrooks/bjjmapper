@@ -1,3 +1,5 @@
+require 'mixpanel-ruby'
+
 module RollFindr
   class Tracker
     def initialize(user_id, super_properties = {})
