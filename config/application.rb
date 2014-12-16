@@ -26,6 +26,9 @@ module RollFindr
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+    config.timezone_service_host = 'localhost'
+    config.timezone_service_port = 9002
+
     config.google_maps_api_key = 'AIzaSyDfVeMiIo8lIaMQ_UxahKftMpIutq7QQ4I'
     config.google_maps_endpoint = '//maps.googleapis.com/maps/api/js'
 
