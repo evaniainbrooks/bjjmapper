@@ -1,3 +1,5 @@
+require 'ice_cube'
+
 class EventRecurrence
   include Mongoid::Document
   include Mongoid::Timestamps

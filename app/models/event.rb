@@ -1,3 +1,5 @@
+require 'mongoid-history'
+
 class Event
   include Mongoid::Document
   include Mongoid::Timestamps

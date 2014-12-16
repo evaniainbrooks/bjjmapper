@@ -1,3 +1,6 @@
+require 'mongoid-history'
+require 'mongoid_paperclip'
+
 class Team
   include Mongoid::Document
   include Mongoid::Paperclip
