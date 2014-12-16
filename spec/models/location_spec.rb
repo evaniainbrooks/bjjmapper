@@ -24,6 +24,35 @@ describe Location do
     end
   end
 
+  describe '.timezone' do
+    context 'when the timezone service returns a response' do
+      let(:expected_timezone) { 'Some/Timezone' }
+      before { RollFindr::TimezoneService.stub(:timezone_for).and_return(expected_timezone) }
+      context 'when the field is empty and there are coordinates' do
+        subject { build(:location, coordinates: [80.0, 80.0], timezone: nil) }
+        it 'populates the field' do
+          subject.timezone.should eq expected_timezone
+        end
+      end
+      context 'when the field is not empty and the coordinates changed' do
+        subject { build(:location, coordinates: [80.0, 80.0], timezone: 'Change/ThisPlease') }
+        before { subject.coordinates = [81.0, 81.0] }
+        it 'repopulates the field with the new timezone' do
+          subject.timezone.should eq expected_timezone
+        end
+      end
+    end
+    context 'when the timezone service raises an error' do
+      before { RollFindr::TimezoneService.stub(:timezone_for).and_raise(StandardError.new) }
+      subject { build(:location, coordinates: [80.0, 80.0], timezone: nil) }
+      before { subject.save }
+      it 'rescues and assigns nil' do
+        subject.timezone.should be_nil
+        subject.should be_persisted
+      end
+    end
+  end
+
   describe 'validations' do
     it 'is invalid without a title' do
       build(:location, title: nil).should_not be_valid

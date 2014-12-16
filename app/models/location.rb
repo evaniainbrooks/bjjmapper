@@ -1,3 +1,4 @@
+require 'mongoid-history'
 require 'mongoid_search_ext'
 
 class Location
@@ -23,7 +24,7 @@ class Location
 
   reverse_geocoded_by :coordinates do |obj, results|
     geo = results.first
-    if obj.address.blank? && geo.present?
+    if obj.address_components.include?(nil) && geo.present?
       obj.street = geo.street_address
       obj.city = geo.city
       obj.state = geo.state
@@ -35,6 +36,7 @@ class Location
   before_save :canonicalize_phone
   before_save :canonicalize_website
   before_save :canonicalize_facebook
+  before_save :populate_timezone
 
   field :coordinates, :type => Array
   field :street
@@ -50,6 +52,7 @@ class Location
   field :phone
   field :email
   field :facebook
+  field :timezone
 
   validates :title, presence: true
 
@@ -93,8 +96,12 @@ class Location
     [id, title.parameterize].join('-')
   end
 
+  def address_components
+    [street, city, state, country, postal_code]
+  end
+
   def address
-    [street, city, state, country, postal_code].select(&:present?).join(', ')
+    address_components.select(&:present?).join(', ')
   end
 
   def team_name
@@ -108,6 +115,7 @@ class Location
       :team_id => self.team_id.to_s,
       :modifier_id => self.modifier_id.to_s,
       :coordinates => self.to_coordinates,
+      :timezone => self.timezone,
       :team_name => team_name,
       :address => address
     })
@@ -115,6 +123,15 @@ class Location
 
   def schedule
     @location_schedule ||= LocationSchedule.new(self.id)
+  end
+
+  def timezone
+    super || populate_timezone
+  end
+
+  def coordinates=(coordinates)
+    self.timezone = nil
+    super
   end
 
   private
@@ -129,5 +146,12 @@ class Location
 
   def canonicalize_phone
     self.phone.gsub!(/[^\d]/, '') if self.phone_changed?
+  end
+
+  def populate_timezone
+    timezone = self.attributes['timezone']
+    if (self.coordinates_changed? || (timezone.blank? && self.coordinates.present?))
+      self.timezone = RollFindr::TimezoneService.timezone_for(self.to_coordinates[0], self.to_coordinates[1]) rescue nil
+    end
   end
 end
