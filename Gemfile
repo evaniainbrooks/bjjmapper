@@ -3,29 +3,21 @@ source 'https://rubygems.org'
 #ruby '1.9.3', :engine => 'jruby', :engine_version => '1.7.12'
 gem 'rails', '>= 4.1.0'
 gem 'i18n', '>= 0.7.0.beta1 '
-# Use SCSS for stylesheets
 gem 'sass-rails', :git => 'git://github.com/rails/sass-rails', :branch => :master
 gem 'sprockets-rails'
-# Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'therubyrhino'
 gem 'jquery-rails'
-# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spork-rails'
 gem 'haml-rails'
 gem 'pry'
-gem 'mongoid', '~> 4.0.0.beta'
-gem 'mongoid-history'
 gem 'google-analytics-rails'
 gem 'puma'
-gem 'geocoder'
 gem 'ejs'
-
 gem 'omniauth-identity'
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'
@@ -33,17 +25,20 @@ gem 'omniauth-google-oauth2'
 gem 'less-rails'
 gem 'js-routes'
 gem 'wikipedia-client'
-gem 'draper'
 gem 'rails-backbone', :git => 'git://github.com/codebrew/backbone-rails.git', :branch => :master
-gem 'mixpanel-ruby'
 gem 'yui-compressor'
 gem 'dotenv-rails'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
 gem 'user-agent'
 gem 'exception_notification'
 gem 'lograge'
-gem 'mongoid-paperclip', require: 'mongoid_paperclip'
-gem 'ice_cube'
+gem 'draper'
+gem 'mongoid', '~> 4.0.0.beta'
+gem 'mongoid-history', require: false
+gem 'geocoder', require: false
+gem 'mixpanel-ruby', require: false
+gem 'mongoid-paperclip', require: false
+gem 'ice_cube', require: false
 
 group :development do
   gem 'capistrano', require: false
