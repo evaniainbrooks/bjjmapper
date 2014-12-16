@@ -126,7 +126,7 @@ class Location
   end
 
   def timezone
-    super || populate_timezone
+    super || (populate_timezone unless self.destroyed?)
   end
 
   def coordinates=(coordinates)
