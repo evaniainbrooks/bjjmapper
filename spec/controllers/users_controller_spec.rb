@@ -1,6 +1,15 @@
 require 'spec_helper'
 
 describe UsersController do
+  describe 'GET index' do
+    context 'with html format' do
+      before { create(:user, belt_rank: 'black') }
+      it 'returns the grouped users' do
+        get :index, { format: 'html' }
+        response.should be_ok
+      end
+    end
+  end
   describe 'GET show' do
     let(:user) { create(:user) }
     context 'with json format' do

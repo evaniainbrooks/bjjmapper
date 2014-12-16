@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users, :only => [:show, :create, :update] do
+  resources :users, :only => [:index, :show, :create, :update] do
     resources :users, controller: :students, as: :students, path: '/students', only: [:create, :destroy, :index]
   end
   resources :locations do
@@ -23,12 +23,12 @@ Rails.application.routes.draw do
   match '/auth/:provider/callback' => 'sessions#create', :via => [:post, :get]
   match '/auth/failure' => 'sessions#failure', :via => [:post, :get]
   match '/signout' => 'sessions#destroy', :as => :signout, :via => [:post, :get, :delete]
-  
+
   post '/report' => 'application#report', :as => :report
   get '/meta' => 'application#meta', :as => :meta
   get '/people' => 'application#people'
   get '/geocode' => 'application#geocode'
   post '/contact' => 'application#contact', :as => :contact
-  
+
   get '/sitemap.xml' => 'sitemaps#index', :format => 'xml', :as => :sitemap
 end

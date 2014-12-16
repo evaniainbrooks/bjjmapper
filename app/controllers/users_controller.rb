@@ -4,6 +4,16 @@ class UsersController < ApplicationController
 
   helper_method :welcome?
 
+  def index
+    @users = User.where(:belt_rank.in => ['white', 'blue', 'purple', 'brown', 'black']).all.group_by(&:belt_rank)
+
+    tracker.track('showUsersIndex')
+
+    respond_to do |format|
+      format.html
+    end
+  end
+
   def show
     tracker.track('showUser',
       id: @user.to_param

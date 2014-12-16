@@ -8,6 +8,16 @@ FactoryGirl.define do
     image 'testimg.jpg'
     provider :twitter
 
+    factory :white_belt do
+      belt_rank 'white'
+    end
+    factory :blue_belt do
+      belt_rank 'blue'
+    end
+    factory :black_belt do
+      belt_rank 'black'
+    end
+
     factory :instructor_with_students do
       after(:create) do |instance|
         3.times do
