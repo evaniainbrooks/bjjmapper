@@ -6,8 +6,8 @@ class SessionsController < ApplicationController
 
     tracker.track('createSession',
       user: user.to_param,
-      ipAddress: request.remote_ip,
-      createdUser: user.new_record?,
+      ip_ddress: request.remote_ip,
+      created_user: user.new_record?,
       provider: auth_info['provider']
     )
 
@@ -26,7 +26,7 @@ class SessionsController < ApplicationController
 
   def new
     tracker.track('showRegister',
-      ipAddress: request.remote_ip,
+      ip_address: request.remote_ip,
       provider: auth_info.try(:[], 'provider')
     )
   end
