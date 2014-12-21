@@ -26,9 +26,12 @@ $color4: hsl(0%, 70%, 50%);
 $colors: $color0, $color1, $color2, $color3;
 
 .event-color-base {
+  padding: 3px;
   color: black !important;
   h4 {
     text-transform: uppercase;
+    margin-top: 5px !important;
+    margin-bottom: 3px !important;
   }
 }
 
