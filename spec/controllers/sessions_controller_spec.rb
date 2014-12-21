@@ -12,7 +12,6 @@ describe SessionsController do
     let(:anonymous_user) { create(:user, role: 'anonymous') }
     let(:session_params) { { :user_id => anonymous_user.to_param } }
     include_context 'omniauth success'
-    
     before do
       RollFindr::Tracker
         .any_instance

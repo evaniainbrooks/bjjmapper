@@ -1,7 +1,10 @@
 class EventsController < ApplicationController
   before_action :set_location
+  before_action :set_event, only: [:destroy, :update, :move]
   before_action :ensure_signed_in, only: [:destroy, :create, :update]
-  decorates_assigned :event, :events
+  decorates_assigned :location, :event, :events
+
+  around_filter :set_location_tz
 
   def create
     @event = Event.new(create_params)
@@ -33,6 +36,7 @@ class EventsController < ApplicationController
   def show
     @event = @location.events.find(params[:id])
     respond_to do |format|
+      format.html
       format.json { render status: :ok, json: @event }
     end
   end
@@ -43,18 +47,43 @@ class EventsController < ApplicationController
     end
   end
 
+  def move
+    delta_seconds = params.fetch(:deltams, 0).to_i / 1000
+
+    @event.update_attributes({
+      starting: @event.starting + delta_seconds.seconds,
+      ending: @event.ending + delta_seconds.seconds
+    })
+
+    respond_to do |format|
+      format.json { render status: :ok, json: @event }
+    end
+  end
+
   def update
+    @event.update(create_params)
     respond_to do |format|
       format.json { render status: :ok, json: {} }
     end
   end
 
 private
+  def set_location_tz(&block)
+    tz = @location.timezone || 'UTC'
+    Time.use_zone(tz, &block)
+  end
 
   def create_params
-    p = params.require(:event).permit(:starting, :ending, :recurrence, :title, :description, :instructor, :location)
+    p = params.require(:event).permit(:starting, :ending, :event_recurrence, :title, :description, :instructor, :location, :weekly_recurrence_days => [])
     p[:modifier_id] = current_user.to_param if signed_in?
+    p[:starting] = Time.zone.parse(p[:starting]) if p.key?(:starting)
+    p[:ending] = Time.zone.parse(p[:ending]) if p.key?(:ending)
     p
+  end
+
+  def set_event
+    @event = @location.events.find(params[:id])
+    head :not_found and return false unless @event.present?
   end
 
   def set_location

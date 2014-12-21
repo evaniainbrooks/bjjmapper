@@ -22,7 +22,6 @@ describe ApplicationController do
       end
     end
   end
-  
   describe 'GET geocode' do
     context 'with json format' do
       context 'when the geocoder service returns results' do

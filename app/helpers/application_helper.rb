@@ -22,7 +22,7 @@ module ApplicationHelper
   end
 
   def select_recurrence
-    [['None', 0],['Daily', 1],['Every second day', 2], ['Weekly', 7], ['Bi-weekly', 14]]
+    [['None', 0],['Daily', 1],['Every second day', 2], ['Weekly', 3], ['Bi-weekly', 4]]
   end
 
   def all_instructors

@@ -11,8 +11,8 @@ describe EventsController do
             format: 'json',
             event: {
               instructor: location.instructors.first.to_param,
-              starting: 10.hours.ago.to_i,
-              ending: 9.hours.ago.to_i,
+              starting: 10.hours.ago.utc.to_s,
+              ending: 9.hours.ago.utc.to_s,
               title: 'test title',
               description: 'test description'
             }

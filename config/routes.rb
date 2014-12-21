@@ -12,7 +12,9 @@ Rails.application.routes.draw do
     get :search, on: :collection
     get :nearby, on: :member
     get :schedule, on: :member
-    resources :events
+    resources :events do
+      post :move, on: :member
+    end
     resources :users, controller: :instructors, as: :instructors, path: '/instructors', only: [:create, :destroy, :index]
   end
   resources :teams, :only => [:show, :index, :update]
