@@ -25,6 +25,7 @@
 //= require bootstrap
 //= require ext
 //= require underscore
+//= require bootstrap-datetimepicker
 //= require_tree ./templates
 //= require backbone
 //= require backbone_rails_sync
