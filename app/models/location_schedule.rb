@@ -12,10 +12,10 @@ class LocationSchedule
   private
 
   def single_events
-    @events ||= Event.where(:location_id => @location_id, :event_recurrence => nil)
+    @events ||= Event.where(:location_id => @location_id, :schedule => nil)
   end
 
   def recurring_events
-    @recurring_events ||= Event.where(:location_id => @location_id, :event_recurrence.ne => nil)
+    @recurring_events ||= Event.where(:location_id => @location_id, :schedule.ne => nil)
   end
 end

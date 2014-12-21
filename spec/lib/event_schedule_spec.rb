@@ -21,14 +21,11 @@ describe RollFindr::EventSchedule do
       end
     end
     context 'when there are recurring events' do
-      let(:recurring_event) do
-        build(:event, title: 'Recurring Event').tap do |e|
-          e.recurrence = IceCube::Rule.weekly(1).count(10)
-        end
-      end
+      let(:recurring_event) { build(:event, title: 'Recurring Event', event_recurrence: Event::RECURRENCE_WEEKLY, weekly_recurrence_days: ["0"]) }
+      before { recurring_event.save }
       subject { RollFindr::EventSchedule.new(empty_query, [recurring_event]) }
       it 'returns all recurring instances' do
-        events = subject.events_between_time(1.day.ago, Time.now + 10.weeks)
+        events = subject.events_between_time(Time.now, Time.now + 10.weeks)
         events.count.should eq 10
       end
     end

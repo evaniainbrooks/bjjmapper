@@ -15,11 +15,7 @@ module RollFindr
     def recurring_events_between_time(start_time, end_time)
       events = []
       @recurring_events.each do |event|
-        recurrence = event.event_recurrence
-        schedule = IceCube::Schedule.new(event.starting)
-        schedule.add_recurrence_rule(recurrence.rule)
-
-        schedule.occurrences(end_time).each do |occurrence|
+        event.schedule.occurrences(end_time).each do |occurrence|
           events << create_event_occurrence(occurrence, event) if occurrence >= start_time
         end
       end
@@ -29,21 +25,22 @@ module RollFindr
 
     def create_event_occurrence(occurrence, event)
       Event.new.tap do |e|
+        e.id = event.id
         e.title = event.title
         e.description = event.description
-        e.starting = occurrence_start(occurrence, event)
-        e.ending = occurrence_end(occurrence, event)
         e.location = event.location
+        e.starting = occurrence_start(occurrence, event).in_time_zone(e.location.timezone)
+        e.ending = occurrence_end(occurrence, event).in_time_zone(e.location.timezone)
         e.instructor = event.instructor
       end
     end
 
     def occurrence_start(occurrence, event)
-      (occurrence.to_time.beginning_of_day + (event.starting.to_i - event.starting.beginning_of_day.to_i).seconds)
+      occurrence
     end
 
     def occurrence_end(occurrence, event)
-      (occurrence.to_time.beginning_of_day + (event.ending.to_i - event.ending.beginning_of_day.to_i).seconds)
+      occurrence + (event.ending - event.starting)
     end
 
     def single_events_between_time(start_time, end_time)

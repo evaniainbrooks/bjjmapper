@@ -56,7 +56,55 @@ describe Event do
       build(:event, starting: 1.hour.ago, ending: 2.hours.ago).should_not be_valid
     end
   end
+  describe 'before_save callback' do
+    describe '.create_schedule' do
+      context 'when .event_recurrence is NONE' do
+        subject { build(:event, event_recurrence: Event::RECURRENCE_NONE) }
+        before { subject.save }
+        it 'does not create a schedule' do
+          subject.read_attribute(:schedule).should be_nil
+        end
+      end
+      context 'when .event_recurrence is DAILY' do
+        subject { build(:event, event_recurrence: Event::RECURRENCE_DAILY) }
+        before { subject.save }
+        it 'adds a daily recurrence rule to the schedule' do
+          subject.schedule.recurrence_rules.first.should be_a(IceCube::DailyRule)
+        end
+      end
+      context 'when .event_recurrence is WEEKLY' do
+        let(:recurrence_days) { ["0", "1"] }
+        subject { build(:event, event_recurrence: Event::RECURRENCE_WEEKLY, weekly_recurrence_days: recurrence_days) }
+        before { subject.save }
+        it 'adds a weekly recurrnce rule to the schedule' do
+          subject.schedule.recurrence_rules.first.should be_a(IceCube::WeeklyRule)
+          subject.schedule.recurrence_rules.first.should eq IceCube::Rule.weekly(1).day(*recurrence_days.map(&:to_i))
+        end
+      end
+    end
+    describe '.serialize_schedule' do
+      context 'with a schedule' do
+        subject { build(:event, event_recurrence: Event::RECURRENCE_DAILY) }
+        before { subject.save }
+        it 'serializes the schedule as yaml' do
+          subject.read_attribute(:schedule).should eq IceCube::Schedule.new(subject.starting).tap { |s|
+            s.add_recurrence_rule IceCube::Rule.daily
+          }.to_yaml
+        end
+      end
+      context 'without a schedule' do
+        subject { build(:event, event_recurrence: Event::RECURRENCE_NONE) }
+        before { subject.save }
+        it 'does not serialize the schedule' do
+          subject.read_attribute(:schedule).should be_nil
+        end
+      end
+    end
+  end
   describe '.as_json' do
-
+    it 'returns the object as json' do
+      json = build(:event).as_json({})
+      [:id, :title, :description, :start, :end, :type, :instructor, :location, :allDay, :recurring].each {|x| json.should have_key(x) }
+    end
   end
 end

@@ -1,0 +1,16 @@
+.row
+  .col-md-10
+    = render partial: 'locations/breadcrumb', locals: { location: location, sub: 'Schedule' }
+  .col-md-2.text-right
+    %a.pull-right.btn.btn-default.btn-sm.display-field{:href => schedule_location_path(location, edit: 1), :style => 'margin-left: 5px', :type => "button"} Edit
+    %a.pull-right.btn.btn-default.edit-field.btn-sm{:href => schedule_location_path(location, edit: 0), :style => 'margin-left: 5px'} Cancel
+    %button.pull-right.btn.btn-default.btn-sm{'data-report-item' => true}
+      %span.report Report
+.row
+  .col-md-2
+    %img{:src => location.image, :class => 'center-block'}/
+  .col-md-10
+    %h1
+      Schedule for
+      = link_to location.title, location_path(location, ref: 'loc_sched_title')
+    = location.address

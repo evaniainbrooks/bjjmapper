@@ -1,9 +1,19 @@
 require 'mongoid-history'
+require 'ice_cube'
 
 class Event
+  RECURRENCE_NONE = 0
+  RECURRENCE_DAILY = 1
+  RECURRENCE_2DAILY = 2
+  RECURRENCE_WEEKLY = 3
+  RECURRENCE_2WEEKLY = 4
+
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::History::Trackable
+  attr_accessor :event_recurrence
+  attr_accessor :weekly_recurrence_days
+
   field :title, type: String
   field :description, type: String
   field :starting, type: Time
@@ -15,9 +25,6 @@ class Event
   scope :before_time, ->(time) { where(:ending.gte => time) }
   scope :after_time, ->(time) { where(:starting.lte => time) }
   scope :between_time, ->(start_time, end_time) { where(:starting.gte => start_time, :starting.lte => end_time) }
-
-  embeds_one :event_recurrence
-  accepts_nested_attributes_for :event_recurrence
 
   belongs_to :modifier, class_name: 'User'
   belongs_to :location
@@ -31,19 +38,24 @@ class Event
   validates :ending, :presence => true
   validate :ending_is_after_starting
 
-  def recurrence=(rule)
-    self.event_recurrence = EventRecurrence.new if self.event_recurrence.blank?
-    self.event_recurrence.rule = rule
+  field :schedule
+
+  before_save :create_schedule
+  before_save :serialize_schedule
+
+  def schedule=(s)
+    @schedule = s
   end
 
-  def starting=(v)
-    v = Time.at(v.to_i).to_datetime unless v.is_a?(DateTime) || v.blank?
-    super(v)
-  end
-
-  def ending=(v)
-    v = Time.at(v.to_i).to_datetime unless v.is_a?(DateTime) || v.blank?
-    super(v)
+  def schedule
+    @schedule ||= begin
+      yaml = read_attribute(:schedule)
+      if yaml.present?
+        IceCube::Schedule.from_yaml(yaml)
+      else
+        IceCube::Schedule.new self.starting
+      end
+    end
   end
 
   def as_json(args)
@@ -56,17 +68,34 @@ class Event
       :type => self.type,
       :instructor => self.instructor.try(:to_param),
       :location => self.location.try(:to_param),
-      :allDay => self.is_all_day,
-      :recurring => self.event_recurrence.present?,
+      :allDay => self.is_all_day ? true : false,
+      :recurring => nil.eql?(read_attribute(:schedule)),
       :url => nil #Rails.application.routes.url_helpers.location_event_path(self.location, self),
     }
   end
 
   private
 
+  def serialize_schedule
+    write_attribute(:schedule, @schedule.to_yaml) if @schedule.present?
+  end
+
   def ending_is_after_starting
     if self.ending.present? && self.starting.present? && self.ending <= self.starting
       errors.add(:ending, "Ending must come after starting")
+    end
+  end
+
+  def create_schedule
+    case self.event_recurrence.try(:to_i)
+    when RECURRENCE_DAILY
+      self.schedule.add_recurrence_rule IceCube::Rule.daily
+    when RECURRENCE_2DAILY
+      self.schedule.add_recurrence_rule IceCube::Rule.daily(2)
+    when RECURRENCE_WEEKLY
+      self.schedule.add_recurrence_rule IceCube::Rule.weekly(1).day(*weekly_recurrence_days.try(:map, &:to_i))
+    when RECURRENCE_2WEEKLY
+      self.schedule.add_recurrence_rule IceCube::Rule.weekly(2).day(*weekly_recurrence_days.try(:map, &:to_i))
     end
   end
 end
