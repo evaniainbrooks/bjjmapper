@@ -2,6 +2,41 @@ require 'spec_helper'
 
 describe LocationDecorator do
   let(:context) { { center: [80.0, 80.0] } }
+  describe '.instructor_color_ordinal' do
+    context 'with nil instructor' do
+      subject { build(:location).decorate }
+      it 'returns open mat color ordinal' do
+        subject.instructor_color_ordinal(nil).should eq LocationDecorator::OPEN_MAT_COLOR_ORDINAL
+      end
+    end
+    context 'with instructor in location' do
+      subject { create(:location_with_instructors).decorate }
+      it 'returns the instructor index' do
+        subject.instructor_color_ordinal(subject.instructors.first).should eq 0
+        subject.instructor_color_ordinal(subject.instructors.last).should eq (subject.instructors.count-1)
+      end
+    end
+    context 'with guest instructor' do
+      subject { build(:location).decorate }
+      it 'returns the guest instructor color ordinal' do
+        subject.instructor_color_ordinal(build(:user)).should eq LocationDecorator::GUEST_INSTRUCTOR_COLOR_ORDINAL
+      end
+    end
+  end
+  describe '.contact_info?' do
+    context 'when one of phone, email, website, facebook is present' do
+      subject { build(:location, website: 'web').decorate }
+      it 'is true' do
+        subject.should be_contact_info
+      end
+    end
+    context 'when phone, email, website, facebook are empty' do
+      subject { build(:location, email: nil, website: nil, phone: nil, facebook: nil).decorate }
+      it 'is false' do
+        subject.should_not be_contact_info
+      end
+    end
+  end
   describe '.distance' do
     context 'when the context has a center point' do
       subject { build(:location).decorate(context: context) }
@@ -10,7 +45,7 @@ describe LocationDecorator do
     end
     context 'when the context has no center point' do
       subject { build(:location).decorate }
-      it { subject.distance.should_not be_present } 
+      it { subject.distance.should_not be_present }
     end
   end
   describe '.bearing' do
@@ -22,7 +57,7 @@ describe LocationDecorator do
     end
     context 'when the context has no center point' do
       subject { build(:location).decorate }
-      it { subject.bearing.should_not be_present } 
+      it { subject.bearing.should_not be_present }
     end
   end
   describe '.bearing_direction' do
@@ -33,12 +68,12 @@ describe LocationDecorator do
         describe direction do
           before { Geocoder::Calculations.stub(:bearing_between).and_return(bearings[i]) }
           it { subject.bearing_direction.should eq direction }
-        end 
+        end
       end
     end
     context 'when the context has no center point' do
       subject { build(:location).decorate }
-      it { subject.bearing_direction.should_not be_present } 
+      it { subject.bearing_direction.should_not be_present }
     end
   end
   describe '.description' do

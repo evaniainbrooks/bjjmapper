@@ -5,6 +5,9 @@ class LocationDecorator < Draper::Decorator
   DEFAULT_TEAM_NAME = 'Independent'
 
   EMPTY_HASH = {}.freeze
+  
+  OPEN_MAT_COLOR_ORDINAL = 999
+  GUEST_INSTRUCTOR_COLOR_ORDINAL = 888
 
   delegate_all
   decorates_finders
@@ -27,6 +30,11 @@ class LocationDecorator < Draper::Decorator
         method: :linear
       )
     end
+  end
+
+  def instructor_color_ordinal(instructor)
+    return OPEN_MAT_COLOR_ORDINAL unless instructor.present?
+    self.instructors.index(instructor) || GUEST_INSTRUCTOR_COLOR_ORDINAL
   end
 
   def bearing_direction
@@ -112,6 +120,10 @@ class LocationDecorator < Draper::Decorator
 
   def phone
     h.number_to_phone(object.phone)
+  end
+
+  def contact_info?
+    object.phone.present? || object.email.present? || object.website.present? || object.facebook.present?
   end
 
   def as_json(args)
