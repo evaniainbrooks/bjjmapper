@@ -11,28 +11,32 @@
   .input-group
     %span.input-group-addon http://facebook.com/
     = f.text_field :facebook, class: 'input-sm form-control'
-- if location.phone.present?
-  %span.display-field.form-group
-    %b.small Phone
-    %br/
-    %a{:class => 'phone', :href => "tel:#{location.phone}"}
-      = location.phone
-      %i.fa.fa-phone
-- if location.email.present?
-  %span.display-field.form-group
-    %b.small Email
-    %br/
-    = link_to 'mailto:' + location.email, class: 'email' do
-      = location.email
-      %i.fa.fa-envelope
-- if location.website.present?
-  %span.display-field.form-group
-    %b.small Website
-    %br/
-    = link_to 'http://' + location.website, class: 'website' do
-      = location.website
-      %i.fa.fa-external-link
-- if location.facebook.present?
-  %span.display-field.form-group
-    = link_to 'http://facebook.com/' + location.facebook, class: 'facebook' do
-      %i.fa.fa-facebook-square.fa-3x
+
+- unless location.contact_info?
+  %i.text-muted No contact information was provided
+- else
+  - if location.phone.present?
+    %span.display-field.form-group
+      %b.small Phone
+      %br/
+      %a{:class => 'phone', :href => "tel:#{location.phone}"}
+        = location.phone
+        %i.fa.fa-phone
+  - if location.email.present?
+    %span.display-field.form-group
+      %b.small Email
+      %br/
+      = link_to 'mailto:' + location.email, class: 'email' do
+        = location.email
+        %i.fa.fa-envelope
+  - if location.website.present?
+    %span.display-field.form-group
+      %b.small Website
+      %br/
+      = link_to 'http://' + location.website, class: 'website' do
+        = location.website
+        %i.fa.fa-external-link
+  - if location.facebook.present?
+    %span.display-field.form-group
+      = link_to 'http://facebook.com/' + location.facebook, class: 'facebook' do
+        %i.fa.fa-facebook-square.fa-3x

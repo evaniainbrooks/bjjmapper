@@ -7,6 +7,11 @@
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
+      .btn-group.pull-left{:role => 'group'}
+        %button.navbar-toggle.btn{'data-toggle' => 'button', 'style' => 'color: white; margin-right: 0px; margin-left: 15px', 'data-show-list' => true}
+          %span List
+        %button.navbar-toggle.btn{'data-toggle' => 'button', 'style' => 'color: white', 'data-show-map' => true}
+          %span Map
     / Collect the nav links, forms, and other content for toggling
     .main-navbar-collapse.collapse.navbar-collapse
       %ul.nav.navbar-nav

@@ -6,7 +6,7 @@
           %button.close{'data-dismiss' => 'modal', 'type' => 'button'}
             %span{'aria-hidden' => 'true'} &times;
             %span.sr-only Close
-          %h4 
+          %h4
             %i.fa.fa-calendar
             Create Event
         .modal-body
@@ -30,38 +30,50 @@
                     %fieldset
                       / Text input
                       .form-group
-                        %label.col-md-4.control-label{:for => "event[title]"} Title
-                        .col-md-8
-                          = f.text_field :title, placeholder: 'eg. BJJ Beginners, Competition Class', class: 'form-control input-lg'
-                          = f.hidden_field :starting
-                          = f.hidden_field :ending
+                        %label.control-label{:for => "event[title]"} Title
+                        = f.text_field :title, placeholder: 'eg. BJJ Beginners, Competition Class', class: 'form-control input-lg'
                       .form-group
-                        %label.col-md-4.control-label{:for => "event[instructor]"} Instructor
-                        .col-md-8
-                          = f.select :instructor, location.instructors.map{|o| [o.name, o.id]}, {include_blank: true}, class: 'form-control input-md'
+                        %label.control-label{:for => "event[instructor]"} Instructor
+                        = f.select :instructor, location.instructors.map{|o| [o.name, o.id]}, {include_blank: true}, class: 'form-control input-md'
                       .form-group
-                        %label.col-md-4.control-label
-                          Start
-                        .col-md-8.form-inline
-                          = select_hour(0, {start_hour: 1, end_hour: 12, field_name: 'start_hours'}, {class: 'form-control input-md'})
-                          = select_minute(0, {minute_step: 15, field_name: 'start_minutes'}, {class: 'form-control input-md'})
-                          = select_tag :date_start_am_pm, options_for_select([['AM', 'am'],['PM','pm']]), class: 'form-control input-md'
+                        %strong Start
+                        .input-group.date.pick-time.start
+                          %input.form-control{'name' => 'event[starting]', 'type' => 'text'}/
+                          %span.input-group-addon
+                            %span.fa.fa-clock-o
                       .form-group
-                        %label.col-md-4.control-label
-                          End
-                        .col-md-8.form-inline
-                          = select_hour(1, {start_hour: 1, end_hour: 12, field_name: 'end_hours'}, {class: 'form-control input-md'})
-                          = select_minute(0, {minute_step: 15, field_name: 'end_minutes'}, {class: 'form-control input-md'})
-                          = select_tag :date_end_am_pm, options_for_select([['AM', 'am'],['PM','pm']]), class: 'form-control input-md'
+                        %strong End
+                        .input-group.date.pick-time.end
+                          %input.form-control{'name' => 'event[ending]', 'type' => 'text'}/
+                          %span.input-group-addon
+                            %span.fa.fa-clock-o
                       .form-group
-                        .checkbox.col-md-offset-4
-                          %label.control-label
-                            = check_box_tag 'event[is_all_day]'
-                            %strong All Day Event
-                      .form-group
-                        %label.col-md-4.control-label{:for => "event[event_recurrence]"} Repeat
-                        .col-md-8
+                        %label.control-label{:for => "event[event_recurrence]"} Repeat
+                        .form-inline
                           = f.select :event_recurrence, select_recurrence, {}, class: 'form-control input-md'
+                          .week-recurrence.btn-group{'data-toggle' => 'buttons'}
+                            %label.btn.btn-default
+                              %input{:name => 'event[weekly_recurrence_days][]', :type => 'checkbox', :value => '0'}/
+                              Su
+                            %label.btn.btn-default
+                              %input{:name => 'event[weekly_recurrence_days][]', :type => 'checkbox', 'data-toggle' => 'button', :value => '1'}/
+                              Mo
+                            %label.btn.btn-default
+                              %input{:name => 'event[weekly_recurrence_days][]', :type => 'checkbox', 'data-toggle' => 'button', :value => '2'}/
+                              Tu
+                            %label.btn.btn-default
+                              %input{:name => 'event[weekly_recurrence_days][]', :type => 'checkbox', 'data-toggle' => 'button', :value => '3'}/
+                              We
+                            %label.btn.btn-default
+                              %input{:name => 'event[weekly_recurrence_days][]', :type => 'checkbox', 'data-toggle' => 'button', :value => '4'}/
+                              Th
+                            %label.btn.btn-default
+                              %input{:name => 'event[weekly_recurrence_days][]', :type => 'checkbox', 'data-toggle' => 'button', :value => '5'}/
+                              Fr
+                            %label.btn.btn-default
+                              %input{:name => 'event[weekly_recurrence_days][]', :type => 'checkbox', 'data-toggle' => 'button', :value => '6'}/
+                              Sa
         .modal-footer
           %button.btn.btn-default{:type => 'button', 'data-dismiss' => 'modal'} Cancel
           %button.btn.btn-success{:disabled => true, :type => 'submit'} Create Event
+

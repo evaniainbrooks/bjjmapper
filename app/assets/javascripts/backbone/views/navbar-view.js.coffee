@@ -3,10 +3,12 @@ class RollFindr.Views.NavbarView extends Backbone.View
   tagName: 'div'
   events: {
     'click [data-geolocate]': 'geolocateMap'
+    'click [data-show-list]': 'scrollToList'
+    'click [data-show-map]': 'scrollToMap'
     'submit form[role="search"]': 'search'
   }
   initialize: ->
-    _.bindAll(this, 'geolocateMap', 'search')
+    _.bindAll(this, 'geolocateMap', 'search', 'scrollToList', 'scrollToMap')
   geolocateMap: ->
     @$('[name="location"]').val('')
     RollFindr.GlobalEvents.trigger('geolocate')
@@ -21,3 +23,11 @@ class RollFindr.Views.NavbarView extends Backbone.View
     @$('[name="location"]').val('')
     e.preventDefault()
 
+  scrollToList: ->
+    $('html, body').animate({
+      scrollTop: $('.map-list-view').offset().top - @$el.height()
+    }, 1000)
+  scrollToMap: ->
+    $('html, body').animate({
+      scrollTop: 0
+    }, 1000)

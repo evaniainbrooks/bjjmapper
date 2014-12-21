@@ -1,12 +1,17 @@
+#= require moment
+
 class RollFindr.Views.CreateEventView extends Backbone.View
-  el: $('.add-event-dialog'),
+  el: $('.add-event-dialog')
+  startPicker: null
+  endPicker: null
   events: {
     'submit form': 'formSubmit'
     'keyup [name="event[title]"]': 'enableSubmit'
+    'change [name="event[event_recurrence]"]': 'recurrenceChanged'
   }
   enableSubmit: ->
     btn = @$('button[type="submit"]')
-    if @hasTitle() && @isEndAfterStart()
+    if @hasTitle()
       btn.removeAttr('disabled')
     else
       btn.attr('disabled', true)
@@ -14,24 +19,10 @@ class RollFindr.Views.CreateEventView extends Backbone.View
   hasTitle: ->
     @$('[name="event[title]"]').val().length > 0
 
-  isEndAfterStart: ->
-    true
-
   formSubmit: (e)->
     e.preventDefault()
 
-    @start.hours(@getStartHours())
-    @start.minutes(@getStartMinutes())
-
-    @end.hours(@getEndHours())
-    @end.minutes(@getEndMinutes())
-
-    data = {}
-    data['event[starting]'] = @start.unix()
-    data['event[ending]'] = @end.unix()
-    _.each ['title', 'description', 'instructor', 'recurrence'], (k)->
-      data["event[#{k}]"] = $("[name='event[#{k}]']", e.target).val()
-
+    data = $(e.target).serialize()
     method = $(e.target).attr('method')
     action = $(e.target).attr('action')
     $.ajax({
@@ -41,57 +32,72 @@ class RollFindr.Views.CreateEventView extends Backbone.View
       success: (eventData)=>
         @$el.modal('hide')
         $('.scheduler').fullCalendar('addEventSource', [eventData])
-        toastr.success("Successfully added event to the calendar.")
+        toastr.success("Successfully added event to the calendar")
     })
 
   initialize: ->
     _.bindAll(this, 'enableSubmit', 'formSubmit')
+    @initializePickers()
+    @setUiDefaults()
+
+  setUiDefaults: ->
+    $('[name="event[event_recurrence]"]').val("0")
+    $('[name="event[weekly_recurrence_days]"]').removeAttr('checked')
+    $('.week-recurrence').hide()
+
+  showModalDialog: ->
+    @setUiDefaults()
+    @$el.modal('show')
+
+  initializePickers: ->
+    icons = {
+      time: "fa fa-clock-o",
+      date: "fa fa-calendar",
+      up: "fa fa-arrow-up",
+      down: "fa fa-arrow-down"
+    }
+
+    formatIso8601 = "YYYY-MM-DDTHH:mm:ss"
+
+    $('.pick-time').datetimepicker({
+      pickTime: true
+      sideBySide: true
+      useSeconds: false
+      useCurrent: false
+      minuteStepping: 15
+      icons: icons
+      format: formatIso8601
+    })
+
+    @startPicker = $('.pick-time.start')
+    @endPicker = $('.pick-time.end')
+    @startPicker.on "dp.change", (e)=>
+      @endPicker.data("DateTimePicker").setMinDate(e.date)
+
+    @endPicker.on "dp.change", (e)=>
+      @startPicker.data("DateTimePicker").setMaxDate(e.date)
 
   render: (start, end)->
     @start = start
     @end = end
 
-    @$('#date_start_hours').val(@hourForCalendar(start.hours()))
-    @$('#date_start_am_pm').val(@amPm(start.hours()))
-    @$('#date_start_minutes').val(@valueForCalendar(start.minutes()))
+    @startPicker.data('DateTimePicker').setDate(@start)
+    @endPicker.data('DateTimePicker').setDate(@end)
 
-    @$('#date_end_hours').val(@hourForCalendar(end.hours()))
-    @$('#date_end_am_pm').val(@amPm(end.hours()))
-    @$('#date_end_minutes').val(@valueForCalendar(end.minutes()))
+    @showModalDialog()
 
-    @$el.modal('show')
-
-  getStartHours: ->
-    hours = parseInt(@$('#date_start_hours').val(), 10)
-    amPm = @$('#date_start_am_pm').val()
-    hours += 12 if amPm == 'pm'
-
-  getStartMinutes: ->
-    parseInt(@$('#date_start_minutes').val(), 10)
-
-  getEndHours: ->
-    hours = parseInt(@$('#date_end_hours').val(), 10)
-    amPm = @$('#date_end_am_pm').val()
-    hours += 12 if amPm == 'pm'
-
-  getEndMinutes: ->
-    parseInt(@$('#date_end_minutes').val(), 10)
-
-  amPm: (v)->
-    if v >= 12 then 'pm' else 'am'
-
-  hourForCalendar: (v)->
-    hour = if v > 12
-      v - 12
-    else if v == 0
-      12
+  recurrenceChanged: (e)->
+    recurrence = $(e.currentTarget).val()
+    if parseInt(recurrence, 10) > 2
+      $('.week-recurrence').show()
+      day = moment(@startPicker.data('DateTimePicker').getDate()).day()
+      @$('[value=' + day + ']').attr('checked', true)
+      @$('[name="event[weekly_recurrence_days]"]').each (i, o)->
+        if parseInt($(o).val(), 10) == day
+          $(o).attr('checked', true)
+          $(o).parent().addClass('active')
+        else
+          $(o).removeAttr('checked')
+          $(o).parent().removeClass('active')
     else
-      v
-
-    return @valueForCalendar(hour)
-
-  valueForCalendar: (v)->
-    return @pad2(v)
-
-  pad2: (n)->
-    if n < 10 then "0" + n else n
+      $('.week-recurrence').hide()

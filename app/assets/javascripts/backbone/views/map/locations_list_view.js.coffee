@@ -28,6 +28,12 @@ class RollFindr.Views.MapLocationsListView extends Backbone.View
 
   activeMarkerChanged: (e)->
     @activeMarkerId = e.id
+    listElem = $('[data-id="' + @activeMarkerId + '"]')
+
+    if 'fixed' == $('.map-canvas').css('position')
+      $('html, body').animate({
+        scrollTop: listElem.offset().top - $('.navbar').height()
+      }, 1000)
     @render()
 
   listItemClicked: (e)->

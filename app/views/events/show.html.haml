@@ -1,0 +1,15 @@
+= content_for(:title) do
+  = "Event information for #{event.title} at #{event.location.title}"
+
+.page.container
+  .row
+    .col-md-2
+      %img{:src => event.instructor.image, :alt => event.instructor.name}/
+    .col-md-10
+      %h1
+        = event.title
+        %small= event.duration
+  - if event.instructor.present?
+    %p.text-info.small= "with #{event.instructor.try(:name)}"
+  %p= event.description
+  %p= event.schedule.to_s
