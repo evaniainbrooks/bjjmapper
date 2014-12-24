@@ -4,6 +4,9 @@ class RollFindr.Models.Location extends Backbone.Model
     instructors = @get('instructors')
     instructors = new RollFindr.Collections.InstructorsCollection(instructors, {location_id: id})
     this.set('instructors', instructors)
+    reviews = @get('reviews')
+    reviews = new RollFindr.Collections.ReviewsCollection(reviews, {location_id: id})
+    this.set('reviews', reviews)
 
   isVisible: (center, radius)->
   paramRoot: 'location'

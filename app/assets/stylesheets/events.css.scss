@@ -28,6 +28,9 @@ $colors: $color0, $color1, $color2, $color3;
 .event-color-base {
   padding: 3px;
   color: black !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
   h4 {
     text-transform: uppercase;
     margin-top: 5px !important;
@@ -48,4 +51,16 @@ $colors: $color0, $color1, $color2, $color3;
       border-color: nth($colors, $i) !important;
     }
   }
+}
+
+.event-color-888 {
+  @extend .event-color-base;
+  background-color: white !important;
+  border-color: red !important;
+}
+
+.event-color-999 {
+  @extend .event-color-base;
+  background-color: #ddd !important;
+  border-color: #aaa !important;
 }

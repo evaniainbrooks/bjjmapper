@@ -26,6 +26,9 @@
           %a{:href => "mailto:info+meta@bjjmapper.com"} info@bjjmapper.com
   .row
     .col-md-7.col-md-offset-1
+      = render partial: 'meta_contact_message' if params.key?(:contacted)
+  .row
+    .col-md-7.col-md-offset-1
       = render partial: 'contact_form'
     .col-md-2
       %img{:src => image_path('evan-150.png')}/

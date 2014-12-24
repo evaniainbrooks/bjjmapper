@@ -59,6 +59,7 @@ class Location
   belongs_to :team, index: true
   has_and_belongs_to_many :instructors, class_name: 'User', index: true
   has_many :events
+  has_many :reviews
 
   index({
     :street => 'text',

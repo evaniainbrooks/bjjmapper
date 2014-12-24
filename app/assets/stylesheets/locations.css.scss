@@ -6,3 +6,12 @@
   width: 100px !important;
   height: 100px !important;
 }
+
+.instructors, .reviews {
+  .empty-message {
+    display: none;
+  }
+  &.empty {
+    .empty-message { display: inherit; }
+  }
+}

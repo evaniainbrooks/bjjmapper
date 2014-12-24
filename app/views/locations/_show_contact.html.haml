@@ -13,7 +13,7 @@
     = f.text_field :facebook, class: 'input-sm form-control'
 
 - unless location.contact_info?
-  %i.text-muted No contact information was provided
+  %i.display-field.text-muted No contact information was provided
 - else
   - if location.phone.present?
     %span.display-field.form-group

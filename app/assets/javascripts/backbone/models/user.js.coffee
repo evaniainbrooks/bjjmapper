@@ -35,8 +35,8 @@ class RollFindr.Collections.UsersCollection extends Backbone.Collection
 class RollFindr.Collections.InstructorsCollection extends RollFindr.Collections.UsersCollection
   model: RollFindr.Models.Instructor
   location_id: null,
-  url: ->
-    Routes.location_instructors_path(this.location_id)
+  url: =>
+    Routes.location_instructors_path(@location_id)
   initialize: (models, options)->
     _.extend(this, _.pick(options, "location_id"))
 

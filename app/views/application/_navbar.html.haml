@@ -7,11 +7,12 @@
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
-      .btn-group.pull-left{:role => 'group'}
-        %button.navbar-toggle.btn{'data-toggle' => 'button', 'style' => 'color: white; margin-right: 0px; margin-left: 15px', 'data-show-list' => true}
-          %span List
-        %button.navbar-toggle.btn{'data-toggle' => 'button', 'style' => 'color: white', 'data-show-map' => true}
-          %span Map
+      - if action?(:map)
+        .btn-group.pull-left{:role => 'group'}
+          %button.navbar-toggle.btn{'data-toggle' => 'button', 'style' => 'color: white; margin-right: 0px; margin-left: 15px', 'data-show-list' => true}
+            %span List
+          %button.navbar-toggle.btn{'data-toggle' => 'button', 'style' => 'color: white', 'data-show-map' => true}
+            %span Map
     / Collect the nav links, forms, and other content for toggling
     .main-navbar-collapse.collapse.navbar-collapse
       %ul.nav.navbar-nav
@@ -21,16 +22,17 @@
           %a{href: locations_path(ref: 'navbar'), title: 'Brazilian Jiu-Jitsu Academy Directory'} Directory
         %li{:class => action?(:meta) ? 'active' : nil}
           %a{:href => meta_path(ref: 'navbar'), title: 'Learn about BJJMapper'} Meta
-      %form.navbar-form.navbar-left{:role => "search"}
-        .form-group.has-feedback
-          %input.clear-input.form-control{:name => 'query', :size => '8', :placeholder => "Search", :type => "text"}/
-          %span.clear-input-button.form-control-feedback.fa.fa-times-circle
-        .form-group
-          .input-group
-            %input.form-control{:name => 'location', :size => '10', :placeholder => "Current View", :type => "text"}/
-            %a.input-group-addon{'data-geolocate' => 'true', :href => '#geolocate'}
-              %i.fa.fa-location-arrow
-        %button.btn.btn-default{:type => "submit"} Search
+      - if action?(:map)
+        %form.navbar-form.navbar-left{:role => "search"}
+          .form-group.has-feedback
+            %input.clear-input.form-control{:name => 'query', :size => '8', :placeholder => "Search", :type => "text"}/
+            %span.clear-input-button.form-control-feedback.fa.fa-times-circle
+          .form-group
+            .input-group
+              %input.form-control{:name => 'location', :size => '10', :placeholder => "Current View", :type => "text"}/
+              %a.input-group-addon{'data-geolocate' => 'true', :href => '#geolocate'}
+                %i.fa.fa-location-arrow
+          %button.btn.btn-default{:type => "submit"} Search
       = render partial: 'profile_or_login'
     / /.navbar-collapse
   / /.container-fluid

@@ -16,7 +16,7 @@
             %li
               %a.add-instructor{:href => "#instructor"} Add Instructor
             %li
-              %a{:href => "#schedule", 'data-follow-href' => true, 'data-begin-edit' => true} Add Event
+              %a{:href => schedule_location_path(location, edit: 1)} Add Event
         %button.pull-right.btn.btn-default.edit-field.btn-sm{:style => 'margin-left: 5px', :'data-cancel-edit' => true } Cancel
         %button.pull-right.btn.btn-default.btn-sm{'data-report-item' => true}
           %span.report Report
@@ -54,7 +54,9 @@
         %button.pull-right.edit-field.btn.btn-small.btn-default.add-instructor{:style => 'margin-top: -5px', :type => 'button'}
           %i.fa.fa-plus-circle
           Add Instructor
-        .clear.items 
+        .clear.items
+        .empty-message
+          %i.text-muted We don't know who teaches at this academy
         %br/
         -#= render :partial => 'locations/instructors', :locals => { :location => location }
       .col-md-8
@@ -66,8 +68,8 @@
         %a{:name => 'schedule'}
         .scheduler.clear
     %hr/
-    .row
-      .col-md-4
+    .row.reviews
+      .col-md-12
         = render :partial => 'locations/show_reviews', :locals => { :location => location }
     %hr.edit-field/
     .row.edit-field

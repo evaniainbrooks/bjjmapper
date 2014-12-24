@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     get :search, on: :collection
     get :nearby, on: :member
     get :schedule, on: :member
+    resources :reviews, only: [:create, :destroy, :index]
     resources :events do
       post :move, on: :member
     end
