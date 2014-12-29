@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   end
   resources :locations do
     get :search, on: :collection
+    get :wizard, on: :collection
     get :nearby, on: :member
     get :schedule, on: :member
     resources :reviews, only: [:create, :destroy, :index]

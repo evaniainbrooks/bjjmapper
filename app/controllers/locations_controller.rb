@@ -57,6 +57,10 @@ class LocationsController < ApplicationController
     end
   end
 
+  def wizard
+
+  end
+
   def create
     location = Location.create(create_params)
 
