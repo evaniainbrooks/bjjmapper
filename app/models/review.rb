@@ -19,7 +19,7 @@ class Review
       :user_id => self.user.id.to_s,
       :body => self.body,
       :rating => self.rating.try(:to_i) || 0,
-      :created_at => self.created_at.strftime("%B %e, %Y")
+      :created_at => self.created_at.try(:strftime, "%B %e, %Y")
     }
   end
 end
