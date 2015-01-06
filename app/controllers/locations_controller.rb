@@ -5,6 +5,8 @@ class LocationsController < ApplicationController
   decorates_assigned :location, :locations
 
   helper_method :created?
+  helper_method :reviewed?
+  helper_method :error?
 
   def schedule
     tracker.track('showSchedule',
@@ -188,6 +190,14 @@ class LocationsController < ApplicationController
 
   def created?
     return params.fetch(:create, 0).to_i.eql?(1)
+  end
+  
+  def reviewed?
+    return params.fetch(:reviewed, 0).to_i.eql?(1)
+  end
+  
+  def error?
+    return params.fetch(:error, 0).to_i.eql?(1)
   end
 
   def set_map
