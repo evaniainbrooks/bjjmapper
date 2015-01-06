@@ -94,6 +94,7 @@ class LocationDecorator < Draper::Decorator
   def image
     img = object.image
     img = team.object.image if img.blank? && team.present?
+    img = avatar_service_url(object.title) if img.blank?
     img = DEFAULT_IMAGE if img.blank?
     h.image_path(img)
   end
@@ -141,6 +142,13 @@ class LocationDecorator < Draper::Decorator
       opengraph_updated_at: opengraph_updated_at,
       opengraph_image: opengraph_image
     )
+  end
+
+  private
+
+  def avatar_service_url(name)
+    q = { name: name }.to_query
+    "/service/avatar?#{q}"
   end
 end
 
