@@ -14,11 +14,13 @@
     reviewsView: null,
     events: {
       'click .add-instructor': 'addInstructor',
+      'click .add-review': 'addReview',
       'change [name="location[team_id]"]': 'changeTeam'
     },
     initialize: function(options) {
       _.bindAll(this,
         'addInstructor',
+        'addReview',
         'changeTeam');
 
       this.model = new RollFindr.Models.Location(options.model);
@@ -34,6 +36,9 @@
     },
     addInstructor: function() {
       $('.add-instructor-dialog').modal('show');
+    },
+    addReview: function() {
+      $('.add-review-dialog').modal('show');
     },
     changeTeam: function(e) {
       var teamImg = $('option:selected', e.currentTarget).data('img-src');

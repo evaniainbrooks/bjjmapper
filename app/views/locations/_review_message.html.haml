@@ -1,0 +1,18 @@
+- unless error?
+  .alert.alert-success{:role => 'alert'}
+    %button.close{"data-dismiss" => "alert", :type => "button"} 
+      %span{"aria-hidden" => "true"} &times;
+      %span.sr-only Close
+    %strong Thank you for contributing to BJJMapper! 
+    %span 
+      Your review of this academy has been posted. 
+      %a{:href => '#reviews'} See Review
+- else
+  .alert.alert-danger{:role => 'alert'}
+    %button.close{"data-dismiss" => "alert", :type => "button"} 
+      %span{"aria-hidden" => "true"} &times;
+      %span.sr-only Close
+    %strong Sorry! Something went wrong. 
+    %span 
+      There was an error posting your review. Please try again later.
+  

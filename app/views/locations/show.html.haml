@@ -17,12 +17,15 @@
               %a.add-instructor{:href => "#instructor"} Add Instructor
             %li
               %a{:href => schedule_location_path(location, edit: 1)} Add Event
+            %li
+              %a.add-review{:href => '#reviews'} Add Review
         %button.pull-right.btn.btn-default.edit-field.btn-sm{:style => 'margin-left: 5px', :'data-cancel-edit' => true } Cancel
         %button.pull-right.btn.btn-default.btn-sm{'data-report-item' => true}
           %span.report Report
     .row
       .col-md-12
         = render partial: 'create_message' if created?
+        = render partial: 'review_message' if reviewed?
     .row
       .col-md-2
         .display-field
@@ -95,6 +98,7 @@
     %br/
 
   = render :partial => 'instructors/add_instructor_dialog'
+  = render :partial => 'reviews/add_review_dialog'
   = render :partial => 'events/add_event_modal', locals: { location: location }
 = content_for(:scripts) do
   :coffeescript
