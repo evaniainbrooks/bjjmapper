@@ -405,6 +405,7 @@ GEM
 
 PLATFORMS
   java
+  ruby
 
 DEPENDENCIES
   bootstrap3-datetimepicker-rails (~> 3.1.3)
