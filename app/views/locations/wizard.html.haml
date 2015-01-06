@@ -47,27 +47,29 @@
               .form-group
                 %label.control-label{:for => "location[team]"} Team
                 = f.select :team_id, grouped_options_for_select(all_teams_select_groups), { include_blank: true }, { class: 'form-control  input-lg' }
-      .step-pane.alert{'data-step' => 2}
-        .row.search-mode
+      .step-pane.alert.editable{'data-step' => 2}
+        .row.display-field
           .col-md-8.col-md-offset-2
             .form-group
+              %label.control-label Address
               .input-group
                 = text_field_tag('full_address', '', placeholder: 'eg. 123 Fourth St, Edmonton', class: 'street form-control input-lg')
-                %a.btn.btn-default.input-group-addon
+                %a.btn.btn-default.input-group-addon{'data-address-search' => true}
                   %span.fa-2x.fa.fa-search
 
-        .row.select-mode
+        .row.edit-field
           .col-md-8.col-md-offset-2
             .form-group
+              %label.control-label Address
               .input-group
                 = select_tag('address_options', '', class: 'form-control input-lg')
-                %a.btn.btn-default.input-group-addon
+                %a.btn.btn-default.input-group-addon{'data-cancel-edit' => true}
                   %span.fa-2x.fa.fa-close
         
-        .row
+        .row.edit-field
           .col-md-offset-2.col-md-8
             %h4 Refine Address
-        .row
+        .row.edit-field
           .col-md-4.col-md-offset-2
             = f.label :street, class: 'small'
             = f.text_field :street, class: 'form-control input-sm'
@@ -80,7 +82,21 @@
             = f.text_field :state, class: 'form-control input-sm'
             = f.label :country, class: 'small'
             = f.text_field :country, class: 'form-control input-sm'
-            
+      .step-pane.alert{'data-step' => 3}
+        .row.edit-field
+          .col-md-8.col-md-offset-2
+            = f.label :phone, class: 'small'
+            = f.text_field :phone, class: 'input-sm form-control'
+            = f.label :email, class: 'small'
+            = f.text_field :email, class: 'input-sm form-control'
+            = f.label :website, class: 'small'
+            .input-group
+              %span.input-group-addon http://
+              = f.text_field :website, class: 'input-sm form-control'
+            .input-group
+              %span.input-group-addon http://facebook.com/
+              = f.text_field :facebook, class: 'input-sm form-control'
+        
 
 = content_for(:scripts) do
   :coffeescript
