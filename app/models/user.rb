@@ -103,7 +103,7 @@ class User
     d = Time.now
     a = d.year - birth_year
     a = a - 1 if (
-         birth_month >  d.month or 
+         birth_month >  d.month or
         (birth_month >= d.month and birth_day > d.day)
     )
     a
