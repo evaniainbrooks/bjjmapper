@@ -12,5 +12,21 @@ FactoryGirl.define do
         end
       end
     end
+    factory :location_with_reviews do
+      after(:create) do |instance|
+        3.times do
+          review = build(:review, location: instance)
+          instance.reviews << review
+        end
+      end
+    end
+    factory :location_with_many_reviews do
+      after(:create) do |instance|
+        20.times do
+          review = build(:review, location: instance)
+          instance.reviews << review
+        end
+      end
+    end
   end
 end
