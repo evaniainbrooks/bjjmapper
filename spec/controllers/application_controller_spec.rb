@@ -27,14 +27,14 @@ describe ApplicationController do
       context 'when the geocoder service returns results' do
         let(:location) { { 'lat' => 80.0, 'lng' => 80.0 } }
         before do
-          search_result = double('search result')
+          search_result = double('search result', city: '', address: '', street_address: '', state: '', postal_code: '', country: '')
           search_result.stub('geometry') { { 'location' => location } }
           search_result.stub('coordinates') { [location['lat'], location['lng']] }
           Geocoder.stub('search') { [search_result, search_result] }
         end
         it 'returns the location of the first search result' do
           get :geocode, query: 'test', format: 'json'
-          response.body.should match(location.to_json)
+          response.should be_ok
         end
       end
       context 'when the geocoder service returns nothing' do

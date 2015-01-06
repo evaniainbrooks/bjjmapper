@@ -24,13 +24,13 @@ class ApplicationController < ActionController::Base
 
     tracker.track('geocodeQuery',
       query: search_query,
-      resultCount: search_result.count
+      result_count: search_result.count
     )
 
     respond_to do |format|
       format.json do
         if search_result.count > 0
-          render json: search_result[0].geometry['location']
+          render json: json_geocode_response(search_result) #[0].geometry['location']
         else
           render status: :not_found, json: {}
         end
@@ -97,7 +97,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def meta 
+  def meta
   end
 
   protected
@@ -145,6 +145,17 @@ class ApplicationController < ActionController::Base
     ep = Rails.configuration.google_maps_endpoint
     key = Rails.configuration.google_maps_api_key
     "#{ep}?key=#{key}&v=3.exp&sensor=false"
+  end
+
+  def json_geocode_response(result)
+    {
+      address: result.first.address,
+      street: result.first.street_address,
+      postal_code: result.first.postal_code,
+      city: result.first.city,
+      state: result.first.state,
+      country: result.first.country
+    }.merge(result.first.geometry['location'])
   end
 end
 
