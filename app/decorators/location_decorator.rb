@@ -147,8 +147,7 @@ class LocationDecorator < Draper::Decorator
   private
 
   def avatar_service_url(name)
-    q = { name: name }.to_query
-    "/service/avatar?#{q}"
+    "/service/avatar/100x100/#{CGI.escape(name)}/image.png"
   end
 end
 
