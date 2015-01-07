@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     end
     resources :users, controller: :instructors, as: :instructors, path: '/instructors', only: [:create, :destroy, :index]
   end
-  resources :teams, :only => [:show, :index, :update]
+  resources :teams, :only => [:show, :index, :update, :create]
   root 'application#map'
 
   get 'search/:query' => 'application#search'

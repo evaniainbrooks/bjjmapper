@@ -1,6 +1,34 @@
 require 'spec_helper'
 
 describe TeamsController do
+  describe 'GET create' do
+    let(:create_params) { { :team => { :name => 'New title', :description => 'New description' } } }
+    context 'when not signed in' do
+      it 'returns not_authorized' do
+        expect do
+          post :create, create_params.merge({:format => 'json'})
+          response.status.should eq 401
+        end.to change { Team.count }.by(0)
+      end
+    end
+    context 'when signed in' do
+      let(:session_params) { { user_id: create(:user).to_param } }
+      context 'with html format' do
+        it 'creates and redirects to a new team in edit mode' do
+          expect do
+            post :create, create_params.merge({:format => 'html'}), session_params
+            response.should redirect_to(team_path(Team.last, edit: 1, create: 1))
+          end.to change { Team.count }.by(1)
+        end
+      end
+      context 'with json format' do
+        it 'creates and returns a new team' do
+          post :create, create_params.merge({:format => 'json'}), session_params
+          response.body.should match(create_params[:team][:description])
+        end
+      end
+    end
+  end
   describe 'GET show' do
     let(:team) { create(:team) }
     it 'returns the team' do

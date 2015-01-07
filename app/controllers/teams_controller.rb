@@ -1,11 +1,29 @@
 class TeamsController < ApplicationController
   before_action :set_team, only: [:show, :update]
   before_action :set_teams, only: :index
-  before_action :ensure_signed_in, only: [:update]
+  before_action :ensure_signed_in, only: [:update, :create]
 
   decorates_assigned :team, :teams
 
+  def create
+    team = Team.create(create_params)
+
+    tracker.track('createTeam',
+      team: team.as_json({}),
+      has_avatar: create_params[:avatar].present?
+    )
+
+    respond_to do |format|
+      format.json { render json: team }
+      format.html { redirect_to team_path(team, edit: 1, create: 1) }
+    end
+  end
+
   def show
+    tracker.track('showTeam',
+      id: @team.to_param
+    )
+
     respond_to do |format|
       format.json { render json: @team }
       format.html
