@@ -48,8 +48,12 @@
       .col-md-4
         %div.nearby-locations
           -# This is filled in by locations/nearby template
-          %h3 Nearby Academies
-          %ul.list-unstyled.items
+          .content
+            %h3 Nearby Academies
+            %ul.list-unstyled.items
+          .alternative
+            %script{:async => true, :src => "//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"}
+            %ins.adsbygoogle{"data-ad-client" => "ca-pub-2053754421757342", "data-ad-slot" => "1611028916", :style => "display:inline-block;width:300px;height:250px"}
     %hr/
     .row
       .col-md-4.instructors

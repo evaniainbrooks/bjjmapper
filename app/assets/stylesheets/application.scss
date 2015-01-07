@@ -323,3 +323,13 @@ html, body {
   clear: both;
 }
 
+.nearby-locations {
+  &.empty {
+    .content { display: none; }
+    .alternative { display: inherit; }
+  }
+
+  .content { display: inherit; }
+  .alternative { display: none; }
+}
+

@@ -14,8 +14,11 @@ class RollFindr.Views.LocationNearbyView extends Backbone.View
 
   render: ->
     @$('.items').empty()
-    _.each @collection.models, (loc)=>
-      id = loc.get('id')
-      locElement = @template({location: loc.toJSON(), active: @activeMarkerId == id})
-      @$('.items').append(locElement)
-
+    if @collection.size() > 0
+      _.each @collection.models, (loc)=>
+        id = loc.get('id')
+        locElement = @template({location: loc.toJSON(), active: @activeMarkerId == id})
+        @$('.items').append(locElement)
+    else
+      @$el.addClass('empty')
+      (adsbygoogle = window.adsbygoogle || []).push({})
