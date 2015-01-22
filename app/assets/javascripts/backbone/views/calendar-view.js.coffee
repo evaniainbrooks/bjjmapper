@@ -32,6 +32,7 @@ class RollFindr.Views.CalendarView extends Backbone.View
       },
       defaultView: viewOptions.split(',')[0]
       minTime: "05:00:00"
+      maxTime: "22:00:00"
     });
 
     @createEventView = new RollFindr.Views.CreateEventView()
