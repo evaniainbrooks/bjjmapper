@@ -112,7 +112,7 @@ class Location
   def as_json(args)
     # Hack around mongo ugly ids
     super(args.merge(except: [:coordinates, :_id, :modifier_id, :team_id, :instructor_ids])).merge({
-      :id => self.id.to_s,
+      :id => self.to_param,
       :team_id => self.team_id.to_s,
       :modifier_id => self.modifier_id.to_s,
       :coordinates => self.to_coordinates,
