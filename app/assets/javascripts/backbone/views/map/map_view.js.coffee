@@ -2,10 +2,10 @@
 #= require term-filter
 #= require backbone/views/team-list-view
 #= require backbone/views/map/create_location_view
+#= require backbone/views/map/directions_dialog_view
 
 class RollFindr.Views.MapView extends Backbone.View
   directionsDisplay: new google.maps.DirectionsRenderer()
-  directionsService: new google.maps.DirectionsService()
   el: $('.wrapper')
   tagName: 'div'
   map: null
@@ -24,6 +24,7 @@ class RollFindr.Views.MapView extends Backbone.View
       'activeMarkerChanged',
       'search',
       'setDefaultCenter',
+      'setDirectionsOverlay',
       'setCenter',
       'setCenterGeolocate',
       'fetchViewport',
@@ -61,7 +62,6 @@ class RollFindr.Views.MapView extends Backbone.View
     if @model.get('refresh')
       refreshButton = JST['templates/refresh_button']()
       @map.controls[google.maps.ControlPosition.TOP_LEFT].push($(refreshButton)[0])
-
       @createLocationView = new RollFindr.Views.MapCreateLocationView({map: @map})
 
   setupEventListeners: ->
@@ -75,6 +75,7 @@ class RollFindr.Views.MapView extends Backbone.View
     RollFindr.GlobalEvents.on('geolocate', @geolocate)
     RollFindr.GlobalEvents.on('search', @search)
     RollFindr.GlobalEvents.on('markerActive', @activeMarkerChanged)
+    RollFindr.GlobalEvents.on('directions', @setDirectionsOverlay)
 
   activeMarkerChanged: (e)->
     locationModel = @filteredLocations.findWhere({id: e.id})
@@ -136,16 +137,15 @@ class RollFindr.Views.MapView extends Backbone.View
       @fetchViewport()
 
   setCenterGeolocate: (doneCallback)->
-    setLocationCallback = (position)=>
+    geolocateSuccessCallback = (position)=>
       initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
       @map.setCenter(initialLocation)
       doneCallback() if doneCallback?
 
     geolocateFailedCallback = =>
       toastr.error('Could not pinpoint your location', 'Error')
-      @setDefaultCenter()
 
-    navigator.geolocation.getCurrentPosition(setLocationCallback, geolocateFailedCallback) if navigator? && navigator.geolocation?
+    navigator.geolocation.getCurrentPosition(geolocateSuccessCallback, geolocateFailedCallback) if navigator? && navigator.geolocation?
 
   setCenter: ->
     shouldGeolocate = @model.get('geolocate')
@@ -162,6 +162,11 @@ class RollFindr.Views.MapView extends Backbone.View
     defaultLocation = new google.maps.LatLng(defaultCenter[0], defaultCenter[1])
     google.maps.event.addListenerOnce(@map, 'idle', @fetchViewport)
     @map.setCenter(defaultLocation)
+
+  setDirectionsOverlay: (e)->
+    @directionsDisplay.setDirections(e.result)
+    @directionsDisplay.setPanel($('.directions-panel')[0])
+    @directionsDisplay.setMap(@map)
 
   fetchViewport: ->
     if (undefined == @map.getCenter() || undefined == @map.getBounds())
@@ -187,22 +192,10 @@ class RollFindr.Views.MapView extends Backbone.View
     })
 
   getDirections: (e)->
-    startLat = @model.get('center')[0]
-    startLng = @model.get('center')[1]
-    startPoint = new google.maps.LatLng(startLat, startLng)
-    endLat = $(e.currentTarget).data('lat')
-    endLng = $(e.currentTarget).data('lng')
-    endPoint = new google.maps.LatLng(endLat, endLng)
-
-    @directionsService.route({
-      origin: startPoint,
-      destination: endPoint,
-      travelMode: google.maps.TravelMode.DRIVING
-    }, (result, status)=>
-      if (status == google.maps.DirectionsStatus.OK)
-        @directionsDisplay.setDirections(result)
-        @directionsDisplay.setMap(@map)
-      else
-        toastr.error('Failed to request directions', 'Error')
-    )
+    endAddress = $(e.currentTarget).data('address')
+    title = $(e.currentTarget).data('title')
+    $('.directions-dialog .destination-title').text(title)
+    $('.directions-dialog').data('end-address', endAddress)
+    $('.directions-dialog').modal('show')
+    return false
 
