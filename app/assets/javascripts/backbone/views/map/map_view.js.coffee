@@ -6,8 +6,8 @@
 
 class RollFindr.Views.MapView extends Backbone.View
   directionsDisplay: new google.maps.DirectionsRenderer()
+  directionsDialog: null
   el: $('.wrapper')
-  tagName: 'div'
   map: null
   teamFilter: null
   termFilter: null
@@ -18,6 +18,7 @@ class RollFindr.Views.MapView extends Backbone.View
     'change [name="sort_order"]': 'sortOrderChanged'
     'click .refresh-button': 'fetchViewport'
     'click a.directions': 'getDirections'
+    'click .directions-panel .close' : 'hideDirectionsOverlay'
   }
   initialize: ->
     _.bindAll(this,
@@ -25,6 +26,7 @@ class RollFindr.Views.MapView extends Backbone.View
       'search',
       'setDefaultCenter',
       'setDirectionsOverlay',
+      'hideDirectionsOverlay',
       'setCenter',
       'setCenterGeolocate',
       'fetchViewport',
@@ -47,6 +49,10 @@ class RollFindr.Views.MapView extends Backbone.View
     if @map?
       @setupEventListeners()
       @setCenter()
+
+  hideDirectionsOverlay: ->
+    @map.controls[google.maps.ControlPosition.RIGHT_CENTER].clear()
+    @directionsDisplay.setMap(null)
 
   setupGoogleMap: ->
     mapOptions = {
@@ -78,10 +84,11 @@ class RollFindr.Views.MapView extends Backbone.View
     RollFindr.GlobalEvents.on('directions', @setDirectionsOverlay)
 
   activeMarkerChanged: (e)->
-    locationModel = @filteredLocations.findWhere({id: e.id})
-    coordinates = locationModel.get('coordinates')
-    newCenter = new google.maps.LatLng(coordinates[0], coordinates[1])
-    @map.setCenter(newCenter)
+    if null != e.id
+      locationModel = @filteredLocations.findWhere({id: e.id})
+      coordinates = locationModel.get('coordinates')
+      newCenter = new google.maps.LatLng(coordinates[0], coordinates[1])
+      @map.setCenter(newCenter)
 
   visibleLocations: ->
     @filteredLocations.filter(
@@ -164,9 +171,14 @@ class RollFindr.Views.MapView extends Backbone.View
     @map.setCenter(defaultLocation)
 
   setDirectionsOverlay: (e)->
+    directionsOverlay = JST['templates/directions_overlay']()
+    @map.controls[google.maps.ControlPosition.RIGHT_CENTER].push($(directionsOverlay)[0])
+
     @directionsDisplay.setDirections(e.result)
     @directionsDisplay.setPanel($('.directions-panel')[0])
     @directionsDisplay.setMap(@map)
+
+    RollFindr.GlobalEvents.trigger('markerActive', {id: null})
 
   fetchViewport: ->
     if (undefined == @map.getCenter() || undefined == @map.getBounds())
@@ -192,10 +204,11 @@ class RollFindr.Views.MapView extends Backbone.View
     })
 
   getDirections: (e)->
-    endAddress = $(e.currentTarget).data('address')
-    title = $(e.currentTarget).data('title')
-    $('.directions-dialog .destination-title').text(title)
-    $('.directions-dialog').data('end-address', endAddress)
-    $('.directions-dialog').modal('show')
+    id = $(e.currentTarget).data('id')
+    location = @model.get('locations').get(id)
+
+
+    @directionsDialog.undelegateEvents() if @directionsDialog?
+    @directionsDialog = new RollFindr.Views.DirectionsDialogView({el: $('.directions-dialog-container'), model: location})
     return false
 

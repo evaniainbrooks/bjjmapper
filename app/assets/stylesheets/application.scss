@@ -333,3 +333,12 @@ html, body {
   .alternative { display: none; }
 }
 
+.directions-panel {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  background-color: white;
+  max-width: 400px;
+  padding: 2px 7px;
+  border: 1px solid silver;
+}

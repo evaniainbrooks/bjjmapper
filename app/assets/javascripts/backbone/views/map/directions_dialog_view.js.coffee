@@ -1,4 +1,3 @@
-
 class RollFindr.Views.DirectionsDialogView extends Backbone.View
   directionsDisplay: new google.maps.DirectionsRenderer()
   directionsService: new google.maps.DirectionsService()
@@ -7,14 +6,18 @@ class RollFindr.Views.DirectionsDialogView extends Backbone.View
     'click [type="submit"]' : 'getDirections'
     'click .use-current-location' : 'fillCurrentLocation'
   }
+  template: JST['templates/directions_dialog']
   initialize: (options)->
     _.bindAll(this, 'addressKeyUp', 'getDirections', 'fillCurrentLocation')
 
-    @map = options.map
+    @$el.html(@template({location: @model.toJSON()}))
+
+    $('.directions-dialog').on 'shown.bs.modal', ->
+      $('.directions-dialog [name="address"]').focus()
+    $('.directions-dialog').modal('show')
 
   addressKeyUp: (e)->
-    if e.keyCode == 13
-      @getDirections()
+    @getDirections() if e.keyCode == 13
 
   fillCurrentLocation: (e)->
     geolocateSuccessCallback = (position)=>
@@ -31,10 +34,8 @@ class RollFindr.Views.DirectionsDialogView extends Backbone.View
       geolocateFailedCallback()
 
   getDirections: ->
-    @$('.directions-panel').html('')
-
     startPoint = @$('[name="address"]').val()
-    endPoint = @$el.data('end-address')
+    endPoint = @$('.directions-dialog').data('address')
     travelMode = @$('[name="travel_mode"]:checked').val()
 
     @directionsService.route({
@@ -43,10 +44,14 @@ class RollFindr.Views.DirectionsDialogView extends Backbone.View
       travelMode: travelMode
     }, (result, status)=>
       if (status == google.maps.DirectionsStatus.OK)
+        $('.directions-dialog').modal('hide')
         RollFindr.GlobalEvents.trigger('directions', {
           result: result,
           status: status
         })
+
+      else if (status == google.maps.DirectionsStatus.ZERO_RESULTS)
+        toastr.error('There is no route from your location to the chosen destination', 'Error')
       else
         toastr.error('Failed to request directions', 'Error')
     )

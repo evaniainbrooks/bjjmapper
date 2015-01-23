@@ -1,0 +1,52 @@
+<div data-address="<%= location.address %>" aria-hidden="true" class="directions-dialog modal fade in" role="dialog" tabindex="-1" style="display: block;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
+        <h4>
+          <i class="fa fa-arrows"></i>
+          Get directions to
+          <span class="destination-title"><%= location.title %></span>
+          <p class="text-info small"><%= location.address %></p>
+        </h4>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="input-group">
+                <input class="form-control input-md" name="address">
+                <a class="input-group-addon use-current-location" href="#">
+                  <i class="fa fa-location-arrow"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-md-3">
+              <input checked="" name="travel_mode" type="radio" value="DRIVING">
+              Driving
+            </label>
+            <label class="col-md-3">
+              <input name="travel_mode" type="radio" value="WALKING">
+              Walking
+            </label>
+            <label class="col-md-3">
+              <input name="travel_mode" type="radio" value="BICYCLING">
+              Bicycle
+            </label>
+            <label class="col-md-3">
+              <input name="travel_mode" type="radio" value="TRANSIT">
+              Transit
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+        <button class="btn btn-success" type="submit">Go!</button>
+      </div>
+    </div>
+  </div>
+</div>
+

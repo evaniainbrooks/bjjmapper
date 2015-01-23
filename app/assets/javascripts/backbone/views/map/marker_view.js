@@ -82,8 +82,12 @@
       }
     },
     activeMarkerChanged: function(e) {
-      var loc = this.collection.findWhere({id: e.id});
-      this.openInfoWindow(loc);
+      if (null !== e.id) {
+        var loc = this.collection.findWhere({id: e.id});
+        this.openInfoWindow(loc);
+      } else {
+        this.infoWindow.close();
+      }
     },
     render: function() {
       var self = this;
