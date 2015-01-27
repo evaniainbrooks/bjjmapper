@@ -33,4 +33,12 @@ xml.tag! 'urlset', 'xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9' do
       xml.priority(0.8)
     }
   end
+  users.each do |user|
+    xml.url {
+      xml.loc "#{user_url(user)}"
+      xml.lastmod (user.updated_at || user.created_at).strftime("%F")
+      xml.changefreq("weekly")
+      xml.priority(0.7)
+    }
+  end
 end
