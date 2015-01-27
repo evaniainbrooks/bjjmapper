@@ -16,13 +16,13 @@
         %li
           %a{href: root_path} Home
         %li
-          %a{href: locations_path, title: 'Brazilian Jiu-Jitsu gym listings'} Academies
+          %a{href: directory_index_path, title: 'Brazilian Jiu-Jitsu gym listings'} Academies
         - if (@criteria.has_key?(:country))
           %li
-            %a{href: locations_path(country: @criteria[:country]), title: "List of Brazilian Jiu-Jitsu gyms in #{@criteria[:country]}"}= @criteria[:country]
+            %a{href: directory_index_path(@criteria[:country]), title: "List of Brazilian Jiu-Jitsu gyms in #{@criteria[:country]}"}= @criteria[:country]
           - if (@criteria.has_key?(:city))
             %li
-              %a{href: locations_path({country: @criteria[:country], city: @criteria[:city]}), title: "List of Brazilian Jiu-Jitsu gyms in #{seo_name}"}= @criteria[:city]
+              %a{href: directory_index_path(@criteria[:country], @criteria[:city]), title: "List of Brazilian Jiu-Jitsu gyms in #{seo_name}"}= @criteria[:city]
 
   - if locations.present?
     .row

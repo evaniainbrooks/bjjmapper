@@ -1,4 +1,5 @@
 class LocationsController < ApplicationController
+  before_action :set_directory_segments, only: [:index]
   before_action :set_location, only: [:schedule, :destroy, :show, :update, :nearby]
   before_action :set_map, only: :show
   before_action :ensure_signed_in, only: [:destroy, :create, :update]
@@ -133,7 +134,8 @@ class LocationsController < ApplicationController
     if @criteria.key?(:city) && @criteria.key?(:country)
       @locations = Location.near(@criteria.values.join(','), 30).decorate
     elsif @criteria.key?(:country)
-      @locations = Location.where(:country => @criteria[:country]).decorate
+      country_abbrev = @countries[ @criteria[:country] ]
+      @locations = Location.where(:country.in => [@criteria[:country], country_abbrev]).decorate
     else
       @locations = []
     end
@@ -143,27 +145,6 @@ class LocationsController < ApplicationController
       country: @criteria[:country],
       count: @locations.count,
     )
-
-    @countries = {
-      'Canada' => 'CA',
-      'Germany' => 'DE',
-      'France' => 'FR',
-      'United Kingdom' => 'UK',
-      'USA' => 'US',
-      'Brazil' => 'BR',
-      'Japan' => 'JP',
-      'South Korea' => 'KR'
-    }
-    @cities = {
-      'USA' => ['San Jose', 'Las Vegas', 'Boston', 'Dallas', 'Phoenix', 'Chicago', 'Seattle', 'New York', 'San Francisco', 'Los Angeles', 'Portland'],
-      'Canada' => ['Ottawa', 'Vancouver', 'Halifax', 'Toronto', 'Montreal', 'Calgary', 'Edmonton', 'Winnipeg', 'Victoria'],
-      'Japan' => ['Tokyo', 'Osaka'],
-      'France' => ['Paris', 'Lyon'],
-      'United Kingdom' => ['London', 'Manchester'],
-      'South Korea' => ['Seoul'],
-      'Germany' => ['Berlin', 'Frankfurt', 'Munich'],
-      'Brazil' => ['Rio de Janerio', 'Sao Paulo', 'Belo Horizonte', 'Salvador']
-    }
 
     @map = {
       :zoom => Map::ZOOM_CITY,
@@ -237,5 +218,11 @@ class LocationsController < ApplicationController
     @location = Location.find(id_param)
 
     render status: :not_found and return unless @location.present?
+  end
+
+  def set_directory_segments
+    # TODO: Refactor this out
+    @countries = RollFindr::DirectoryCountries
+    @cities = RollFindr::DirectoryCities
   end
 end

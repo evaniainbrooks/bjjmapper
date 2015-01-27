@@ -1,15 +1,16 @@
+- country_name = country_name_for(location.country)
 %ol.breadcrumb
   %li
     %a{href: root_path} Home
   %li
-    %a{href: locations_path} Academies
+    %a{href: directory_index_path} Academies
   %li
-    %a{href: locations_path(country: location.country)}= location.country
+    %a{href: directory_index_path(country_name)}= country_name
   %li
-    %a{href: locations_path({country: location.country, city: location.city})}= location.city
+    %a{href: directory_index_path(country_name, location.city)}= location.city
   - if local_assigns.key?(:sub)
     %li
       %a{href: location_path(location)}= location.title
     %li.active= sub
   - else
-    %li.active= location.title 
+    %li.active= location.title

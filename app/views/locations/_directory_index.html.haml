@@ -5,11 +5,11 @@
   - @countries.keys.sort.each_slice(@countries.size/2).each do |countries|
     .col-md-6
       - countries.each do |country|
-        %h3= link_to country, locations_path(country: @countries[country]), title: "List of Brazilian Jiu-Jitsu gyms in #{country}"
+        %h3= link_to country, directory_index_path(country), title: "List of Brazilian Jiu-Jitsu gyms in #{country}"
         - if (@cities.has_key?(country))
           %ul.list-inline
             - @cities[country].sort.each do |city|
-              %li.small= link_to city, locations_path(country: country, city: city), title: "List of Brazilian Jiu-Jitsu gyms in #{city}, #{country}"
+              %li.small= link_to city, directory_index_path(country, city), title: "List of Brazilian Jiu-Jitsu gyms in #{city}, #{country}"
 %hr/
 .row
   .col-md-12

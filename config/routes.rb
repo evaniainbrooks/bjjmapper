@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   resources :users, :only => [:index, :show, :create, :update] do
     resources :users, controller: :students, as: :students, path: '/students', only: [:create, :destroy, :index]
   end
-  resources :locations do
+  resources :locations, path: '/bjj-academy-directory' do
     get :search, on: :collection
     get :wizard, on: :collection
     get :nearby, on: :member
@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   root 'application#map'
 
   get 'search/:query' => 'application#search'
+  get '/bjj-academy-directory(/country/:country(/city/:city))' => 'locations#index', :as => :directory_index
   match '/signin' => 'sessions#new', :as => :signin, :via => [:post, :get]
   match '/auth/:provider/callback' => 'sessions#create', :via => [:post, :get]
   match '/auth/failure' => 'sessions#failure', :via => [:post, :get]
