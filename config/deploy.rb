@@ -67,7 +67,7 @@ namespace :puma do
 
   task :source_env do
     on roles(:app) do
-      execute "source /var/www/rollfindr/.env"
+      execute "source /var/www/rollfindr/current/.env"
     end
   end
 
@@ -114,6 +114,9 @@ namespace :deploy do
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
   after  :finishing,    :restart
+  after :restart do
+    run "/var/www/rollfindr/current/public/script/warmup_100.sh"
+  end
 end
 
 
