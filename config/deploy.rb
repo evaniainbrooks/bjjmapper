@@ -110,13 +110,17 @@ namespace :deploy do
     end
   end
 
+  task :warmup do
+    on roles(:app) do
+      run "/var/www/rollfindr/current/public/script/warmup_100.sh"
+    end
+  end
+
   before :starting,     :check_revision
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
   after  :finishing,    :restart
-  after :restart do
-    run "/var/www/rollfindr/current/public/script/warmup_100.sh"
-  end
+  after  :restart,      :warmup
 end
 
 
