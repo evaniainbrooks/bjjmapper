@@ -112,7 +112,7 @@ namespace :deploy do
 
   task :warmup do
     on roles(:app) do
-      run "/var/www/rollfindr/current/public/script/warmup_100.sh"
+      execute "/var/www/rollfindr/current/public/script/warmup_100.sh"
     end
   end
 
