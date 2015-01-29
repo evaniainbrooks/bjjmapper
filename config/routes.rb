@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   resources :users, :only => [:index, :show, :create, :update] do
     resources :users, controller: :students, as: :students, path: '/students', only: [:create, :destroy, :index]
   end
-  resources :locations, path: '/bjj-academy-directory' do
+  resources :locations do
     get :search, on: :collection
     get :wizard, on: :collection
     get :nearby, on: :member
