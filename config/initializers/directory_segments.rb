@@ -1,6 +1,7 @@
 RollFindr::DirectoryCountries =  {
   'Canada' => 'CA',
   'Germany' => 'DE',
+  'Greece' => 'GR',
   'France' => 'FR',
   'United Kingdom' => 'UK',
   'USA' => 'US',
@@ -17,6 +18,7 @@ RollFindr::DirectoryCities = {
   'United Kingdom' => ['London', 'Manchester'],
   'South Korea' => ['Seoul'],
   'Germany' => ['Berlin', 'Frankfurt', 'Munich'],
-  'Brazil' => ['Rio de Janerio', 'Sao Paulo', 'Belo Horizonte', 'Salvador']
+  'Brazil' => ['Rio de Janerio', 'Sao Paulo', 'Belo Horizonte', 'Salvador'],
+  'Greece' => ['Athens', 'Thessaloniki', 'Volos']
 }
 
