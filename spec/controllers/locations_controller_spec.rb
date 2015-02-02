@@ -78,6 +78,21 @@ describe LocationsController do
       end
     end
   end
+  describe 'GET wizard' do
+    context 'when not signed in' do
+      it 'redirects to the login page' do
+        get :wizard
+        response.should redirect_to(signin_path)
+      end
+    end
+    context 'when signed in' do
+      let(:session_params) { { user_id: create(:user).to_param } }
+      it 'shows the wizard' do
+        get :wizard, {}, session_params
+        response.should be_ok
+      end
+    end
+  end
   describe 'POST create' do
     let(:create_params) { { :location => { :title => 'New title', :description => 'New description' } } }
     context 'when not signed in' do

@@ -123,10 +123,10 @@ class RollFindr.Views.MapView extends Backbone.View
         },
         type: 'GET',
         dataType: 'json',
-        success: (result) =>
+        success: (results) =>
           google.maps.event.addListenerOnce(@map, 'idle', @fetchViewport)
 
-          newCenter = new google.maps.LatLng(result.lat, result.lng)
+          newCenter = new google.maps.LatLng(results[0].lat, results[0].lng)
           @map.setCenter(newCenter)
           @setTermFilterQuery(e.query)
       })

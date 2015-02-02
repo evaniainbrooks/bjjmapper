@@ -2,13 +2,11 @@ class RollFindr.Views.MapCreateLocationView extends Backbone.View
   el: $('.wrapper')
   template: JST['templates/create_location_button']
   events: {
-    'click .add-academy': 'addAcademyClicked'
     'click .add-academy-quick': 'addAcademyQuickClicked'
     'click .add-academy-quick-geo': 'addAcademyQuickGeoClicked'
   }
   initialize: (options)->
     _.bindAll(this,
-      'addAcademyClicked',
       'addAcademyQuickClicked',
       'addAcademyQuickGeoClicked')
 
@@ -28,13 +26,6 @@ class RollFindr.Views.MapCreateLocationView extends Backbone.View
       })
 
       @showQuickCreateModalForCoords(event.latLng.lat(), event.latLng.lng())
-
-  addAcademyClicked: (event)->
-    mixpanel.track('clickAddAcademy')
-
-    return false unless @checkLoggedInOrShowModal()
-
-    @showFullCreateModal()
 
   addAcademyQuickGeoClicked: (event)->
     mixpanel.track('clickAddAcademyQuickGeo', { quick: true, geo: true })
@@ -59,9 +50,6 @@ class RollFindr.Views.MapCreateLocationView extends Backbone.View
   showQuickCreateModalForCoords: (lat, lng)->
     $('.coordinates', '.create-location-dialog').val(JSON.stringify([lng, lat]))
     $('.create-location-quick-dialog').modal('show')
-
-  showFullCreateModal: ->
-    $('.create-location-full-dialog').modal('show')
 
   render: ->
     btn = @template()

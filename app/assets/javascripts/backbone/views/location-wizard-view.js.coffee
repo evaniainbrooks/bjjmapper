@@ -3,38 +3,107 @@ class RollFindr.Views.LocationWizardView extends Backbone.View
   initialize: ->
     @$el.wizard()
 
-    _.bindAll(this, 'enableNext', 'disableNext', 'initializeStep')
+    _.bindAll(this,
+      'addressChanged',
+      'addressValueChanged',
+      'contactInfoChanged',
+      'fullAddressKeyUp',
+      'nextClicked',
+      'searchAddress',
+      'teamChanged',
+      'titleChanged')
 
-    @initializeStep()
+    @$('.btn-next')
+      .attr('type', 'button')
+      .attr('disabled', true)
+
+    @$('.btn-prev').attr('type', 'button')
 
   events: {
-    'keyup [name="location[title]"]' : 'initializeStep'
-    'keyup [name="location[postal_code]"]': 'initializeStep'
-    'keyup [name="location[street]"]': 'initializeStep'
-    'click .btn-next': 'initializeStep'
+    'change [name="location[team_id]"]': 'teamChanged'
+    'change #address_options': 'addressChanged'
+    'change [name="location[street]"]': 'addressValueChanged'
+    'keyup [name="location[street]"]': 'addressValueChanged'
+    'change [name="location[postal_code]"]': 'addressValueChanged'
+    'keyup [name="location[postal_code]"]': 'addressValueChanged'
+    'change [name="location[phone]"]': 'contactInfoChanged'
+    'keyup [name="location[phone]"]': 'contactInfoChanged'
+    'change [name="location[email]"]': 'contactInfoChanged'
+    'keyup [name="location[email]"]': 'contactInfoChanged'
+    'change [name="location[website]"]': 'contactInfoChanged'
+    'keyup [name="location[website]"]': 'contactInfoChanged'
+    'change [name="location[facebook]"]': 'contactInfoChanged'
+    'keyup [name="location[facebook]"]': 'contactInfoChanged'
+    'change [name="location[title]"]' : 'titleChanged'
+    'keyup [name="location[title]"]' : 'titleChanged'
+    'keyup #full_address': 'fullAddressKeyUp'
     'click [data-address-search]': 'searchAddress'
+    'click .btn-next': 'nextClicked'
+    'click .btn-prev': 'prevClicked'
   }
-  enableNext: ->
-    @$('.btn-next').removeAttr('disabled')
-    @$('.btn-next').attr('class', 'btn-success btn btn-next')
 
-  disableNext: ->
-    @$('.btn-next').attr('disabled', true)
-    @$('.btn-next').attr('class', 'btn-default btn btn-next')
+  contactInfoChanged: ->
+    hasContactInfo = @hasContactInfo()
+    @setNextDisabled( !hasContactInfo )
+    if hasContactInfo
+      @$('.btn-next')
+        .attr('type', 'submit')
+        .addClass('btn-success')
 
-  initializeStep: ->
-    if 1 == @currentStep()
-      if @isTitleEntered()
-        @enableNext()
-      else
-        @disableNext()
+  addressValueChanged: ->
+    @setNextDisabled( !@hasAddress() )
+
+  prevClicked: ->
+    @$('.btn-next')
+      .attr('type', 'button')
+      .removeClass('btn-success')
+    @resetActionButtons()
+
+  resetActionButtons: ->
+    switch @currentStep()
+      when 1
+        @titleChanged()
+      when 2
+        @addressValueChanged()
+      when 3
+        @contactInfoChanged()
+
+  nextClicked: ->
+    if 'submit' != @$('.btn-next').attr('type')
+      @resetActionButtons()
+
+  setNextDisabled: (state)->
+    if state
+      @$('.btn-next').attr('disabled', true)
     else
-      if @hasCoordinatesOrAddress()
-        @enableNext()
-      else
-        @disableNext()
+      @$('.btn-next').removeAttr('disabled')
 
-  hasCoordinatesOrAddress: ->
+
+  teamChanged: (e)->
+    if @hasTeam()
+      teamImg = $('option:selected', e.currentTarget).data('img-src')
+      imgElem = @$('.edit-image')
+      imgElem.attr('src', if teamImg.length > 0 then teamImg else imgElem.data('default-src'))
+    else
+      title = @$('input[name="location[title]"]').val()
+      @$('.edit-image').attr('src', RollFindr.AvatarService(title))
+
+  titleChanged: ->
+    if @isTitleEntered() && !@hasTeam()
+      title = @$('input[name="location[title]"]').val()
+      @$('.edit-image').attr('src', RollFindr.AvatarService(title))
+
+    @setNextDisabled( !@isTitleEntered() )
+
+  hasContactInfo: ->
+    hasPhone = @hasValue('input[name="location[phone]"]')
+    hasEmail = @hasValue('input[name="location[email]"]')
+    hasWebsite = @hasValue('input[name="location[website]"]')
+    hasFacebook = @hasValue('input[name="location[facebook]"]')
+
+    return hasPhone || hasEmail || hasWebsite || hasFacebook
+
+  hasAddress: ->
     hasPostalCode = @hasValue('input[name="location[postal_code]"]')
     hasStreet = @hasValue('input[name="location[street]"]')
 
@@ -43,6 +112,9 @@ class RollFindr.Views.LocationWizardView extends Backbone.View
   currentStep: ->
     selectedItem = @$el.wizard('selectedItem')
     return selectedItem.step if selectedItem?
+
+  hasTeam: ->
+    @hasValue('[name="location[team_id]"] option:selected')
 
   isTitleEntered: ->
     @hasValue('input[name="location[title]"]', 2)
@@ -53,24 +125,54 @@ class RollFindr.Views.LocationWizardView extends Backbone.View
     elem = @$(selector)
     elem.length > 0 && elem.val().length > cmplength
 
+  addressChanged: (e)->
+    teamImg = $('option:selected', e.currentTarget).data('')
+    _.each ['street', 'city', 'postal_code', 'state', 'country'], (i)=>
+      value = $('option:selected', e.currentTarget).data(i)
+      @$("[name='location[#{i}]']").val(value)
+
+    @setNextDisabled( !@hasAddress() )
+
+  fullAddressKeyUp: (e)->
+    if e.keyCode == 13
+      @searchAddress()
+
+
   searchAddress: ->
     $.ajax({
       url: Routes.geocode_path(),
       data: {
         query: $('#full_address').val()
       }
+      beforeSend: =>
+        @$('.fa-search')
+          .attr('disabled', true)
+          .attr('class', 'fa fa-2x fa-refresh fa-spin')
+
+      complete: =>
+        @$('.fa-refresh')
+          .attr('class', 'fa fa-2x fa-search')
+          .removeAttr('disabled')
+
       method: 'GET'
-      success: (result)=>
+      success: (results)=>
         @$('.editable').addClass('edit-mode')
-        @$('#address_options')
-          .html($('<option></option>')
-          .attr('value', result.address)
-          .text(result.address))
+        @$('#address_options').html('')
+        _.each results, (result)=>
+          @$('#address_options')
+            .append($('<option></option>')
+            .attr('value', result.address)
+            .data('street', result.street)
+            .data('city', result.city)
+            .data('postal_code', result.postal_code)
+            .data('state', result.state)
+            .data('country', result.country)
+            .text(result.address))
 
-        _.each(['street', 'city', 'postal_code', 'state', 'country'], (i)=>
-          @$("[name='location[#{i}]']").val(result[i])
-        )
+        _.each ['street', 'city', 'postal_code', 'state', 'country'], (i)=>
+          @$("[name='location[#{i}]']").val(results[0][i])
 
-        @enableNext()
+        @setNextDisabled( !@hasAddress() )
+
     })
 

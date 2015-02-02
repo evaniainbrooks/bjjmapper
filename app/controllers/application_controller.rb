@@ -116,6 +116,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
+    # return User.where(:role.ne => 'anonymous').first # For dev
     begin
       @current_user ||= User.find(session[:user_id]) if session[:user_id]
       @current_user ||= anonymous_user
@@ -148,14 +149,16 @@ class ApplicationController < ActionController::Base
   end
 
   def json_geocode_response(result)
-    {
-      address: result.first.address,
-      street: result.first.street_address,
-      postal_code: result.first.postal_code,
-      city: result.first.city,
-      state: result.first.state,
-      country: result.first.country
-    }.merge(result.first.geometry['location'])
+    result.map do |r|
+      {
+        address: r.address,
+        street: r.street_address,
+        postal_code: r.postal_code,
+        city: r.city,
+        state: r.state,
+        country: r.country
+      }.merge(r.geometry['location'])
+    end
   end
 end
 

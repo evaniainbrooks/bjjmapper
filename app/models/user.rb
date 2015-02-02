@@ -38,6 +38,8 @@ class User
   field :birth_place, type: String
   field :internal, type: Boolean
 
+  validates :name, presence: true
+
   geocoded_by :ip_address
   after_validation :safe_geocode
 
@@ -58,6 +60,10 @@ class User
   end
 
   scope :jitsukas, -> { where(:belt_rank.in => ['blue', 'purple', 'brown', 'black']) }
+
+  #def to_param
+  #  [id, name.parameterize].join('-')
+  #end
 
   def jitsuka?
     self.belt_rank.present?
@@ -111,7 +117,7 @@ class User
 
   def as_json(args={})
     super(args.merge(except: [:ip_address, :coordinates, :uid, :provider, :email, :_id])).merge({
-      :id => self.id.to_s,
+      :id => self.to_param.to_s,
       :full_lineage => self.full_lineage.take(2).reverse.map do |u|
         { :id => u.to_param, :name => u.name }
       end
