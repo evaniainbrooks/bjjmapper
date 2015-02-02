@@ -135,7 +135,8 @@ class LocationsController < ApplicationController
       @locations = Location.near(@criteria.values.join(','), 30).decorate
     elsif @criteria.key?(:country)
       country_abbrev = @countries[ @criteria[:country] ]
-      @locations = Location.where(:country.in => [@criteria[:country], country_abbrev]).decorate
+      country_criteria = [@criteria[:country], country_abbrev].compact
+      @locations = Location.where(:country.in => country_criteria).decorate
     else
       @locations = []
     end
