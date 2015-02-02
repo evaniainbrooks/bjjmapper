@@ -11,10 +11,10 @@
         If you are using filters, try clearing them.
     %br/
     %div
-      %a.btn.btn-success.add-academy{:href => '#', :style => 'display: block;'}
+      %a.btn.btn-success{:href => wizard_locations_path(ref: 'empty_list'), :style => 'display: block;'}
         %h4
           %i.fa.fa.fa-map-marker
           %span Where is my academy?
-        %small Click here to add your academy to the map.
+        %small{:style => 'margin-bottom: 10px; display: block'} Click here to add your academy to the map
     %br/
   .items
