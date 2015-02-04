@@ -9,14 +9,13 @@
         Brazilian Jiu-Jitsu Academy Directory
         - if locations.blank?
           %span.small= "#{Location.count} academies worldwide"
-
   .row
     .col-md-10
       %ol.breadcrumb
         %li
           %a{href: root_path} Home
         %li
-          %a{href: directory_index_path, title: 'Brazilian Jiu-Jitsu gym listings'} Academies
+          %a{href: directory_index_path, title: 'Brazilian Jiu-Jitsu gym listings'} BJJ Academy Directory 
         - if (@criteria.has_key?(:country))
           %li
             %a{href: directory_index_path(@criteria[:country]), title: "List of Brazilian Jiu-Jitsu gyms in #{@criteria[:country]}"}= @criteria[:country]
@@ -27,6 +26,9 @@
       = link_to wizard_locations_path(ref: 'directory_index'), class: 'btn btn-success' do
         %i.fa.fa-map-marker
         Create Academy
+  .row
+    .col-md-12
+      = render partial: 'locations/directory_welcome_message'
   - if locations.present?
     .row
       .col-md-5
