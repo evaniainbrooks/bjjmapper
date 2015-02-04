@@ -95,7 +95,17 @@ describe User do
       end
     end
   end
-
+  describe '#rank_sort_key' do
+    let(:wb0) { build(:user, stripe_rank: 0, belt_rank: 'white') }
+    let(:wb1) { build(:user, stripe_rank: 1, belt_rank: 'white') }
+    let(:pb) { build(:user, stripe_rank: 0, belt_rank: 'purple') }
+    let(:bb) { build(:user, stripe_rank: 0, belt_rank: 'black') }
+    it 'returns a key that will sort a list of users by descending rank' do
+      wb0.rank_sort_key.should > wb1.rank_sort_key
+      wb1.rank_sort_key.should > pb.rank_sort_key
+      pb.rank_sort_key.should > bb.rank_sort_key
+    end
+  end
   describe 'before_create callback' do
     context 'when the role is instructor' do
       # TODO Refactor into shared context

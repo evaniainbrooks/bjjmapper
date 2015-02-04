@@ -69,6 +69,13 @@ class User
     self.belt_rank.present?
   end
 
+  def rank_sort_key
+    belt = self.belt_rank || 'white'
+    stripe = self.stripe_rank || 0
+    key = {'white' => 0, 'blue' => 100, 'purple' => 200, 'brown' => 300, 'black' => 400}[belt] + stripe
+    return -key
+  end
+
   def self.create_anonymous(ip_address)
     User.create(provider: 'anonymous', role: 'anonymous', ip_address: ip_address, name: "Anonymous #{ip_address}", last_seen_at: Time.now)
   end
@@ -118,6 +125,7 @@ class User
   def as_json(args={})
     super(args.merge(except: [:ip_address, :coordinates, :uid, :provider, :email, :_id])).merge({
       :id => self.to_param.to_s,
+      :rank_sort_key => self.rank_sort_key,
       :full_lineage => self.full_lineage.take(2).reverse.map do |u|
         { :id => u.to_param, :name => u.name }
       end
