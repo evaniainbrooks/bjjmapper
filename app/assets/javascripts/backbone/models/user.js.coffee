@@ -23,7 +23,7 @@ class RollFindr.Models.Student extends RollFindr.Models.User
 class RollFindr.Collections.UsersCollection extends Backbone.Collection
   model: RollFindr.Models.User
   url: '/users'
-  sort_key: 'id'
+  sort_key: 'rank_sort_key'
   comparator:
     (item)->
       return item.get(this.sort_key)
