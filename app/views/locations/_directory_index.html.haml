@@ -2,7 +2,8 @@
   .col-md-12
     %h2 Browse by Location
 .row
-  - @countries.keys.sort.each_slice(@countries.size/2).each do |countries|
+  - per_column = (@countries.size / 2.0).ceil
+  - @countries.keys.sort.each_slice(per_column).each do |countries|
     .col-md-6
       - countries.each do |country|
         %h3= link_to country, directory_index_path(country), title: "List of Brazilian Jiu-Jitsu gyms in #{country}"
@@ -18,7 +19,8 @@
       %span.small= "#{all_teams.size} teams"
 
   - groups = all_teams_groups
-  - groups[nil].each_slice(groups[nil].size/4).each do |teams|
+  - per_column = (groups[nil].size / 4.0).ceil
+  - groups[nil].each_slice(per_column).each do |teams|
     %ul.col-md-3.list-unstyled.team-index
       - teams.each do |team|
         %li
