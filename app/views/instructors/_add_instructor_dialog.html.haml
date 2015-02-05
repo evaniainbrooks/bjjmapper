@@ -5,7 +5,9 @@
         %button.close{'data-dismiss' => 'modal', 'type' => 'button'}
           %span{'aria-hidden' => 'true'} &times;
           %span.sr-only Close
-        %h4.modal-title Add Instructor
+        %h4.modal-title
+          %i.fa.fa-user
+          %span Add Instructor
       .modal-body
         = render partial: 'instructors/add_instructor_tabs'
         = render partial: 'instructors/add_instructor'

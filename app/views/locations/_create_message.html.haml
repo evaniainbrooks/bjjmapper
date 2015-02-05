@@ -3,5 +3,23 @@
     %span{"aria-hidden" => "true"} &times;
     %span.sr-only Close
   %strong Thank you for contributing to BJJMapper! 
-  %span This is the academy you just created. Please take a few moments to review the address and fill in any additional details. Questions? Something broken? Mail us at  
-  = mail_to 'info@bjjmapper.com'
+  %span This is the academy you just created. Please take a few moments to review the address and fill in any additional details. As a next step, you may want to
+  %ul.small.list-inline{:style => 'display: inline'}
+    %li
+      = link_to '#instructor', class: 'add-instructor' do
+        %i.fa.fa-user
+        %span Add an instructor
+    %li
+      = link_to schedule_location_path(location, edit: 1) do
+        %i.fa.fa-calendar
+        %span Edit the calendar
+    %li
+      = link_to '#reviews', class: 'add-review' do
+        %i.fa.fa-star-o
+        %span Write a review
+    %li
+      = link_to wizard_locations_path(ref: 'loc_detail') do
+        %i.fa.fa-map-marker
+        %span Add another academy
+
+
