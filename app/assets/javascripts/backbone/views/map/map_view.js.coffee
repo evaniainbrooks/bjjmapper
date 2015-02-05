@@ -150,6 +150,7 @@ class RollFindr.Views.MapView extends Backbone.View
       doneCallback() if doneCallback?
 
     geolocateFailedCallback = =>
+      @setDefaultCenter()
       toastr.error('Could not pinpoint your location', 'Error')
 
     navigator.geolocation.getCurrentPosition(geolocateSuccessCallback, geolocateFailedCallback) if navigator? && navigator.geolocation?
