@@ -7,8 +7,8 @@ class RollFindr.Views.LocationInstructorsView extends Backbone.View
   }
   initialize: ->
     _.bindAll(this, 'render', 'removeInstructor')
-    this.listenTo(@model.get('instructors'), 'remove add', @render);
-    @model.get('instructors').fetch().done(@render)
+    this.listenTo(@model.get('instructors'), 'remove sync', @render);
+    @model.get('instructors').fetch()
 
   render: ->
     @$('.items').empty()
