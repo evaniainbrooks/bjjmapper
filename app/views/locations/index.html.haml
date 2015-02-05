@@ -22,7 +22,7 @@
           - if (@criteria.has_key?(:city))
             %li
               %a{href: directory_index_path(@criteria[:country], @criteria[:city]), title: "List of Brazilian Jiu-Jitsu gyms in #{seo_name}"}= @criteria[:city]
-    .col-md-2
+    .col-md-2.text-right
       = link_to wizard_locations_path(ref: 'directory_index'), class: 'btn btn-success' do
         %i.fa.fa-map-marker
         Create Academy
