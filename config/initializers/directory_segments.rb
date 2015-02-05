@@ -15,7 +15,7 @@ RollFindr::DirectoryCountries =  {
 }
 
 RollFindr::DirectoryCities = {
-  'USA' => ['Boston', 'San Jose', 'San Antonio', 'Las Vegas', 'Boston', 'Dallas', 'Houston', 'Philadelphia', 'Phoenix', 'Chicago', 'Seattle', 'New York', 'San Francisco', 'Los Angeles', 'Portland'],
+  'USA' => ['San Jose', 'San Antonio', 'Las Vegas', 'Boston', 'Dallas', 'Houston', 'Philadelphia', 'Phoenix', 'Chicago', 'Seattle', 'New York', 'San Francisco', 'Los Angeles', 'Portland'],
   'Canada' => ['Ottawa', 'Vancouver', 'Halifax', 'Toronto', 'Montreal', 'Calgary', 'Edmonton', 'Winnipeg', 'Victoria'],
   'Japan' => ['Tokyo', 'Osaka'],
   'France' => ['Paris', 'Lyon'],
