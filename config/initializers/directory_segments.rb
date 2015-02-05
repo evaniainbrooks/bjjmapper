@@ -1,3 +1,6 @@
+# encoding: UTF-8
+# coding: UTF-8
+
 RollFindr::DirectoryCountries =  {
   'Canada' => 'CA',
   'Germany' => 'DE',
