@@ -19,9 +19,9 @@
       %span.small= "#{all_teams.size} teams"
 
   - groups = all_teams_groups
-  - per_column = (groups[nil].size / 4.0).ceil
+  - per_column = (groups[nil].size / 3.0).ceil
   - groups[nil].each_slice(per_column).each do |teams|
-    %ul.col-md-3.list-unstyled.team-index
+    %ul.col-md-4.list-unstyled.team-index
       - teams.each do |team|
         %li
           - if groups[team]
