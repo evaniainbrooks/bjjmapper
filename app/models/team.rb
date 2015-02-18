@@ -1,9 +1,7 @@
 require 'mongoid-history'
-require 'mongoid_paperclip'
 
 class Team
   include Mongoid::Document
-  include Mongoid::Paperclip
   include Mongoid::Timestamps
   include Mongoid::History::Trackable
   track_history   :on => :all,
@@ -24,9 +22,6 @@ class Team
   has_many :child_teams, class_name: 'Team', inverse_of: :parent_team
 
   validates :name, presence: true
-
-  has_mongoid_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :url => "/images/:class/:attachment/:style/:id.:extension", :default_url => "/images/:style/missing.png"
-  validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
 
   def as_json(args)
     super(args.merge(except: [:_id, :parent_team_id, :modifier_id])).merge({

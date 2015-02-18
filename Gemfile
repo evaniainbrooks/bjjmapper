@@ -37,7 +37,6 @@ gem 'mongoid', '~> 4.0.0.beta'
 gem 'mongoid-history', require: false
 gem 'geocoder', require: false
 gem 'mixpanel-ruby', require: false
-gem 'mongoid-paperclip', require: false
 gem 'ice_cube', require: false
 gem 'bootstrap3-datetimepicker-rails', '~> 3.1.3'
 
