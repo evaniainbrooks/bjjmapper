@@ -7,7 +7,7 @@
   %meta{:property => 'og:image', :content => "#{request.protocol}#{request.host}:#{request.port}#{team.image}"}/
 
 .container.page
-  = form_for(team, html: { multipart: true, class: 'form ' + edit_mode_classes }) do |f|
+  = form_for(team, html: { class: 'form ' + edit_mode_classes }) do |f|
     .row
       .col-md-10
         = render partial: 'breadcrumb', locals: { team: team }
@@ -22,7 +22,7 @@
           %img.center-block{:src => team.image}
         .edit-field
           %img.center-block.edit-image{:src => team.image}
-          -#= f.file_field :avatar, class: 'input-md form-control'
+          %input{:'data-id' => team.id, :'data-upload-avatar' => true, :type => 'file', :class => 'input-md form-control'}/
       .col-md-6
         .edit-field
           = f.label :name, class: 'small'
@@ -63,5 +63,4 @@
           &nbsp;&nbsp;
           %button.btn.btn-default.btn-md{:type => 'button', 'data-cancel-edit' => true} Cancel Editing
           %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes
-
 
