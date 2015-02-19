@@ -13,11 +13,18 @@
               %li.small= link_to city, directory_index_path(country, city), title: "List of Brazilian Jiu-Jitsu gyms in #{city}, #{country}"
 %hr/
 .row
-  .col-md-12
+  .col-md-10
     %h2
       Browse by Team
       %span.small= "#{all_teams.size} teams"
     %a{:name => 'teams'}
+  .col-md-2.text-right
+    = link_to new_team_path(ref: 'directory_index'), class: 'btn btn-success', style: 'margin-top: 20px' do
+      %i.fa.fa-group
+      Create Team
+
+.row
+  .col-md-12
   - groups = all_teams_groups
   - per_column = (groups[nil].size / 3.0).ceil
   - groups[nil].each_slice(per_column).each do |teams|

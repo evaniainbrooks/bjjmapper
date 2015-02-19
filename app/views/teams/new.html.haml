@@ -1,0 +1,38 @@
+= content_for(:title) do
+  = "Create New Brazilian Jiu-Jitsu Team"
+= content_for(:head) do
+  %meta{:property => 'og:title', :content => 'Create New Team'}/
+  %meta{:property => 'og:description', :content => 'Create a new team in the Brazilian Jiu-Jitsu academy directory.'}/
+.container.page
+  = form_for(team, html: { multipart: true, class: 'form editable edit-mode' }) do |f|
+    .row
+      .col-md-12
+        %ol.breadcrumb
+          %li
+            %a{href: root_path} Home
+          %li
+            %a{href: directory_index_path(anchor: 'teams')} BJJ Team Directory
+          %li.active Create New Team
+    .row
+      .col-md-2
+        .edit-field
+          %img.center-block.edit-image{:src => 'https://storage.googleapis.com/bjjmapper/uploads/production/teams/academy-default-100.jpg'}
+          %p.text-info.small.text-center
+            %strong Note:
+            You can upload an image on the next page.
+          -#= f.file_field :image_upload, class: 'input-md form-control'
+      .col-md-6
+        .edit-field
+          = f.label :name, class: 'small'
+          = f.text_field :name, placeholder: 'Name of the team/association (eg. Alliance)', class: 'form-control input-lg'
+        .edit-field
+          = f.label :parent_team_id, class: 'small'
+          = f.select :parent_team_id, options_for_select(all_teams.map { |team| [team.name, team.id, {'data-img-src' => team.image}] }, team.parent_team_id), {:include_blank => true}, class: 'form-control  input-md'
+          = f.label :description, class: 'small'
+          = f.text_area :description, placeholder: 'Provide a description of the team/association', class: 'form-control', rows: 4
+          %br/
+    .row.edit-field.edit-control
+      .col-md-8
+        .pull-right
+          %button.btn.btn-success.btn-md{:type => 'submit'} Create Team
+

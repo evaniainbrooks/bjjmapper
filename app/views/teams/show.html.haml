@@ -17,6 +17,9 @@
         %button.pull-right.btn.btn-default.btn-sm{'data-report-item' => true}
           %span.report Report
     .row
+      .col-md-12
+        = render partial: 'teams/create_message' if created?
+    .row
       .col-md-2
         .display-field
           %img.center-block{:src => team.image}
@@ -38,12 +41,14 @@
           = f.label :description, class: 'small'
           = f.text_area :description, placeholder: 'Provide a description of the team/association', class: 'form-control', rows: 4
         %p.display-field= team.description
-    %hr/
-    .row
-      .col-md-12
-        %h3= "#{pluralize(team.locations.count, 'Academy')}"
-        = render partial: 'locations/table', locals: { locations: team.locations }
+    - if team.locations.count > 0
+      %hr/
+      .row
+        .col-md-12
+          %h3= "#{pluralize(team.locations.count, 'Academy')}"
+          = render partial: 'locations/table', locals: { locations: team.locations }
 
+    %hr.edit-field/
     .row.edit-field.edit-control
       .col-md-12
         %h3 Edit Controls

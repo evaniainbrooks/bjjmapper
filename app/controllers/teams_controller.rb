@@ -1,9 +1,16 @@
 class TeamsController < ApplicationController
   before_action :set_team, only: [:show, :update]
   before_action :set_teams, only: :index
-  before_action :ensure_signed_in, only: [:update, :create]
+  before_action :ensure_signed_in, only: [:update, :create, :new]
 
   decorates_assigned :team, :teams
+  
+  helper_method :created?
+
+  def new
+    @team = Team.new
+    tracker.track('newTeam')
+  end
 
   def create
     team = Team.create(create_params)
@@ -53,6 +60,10 @@ class TeamsController < ApplicationController
   end
 
   private
+  
+  def created?
+    return params.fetch(:create, 0).to_i.eql?(1)
+  end
 
   def create_params
     p = params.require(:team).permit(:name, :description, :parent_team_id, :primary_color_index, :avatar, :modifier_id)
