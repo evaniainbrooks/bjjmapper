@@ -17,7 +17,7 @@
     %h2
       Browse by Team
       %span.small= "#{all_teams.size} teams"
-
+    %a{:name => 'teams'}
   - groups = all_teams_groups
   - per_column = (groups[nil].size / 3.0).ceil
   - groups[nil].each_slice(per_column).each do |teams|
