@@ -7,6 +7,8 @@
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
+      %a.navbar-brand{:rel => 'home', :href => root_path, :title => 'BJJMapper Homepage'}
+        %img{:src => '/logo.png', :style => 'margin-top: -17px; width: 60px; height: 60px'}/
       - if action?(:map)
         .btn-group.pull-left{:role => 'group'}
           %button.navbar-toggle.btn{'data-toggle' => 'button', 'style' => 'color: white; margin-right: 0px; margin-left: 15px', 'data-show-list' => true}
