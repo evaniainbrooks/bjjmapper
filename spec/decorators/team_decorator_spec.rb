@@ -9,4 +9,14 @@ describe TeamDecorator do
       end
     end
   end
+  describe '.description' do
+    context 'with blank description' do
+      subject { build(:team, description: nil).decorate }
+      it { subject.description.should match TeamDecorator::DEFAULT_DESCRIPTION }
+    end
+    context 'with explicit description' do
+      subject { build(:team, description: 'xyz').decorate }
+      it { subject.description.should eq subject.object.description }
+    end
+  end
 end

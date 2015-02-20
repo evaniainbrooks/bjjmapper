@@ -1,4 +1,6 @@
 class TeamDecorator < Draper::Decorator
+  DEFAULT_DESCRIPTION = 'No description was provided'
+  
   delegate_all
   decorates_finders
   decorates_association :locations
@@ -19,6 +21,14 @@ class TeamDecorator < Draper::Decorator
 
   def created_at
     object.created_at.present? ? "created #{h.time_ago_in_words(object.created_at)} ago" : nil
+  end
+  
+  def description
+    if object.description.present?
+      object.description
+    else
+      h.content_tag(:i, class: 'text-muted') { DEFAULT_DESCRIPTION }
+    end
   end
 
   def as_json(args)
