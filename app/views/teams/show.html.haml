@@ -44,9 +44,15 @@
     - if team.locations.count > 0
       %hr/
       .row
-        .col-md-12
+        .col-md-10
           %h3= "#{pluralize(team.locations.count, 'Academy')}"
-          = render partial: 'locations/table', locals: { locations: team.locations }
+        .col-md-2.text-right
+          = link_to wizard_locations_path(ref: 'tdp', team: team.id), style: 'margin-bottom: 10px; margin-top: 20px', class: 'btn btn-success' do
+            %i.fa.fa-map-marker
+            Create Academy
+      .row
+        .col-md-12
+          = render partial: 'locations/table', locals: { locations: team.locations, exclude: [:team] }
 
     %hr.edit-field/
     .row.edit-field.edit-control
