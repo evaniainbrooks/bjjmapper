@@ -33,17 +33,18 @@
       .step-pane.active.alert{'data-step' => 1}
         .row
           .col-md-8.col-md-offset-2
-            %img.center-block.edit-image{'data-default-src' => image_path(LocationDecorator::DEFAULT_IMAGE), :alt => 'logo', :src => image_path(LocationDecorator::DEFAULT_IMAGE)}/
+            %img.img-border.center-block.edit-image{:width => 100, :height => 100, 'data-default-src' => image_path(LocationDecorator::DEFAULT_IMAGE), :alt => 'logo', :src => image_path(LocationDecorator::DEFAULT_IMAGE)}/
             %fieldset
               .form-group
                 %label.control-label{:for => "location[title]"} Name
                 = f.text_field :title, placeholder: 'The name of the academy', autofocus: true, class: 'form-control input-lg'
               .form-group
                 %label.control-label{:for => "location[team]"} Team
-                = f.select :team_id, grouped_options_for_select(all_teams_select_groups), { include_blank: true }, { class: 'form-control  input-lg' }
+                = f.select :team_id, grouped_options_for_select(all_teams_select_groups, params[:team]), { include_blank: true }, { class: 'form-control  input-lg' }
       .step-pane.alert.editable{'data-step' => 2}
         .row.display-field
           .col-md-8.col-md-offset-2
+            %p.text-info.small Please enter at least the street and postal/zip code.
             .form-group
               %label.control-label Address
               .input-group
@@ -53,6 +54,7 @@
 
         .row.edit-field
           .col-md-8.col-md-offset-2
+            %p.text-info.small Please enter at least the street and postal/zip code.
             .form-group
               %label.control-label Address
               .input-group
@@ -100,17 +102,31 @@
       .step-pane.alert{'data-step' => 3}
         .row.edit-field
           .col-md-8.col-md-offset-2
-            = f.label :phone, class: 'small'
-            = f.text_field :phone, class: 'input-sm form-control'
-            = f.label :email, class: 'small'
-            = f.text_field :email, class: 'input-sm form-control'
-            = f.label :website, class: 'small'
-            .input-group
-              %span.input-group-addon http://
-              = f.text_field :website, class: 'input-sm form-control'
-            .input-group
-              %span.input-group-addon http://facebook.com/
-              = f.text_field :facebook, class: 'input-sm form-control'
+            %p.text-info.small Please enter at least once piece of contact information.
+            .form-group
+              = f.label :phone, class: 'control-label'
+              .input-group
+                %span.input-group-addon
+                  %span.fa.fa-2x.fa-phone
+                = f.text_field :phone, class: 'input-lg form-control'
+            .form-group
+              = f.label :email, class: 'control-label'
+              .input-group
+                %span.input-group-addon
+                  %span.fa.fa-2x.fa-envelope
+                = f.text_field :email, class: 'input-lg form-control'
+            .form-group
+              = f.label :website, class: 'control-label'
+              .input-group
+                %span.input-group-addon
+                  %span.fa.fa-external-link.fa-2x
+                = f.text_field :website, class: 'input-lg form-control'
+            .form-group
+              = f.label :facebook, class: 'control-label'
+              .input-group
+                %span.input-group-addon
+                  %span.fa.fa-facebook.fa-2x
+                = f.text_field :facebook, class: 'input-lg form-control'
 
 = content_for(:scripts) do
   :coffeescript

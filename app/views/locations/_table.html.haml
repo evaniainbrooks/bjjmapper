@@ -1,9 +1,11 @@
+- exclude = local_assigns[:exclude] || []
 %table.table.table-striped
   %tr
     %th
       Name
-    %th
-      Team
+    - unless exclude.include?(:team)
+      %th
+        Team
     %th
       Instructors
     %th
@@ -12,11 +14,12 @@
     %tr
       %td
         = link_to(location.title, location_path(location, ref: "index#{i}"), title: location.title)
-      %td
-        - if location.team.present?
-          = link_to(location.team_name, team_path(location.team, ref: "index#{i}"), title: "#{location.team_name} gyms")
-        - else
-          = location.team_name
+      - unless exclude.include?(:team)
+        %td
+          - if location.team.present?
+            = link_to(location.team_name, team_path(location.team, ref: "index#{i}"), title: "#{location.team_name} gyms")
+          - else
+            = location.team_name
       %td
         = location.instructors.map{|o| link_to(o.name, user_path(o, ref: "index#{i}"))}.join(", ").html_safe
       %td

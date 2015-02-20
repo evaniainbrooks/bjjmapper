@@ -1,6 +1,6 @@
 class RollFindr.Views.LocationWizardView extends Backbone.View
   el: $('.wizard')
-  initialize: ->
+  initialize: (options)->
     @$el.wizard()
 
     _.bindAll(this,
@@ -18,6 +18,7 @@ class RollFindr.Views.LocationWizardView extends Backbone.View
       .attr('disabled', true)
 
     @$('.btn-prev').attr('type', 'button')
+    @setSelectedTeamImage()
 
   events: {
     'change [name="location[team_id]"]': 'teamChanged'
@@ -79,14 +80,18 @@ class RollFindr.Views.LocationWizardView extends Backbone.View
       @$('.btn-next').removeAttr('disabled')
 
 
+  setSelectedTeamImage: ->
+    teamImg = $("[name='location[team_id]'] option:selected").data('img-src')
+    imgElem = @$('.edit-image')
+    imgElem.attr('src', if teamImg.length > 0 then teamImg else imgElem.data('default-src'))
+
   teamChanged: (e)->
     if @hasTeam()
-      teamImg = $('option:selected', e.currentTarget).data('img-src')
-      imgElem = @$('.edit-image')
-      imgElem.attr('src', if teamImg.length > 0 then teamImg else imgElem.data('default-src'))
+      @setSelectedTeamImage()
     else
       title = @$('input[name="location[title]"]').val()
       @$('.edit-image').attr('src', RollFindr.AvatarService(title))
+
 
   titleChanged: ->
     if @isTitleEntered() && !@hasTeam()
