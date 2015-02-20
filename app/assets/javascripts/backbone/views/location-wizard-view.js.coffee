@@ -83,7 +83,7 @@ class RollFindr.Views.LocationWizardView extends Backbone.View
   setSelectedTeamImage: ->
     teamImg = $("[name='location[team_id]'] option:selected").data('img-src')
     imgElem = @$('.edit-image')
-    imgElem.attr('src', if teamImg.length > 0 then teamImg else imgElem.data('default-src'))
+    imgElem.attr('src', if teamImg && teamImg.length > 0 then teamImg else imgElem.data('default-src'))
 
   teamChanged: (e)->
     if @hasTeam()
