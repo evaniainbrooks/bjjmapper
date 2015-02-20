@@ -1,7 +1,7 @@
 class LocationDecorator < Draper::Decorator
   DEFAULT_DESCRIPTION = 'No description was provided'
   DEFAULT_DIRECTIONS = 'No extra directions were provided'
-  DEFAULT_IMAGE = 'https://storage.googleapis.com/bjjmapper/uploads/production/teams/academy-default-100.png'
+  DEFAULT_IMAGE = 'https://storage.googleapis.com/bjjmapper/academy-default-100.png'
   DEFAULT_TEAM_NAME = 'Independent'
 
   EMPTY_HASH = {}.freeze
