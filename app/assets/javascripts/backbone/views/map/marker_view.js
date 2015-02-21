@@ -29,7 +29,7 @@
 
       this.listenTo(this.collection, 'reset', this.render);
 
-      this.draggable = options.draggable;
+      this.draggable = options.editable;
       this.map = options.map;
       this.markers = {};
       this.idFactory = new IdFactory();

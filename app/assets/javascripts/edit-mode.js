@@ -3,7 +3,12 @@
     $('html').delegate('.editable [data-cancel-edit]', 'click', function(e) {
       $(e.target).parents('.editable').removeClass('edit-mode');
       RollFindr.GlobalEvents.trigger('editing', false);
-      e.preventDefault();
+      if (!$(e.currentTarget).data('follow-href')) {
+        e.preventDefault();
+        return false;
+      } else {
+        return true;
+      }
     });
     $('html').delegate('.editable [data-begin-edit]', 'click', function(e) {
       if (!RollFindr.CurrentUser.isAnonymous()) {

@@ -46,17 +46,17 @@ class RollFindr.Views.MapView extends Backbone.View
       filteredCount: 0
     })
 
-    @initializeMarkerView(options.draggable)
+    @initializeMarkerView(options.editable)
 
     if @map?
       @setupEventListeners()
       @setCenter()
 
-  initializeMarkerView: (draggable)->
+  initializeMarkerView: (editable)->
     shouldRender = @markerView?
     @markerView.destroy() if @markerView?
 
-    @markerView = new RollFindr.Views.MapMarkerView({draggable: draggable, map: @map, collection: @filteredLocations})
+    @markerView = new RollFindr.Views.MapMarkerView({editable: editable, map: @map, collection: @filteredLocations})
     @markerView.render() if shouldRender
 
   hideDirectionsOverlay: ->

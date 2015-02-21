@@ -25,13 +25,13 @@
 
       this.model = new RollFindr.Models.Location(options.model);
       this.addInstructorView = new RollFindr.Views.AddInstructorView();
-      this.calendarView = new RollFindr.Views.CalendarView({model: this.model});
+      this.calendarView = new RollFindr.Views.CalendarView({editable: options.editable, model: this.model});
       this.nearbyView = new RollFindr.Views.LocationNearbyView({model: this.model});
       this.instructorsView = new RollFindr.Views.LocationInstructorsView({model: this.model});
       this.reviewsView = new RollFindr.Views.LocationReviewsView({model: this.model});
       if (undefined !== options.mapModel) {
         var mapModel = new RollFindr.Models.Map(options.mapModel);
-        this.mapView = new RollFindr.Views.MapView({draggable: options.draggable, model: mapModel, el: this.el});
+        this.mapView = new RollFindr.Views.MapView({editable: options.editable, model: mapModel, el: this.el});
       }
     },
     addInstructor: function() {

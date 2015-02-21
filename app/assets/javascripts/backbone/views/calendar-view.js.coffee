@@ -5,10 +5,16 @@ class RollFindr.Views.CalendarView extends Backbone.View
   createEventView: null
   eventTemplate: JST['templates/event']
   initialize: (options)->
-    _.bindAll(this, 'calendarSelected', 'calendarEventDrop', 'calendarEventRender', 'calendarEventClick')
+    _.bindAll(this, 'initializeCalendarView', 'calendarSelected', 'calendarEventDrop', 'calendarEventRender', 'calendarEventClick')
 
-    @editable = @$el.parents('.editable').hasClass('edit-mode')
-    viewOptions = if @editable
+    RollFindr.GlobalEvents.on('editing', @initializeCalendarView)
+
+    @createEventView = new RollFindr.Views.CreateEventView()
+
+    @initializeCalendarView(options.editable)
+
+  initializeCalendarView: (editable)->
+    viewOptions = if editable
       "agendaWeek,agendaDay"
     else
       "basicWeek,basicDay"
@@ -17,10 +23,10 @@ class RollFindr.Views.CalendarView extends Backbone.View
     @$el.fullCalendar({
       events: Routes.location_events_path(locationId),
       eventDurationEditable: false,
-      editable: @editable,
+      editable: editable,
       height: 'auto',
       timezone: @model.get('timezone')
-      selectable: @editable,
+      selectable: editable,
       select: this.calendarSelected,
       eventRender: this.calendarEventRender,
       #eventClick: this.calendarEventClick,
@@ -33,9 +39,7 @@ class RollFindr.Views.CalendarView extends Backbone.View
       defaultView: viewOptions.split(',')[0]
       minTime: "05:00:00"
       maxTime: "22:00:00"
-    });
-
-    @createEventView = new RollFindr.Views.CreateEventView()
+    })
 
   calendarEventClick: (event, jsEvent, view)->
     locationId = @model.get('id')
