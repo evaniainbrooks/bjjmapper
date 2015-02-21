@@ -1,8 +1,8 @@
 class LocationsController < ApplicationController
   before_action :set_directory_segments, only: [:index]
-  before_action :set_location, only: [:schedule, :destroy, :show, :update, :nearby]
+  before_action :set_location, only: [:schedule, :destroy, :show, :update, :nearby, :move]
   before_action :set_map, only: :show
-  before_action :ensure_signed_in, only: [:wizard, :destroy, :create, :update]
+  before_action :ensure_signed_in, only: [:wizard, :destroy, :create, :update, :move]
   decorates_assigned :location, :locations
 
   helper_method :created?
@@ -77,6 +77,32 @@ class LocationsController < ApplicationController
     end
   end
 
+  def move
+    lat = params.fetch(:lat, nil).try(:to_f)
+    lng = params.fetch(:lng, nil).try(:to_f)
+
+    head :bad_request and return false unless lat.present? && lng.present?
+
+    tracker.track('moveLocation',
+      id: @location.to_param,
+      old_coords: @location.to_coordinates,
+      new_coords: [lat, lng])
+
+    @location.update!({
+      coordinates: [lng, lat],
+      street: nil,
+      city: nil,
+      state: nil,
+      country: nil,
+      postal_code: nil
+    })
+
+    respond_to do |format|
+      format.json { render json: @location }
+      format.html { render json: location_path(@location, success: 1) }
+    end
+  end
+
   def update
     tracker.track('updateLocation',
       id: @location.to_param,
@@ -88,7 +114,7 @@ class LocationsController < ApplicationController
 
     respond_to do |format|
       format.json { render json: @location }
-      format.html { redirect_to location_path(location, edit: 0) }
+      format.html { redirect_to location_path(location, success: 1, edit: 0) }
     end
   end
 

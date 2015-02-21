@@ -144,12 +144,40 @@ describe LocationsController do
       context 'with html format' do
         it 'redirects back to the location' do
           post :update, { id: location.to_param, :format => 'html' }.merge(update_params), session_params
-          response.body.should redirect_to(location_path(assigns[:location], edit: 0))
+          response.body.should redirect_to(location_path(assigns[:location], success: 1, edit: 0))
         end
       end
     end
   end
-
+  describe 'POST move' do
+    let(:move_params) { { :lat => 90.0, :lng => 90.0 } }
+    let(:original_coords) { [99.9, 99.9] }
+    let(:location) { create(:location, coordinates: original_coords) }
+    let(:common_params) { { id: location.id, format: 'json' } }
+    context 'when not signed in' do
+      it 'returns not_authorized' do
+        post :move, common_params.merge(move_params)
+        location.reload.coordinates.should eq original_coords
+        response.status.should eq 401
+      end
+    end
+    context 'when signed in' do
+      let(:session_params) { { user_id: create(:user).to_param } }
+      context 'with json format' do
+        it 'moves and returns the location' do
+          post :move, common_params.merge(move_params), session_params
+          assigns[:location].to_coordinates[0].should match move_params[:lat]
+          assigns[:location].to_coordinates[1].should match move_params[:lng]
+        end
+      end
+      context 'with missing lat, lng params' do
+        it 'returns 400 bad request' do
+          post :move, common_params, session_params
+          response.status.should eq 400
+        end
+      end
+    end
+  end
   describe 'GET index' do
     context 'with country and city filter' do
       let(:filter) { { :city => 'New York', :country => 'US' } }
