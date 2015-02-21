@@ -3,16 +3,23 @@
 
   var template = JST['templates/confirm_dialog']; 
   $('body').delegate('.confirm-dialog button.confirm', 'click', function(e) {
-    var method = $(e.target).data('method');
+    var method = $(e.target).data('method') || 'POST';
     var url = $(e.target).data('url');
+    var returnTo = $(e.target).data('return');
+    var extraData = {};
+    extraData['_method'] = method.toLowerCase();
+
     $.ajax({
-      type: 'POST',
-      data: { '_method': method.toLowerCase() },
+      type: method,
+      data: extraData,
       dataType: 'json',
       url: url,
       success: function(response, status, xhr) {  
         $(e.target).parents('.confirm-dialog').modal('hide');
-        window.location = Routes.root_path();
+        window.location = returnTo;
+      },
+      error: function() {
+        toastr.error('Please try again later. If you believe this to be a bug, email us at info@bjjmapper.com', 'An error has occurred');
       }
     });
   });
@@ -23,7 +30,8 @@
       type: 'primary',
       confirm: 'Confirm',
       cancel: 'Cancel',
-      method: 'POST'
+      method: 'POST',
+      return_to: Routes.root_path()
     };
 
     var templateArgs = $.extend({}, defaults, data);

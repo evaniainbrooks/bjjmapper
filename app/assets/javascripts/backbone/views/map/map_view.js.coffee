@@ -11,7 +11,7 @@ class RollFindr.Views.MapView extends Backbone.View
   map: null
   teamFilter: null
   termFilter: null
-  locationsView: null
+  markerView: null
   listView: null
   filteredLocations: new RollFindr.Collections.LocationsCollection()
   events: {
@@ -20,13 +20,14 @@ class RollFindr.Views.MapView extends Backbone.View
     'click a.directions': 'getDirections'
     'click .directions-panel .close' : 'hideDirectionsOverlay'
   }
-  initialize: ->
+  initialize: (options)->
     _.bindAll(this,
       'activeMarkerChanged',
       'search',
       'setDefaultCenter',
       'setDirectionsOverlay',
       'hideDirectionsOverlay',
+      'initializeMarkerView',
       'setCenter',
       'setCenterGeolocate',
       'fetchViewport',
@@ -39,16 +40,24 @@ class RollFindr.Views.MapView extends Backbone.View
     @termFilter = new TermFilter()
     @teamFilter = new RollFindr.Views.TeamListView({el: @$('.filter-list .team-list')})
 
-    @locationsView = new RollFindr.Views.MapMarkerView({map: @map, collection: @filteredLocations})
     @listView = new RollFindr.Views.MapLocationsListView({
       el: @$('.location-list')
       collection: @filteredLocations
       filteredCount: 0
     })
 
+    @initializeMarkerView(options.draggable)
+
     if @map?
       @setupEventListeners()
       @setCenter()
+
+  initializeMarkerView: (draggable)->
+    shouldRender = @markerView?
+    @markerView.destroy() if @markerView?
+
+    @markerView = new RollFindr.Views.MapMarkerView({draggable: draggable, map: @map, collection: @filteredLocations})
+    @markerView.render() if shouldRender
 
   hideDirectionsOverlay: ->
     @map.controls[google.maps.ControlPosition.RIGHT_CENTER].clear()
@@ -75,13 +84,11 @@ class RollFindr.Views.MapView extends Backbone.View
     @listenTo(@termFilter.collection, 'sync reset', @filtersChanged)
     @listenTo(@model.get('locations'), 'sort sync reset', @filtersChanged)
 
-    #google.maps.event.addListener(@map, 'click', @createLocation)
-    #google.maps.event.addListenerOnce(@map, 'idle', @fetchViewport)
-
     RollFindr.GlobalEvents.on('geolocate', @geolocate)
     RollFindr.GlobalEvents.on('search', @search)
     RollFindr.GlobalEvents.on('markerActive', @activeMarkerChanged)
     RollFindr.GlobalEvents.on('directions', @setDirectionsOverlay)
+    RollFindr.GlobalEvents.on('editing', @initializeMarkerView)
 
   activeMarkerChanged: (e)->
     if null != e.id
@@ -112,7 +119,7 @@ class RollFindr.Views.MapView extends Backbone.View
   render: ->
     filteredCount = @model.get('locations').models.length - @filteredLocations.models.length
     @listView.render(filteredCount)
-    @locationsView.render()
+    @markerView.render()
 
   search: (e)->
     if e.location? && e.location.length > 0
@@ -194,6 +201,7 @@ class RollFindr.Views.MapView extends Backbone.View
 
     @model.set('center', center)
     @$('.refresh-button .fa').addClass('fa-spin')
+
     @model.get('locations').fetch({
       data:
         center: center
@@ -207,7 +215,6 @@ class RollFindr.Views.MapView extends Backbone.View
   getDirections: (e)->
     id = $(e.currentTarget).data('id')
     location = @model.get('locations').get(id)
-
 
     @directionsDialog.undelegateEvents() if @directionsDialog?
     @directionsDialog = new RollFindr.Views.DirectionsDialogView({el: $('.directions-dialog-container'), model: location})

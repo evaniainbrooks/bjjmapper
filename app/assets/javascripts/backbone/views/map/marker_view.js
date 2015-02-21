@@ -25,10 +25,11 @@
   RollFindr.Views.MapMarkerView = Backbone.View.extend({
     template: JST['templates/locations/show'],
     initialize: function(options) {
-      _.bindAll(this, 'render', 'activeMarkerChanged');
+      _.bindAll(this, 'render', 'activeMarkerChanged', 'markerDragEnd');
 
       this.listenTo(this.collection, 'reset', this.render);
 
+      this.draggable = options.draggable;
       this.map = options.map;
       this.markers = {};
       this.idFactory = new IdFactory();
@@ -41,6 +42,7 @@
       var id = loc.get('id');
       var icon;
       var position;
+      var marker;
       var markerExists = "undefined" !== typeof(self.markers[id]);
       if (markerExists) {
         return;
@@ -49,17 +51,24 @@
       loc.attributes['marker_id'] = this.idFactory.nextId();
       icon = "/assets/markers/number_" + loc.get('marker_id') + ".png";
       position = new google.maps.LatLng(loc.get('coordinates')[0], loc.get('coordinates')[1]),
+      marker = new google.maps.Marker({
+         id: id,
+         map: self.map,
+         title: loc.get('address'),
+         position: position,
+         icon: icon,
+         draggable: self.draggable,
+         cursor: 'pointer',
+         flat: false,
+      });
+
+      if (self.draggable) {
+        google.maps.event.addListener(marker, 'dragend', self.markerDragEnd);
+      }
+
       self.markers[id] = {
         marker_id: loc.get('marker_id'),
-        marker: new google.maps.Marker({
-           id: id,
-           map: self.map,
-           title: loc.get('address'),
-           position: position,
-           icon: icon,
-           cursor: 'pointer',
-           flat: false,
-        })
+        marker: marker
       };
 
       if (null !== self.template) {
@@ -67,6 +76,19 @@
           RollFindr.GlobalEvents.trigger('markerActive', {id: id});
         });
       }
+    },
+    markerDragEnd: function(e) {
+      var model = this.collection.models[0];
+      var id = model.get('id');
+      var address = model.get('address');
+      RollFindr.ConfirmDialog({
+        url: Routes.move_location_path(id, { lat: e.latLng.lat(), lng: e.latLng.lng() }),
+        return_to: Routes.location_path(id, { success: 1 }),
+        method: 'POST',
+        type: 'warning',
+        title: 'Are you sure you want to move this academy?',
+        body: "Note that this action cannot be un-done. This will clear the current address of <b>" + address + "</b> and a new address will be calculated based on the new coordinates. Please proceed with caution."
+      });
     },
     openInfoWindow: function(loc) {
       var self = this;
@@ -80,6 +102,14 @@
         delete this.markers[id].marker;
         delete this.markers[id];
       }
+    },
+    destroy: function() {
+      for (var marker in this.markers) {
+        this.deleteMarker(marker);
+      }
+      
+      this.undelegateEvents();
+      RollFindr.GlobalEvents.off('markerActive', this.activeMarkerChanged);
     },
     activeMarkerChanged: function(e) {
       if (null !== e.id) {

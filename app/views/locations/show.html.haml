@@ -25,6 +25,7 @@
     .row
       .col-md-12
         = render partial: 'create_message' if created?
+        = render partial: 'edit_success_message' if edit_success?
         = render partial: 'review_message' if reviewed?
     .row
       .col-md-2
@@ -44,7 +45,8 @@
       .col-md-5
         %div.map-canvas{:style => 'height: 300px'}
         -# This is filled in by google maps
-        %h4.text-center= link_to 'See on larger map', root_path(:center => location.to_coordinates, :ref => 'loc_map_full'), :data => { :'no-turbolink' => true }
+        %h4.display-field.text-center= link_to 'See on larger map', root_path(:center => location.to_coordinates, :ref => 'loc_map_full'), :data => { :'no-turbolink' => true }
+        %p.edit-field.text-info.small Note: you can drag the marker to a new location to change the address of this academy.
       .col-md-4
         %div.nearby-locations
           -# This is filled in by locations/nearby template
@@ -108,7 +110,7 @@
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->
-      mapView = new RollFindr.Views.LocationShowView({ model: #{location.to_json}, mapModel: #{@map.to_json}, el: $('.show-location')})
+      mapView = new RollFindr.Views.LocationShowView({ draggable: #{edit_mode?}, model: #{location.to_json}, mapModel: #{@map.to_json}, el: $('.show-location')})
 
 = content_for(:head) do
   = render partial: 'opengraph_tags', locals: { location: location }

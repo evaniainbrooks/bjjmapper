@@ -31,7 +31,7 @@
       this.reviewsView = new RollFindr.Views.LocationReviewsView({model: this.model});
       if (undefined !== options.mapModel) {
         var mapModel = new RollFindr.Models.Map(options.mapModel);
-        this.mapView = new RollFindr.Views.MapView({model: mapModel, el: this.el});
+        this.mapView = new RollFindr.Views.MapView({draggable: options.draggable, model: mapModel, el: this.el});
       }
     },
     addInstructor: function() {
