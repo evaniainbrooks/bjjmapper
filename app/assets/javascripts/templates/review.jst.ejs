@@ -1,4 +1,4 @@
-<div class="review">
+<div class="review col-md-3">
   <span class="small text-muted"><%= review.created_at %></span>
   <span class="rating">
     <% _.times(5, function(i) { %><span class="fa fa-<%= review.rating > i ? 'star' : 'star-o' %>"></span><% }); %>
