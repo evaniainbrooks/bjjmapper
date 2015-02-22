@@ -90,7 +90,7 @@ describe LocationDecorator do
     context 'with no image' do
       context 'with no team image' do
         subject { build(:location, image: nil, team: nil).decorate }
-        it 'returns the default image' do
+        it 'returns the avatar service image' do
           subject.image.should match("/service/avatar/100x100/#{subject.title}/image.png")
         end
       end
