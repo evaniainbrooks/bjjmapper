@@ -38,7 +38,7 @@
                   = image_tag team.image, alt: "#{team.name} logo", class: 'logo'
                 - else
                   %span.logo
-                = team.name
+                = team.object.name
               %span.small
                 = surround '(', ')' do
                   = team.locations.count
@@ -52,7 +52,7 @@
                   = image_tag team.image, alt: "#{team.name} logo", class: 'logo'
                 - else
                   .logo
-                = team.name
+                = team.object.name
               %span.small
                 = surround '(', ')' do
                   = team.locations.count
