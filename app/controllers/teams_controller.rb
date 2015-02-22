@@ -1,7 +1,7 @@
 class TeamsController < ApplicationController
-  before_action :set_team, only: [:show, :update]
+  before_action :set_team, only: [:show, :update, :remove_image]
   before_action :set_teams, only: :index
-  before_action :ensure_signed_in, only: [:update, :create, :new]
+  before_action :ensure_signed_in, only: [:update, :create, :new, :remove_image]
 
   decorates_assigned :team, :teams
   
@@ -43,6 +43,22 @@ class TeamsController < ApplicationController
     end
   end
 
+  def remove_image
+    tracker.track('removeTeamImage',
+      id: @team.to_param,
+      image: @team.image
+    )
+
+    @team.update!({
+      :image => nil,
+      :image_large => nil
+    })
+
+    respond_to do |format|
+      format.json { render json: @team }
+    end
+  end
+
   def update
     tracker.track('updateTeam',
       id: @team.to_param,
@@ -66,7 +82,7 @@ class TeamsController < ApplicationController
   end
 
   def create_params
-    p = params.require(:team).permit(:name, :description, :parent_team_id, :primary_color_index, :avatar, :modifier_id)
+    p = params.require(:team).permit(:name, :description, :parent_team_id, :primary_color_index, :modifier_id)
     p[:modifier_id] = current_user.to_param if signed_in?
     p
   end
