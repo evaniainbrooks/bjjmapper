@@ -6,26 +6,32 @@
   %meta{:property => 'og:description', :content => team.description || "Brazilian Jiu-Jitsu Academy Directory"}/
   %meta{:property => 'og:image', :content => "#{request.protocol}#{request.host}:#{request.port}#{team.image}"}/
 
-.container.page
+.container.page.show-team
   = form_for(team, html: { class: 'form ' + edit_mode_classes }) do |f|
     .row
       .col-md-10
         = render partial: 'breadcrumb', locals: { team: team }
-      .col-md-2.text-right
-        %button.pull-right.btn.btn-default.display-field.btn-sm{:style => 'margin-left: 5px', :type => "button", 'data-begin-edit' => true} Edit
-        %button.pull-right.btn.btn-default.edit-field.btn-sm{:style => 'margin-left: 5px', :'data-cancel-edit' => true } Cancel
-        %button.pull-right.btn.btn-default.btn-sm{'data-report-item' => true}
-          %span.report Report
+      .col-md-2
+        .display-field
+          %button.btn.btn-default.btn-sm{:type => "button", 'data-begin-edit' => true} Edit
+          %button.btn.btn-default.btn-sm{'data-report-item' => true}
+            %span.report Report
+        .edit-field
+          %button.btn.btn-default.btn-sm{:'data-cancel-edit' => true } Cancel
+          %button.btn.btn-primary.btn-sm{:type => 'submit'} Save
     .row
       .col-md-12
         = render partial: 'teams/create_message' if created?
     .row
-      .col-md-2
+      .col-md-2{:style => 'padding-right: 0px;'}
         .display-field
           %img.center-block{:src => team.image}
         .edit-field
           %img.center-block.edit-image{:src => team.image}
+          %br/
           %input{:'data-id' => team.id, :'data-upload-avatar' => true, :type => 'file', :class => 'input-md form-control'}/
+          - if team.object.image.present?
+            %input{:'data-id' => team.id, :'data-clear-avatar' => true, :type => 'button', :value => 'Remove Image', :class => 'btn btn-default btn-small btn-block'}/
       .col-md-6
         .edit-field
           = f.label :name, class: 'small'
@@ -47,7 +53,7 @@
         .col-md-10
           %h3= "#{pluralize(team.locations.count, 'Academy')}"
         .col-md-2.text-right
-          = link_to wizard_locations_path(ref: 'tdp', team: team.id), style: 'margin-bottom: 10px; margin-top: 20px', class: 'btn btn-success' do
+          = link_to wizard_locations_path(ref: 'tdp', team: team.id), style: 'margin-top: -5px', class: 'btn btn-success' do
             %i.fa.fa-map-marker
             Create Academy
       .row
