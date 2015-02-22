@@ -12,9 +12,12 @@ class TeamDecorator < Draper::Decorator
   end
 
   def image
-    h.image_path(object.image)
+    img = object.image
+    img = parent_team.image if img.blank? && parent_team.present?
+    img = avatar_service_url(object.name) if img.blank?
+    h.image_path(img)
   end
-  
+
   def updated_at
     object.updated_at.present? ? "updated #{h.time_ago_in_words(object.updated_at)} ago" : nil
   end
@@ -37,5 +40,11 @@ class TeamDecorator < Draper::Decorator
       created_at: created_at,
       updated_at: updated_at
     )
+  end
+
+  private
+
+  def avatar_service_url(name)
+    "/service/avatar/100x100/#{CGI.escape(name)}/image.png"
   end
 end
