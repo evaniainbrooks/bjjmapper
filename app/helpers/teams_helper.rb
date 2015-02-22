@@ -3,7 +3,7 @@ module TeamsHelper
     Team.all.limit(50).to_a.sort_by(&:name)
   end
   def all_teams_groups
-    teams = all_teams
+    teams = TeamDecorator.decorate_collection(all_teams)
     grouped_teams = {}
     teams.each do |team|
       grouped_teams[team.parent_team] ||= []
