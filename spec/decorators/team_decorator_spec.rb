@@ -12,7 +12,7 @@ describe TeamDecorator do
       context 'with no parent team image' do
         subject { build(:team, image: nil, parent_team: nil).decorate }
         it 'returns the avatar service image' do
-          subject.image.should match("/service/avatar/100x100/#{subject.name}/image.png")
+          subject.image.should match("/service/avatar/")
         end
       end
       context 'with parent team image' do
