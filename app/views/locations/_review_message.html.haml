@@ -1,5 +1,5 @@
 - unless error?
-  .alert.alert-success{:role => 'alert'}
+  .alert.alert-success.buffer-top-sm{:role => 'alert'}
     %button.close{"data-dismiss" => "alert", :type => "button"} 
       %span{"aria-hidden" => "true"} &times;
       %span.sr-only Close
@@ -8,7 +8,7 @@
       Your review of this academy has been posted. 
       %a{:href => '#reviews'} See Review
 - else
-  .alert.alert-danger{:role => 'alert'}
+  .alert.alert-danger.buffer-top-sm{:role => 'alert'}
     %button.close{"data-dismiss" => "alert", :type => "button"} 
       %span{"aria-hidden" => "true"} &times;
       %span.sr-only Close
