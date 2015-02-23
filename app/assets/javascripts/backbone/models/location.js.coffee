@@ -43,3 +43,10 @@ class RollFindr.Collections.NearbyLocationsCollection extends Backbone.Collectio
 
   url: =>
     Routes.nearby_location_path(@location)
+
+class RollFindr.Collections.RecentLocationsCollection extends Backbone.Collection
+  initialize: (options)->
+    @count = options.count
+
+  url: =>
+    Routes.recent_locations_path({count: @count})
