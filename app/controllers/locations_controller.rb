@@ -9,6 +9,23 @@ class LocationsController < ApplicationController
   helper_method :reviewed?
   helper_method :error?
 
+  RECENT_COUNT_DEFAULT = 5
+  RECENT_COUNT_MAX = 10
+
+  def recent
+    count = [params.fetch(:count, RECENT_COUNT_DEFAULT).to_i, RECENT_COUNT_MAX].min
+
+    tracker.track('showRecentLocations',
+      count: count
+    )
+
+    @locations = Location.all.desc('created_at').limit(count)
+
+    respond_to do |format|
+      format.json { render json: locations }
+    end
+  end
+
   def schedule
     tracker.track('showSchedule',
       id: @location.to_param

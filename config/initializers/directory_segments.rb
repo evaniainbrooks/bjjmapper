@@ -14,7 +14,11 @@ RollFindr::DirectoryCountries =  {
   'South Korea' => 'KR',
   'Spain' => 'ES',
   'Turkey' => 'TR',
-  'Hungary' => 'HU'
+  'Hungary' => 'HU',
+  'Sweden' => 'SE',
+  'Finland' => 'FI',
+  'Russia' => 'RU',
+  'Mexico' => 'MX'
 }
 
 RollFindr::DirectoryCities = {
@@ -30,6 +34,10 @@ RollFindr::DirectoryCities = {
   'Germany' => ['Berlin', 'Frankfurt', 'Munich', 'Hamburg', 'Cologne', 'Stuttgart', 'Dresden'],
   'Brazil' => ['Rio de Janerio', 'Sao Paulo', 'Belo Horizonte', 'Salvador'],
   'Poland' => ['Warszawa', 'Kraków', 'Wrocław', 'Łódź'],
-  'Greece' => ['Athens', 'Thessaloniki', 'Volos']
+  'Greece' => ['Athens', 'Thessaloniki', 'Volos'],
+  'Sweden' => ['Stockholm', 'Göteborg', 'Malmö'],
+  'Finland' => ['Helsinki', 'Tampere'],
+  'Russia' => ['Moscow', 'Saint Petersburg', 'Novosibirsk', 'Yekaterinburg'],
+  'Mexico' => ['Mexico City', 'Ecatepec', 'Guadalajara', 'Puebla', 'Juárez']
 }
 

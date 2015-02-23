@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :locations do
     get :search, on: :collection
     get :wizard, on: :collection
+    get :recent, on: :collection
     get :nearby, on: :member
     get :schedule, on: :member
     post :move, on: :member
@@ -23,7 +24,7 @@ Rails.application.routes.draw do
   resources :teams, :only => [:show, :index, :update, :create, :new] do
     post :remove_image, on: :member
   end
-  root 'application#map'
+  root 'application#homepage'
 
   get 'search/:query' => 'application#search'
   get '/bjj-academy-directory(/country/:country(/city/:city))' => 'locations#index', :as => :directory_index
@@ -33,6 +34,7 @@ Rails.application.routes.draw do
   match '/signout' => 'sessions#destroy', :as => :signout, :via => [:post, :get, :delete]
 
   post '/report' => 'application#report', :as => :report
+  get '/map' => 'application#map', :as => :map
   get '/meta' => 'application#meta', :as => :meta
   get '/people' => 'application#people'
   get '/geocode' => 'application#geocode'
