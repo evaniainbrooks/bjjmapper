@@ -1,6 +1,16 @@
 require 'spec_helper'
 
 describe LocationsController do
+  describe 'GET recent' do
+    context 'with json format' do
+      subject { build_list(:location, 2) }
+      before { Location.stub_chain(:all, :desc, :limit).and_return(subject) }
+      it 'returns the recent locations' do
+        get :recent, format: 'json', count: 2
+        response.should be_success
+      end
+    end
+  end
   describe 'GET schedule' do
     context 'with html format' do
       let(:location) { create(:location) }
