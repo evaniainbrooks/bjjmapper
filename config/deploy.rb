@@ -111,7 +111,8 @@ namespace :deploy do
   end
 
   task :warmup do
-    on roles(:app), in: :sequence, wait: 300 do
+    on roles(:app), in: :sequence do
+      execute "sleep 1m"
       execute "cd '#{release_path}'; ./script/warmup_100.sh || true"
     end
   end
