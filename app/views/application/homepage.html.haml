@@ -48,7 +48,7 @@
       .map-list-view
         .location-list
           = render partial: 'locations/map_list', locals: { show_create: false }
-      %a{:href => map_path(center: @map[:center]), :title => 'Academy Map'}
+      %a{:href => map_path(center: @map[:center], :ref => 'homepage'), :title => 'Academy Map'}
         %h4.text-center 
           %span.fa.fa-search-plus
           See larger map
