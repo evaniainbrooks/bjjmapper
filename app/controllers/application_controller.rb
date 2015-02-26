@@ -52,13 +52,17 @@ class ApplicationController < ActionController::Base
 
   def map
     center = params.fetch(:center, [])
-    geolocate = center.present? ? 0 : 1
+    query = params.fetch(:query, "")
+    location = params.fetch(:location, "")
+    geolocate = center.blank? && query.blank? && location.blank? ? 1 : 0
     zoom = params.fetch(:zoom, nil).try(:to_i)
     zoom ||= center.present? ? Map::ZOOM_LOCATION : Map::ZOOM_DEFAULT
     @map = {
       zoom: zoom,
       center: center,
-      :minZoom => Map::ZOOM_CITY,
+      query: query,
+      location: location,
+      minZoom: Map::DEFAULT_MIN_ZOOM,
       geolocate: geolocate,
       locations: [],
       refresh: 1
@@ -67,6 +71,8 @@ class ApplicationController < ActionController::Base
     tracker.track('showMap',
       zoom: zoom,
       center: center,
+      query: query,
+      location: location,
       geolocate: geolocate
     )
 

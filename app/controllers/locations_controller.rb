@@ -147,6 +147,7 @@ class LocationsController < ApplicationController
       if geocode_result.present?
         location = geocode_result[0].geometry['location']
         center = [location['lat'], location['lng']]
+        distance = 50.0
       end
     end
 
