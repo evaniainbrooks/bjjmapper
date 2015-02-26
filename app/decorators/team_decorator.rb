@@ -1,6 +1,6 @@
 class TeamDecorator < Draper::Decorator
   DEFAULT_DESCRIPTION = 'No description was provided'
-  
+
   delegate_all
   decorates_finders
   decorates_association :locations
@@ -11,10 +11,25 @@ class TeamDecorator < Draper::Decorator
     "Team #{object.name}"
   end
 
+  # TODO: DRY up these methods
+  def image_large
+    img = object.image_large
+    img = parent_team.image_large if img.blank? && parent_team.present?
+    img = avatar_service_url(object.name, 300) if img.blank?
+    h.image_path(img)
+  end
+
   def image
     img = object.image
     img = parent_team.image if img.blank? && parent_team.present?
-    img = avatar_service_url(object.name) if img.blank?
+    img = avatar_service_url(object.name, 100) if img.blank?
+    h.image_path(img)
+  end
+
+  def image_tiny
+    img = object.image_tiny
+    img = parent_team.image_tiny if img.blank? && parent_team.present?
+    img = avatar_service_url(object.name, 50) if img.blank?
     h.image_path(img)
   end
 
@@ -25,7 +40,7 @@ class TeamDecorator < Draper::Decorator
   def created_at
     object.created_at.present? ? "created #{h.time_ago_in_words(object.created_at)} ago" : nil
   end
-  
+
   def description
     if object.description.present?
       object.description
@@ -44,7 +59,7 @@ class TeamDecorator < Draper::Decorator
 
   private
 
-  def avatar_service_url(name)
-    "/service/avatar/100x100/#{CGI.escape(name)}/image.png"
+  def avatar_service_url(name, size)
+    "/service/avatar/#{size}x#{size}/#{CGI.escape(name)}/image.png"
   end
 end

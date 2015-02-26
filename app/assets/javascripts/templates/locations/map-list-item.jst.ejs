@@ -1,16 +1,29 @@
 <div data-id="<%= location.id %>" class="location-list-item <%= active ? 'marker-active' : ''%> list-group-item">
-  <div class="list-index">
-    <span class="text-muted"><%= location.marker_id %></span>
-  </div>
-  <img src="<%= location.image %>" alt="<% location.title %> logo" class="pull-left" />
-  <div>
-    <a class="text-primary" href="<%= Routes.location_path(location) %>"><h4 class="list-group-item-heading"><%= location.title %></h4></a>
-    <p class="strong list-group-item-text small"><%= location.team_name %></p>
-    <p class="text-muted list-group-item-text small"><%= location.street %></p>
+  <div class="inactive-content">
+    <div class="list-index">
+      <span><%= location.marker_id %></span>
+    </div>
+    <img src="<%= location.image %>" alt="<% location.title %> logo" class="logo pull-left" />
+    <div>
+      <h4 class="list-group-item-heading"><%= location.title %></h4>
+      <p class="strong list-group-item-text small"><%= location.team_name %></p>
+      <p class="text-muted list-group-item-text small"><%= location.street %></p>
+    </div>
+    <span class="text-info distance small"><%= location.distance %></span>
   </div>
   <div class="active-content">
-    <p class="text-muted list-group-item-text small"><%= location.address.split(',').slice(1).join(',') %></p>
-    <br/>
+    <a class="location-link" href="<%= Routes.location_path(location.id) %>" alt="See more about <%= location.title %>">
+      <div class="list-index">
+        <span><%= location.marker_id %></span>
+      </div>
+      <img src="<%= location.image %>" alt="<% location.title %> logo" class="logo pull-left" />
+      <div>
+        <h4 class="list-group-item-heading"><%= location.title %></h4>
+        <p class="strong list-group-item-text small team-title"><%= location.team_name %></p>
+        <p class="text-muted list-group-item-text small address"><%= location.address %></p>
+      </div>
+      <br/>
+    </a>
     <ul class="small list-unstyled">
       <% if (null !== location.phone && location.phone.length > 0) { %>
         <li><span class="col-md-offset-1 label">Phone</span> <a class="phone" href="tel:<%= location.phone %>"><%= location.phone %></a></li>
@@ -25,6 +38,6 @@
         <li><span class="col-md-offset-1 label"></span><a class="facebook" href="http://fb.com/<%= location.facebook %>"><i class="fa fa-facebook-square fa-2x"></i></a></li>
       <% } %>
     </ul>
+    <span class="text-info distance small"><%= location.distance %></span>
   </div>
-  <span class="text-info distance small"><%= location.distance %></span>
 </div>

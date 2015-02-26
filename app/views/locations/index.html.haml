@@ -2,7 +2,7 @@
 = content_for :title do
   = locations.present? ? "Brazilian Jiu-Jitsu Academies in #{seo_name}" : "Brazilian Jiu-Jitsu Academy Directory"
 
-.container.page
+.container.page.directory
   .row
     .col-md-12
       %h1
@@ -42,7 +42,7 @@
         %br/
         %br/
         %div
-          %big= link_to "See on map view", root_path(zoom: Map::ZOOM_CITY, center: locations.first.to_coordinates), title: "See map of Brazilian Jiu-Jitsu gyms in #{seo_name}"
+          %big= link_to "See on map view", map_path(zoom: Map::ZOOM_CITY, center: locations.first.to_coordinates), title: "See map of Brazilian Jiu-Jitsu gyms in #{seo_name}"
     %br/
     .row 
       .col-md-12

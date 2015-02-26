@@ -23,4 +23,4 @@
       %td
         = location.instructors.map{|o| link_to(o.name, user_path(o, ref: "index#{i}"))}.join(", ").html_safe
       %td
-        = link_to(location.address, root_path(center: location.to_coordinates))
+        = link_to(location.address, map_path(center: location.to_coordinates))

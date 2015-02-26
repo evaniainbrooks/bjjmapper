@@ -31,16 +31,16 @@
         = render partial: 'edit_success_message' if edit_success?
         = render partial: 'review_message' if reviewed?
     .row
-      .col-md-2{:style => 'margin-top: 20px; padding-right: 0px;'}
+      .col-md-2.col-xs-6{:style => 'margin-top: 20px; padding-right: 0px;'}
         .display-field
           %img{:src => location.image, :class => 'center-block'}/
         .edit-field
           %img{:src => location.image, :class => 'center-block edit-image'}/
-      .col-md-1{:style => 'padding: 0px'}
+      .col-md-1.col-xs-6{:style => 'padding: 0px'}
         = render partial: 'subnav', :locals => { location: location }
       .col-md-5
         = render partial: 'show_header', :locals => { location: location, f: f }
-      .col-md-4= render partial: 'show_contact', :locals => { location: location, f: f }
+      = render partial: 'show_contact', :locals => { location: location, f: f }
     %hr/
     .row
       .col-md-3
@@ -50,7 +50,10 @@
       .col-md-5
         %div.map-canvas{:style => 'height: 300px'}
         -# This is filled in by google maps
-        %h4.display-field.text-center= link_to 'See on larger map', root_path(:center => location.to_coordinates, :ref => 'loc_map_full'), :data => { :'no-turbolink' => true }
+        %h4.display-field.text-center
+          = link_to map_path(:center => location.to_coordinates, :ref => 'loc_map_full'), :data => { :'no-turbolink' => true } do
+            %span.fa.fa-search-plus
+            See on larger map
         %p.edit-field.text-info.small Note: you can drag the marker to a new location to change the address of this academy.
       .col-md-4
         %div.nearby-locations
@@ -59,8 +62,7 @@
             %h3 Nearby Academies
             %ul.list-unstyled.items
           .alternative
-            %script{:async => true, :src => "//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"}
-            %ins.adsbygoogle{"data-ad-client" => "ca-pub-2053754421757342", "data-ad-slot" => "1611028916", :style => "display:inline-block;width:300px;height:250px"}
+            = render partial: 'application/google_adsense'
     %hr/
     .row
       .col-md-4.instructors

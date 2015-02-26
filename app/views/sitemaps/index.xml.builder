@@ -8,6 +8,11 @@ xml.tag! 'urlset', 'xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9' do
       xml.priority(1.0)
   }
   xml.url{
+      xml.loc("http://bjjmapper.com/map")
+      xml.changefreq("daily")
+      xml.priority(0.9)
+  }
+  xml.url{
       xml.loc("http://bjjmapper.com/bjj-academy-directory")
       xml.changefreq("daily")
       xml.priority(0.9)

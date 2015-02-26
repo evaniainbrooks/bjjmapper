@@ -7,7 +7,7 @@
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
-      %a.navbar-brand{:rel => 'home', :href => root_path, :title => 'BJJMapper Homepage'}
+      %a.navbar-brand{:rel => 'home', :href => root_path(ref: 'logo'), :title => 'BJJMapper Homepage'}
         %img{:src => 'https://storage.googleapis.com/bjjmapper/logo.png', :style => 'margin-top: -17px; width: 60px; height: 60px'}/
       - if action?(:map)
         .btn-group.pull-left{:role => 'group'}
@@ -19,7 +19,7 @@
     .main-navbar-collapse.collapse.navbar-collapse
       %ul.nav.navbar-nav
         %li{:class => action?(:map) ? 'active' : nil}
-          %a{href: root_path(ref: 'navbar'), title: 'Brazilian Jiu-Jitsu Academy Map'} Map
+          %a{href: map_path(ref: 'navbar'), title: 'Brazilian Jiu-Jitsu Academy Map'} Map
         %li{:class => action?(:index) ? 'active' : nil}
           %a{href: directory_index_path(ref: 'navbar'), title: 'Brazilian Jiu-Jitsu Academy Directory'} Directory
         %li{:class => action?(:meta) ? 'active' : nil}
@@ -27,11 +27,10 @@
       - if action?(:map)
         %form.navbar-form.navbar-left{:role => "search"}
           .form-group.has-feedback
-            %input.clear-input.form-control{:name => 'query', :size => '8', :placeholder => "Search", :type => "text"}/
-            %span.clear-input-button.form-control-feedback.fa.fa-times-circle
+            %input.form-control{:name => 'query', :size => '8', :placeholder => "Search", :type => "text", :value => params[:query]}/
           .form-group
             .input-group
-              %input.form-control{:name => 'location', :size => '10', :placeholder => "Current View", :type => "text"}/
+              %input.form-control{:name => 'location', :size => '10', :placeholder => "Everywhere", :type => "text"}/
               %a.input-group-addon{'data-geolocate' => 'true', :href => '#geolocate'}
                 %i.fa.fa-location-arrow
           %button.btn.btn-default{:type => "submit"} Search

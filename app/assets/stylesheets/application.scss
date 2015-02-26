@@ -26,25 +26,6 @@ html, body {
   height: 100%;
 }
 
-.location-list {
-  .list-index {
-    padding: 7px 0px;
-    height: 100%;
-    float: left;
-    width: 40px;
-    text-align: center;
-    span {
-      font-size: 150%;
-    }
-  }
-
-  .distance {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-  }
-}
-
 .team-list ul {
   max-height: 200px;
   overflow-y: scroll;
@@ -69,6 +50,10 @@ html, body {
   color: red;
 }
 
+.block {
+  display: block;
+}
+
 .show-user {
   img {
     max-width: 300px;
@@ -76,9 +61,6 @@ html, body {
 }
 
 .show-location, .show-user, .show-team {
-  &>a {
-    color: black;
-  }
   h3 {
     margin-top: 0px !important;
   }
@@ -88,10 +70,14 @@ html, body {
 }
 
 .show-location-overlay {
+  margin-top: 20px;
   img {
     width: 50px;
     height: 50px;
   }
+  h4 { color: black; }
+  .team-title { color: #777; }
+  .address { color: black; }
 }
 
 .map-list {
@@ -152,106 +138,10 @@ html, body {
     left: 0px;
     margin-bottom: 0px !important;
   }
-  .location-list {
-    padding: 0px !important;
-    .location-list-item {
-      h4 {
-        display: inline-block;
-      }
-      .label {
-        color: black;
-        min-width: 60px;
-        display: inline-block;
-        text-align: left;
-      }
-      .active-content { display: none; }
-      &.marker-active {
-        background-color: #D7F0FF;
-        .active-content {
-          display: inherit;
-        }
-        .list-group-item-heading {
-          color: black;
-        }
-        img {
-          opacity: 1.0;
-        }
-      }
-    }
-    .distance {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-    }
-    .empty-message {
-      div { padding: 12px; }
-      display: none;
-    }
-    &.empty {
-      .empty-message { display: inherit; }
-    }
-    .empty-message {
-      margin: 10px 20px;
-      display: none;
-    }
-    a .list-group-item-heading, a .list-group-item-text {
-        display: block;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-    }
-    .list-group-item-text {
-      margin-left: 90px;
-    }
-    img {
-      opacity: 0.7;
-      width: 42px;
-      height: 42px;
-      margin-right: 7px;
-    }
-  }
 }
 
 .page {
   margin-top: 20px;
-}
-
-.card {
-  .close {
-    padding: 2px 5px !important;
-  }
-  .thumbnail {
-    padding: 0px;
-    margin-bottom: 7px;
-    .caption {
-      p { margin: 0 0 2px; }
-      padding: 2px 5px;
-      margin-left: 100px;
-    }
-    h3 {
-      color: black;
-      margin-top: 3px;
-      margin-bottom: 0px;
-    }
-    .avatar {
-      width: 100px;
-      height: 100px;
-    }
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .fa {
-    color: #333;
-  }
-}
-
-.card.nearby-card .thumbnail .caption {
-  margin-left: 55px;
-}
-
-.card.location-card .thumbnail .caption {
-  margin-left: 0px;
 }
 
 .modal {
@@ -322,16 +212,6 @@ html, body {
 
 .clear {
   clear: both;
-}
-
-.nearby-locations {
-  &.empty {
-    .content { display: none; }
-    .alternative { display: inherit; }
-  }
-
-  .content { display: inherit; }
-  .alternative { display: none; }
 }
 
 .directions-panel {

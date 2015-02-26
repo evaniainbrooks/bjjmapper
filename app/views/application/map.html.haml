@@ -5,15 +5,10 @@
     %li.active
       %a.show-locations{:href => '#tab-pane-location-list', 'data-toggle' => 'tab'} 
         %strong Academies
-    %li
-      %a.show-filters{:href => '#tab-pane-filter-list', 'data-toggle' => 'tab'} 
-        %strong Options &amp; Filters
-
   .tab-content
     %br/
     %div#tab-pane-location-list.tab-pane.location-list.fade.in.active
-      = render partial: 'locations/map_list'
-
+      = render partial: 'locations/map_list', locals: { show_create: true }
     %div#tab-pane-filter-list.filter-list.tab-pane.fade.in
       .term-filter.container-fluid
         %h4 Search terms

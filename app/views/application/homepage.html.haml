@@ -1,0 +1,88 @@
+= content_for(:scripts) do
+  :javascript
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+.container.homepage
+  %div#fb-root
+  .row
+    .col-md-offset-2.col-md-8.text-center
+      %h1.welcome
+        %img{:src => 'https://storage.googleapis.com/bjjmapper/logo.png', :style => 'margin-top: -17px; width: 100px; height: 100px'}/
+        %span Welcome to BJJMapper
+        %br/
+        %small The authoritative Brazilian Jiu-Jitsu academy directory
+    %br/
+    %br/
+  .row
+    .col-lg-8.col-md-7.col-md-offset-1.col-xs-11.text-center
+      %form.form.form-horizontal{:action => map_path(ref: 'home'), :method => 'GET'}
+        .control-group.well.search-well.center-block
+          %h4 Search the directory 
+          .controls.form-inline
+            %input.form-control.input-lg{:name => 'query', :size => '40', :placeholder => "Example: Carlson Gracie, Art of Jiu-Jitsu", :type => "text"}/
+            %input.form-control.input-lg{:name => 'location', :size => '10', :placeholder => "Anywhere", :type => "text"}/
+            %button.btn.btn-default.btn-lg{:type => "submit"}
+              %span.fa.fa-search
+    .col-lg-2.col-md-3.col-xs-11
+      .well.contribute-well
+        %h4.text-center Contribute
+        %p.small.content 
+          This website is a collaborative effort by the people who use it. Everyone can add and edit content.
+          = link_to 'Get started here', wizard_locations_path
+  -#.row
+    .col-md-8.col-md-offset-2.hidden-sm.hidden-xs
+      = render partial: 'application/google_adsense_banner'
+  .row
+    .col-md-5
+      %h3.text-center New Additions
+      .recent-locations.location-list
+    .col-md-4
+      %h3.text-center Near You
+      .map-canvas{:style => 'height: 350px'}
+      .map-list-view
+        .location-list
+          = render partial: 'locations/map_list', locals: { show_create: false }
+      %a{:href => map_path(center: @map[:center]), :title => 'Academy Map'}
+        %h4.text-center 
+          %span.fa.fa-search-plus
+          See larger map
+    .col-md-3
+      %h3.text-center Events
+      %a{:href => 'http://parosbjj.com/camp2015', :title => 'Brazilian Jiu-Jitsu Paradise Camp 2015'}
+        %img{:src => '//storage.googleapis.com/bjjmapper/paros2015_banner.png', :alt => 'Paros BJJ Camp Banner'}/
+      %br/
+      %br/
+      = render partial: 'google_adsense'
+      %br/
+      %br/
+      .fb-like-box{"data-colorscheme" => "light", "data-header" => "false", "data-href" => "https://www.facebook.com/BJJMapper", "data-show-border" => "true", "data-show-faces" => "true", "data-stream" => "false"}
+  .row
+    .col-md-12
+      %h3 Around The World
+  .row
+    - per_column = (@countries.size / 4.0).ceil
+    - @countries.keys.sort.each_slice(per_column).each do |countries|
+      .col-md-3
+        - countries.each do |country|
+          = link_to directory_index_path(country), class: 'small block', title: "List of BJJ gyms in #{country}" do
+            Brazilian Jiu-Jitsu academies in
+            %strong= country
+  .row
+    .col-md-8.col-md-offset-2.hidden-sm.hidden-xs
+      %br/
+      = render partial: 'application/google_adsense_banner'
+
+= content_for(:scripts) do
+  :coffeescript
+    $(document).ready ->
+      recentView = new RollFindr.Views.RecentLocationsView()
+
+      mapModel = new RollFindr.Models.Map(#{@map.to_json})
+      mapView = new RollFindr.Views.MapView({el: $('.homepage'), model: mapModel})
+

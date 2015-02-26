@@ -139,28 +139,41 @@ class LocationsController < ApplicationController
     center = params.fetch(:center, nil)
     team = params.fetch(:team, nil)
     distance = params.fetch(:distance, 5.0)
-
     text_filter = params.fetch(:query, nil)
-    filter_ids = Location.search_ids(text_filter).try(:to_set) if text_filter.present?
+    location = params.fetch(:location, nil)
 
-    head :bad_request and return unless center.is_a?(Array) && center.present?
-
-    @locations = Location.near(center, distance)
-    @locations = @locations.where(:team_id.in => team) if team.present?
-    @locations = @locations.to_a
-
-    if text_filter.present?
-      @locations.select! do |location|
-        filter_ids.include?(location.id.to_s)
+    if location.present? && center.blank?
+      geocode_result = Geocoder.search(location)
+      if geocode_result.present?
+        location = geocode_result[0].geometry['location']
+        center = [location['lat'], location['lng']]
       end
+    end
+
+    if center.present? && center.is_a?(Array)
+      filter_ids = Location.search_ids(text_filter).try(:to_set) if text_filter.present?
+
+      @locations = Location.near(center, distance)
+      @locations = @locations.where(:team_id.in => team) if team.present?
+      @locations = @locations.to_a
+
+      if text_filter.present?
+        @locations.select! do |location|
+          filter_ids.include?(location.id.to_s)
+        end
+      end
+    elsif text_filter.present?
+      @locations = Location.search(text_filter)
+      center = @locations.first.coordinates unless @locations.empty?
+    else
+      head :bad_request and return false
     end
 
     tracker.track('searchLocations',
       center: center,
       team: team,
       distance: distance,
-      text_filter: text_filter,
-      filter_ids: filter_ids.try(:count),
+      query: text_filter,
       results: @locations.count
     )
 
@@ -192,6 +205,7 @@ class LocationsController < ApplicationController
 
     @map = {
       :zoom => Map::ZOOM_CITY,
+      :minZoom => Map::DEFAULT_MIN_ZOOM,
       :center => @locations.first.to_coordinates,
       :geolocate => 0,
       :locations => [],
@@ -228,6 +242,7 @@ class LocationsController < ApplicationController
   def set_map
     @map = {
       :zoom => Map::ZOOM_LOCATION,
+      :minZoom => Map::ZOOM_CITY,
       :center => @location.to_coordinates,
       :geolocate => 0,
       :locations => [],

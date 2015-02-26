@@ -18,6 +18,18 @@ class ApplicationController < ActionController::Base
 
   helper_method :action?
 
+  def homepage
+    @map = {
+      zoom: Map::ZOOM_CITY,
+      minZoom: Map::DEFAULT_MIN_ZOOM,
+      geolocate: 1,
+      locations: [],
+      refresh: 0
+    }
+    @countries = RollFindr::DirectoryCountries
+    @cities = RollFindr::DirectoryCities
+  end
+
   def geocode
     search_query = params.fetch(:query, '')
     search_result = Geocoder.search(search_query)
@@ -46,6 +58,7 @@ class ApplicationController < ActionController::Base
     @map = {
       zoom: zoom,
       center: center,
+      :minZoom => Map::ZOOM_CITY,
       geolocate: geolocate,
       locations: [],
       refresh: 1

@@ -97,6 +97,10 @@ class LocationDecorator < Draper::Decorator
     h.image_path(img)
   end
 
+  def image_tiny
+    team.try(:image_tiny)
+  end
+
   def opengraph_image
     object.team.try(:image_large)
   end
@@ -129,6 +133,7 @@ class LocationDecorator < Draper::Decorator
     # Select which decorator methods override the defaults from object
     object.as_json(args).symbolize_keys.merge(
       image: image,
+      image_tiny: image_tiny,
       #address: address,
       phone: phone,
       team_name: team_name,

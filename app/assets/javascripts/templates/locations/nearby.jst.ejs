@@ -1,22 +1,25 @@
 <li class="card nearby-card">
   <a class="thumbnail" href="<%= Routes.location_path(location) %>">
-    <div style="margin-left: 5px; margin-top: 5px;" class="text-center pull-left">
-      <i class="center-block fa-3x fa fa-arrow-up direction-<%= location.bearing_direction %>"></i>
-      <p style="margin-left: 5px;" class="small text-info distance">
-        <%= location.bearing_name %> (<%= location.distance %>)
-      </p>
-    </div>
-      <div class="caption">
-        <p class="text-primary">
+      <div class="pull-left">
+        <img class="img-tiny" src="<%= location.image %>" alt="<%= location.title %> logo" />
+      </div>
+      <div class="pull-left">
+        <h5 class="text-primary">
           <%= location.title %>
-        </p>
-        <b class="small">
+        </h5>
+        <p class="small">
           <%= location.team_name %>
-        </b>
+        </p>
         <p>
           <span class="small text-muted">
             <%= location.street %>
           </span>
+        </p>
+      </div>
+      <div class="pull-right direction">
+        <i class="center-block fa-3x fa fa-arrow-up direction-<%= location.bearing_direction %>"></i>
+        <p class="text-center small text-info distance">
+          <%= location.bearing_name %> (<%= location.distance %>)
         </p>
       </div>
     <div class="clear"></div>

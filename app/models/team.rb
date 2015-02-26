@@ -13,6 +13,7 @@ class Team
                   :track_destroy  =>  true     # track document destruction, default is false
   field :name, type: String
   field :description, type: String
+  field :image_tiny, type: String
   field :image, type: String
   field :image_large, type: String
   field :primary_color_index, type: String
