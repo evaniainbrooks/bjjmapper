@@ -163,22 +163,48 @@ class RollFindr.Views.MapView extends Backbone.View
         location: @model.get('location')
       complete: =>
         firstLocation = @model.get('locations').models[0]
-        coords = firstLocation.get('coordinates')
-        newCenter = new google.maps.LatLng(coords[0], coords[1])
+        if firstLocation?
+          coords = firstLocation.get('coordinates')
+          newCenter = new google.maps.LatLng(coords[0], coords[1])
 
-        @model.set('center', coords)
-        @map.setCenter(newCenter)
+          @model.set('center', coords)
+          @map.setCenter(newCenter)
 
-        @$('.refresh-button .fa').removeClass('fa-spin')
+          @$('.refresh-button .fa').removeClass('fa-spin')
+        else if @model.get('location')?
+          @setMapCenterFromLocationQuery()
+        else if !@map.getCenter()?
+          toastr.warning('Your search query did not return any results', 'Oops')
+          @setMapCenterAndRefresh()
+
       error: =>
         toastr.error('Failed to refresh map', 'Error')
     })
 
-  clearSearchAndFetchViewport: ->
+
+  setMapCenterFromLocationQuery: ->
+    $.ajax({
+      url: Routes.geocode_path(),
+      data: {
+        query: @model.get('location'),
+      },
+      type: 'GET',
+      dataType: 'json',
+      success: (results) =>
+        google.maps.event.addListenerOnce(@map, 'idle', @fetchViewport)
+        newCenter = new google.maps.LatLng(results[0].lat, results[0].lng)
+        @map.setZoom(7)
+        @map.setCenter(newCenter)
+    })
+
+
+  clearSearch: ->
     @model.set('query', null)
     @model.set('location', null)
-    @fetchViewport()
 
+  clearSearchAndFetchViewport: ->
+    @clearSearch()
+    @fetchViewport()
 
   fetchViewport: ->
     if (undefined == @map.getCenter() || undefined == @map.getBounds())
