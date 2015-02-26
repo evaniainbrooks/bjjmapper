@@ -20,7 +20,7 @@ class RollFindr.Views.NavbarView extends Backbone.View
       location: searchLocation
     })
 
-    @$('[name="location"]').val('')
+    #@$('[name="location"]').val('')
     e.preventDefault()
 
   scrollToList: ->
