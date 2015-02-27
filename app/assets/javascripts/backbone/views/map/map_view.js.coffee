@@ -129,10 +129,11 @@ class RollFindr.Views.MapView extends Backbone.View
   setCenterAndFetchLocations: ->
     shouldGeolocate = @model.get('geolocate')
     hasQuery = @model.get('query')? && @model.get('query').length > 0
+    hasCenter = @model.get('center')? && @model.get('center').length > 0
     if (shouldGeolocate && navigator.geolocation)
       @setCenterGeolocate =>
         @fetchViewport()
-    else if !hasQuery && @model.get('center')?
+    else if !hasQuery && hasCenter
       @setCenterFromModelAndRefresh()
     else
       @fetchGlobal()
