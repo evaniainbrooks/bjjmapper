@@ -20,11 +20,11 @@ class RollFindr.Views.MapView extends Backbone.View
     _.bindAll(this,
       'activeMarkerChanged',
       'search',
-      'setMapCenterAndRefresh',
+      'setCenterFromModelAndRefresh',
       'setDirectionsOverlay',
       'hideDirectionsOverlay',
       'initializeMarkerView',
-      'setCenter',
+      'setCenterAndFetchLocations',
       'setCenterGeolocate',
       'clearSearchAndFetchViewport',
       'fetchViewport',
@@ -33,7 +33,6 @@ class RollFindr.Views.MapView extends Backbone.View
       'render')
 
     @setupGoogleMap()
-
 
     @listView = new RollFindr.Views.MapLocationsListView({
       el: @$('.location-list')
@@ -45,7 +44,7 @@ class RollFindr.Views.MapView extends Backbone.View
 
     if @map?
       @setupEventListeners()
-      @setCenter()
+      @setCenterAndFetchLocations()
 
   initializeMarkerView: (editable)->
     shouldRender = @markerView?
@@ -122,22 +121,23 @@ class RollFindr.Views.MapView extends Backbone.View
       doneCallback() if doneCallback?
 
     geolocateFailedCallback = =>
-      @setMapCenterAndRefresh()
+      @setCenterFromModelAndRefresh()
       toastr.error('Could not pinpoint your location', 'Error')
 
     navigator.geolocation.getCurrentPosition(geolocateSuccessCallback, geolocateFailedCallback) if navigator? && navigator.geolocation?
 
-  setCenter: ->
+  setCenterAndFetchLocations: ->
     shouldGeolocate = @model.get('geolocate')
+    hasQuery = @model.get('query')? && @model.get('query').length > 0
     if (shouldGeolocate && navigator.geolocation)
       @setCenterGeolocate =>
         @fetchViewport()
-    else if !@model.get('query')?
-      @setMapCenterAndRefresh()
+    else if !hasQuery && @model.get('center')?
+      @setCenterFromModelAndRefresh()
     else
       @fetchGlobal()
 
-  setMapCenterAndRefresh: ->
+  setCenterFromModelAndRefresh: ->
     defaultCenter = @model.get('center')
     defaultCenter = [47.718415099999994, -122.31384220000001] if defaultCenter.length < 2
 
@@ -175,7 +175,7 @@ class RollFindr.Views.MapView extends Backbone.View
           @setMapCenterFromLocationQuery()
         else if !@map.getCenter()?
           toastr.warning('Your search query did not return any results', 'Oops')
-          @setMapCenterAndRefresh()
+          @setCenterFromModelAndRefresh()
 
       error: =>
         toastr.error('Failed to refresh map', 'Error')
