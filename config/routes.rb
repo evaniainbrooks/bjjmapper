@@ -40,5 +40,7 @@ Rails.application.routes.draw do
   get '/geocode' => 'application#geocode'
   post '/contact' => 'application#contact', :as => :contact
 
+  post '/paroscamp/contact' => 'paroscamp#contact'
+
   get '/sitemap.xml' => 'sitemaps#index', :format => 'xml', :as => :sitemap
 end
