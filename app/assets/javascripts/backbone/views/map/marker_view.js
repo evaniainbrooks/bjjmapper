@@ -44,12 +44,13 @@
       var position;
       var marker;
       var markerExists = "undefined" !== typeof(self.markers[id]);
+      var markerBase = "//storage.googleapis.com/bjjmapper/markers/number_"
       if (markerExists) {
         return;
       }
 
       loc.attributes['marker_id'] = this.idFactory.nextId();
-      icon = "/assets/markers/number_" + loc.get('marker_id') + ".png";
+      icon = markerBase + loc.get('marker_id') + ".png";
       position = new google.maps.LatLng(loc.get('coordinates')[0], loc.get('coordinates')[1]),
       marker = new google.maps.Marker({
          id: id,
@@ -107,7 +108,6 @@
       for (var marker in this.markers) {
         this.deleteMarker(marker);
       }
-      
       this.undelegateEvents();
       RollFindr.GlobalEvents.off('markerActive', this.activeMarkerChanged);
     },
