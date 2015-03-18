@@ -37,7 +37,7 @@
     %ul.col-md-4.list-unstyled.team-index
       - teams.each do |team|
         %li
-          - if groups[team]
+          - if groups[team.id].present?
             %h3
               = link_to(team_path(team), title: "List #{team.name} Brazilian Jiu-Jitsu gyms") do
                 - if team.image.present?
@@ -49,8 +49,8 @@
                 = surround '(', ')' do
                   = team.locations.count
             %ul.list-inline
-              - groups[team].each do |t|
-                %li.small= link_to(t.name, team_path(t), title: "List #{t.name} Brazilian Jiu-Jitsu gyms")
+              - groups[team.id].each do |t|
+                %li.small= link_to(t.object.name, team_path(t), title: "List #{t.name} Brazilian Jiu-Jitsu gyms")
           - else
             %h3
               = link_to(team_path(team), title: "List #{team.name} Brazilian Jiu-Jitsu gyms") do

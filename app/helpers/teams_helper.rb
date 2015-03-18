@@ -6,8 +6,8 @@ module TeamsHelper
     teams = TeamDecorator.decorate_collection(all_teams)
     grouped_teams = {}
     teams.each do |team|
-      grouped_teams[team.parent_team] ||= []
-      grouped_teams[team.parent_team] << team
+      grouped_teams[team.parent_team_id] ||= []
+      grouped_teams[team.parent_team_id] << team
     end
     grouped_teams
   end
