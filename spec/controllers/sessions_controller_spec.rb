@@ -1,7 +1,9 @@
 require 'spec_helper'
 require 'shared/omniauth_context'
+require 'shared/tracker_context'
 
 describe SessionsController do
+  include_context 'skip tracking'
   describe 'GET new' do
     it 'shows the signin page' do
       get :new

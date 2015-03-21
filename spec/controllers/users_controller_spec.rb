@@ -1,6 +1,8 @@
 require 'spec_helper'
+require 'shared/tracker_context'
 
 describe UsersController do
+  include_context 'skip tracking'
   describe 'GET index' do
     context 'with html format' do
       before { create(:user, belt_rank: 'black') }

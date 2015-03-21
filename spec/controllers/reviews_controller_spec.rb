@@ -1,6 +1,8 @@
 require 'spec_helper'
+require 'shared/tracker_context'
 
 describe ReviewsController do
+  include_context 'skip tracking'
   describe 'POST create' do
     context 'with json format' do
       let(:location) { create(:location) }

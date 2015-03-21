@@ -1,6 +1,8 @@
 require 'rails_helper'
+require 'shared/tracker_context'
 
 describe InstructorsController do
+  include_context 'skip tracking'
   let(:anonymous_user) { create(:user, role: 'anonymous') }
   let(:session_params) { { :user_id => anonymous_user.to_param } }
   describe 'DELETE destroy' do

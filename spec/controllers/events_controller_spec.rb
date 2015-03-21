@@ -1,6 +1,8 @@
 require 'spec_helper'
+require 'shared/tracker_context'
 
 describe EventsController do
+  include_context 'skip tracking'
   describe 'POST create' do
     context 'with json format' do
       context 'with valid params' do

@@ -1,6 +1,8 @@
 require 'spec_helper'
+require 'shared/tracker_context'
 
 describe ApplicationController do
+  include_context 'skip tracking'
   describe '.current_user' do
     context 'when there is no session user' do
       it 'returns a new anonymous user' do

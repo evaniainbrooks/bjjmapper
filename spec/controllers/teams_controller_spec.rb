@@ -1,6 +1,8 @@
 require 'spec_helper'
+require 'shared/tracker_context'
 
 describe TeamsController do
+  include_context 'skip tracking'
   describe 'GET new' do
     context 'when not signed in' do
       it 'redirects to the login page' do
