@@ -12,6 +12,9 @@ class LocationsController < ApplicationController
   RECENT_COUNT_DEFAULT = 5
   RECENT_COUNT_MAX = 10
 
+  NEARBY_DISTANCE_DEFAULT = 5
+  NEARBY_COUNT_DEFAULT = 4
+
   def recent
     count = [params.fetch(:count, RECENT_COUNT_DEFAULT).to_i, RECENT_COUNT_MAX].min
 
@@ -48,8 +51,8 @@ class LocationsController < ApplicationController
   end
 
   def nearby
-    distance = params.fetch(:distance, 5).to_i
-    count = params.fetch(:count, 4).to_i
+    distance = params.fetch(:distance, NEARBY_DISTANCE_DEFAULT).to_i
+    count = params.fetch(:count, NEARBY_COUNT_DEFAULT).to_i
 
     @nearby_locations = Location.near(@location.to_coordinates, distance).limit(count+1).to_a
     @nearby_locations.reject!{|loc| loc.to_param.eql?(@location.to_param)}
@@ -275,9 +278,9 @@ class LocationsController < ApplicationController
 
   def set_location
     id_param = params.fetch(:id, '').split('-', 2).first
-    @location = Location.find(id_param)
+    @location = Location.where(id: id_param).first
 
-    render status: :not_found and return unless @location.present?
+    head :not_found and return false unless @location.present?
   end
 
   def set_directory_segments

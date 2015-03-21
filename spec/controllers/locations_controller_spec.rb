@@ -1,6 +1,8 @@
 require 'spec_helper'
+require 'shared/tracker_context'
 
 describe LocationsController do
+  include_context 'skip tracking'
   describe 'GET recent' do
     context 'with json format' do
       subject { build_list(:location, 2) }
@@ -21,8 +23,7 @@ describe LocationsController do
     end
   end
   describe 'GET nearby' do
-    let(:location) { build(:location, title: 'self location') }
-    before { Location.stub(:find).and_return(location) }
+    let(:location) { create(:location, title: 'self location') }
     context 'with json format' do
       context 'when there are locations nearby' do
         let(:other_location) { build(:location, title: 'near you location') }
@@ -55,6 +56,13 @@ describe LocationsController do
       it 'returns the location markup' do
         get :show, id: location
         response.should render_template('locations/show')
+      end
+    end
+    context 'when the location does not exist' do
+      before { Location.stub(:find_by_id).and_return(nil) }
+      it 'returns 404 not found' do
+        get :show, id: 'bogus'
+        response.status.should eq 404
       end
     end
   end
