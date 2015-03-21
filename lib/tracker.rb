@@ -10,7 +10,7 @@ module RollFindr
     def track(event, params = {})
       props = @super_properties.merge(params)
       unless props.fetch(:__skip_tracking, false)
-        tracker.track(@user_id, event, props.except(:__skip_tracking))
+        tracker.track(@user_id, event, props.except(:__skip_tracking)) rescue nil
       end
     end
 

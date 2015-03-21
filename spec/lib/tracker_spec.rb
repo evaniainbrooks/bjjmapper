@@ -18,9 +18,17 @@ describe RollFindr::Tracker do
         end
         context 'when the __skip_tracking property is false' do
           subject { RollFindr::Tracker.new(uid, super_property.merge(__skip_tracking: false)) }
-          before { Mixpanel::Tracker.any_instance.should_receive(:track).with(uid, event, hash_including(super_property.merge(params))) }
-          it 'calls track with all merged properties' do
-            subject.track(event, params)
+          context 'when track does not raise an exception' do
+            before { Mixpanel::Tracker.any_instance.should_receive(:track).with(uid, event, hash_including(super_property.merge(params))) }
+            it 'calls track with all merged properties' do
+              subject.track(event, params)
+            end
+          end
+          context 'when track raises an exception' do
+            before { Mixpanel::Tracker.any_instance.stub(:track).and_raise(StandardError) }
+            it 'does nothing' do
+              subject.track(event, params)
+            end
           end
         end
       end
