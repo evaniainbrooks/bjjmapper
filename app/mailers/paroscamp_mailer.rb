@@ -1,6 +1,6 @@
 class ParoscampMailer < ActionMailer::Base
   #DEFAULT_TO = "nickbjjman@gmail.com"
-  DEFAULT_TO = "nickbjjman@gmail.com, info@bjjmapper.com"
+  DEFAULT_TO = "info@bjjmapper.com"
   DEFAULT_FROM = "no-reply@bjjmapper.com"
 
   default from: DEFAULT_FROM
