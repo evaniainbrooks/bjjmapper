@@ -41,8 +41,18 @@
         %span.small.text-info= "GPS: #{locations.first.gps}"
         %br/
         %br/
+        - if @criteria[:city].blank? && @cities[ @criteria[:country] ].present?
+          %h4 Popular cities
+          %ul.list-inline
+            - @cities[ @criteria[:country] ].sort.each do |city|
+              %li= link_to city, directory_index_path(@criteria[:country], city), title: "List of Brazilian Jiu-Jitsu gyms in #{city}, #{@criteria[:country]}"
+
+        %br/
         %div
-          %big= link_to "See on map view", map_path(zoom: Map::ZOOM_CITY, center: locations.first.to_coordinates), title: "See map of Brazilian Jiu-Jitsu gyms in #{seo_name}"
+          %big
+            = link_to map_path(zoom: Map::ZOOM_CITY, center: locations.first.to_coordinates), title: "See map of Brazilian Jiu-Jitsu gyms in #{seo_name}" do
+              %span.fa.fa-search-plus
+              See larger map
     %br/
     .row 
       .col-md-12
