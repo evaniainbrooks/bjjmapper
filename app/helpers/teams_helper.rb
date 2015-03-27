@@ -6,18 +6,17 @@ module TeamsHelper
     teams = TeamDecorator.decorate_collection(all_teams)
     grouped_teams = {}
     teams.each do |team|
-      grouped_teams[team.parent_team] ||= []
-      grouped_teams[team.parent_team] << team
+      grouped_teams[team.parent_team.try(:to_param)] ||= (team.parent_team.present? ? [team.parent_team] : [])
+      grouped_teams[team.parent_team.try(:to_param)] << team
     end
     grouped_teams
   end
   def all_teams_select_groups
     grouped_teams = all_teams_groups
-    grouped_teams.each_pair do |parent_team, member_group|
-      member_group.reject!{|team| grouped_teams[team] } if parent_team.blank?
-      member_group.unshift(parent_team) if parent_team.present?
-    end.map do |parent_team, member_group|
-      [parent_team.try(:name) || 'Teams', member_group.map { |team| team=team.decorate; [team.name, team.id.to_s, {:'data-img-src' => team.image}] }]
+    grouped_teams.each_pair do |parent_team_id, member_group|
+      member_group.reject!{|team| grouped_teams[team.to_param] } if parent_team_id.blank?
+    end.map do |parent_team_id, member_group|
+      [parent_team_id.present? ? member_group[0].name : 'Teams', member_group.map { |team| team=team.decorate; [team.name, team.id.to_s, {:'data-img-src' => team.image}] }]
     end
   end
   def all_teams_select_options

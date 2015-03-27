@@ -31,7 +31,7 @@
 
 .row
   .col-md-12
-  - groups = Hash[all_teams_groups.map {|k, v| [k.to_param, v] }]
+  - groups = all_teams_groups
   - per_column = (groups[nil].size / 3.0).ceil
   - groups[nil].each_slice(per_column).each do |teams|
     %ul.col-md-4.list-unstyled.team-index
@@ -49,7 +49,7 @@
                 = surround '(', ')' do
                   = team.locations.count
             %ul.list-inline
-              - groups[team.to_param].each do |t|
+              - groups[team.to_param].drop(1).each do |t|
                 %li.small= link_to(t.object.name, team_path(t), title: "List #{t.name} Brazilian Jiu-Jitsu gyms")
           - else
             %h3
