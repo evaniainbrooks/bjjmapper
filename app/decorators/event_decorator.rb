@@ -14,6 +14,8 @@ class EventDecorator < Draper::Decorator
 
   def as_json(args)
     object.as_json(args).merge(
+      location_name: location.title,
+      location_image: location.image,
       duration: duration,
       color_ordinal: color_ordinal,
       instructor_name: instructor.try(:name)
