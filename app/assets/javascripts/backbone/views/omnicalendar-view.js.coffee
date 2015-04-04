@@ -41,6 +41,7 @@ class RollFindr.Views.OmniCalendarView extends Backbone.View
 
     element.addClass("event-#{event.type}")
     element.addClass("event-color-#{colorIndex}")
+    element.addClass("event-omnicalendar")
 
     element.html(@eventTemplate({event: event}))
 
