@@ -1,7 +1,7 @@
 <img src="<%= event.location_image %>" alt="<%= event.location_name %>" />
 <h4><%= event.title %></h4>
 <% if (event.instructor_name) { %>
-<span class="h5 text-info">with <%= event.instructor_name %> at <%= event.location_name %></span><br/>
+<span class="h5 text-info">at <%= event.location_name %> >with <%= event.instructor_name %></span><br/>
 <% } else { %>
 <span class="h5 text-info">at <%= event.location_name %></span><br/>
 <% } %>
