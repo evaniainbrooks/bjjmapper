@@ -24,18 +24,18 @@
   line-height: 1.0em;
 }
 
-$color0: hsl(360, 90%, 55%);
-$color1: hsl(320, 90%, 55%);
-$color2: hsl(290, 90%, 55%);
-$color3: hsl(260, 90%, 55%);
-$color4: hsl(230, 90%, 55%);
-$color5: hsl(200, 90%, 55%);
-$color6: hsl(170, 90%, 55%);
-$color7: hsl(140, 90%, 55%);
-$color8: hsl(110, 90%, 55%);
-$color9: hsl(80, 90%, 55%);
-$color10: hsl(50, 90%, 55%);
-$color11: hsl(20, 90%, 55%);
+$color0: hsl(360, 90%, 40%);
+$color1: hsl(315, 90%, 40%);
+$color2: hsl(280, 90%, 40%);
+$color3: hsl(245, 90%, 40%);
+$color4: hsl(210, 90%, 40%);
+$color5: hsl(175, 90%, 40%);
+$color6: hsl(140, 90%, 40%);
+$color7: hsl(105, 90%, 40%);
+$color8: hsl(70, 90%, 40%);
+$color9: hsl(35, 90%, 40%);
+$color10: hsl(15, 90%, 40%);
+$color11: hsl(0, 90%, 40%);
 $colors: $color0, $color1, $color2, $color3, $color4, $color5, $color6, $color7, $color8, $color9, $color10, $color11;
 
 .event-color-base {
