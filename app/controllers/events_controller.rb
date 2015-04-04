@@ -1,8 +1,12 @@
 class EventsController < ApplicationController
-  before_action :set_location
+  before_action :set_location, except: [:omnischedule]
+  before_action :set_locations, only: [:omnischedule]
+  
   before_action :set_event, only: [:destroy, :update, :move]
+  before_action :validate_time_range, only: [:index, :omnischedule]
+  
   before_action :ensure_signed_in, only: [:destroy, :create, :update]
-  decorates_assigned :location, :event, :events
+  decorates_assigned :location, :locations, :event, :events
 
   around_filter :set_location_tz
 
@@ -17,15 +21,7 @@ class EventsController < ApplicationController
   end
 
   def index
-    start_param = params.fetch(:start, nil)
-    head :bad_request and return false unless start_param.present?
-    start_param = DateTime.parse(start_param).to_time
-
-    end_param = params.fetch(:end, nil)
-    head :bad_request and return false unless end_param.present?
-    end_param = DateTime.parse(end_param).to_time
-
-    @events = @location.schedule.events_between_time(start_param, end_param)
+    @events = @location.schedule.events_between_time(@start_param, @end_param)
 
     status = @events.count == 0 ? :no_content : :ok
     respond_to do |format|
@@ -67,9 +63,32 @@ class EventsController < ApplicationController
     end
   end
 
+  def omnischedule
+    @events = []
+
+    @locations.each do |location|
+      @events.concat(location.schedule.events_between_time(@start_param, @end_param))
+    end
+
+    status = @events.count == 0 ? :no_content : :ok
+    respond_to do |format|
+      format.json { render status: status, json: events }
+    end
+  end
+
 private
+  def validate_time_range
+    start_param = params.fetch(:start, nil)
+    head :bad_request and return false unless start_param.present?
+    @start_param = DateTime.parse(start_param).to_time
+
+    end_param = params.fetch(:end, nil)
+    head :bad_request and return false unless end_param.present?
+    @end_param = DateTime.parse(end_param).to_time
+  end
+  
   def set_location_tz(&block)
-    tz = @location.timezone || 'UTC'
+    tz = (defined?(@location) ? @location.timezone : @locations.first.timezone) || 'UTC'
     Time.use_zone(tz, &block)
   end
 
@@ -84,6 +103,13 @@ private
   def set_event
     @event = @location.events.find(params[:id])
     head :not_found and return false unless @event.present?
+  end
+
+  def set_locations
+    id_params = params[:ids].collect{|id| id.split('-', 2).first}
+    
+    @locations = Location.where(:_id.in => id_params)
+    head :bad_request and return false unless @locations.present?
   end
 
   def set_location

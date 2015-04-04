@@ -16,7 +16,7 @@ Rails.application.routes.draw do
     get :schedule, on: :member
     post :move, on: :member
     resources :reviews, only: [:create, :destroy, :index]
-    resources :events do
+    resources :events, only: [:create, :index, :show, :destroy, :update] do
       post :move, on: :member
     end
     resources :users, controller: :instructors, as: :instructors, path: '/instructors', only: [:create, :destroy, :index]
@@ -26,6 +26,9 @@ Rails.application.routes.draw do
   end
   root 'application#homepage'
 
+  
+  get '/omnischedule' => 'events#omnischedule', :as => :omnischedule
+  
   get 'search/:query' => 'application#search'
   get '/bjj-academy-directory(/country/:country(/city/:city))' => 'locations#index', :as => :directory_index
   match '/signin' => 'sessions#new', :as => :signin, :via => [:post, :get]
