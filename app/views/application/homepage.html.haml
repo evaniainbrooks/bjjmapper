@@ -23,7 +23,7 @@
     .col-lg-8.col-md-7.col-md-offset-1.col-xs-11.text-center
       %form.form.form-horizontal{:action => map_path(ref: 'home'), :method => 'GET'}
         .control-group.well.search-well.center-block
-          %h4 Search the directory 
+          %h4 Search the directory
           .controls.form-inline
             %input.form-control.input-lg{:name => 'query', :size => '40', :placeholder => "Example: Carlson Gracie, Art of Jiu-Jitsu", :type => "text"}/
             %input.form-control.input-lg{:name => 'location', :size => '10', :placeholder => "Anywhere", :type => "text"}/
@@ -32,7 +32,7 @@
     .col-lg-2.col-md-3.col-xs-11
       .well.contribute-well
         %h4.text-center Contribute
-        %p.small.content 
+        %p.small.content
           This website is a collaborative effort by the people who use it. Everyone can add and edit content.
           = link_to 'Get started here', wizard_locations_path
   -#.row
@@ -49,7 +49,7 @@
         .location-list
           = render partial: 'locations/map_list', locals: { show_create: false }
       %a{:href => map_path(center: @map[:center], :ref => 'homepage'), :title => 'Academy Map'}
-        %h4.text-center 
+        %h4.text-center
           %span.fa.fa-search-plus
           See larger map
     .col-md-3
