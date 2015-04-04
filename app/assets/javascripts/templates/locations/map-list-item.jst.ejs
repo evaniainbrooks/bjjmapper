@@ -6,8 +6,8 @@
     <img src="<%= location.image %>" alt="<% location.title %> logo" class="logo pull-left" />
     <div>
       <h4 class="list-group-item-heading"><%= location.title %></h4>
-      <p class="strong list-group-item-text small"><%= location.team_name %></p>
-      <p class="text-muted list-group-item-text small"><%= location.street %></p>
+      <p class="team-title strong list-group-item-text small"><%= location.team_name %></p>
+      <p class="address list-group-item-text small"><%= location.street %></p>
     </div>
     <span class="text-info distance small"><%= location.distance %></span>
   </div>
@@ -20,7 +20,7 @@
       <div>
         <h4 class="list-group-item-heading"><%= location.title %></h4>
         <p class="strong list-group-item-text small team-title"><%= location.team_name %></p>
-        <p class="text-muted list-group-item-text small address"><%= location.address %></p>
+        <p class="list-group-item-text small address"><%= location.address %></p>
       </div>
       <br/>
     </a>

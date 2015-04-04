@@ -28,6 +28,9 @@
       color: #428bca;
     }
     .team-title {
+      color: #777;
+    }
+    .address {
       color: black;
     }
     .label {
@@ -91,18 +94,10 @@
 
 .map-list-item {
   &.marker-active {
-    background: rgb(222,239,255); /* Old browsers */
-    background: -moz-radial-gradient(center, ellipse cover, rgba(222,239,255,1) 0%, rgba(177,201,221,1) 100%); /* FF3.6+ */
-    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(222,239,255,1)), color-stop(100%,rgba(177,201,221,1))); /* Chrome,Safari4+ */
-    background: -webkit-radial-gradient(center, ellipse cover, rgba(222,239,255,1) 0%,rgba(177,201,221,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-radial-gradient(center, ellipse cover, rgba(222,239,255,1) 0%,rgba(177,201,221,1) 100%); /* Opera 12+ */
-    background: -ms-radial-gradient(center, ellipse cover, rgba(222,239,255,1) 0%,rgba(177,201,221,1) 100%); /* IE10+ */
-    background: radial-gradient(ellipse at center, rgba(222,239,255,1) 0%,rgba(177,201,221,1) 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#deefff', endColorstr='#b1c9dd',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-
+    background-color: #ebeeff;
 
     a.phone, a.website, a.email, a.facebook {
-      color: black;
+      color: blue;
     }
 
     .active-content { display: inherit; }
@@ -184,4 +179,10 @@
   }
 }
 
-
+.location-table {
+  img {
+    width: 30px;
+    height: 30px;
+    opacity: 0.7;
+  }
+}
