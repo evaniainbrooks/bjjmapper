@@ -15,7 +15,7 @@
         %li
           %a{href: root_path} Home
         %li
-          %a{href: directory_index_path, title: 'Brazilian Jiu-Jitsu gym listings'} BJJ Academy Directory 
+          %a{href: directory_index_path, title: 'Brazilian Jiu-Jitsu gym listings'} BJJ Academy Directory
         - if (@criteria.has_key?(:country))
           %li
             %a{href: directory_index_path(@criteria[:country]), title: "List of Brazilian Jiu-Jitsu gyms in #{@criteria[:country]}"}= @criteria[:country]
@@ -29,39 +29,38 @@
   .row
     .col-md-12
       = render partial: 'locations/directory_welcome_message'
+  
+  - if @criteria[:city].blank? && @cities[ @criteria[:country] ].present?
+    .row
+      .col-md-12
+        %h3 Popular cities in #{seo_name}
+        %ul.list-inline
+          - @cities[ @criteria[:country] ].sort.each do |city|
+            %li= link_to city, directory_index_path(@criteria[:country], city), title: "List of Brazilian Jiu-Jitsu gyms in #{city}, #{@criteria[:country]}"
   - if locations.present?
     .row
-      .col-md-5
-        .map-canvas{:style => 'height: 300px'}
-      .col-md-7
-        - if @criteria[:city].present?
-          %h3= "Found #{pluralize(locations.count, 'academy')} near #{@criteria[:city]}, #{@criteria[:country]}"
-        - else
-          %h3= "Found #{pluralize(locations.count, 'academy')} in #{@criteria[:country]}"
-        %span.small.text-info= "GPS: #{locations.first.gps}"
-        %br/
-        %br/
-        - if @criteria[:city].blank? && @cities[ @criteria[:country] ].present?
-          %h4 Popular cities
-          %ul.list-inline
-            - @cities[ @criteria[:country] ].sort.each do |city|
-              %li= link_to city, directory_index_path(@criteria[:country], city), title: "List of Brazilian Jiu-Jitsu gyms in #{city}, #{@criteria[:country]}"
-
-        %br/
-        %div
-          %big
-            = link_to map_path(zoom: Map::ZOOM_CITY, center: locations.first.to_coordinates), title: "See map of Brazilian Jiu-Jitsu gyms in #{seo_name}" do
-              %span.fa.fa-search-plus
-              See larger map
-    %br/
-    .row 
       .col-md-12
-        = render partial: 'table', locals: { locations: locations }
+        %h3
+          - if @criteria[:city].present?
+            %span= "Found #{pluralize(locations.count, 'academy')} near #{@criteria[:city]}, #{@criteria[:country]}"
+          - else
+            %span= "Found #{pluralize(locations.count, 'academy')} in #{@criteria[:country]}"
+          %span
+            = surround '(', ')' do
+              = link_to 'See locations on map', map_path(zoom: Map::ZOOM_CITY, center: locations.first.to_coordinates), title: "See map of Brazilian Jiu-Jitsu gyms in #{seo_name}"
+    .row
+      .col-md-12
+        = render partial: 'locations/table', locals: { locations: locations, show_legend: @criteria[:city].present? }
+    - if @criteria[:city].present?
+      .row
+        .col-md-12
+          %h3 Schedule for #{seo_name}
+          .scheduler.clear
   - else
     = render partial: 'directory_index'
 
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->
-      mapModel = new RollFindr.Models.Map(#{@map.to_json})
-      mapView = new RollFindr.Views.MapView({ model: mapModel, el: $('.container')})
+      locationsCollection = new RollFindr.Collections.LocationsCollection(#{locations.to_json})
+      calendarView = new RollFindr.Views.OmniCalendarView({ collection: locationsCollection })

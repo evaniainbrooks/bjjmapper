@@ -1,6 +1,7 @@
 - exclude = local_assigns[:exclude] || []
-%table.table.table-striped
+%table.table.table-striped.location-table
   %tr
+    %th
     %th
       Name
     - unless exclude.include?(:team)
@@ -10,8 +11,11 @@
       Instructors
     %th
       Address
+    %th
   - locations.each_with_index do |location, i|
-    %tr
+    %tr{:class => "schedule-color-#{i}"}
+      %td
+        %img{:src => location.image, :alt => location.title}
       %td
         = link_to(location.title, location_path(location, ref: "index#{i}"), title: location.title)
       - unless exclude.include?(:team)
@@ -21,6 +25,10 @@
           - else
             = location.team_name
       %td
-        = location.instructors.map{|o| link_to(o.name, user_path(o, ref: "index#{i}"))}.join(", ").html_safe
+        - location.instructors.each do |o|
+          = link_to(o.name, user_path(o, ref: "index#{i}"), class: "belt belt-#{o.belt_rank}")
       %td
         = link_to(location.address, map_path(center: location.to_coordinates))
+      - if local_assigns[:show_legend] && show_legend
+        %td.color-legend
+          %div
