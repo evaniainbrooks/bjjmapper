@@ -2,7 +2,7 @@ class EventsController < ApplicationController
   before_action :set_location, except: [:omnischedule]
   before_action :set_locations, only: [:omnischedule]
   
-  before_action :set_event, only: [:destroy, :update, :move]
+  before_action :set_event, only: [:show, :destroy, :update, :move]
   before_action :validate_time_range, only: [:index, :omnischedule]
   
   before_action :ensure_signed_in, only: [:destroy, :create, :update]
@@ -30,7 +30,6 @@ class EventsController < ApplicationController
   end
 
   def show
-    @event = @location.events.find(params[:id])
     respond_to do |format|
       format.html
       format.json { render status: :ok, json: @event }
@@ -38,13 +37,28 @@ class EventsController < ApplicationController
   end
 
   def destroy
+    @event = @location.events.find(params[:id])
+    @event.destroy
+
+    tracker.track('deleteEvent',
+      event: @event.to_param
+    )
+    
     respond_to do |format|
       format.json { render status: :ok, json: {} }
+      format.html { redirect_to schedule_location_path(location, edit: 1) }
     end
   end
 
   def move
     delta_seconds = params.fetch(:deltams, 0).to_i / 1000
+    
+    tracker.track('moveEvent',
+      delta_seconds: delta_seconds,
+      starting: @event.starting,
+      ending: @event.ending,
+      event: @event.to_param
+    )
 
     @event.update_attributes({
       starting: @event.starting + delta_seconds.seconds,
@@ -57,9 +71,15 @@ class EventsController < ApplicationController
   end
 
   def update
+    tracker.track('updateEvent',
+      event: @event.to_param,
+      params: create_params
+    )
+
     @event.update(create_params)
     respond_to do |format|
       format.json { render status: :ok, json: {} }
+      format.html { redirect_to location_event_path(location, @event, success: 1, edit: 0) }
     end
   end
 
@@ -69,6 +89,11 @@ class EventsController < ApplicationController
     @locations.each do |location|
       @events.concat(location.schedule.events_between_time(@start_param, @end_param))
     end
+    
+    tracker.track('showOmniSchedule',
+      location_count: @locations.count,
+      event_count: @events.count
+    )
 
     status = @events.count == 0 ? :no_content : :ok
     respond_to do |format|
@@ -101,7 +126,7 @@ private
   end
 
   def set_event
-    @event = @location.events.find(params[:id])
+    @event = @location.events.where(id: params[:id]).first
     head :not_found and return false unless @event.present?
   end
 
