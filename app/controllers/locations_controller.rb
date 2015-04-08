@@ -192,11 +192,11 @@ class LocationsController < ApplicationController
   def index
     @criteria = params.slice(:city, :country) || {}
     if @criteria.key?(:city) && @criteria.key?(:country)
-      @locations = Location.near(@criteria.values.join(','), 30).decorate
+      @locations = Location.near(@criteria.values.join(','), 30).asc(:title).decorate
     elsif @criteria.key?(:country)
       country_abbrev = @countries[ @criteria[:country] ]
       country_criteria = [@criteria[:country], country_abbrev].compact
-      @locations = Location.where(:country.in => country_criteria).decorate
+      @locations = Location.where(:country.in => country_criteria).asc(:title).decorate
     else
       @locations = []
     end
@@ -206,15 +206,6 @@ class LocationsController < ApplicationController
       country: @criteria[:country],
       count: @locations.count,
     )
-
-    @map = {
-      :zoom => Map::ZOOM_CITY,
-      :minZoom => Map::DEFAULT_MIN_ZOOM,
-      :center => @locations.first.to_coordinates,
-      :geolocate => 0,
-      :locations => [],
-      :refresh => 0
-    } if @locations.present?
 
     respond_to do |format|
       format.html
