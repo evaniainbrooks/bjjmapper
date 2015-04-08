@@ -5,7 +5,7 @@
   $('body').delegate('.confirm-dialog button.confirm', 'click', function(e) {
     var method = $(e.target).data('method') || 'POST';
     var url = $(e.target).data('url');
-    var returnTo = $(e.target).data('return');
+    var returnTo = $(e.target).data('returnto');
     var extraData = {};
     extraData['_method'] = method.toLowerCase();
 
@@ -31,7 +31,7 @@
       confirm: 'Confirm',
       cancel: 'Cancel',
       method: 'POST',
-      return_to: Routes.root_path()
+      returnto: Routes.root_path()
     };
 
     var templateArgs = $.extend({}, defaults, data);
