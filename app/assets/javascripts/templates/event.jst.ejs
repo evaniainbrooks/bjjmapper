@@ -1,6 +1,6 @@
 <h4><%= event.title %></h4>
 <% if (event.instructor_name) { %>
-<span class="small text-info">with <%= event.instructor_name %></span><br/>
+<span class="text-info h5">with <%= event.instructor_name %></span><br/>
 <% } %>
-<span class="text-muted small"> <%= event.duration %></span>
-<p><%= event.description %></p>
+<span class="text-muted h5"> <%= event.duration %></span>
+<p class="small"><%= event.description %></p>

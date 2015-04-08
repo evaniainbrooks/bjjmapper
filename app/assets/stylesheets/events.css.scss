@@ -56,7 +56,11 @@ $colors: $color0, $color1, $color2, $color3, $color4, $color5, $color6, $color7,
     color: black;
     text-transform: uppercase;
     margin-top: 5px !important;
-    margin-bottom: 3px !important;
+    margin-bottom: 1px !important;
+  }
+
+  &:hover {
+    cursor: pointer;
   }
 }
 
@@ -64,6 +68,10 @@ $colors: $color0, $color1, $color2, $color3, $color4, $color5, $color6, $color7,
   .event-color-#{$i - 1} {
     @extend .event-color-base;
     background-color: lighten(nth($colors, $i), 40%) !important;
+    border-color: nth($colors, $i) !important;
+  }
+  
+  .event-color-#{$i - 1}.event-omnicalendar {
     background: repeating-linear-gradient(
       #{(($i - 1) % 13) * 30}deg,
       lighten(nth($colors, $i), 50%),
@@ -71,12 +79,12 @@ $colors: $color0, $color1, $color2, $color3, $color4, $color5, $color6, $color7,
       lighten(nth($colors, $i), 45%) 5px,
       lighten(nth($colors, $i), 45%) 10px
     );
-    border-color: nth($colors, $i) !important;
   }
 
   .schedule-color-#{$i - 1} {
     .color-legend div {
       background-color: lighten(nth($colors, $i), 40%);
+      border-color: nth($colors, $i) !important;
       background: repeating-linear-gradient(
         #{(($i - 1) % 13) * 30}deg,
         lighten(nth($colors, $i), 50%),
@@ -84,7 +92,6 @@ $colors: $color0, $color1, $color2, $color3, $color4, $color5, $color6, $color7,
         lighten(nth($colors, $i), 45%) 5px,
         lighten(nth($colors, $i), 45%) 10px
       );
-      border-color: nth($colors, $i) !important;
     }
   }
 }
@@ -101,6 +108,3 @@ $colors: $color0, $color1, $color2, $color3, $color4, $color5, $color6, $color7,
   border-color: #aaa !important;
 }
 
-.event-omnicalendar:hover {
-  cursor: pointer;
-}
