@@ -66,10 +66,12 @@ class Event
       :start => self.starting,
       :end => self.ending,
       :type => self.type,
-      :instructor => self.instructor.try(:to_param),
+      :instructor => self.instructor.as_json,
       :location => self.location.try(:to_param),
       :allDay => self.is_all_day ? true : false,
-      :recurring => nil.eql?(read_attribute(:schedule)),
+      :recurring => !nil.eql?(read_attribute(:schedule)),
+      :recurrence_type => schedule_rule_to_recurrence_type,
+      :recurrence_days => schedule_rule_to_recurrence_days,
       :url => nil #Rails.application.routes.url_helpers.location_event_path(self.location, self),
     }
   end
@@ -86,7 +88,24 @@ class Event
     end
   end
 
+  def schedule_rule_to_recurrence_type
+    case self.schedule.try(:rrules).try(:first)
+    when IceCube::WeeklyRule
+      self.schedule.rrules.first.to_hash[:interval] == 1 ? RECURRENCE_WEEKLY : RECURRENCE_2WEEKLY
+    when IceCube::DailyRule
+      self.schedule.rrules.first.to_hash[:interval] == 1 ? RECURRENCE_DAILY : RECURRENCE_2DAILY
+    else
+      RECURRENCE_NONE
+    end
+  end
+
+  def schedule_rule_to_recurrence_days
+    self.schedule.try(:rrules).try(:first).try(:to_hash).try(:[], :validations).try(:[], :day)
+  end
+
   def create_schedule
+    self.schedule.rrules.clear
+
     case self.event_recurrence.try(:to_i)
     when RECURRENCE_DAILY
       self.schedule.add_recurrence_rule IceCube::Rule.daily

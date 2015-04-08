@@ -62,7 +62,7 @@ describe Event do
         subject { build(:event, event_recurrence: Event::RECURRENCE_NONE) }
         before { subject.save }
         it 'does not create a schedule' do
-          subject.read_attribute(:schedule).should be_nil
+          subject.schedule.rrules.should be_empty
         end
       end
       context 'when .event_recurrence is DAILY' do
@@ -96,7 +96,7 @@ describe Event do
         subject { build(:event, event_recurrence: Event::RECURRENCE_NONE) }
         before { subject.save }
         it 'does not serialize the schedule' do
-          subject.read_attribute(:schedule).should be_nil
+          subject.schedule.rrules.should be_empty
         end
       end
     end
@@ -104,7 +104,7 @@ describe Event do
   describe '.as_json' do
     it 'returns the object as json' do
       json = build(:event).as_json({})
-      [:id, :title, :description, :start, :end, :type, :instructor, :location, :allDay, :recurring].each {|x| json.should have_key(x) }
+      [:id, :title, :description, :start, :end, :type, :instructor, :location, :allDay, :recurring, :recurrence_type, :recurrence_days].each {|x| json.should have_key(x) }
     end
   end
 end
