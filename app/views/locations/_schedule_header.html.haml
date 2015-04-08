@@ -7,6 +7,10 @@
     %button.pull-right.btn.btn-default.btn-sm{'data-report-item' => true}
       %span.report Report
 .row
+  .col-md-12
+    = render partial: 'schedule_event_deleted_message'
+
+.row
   .col-md-2
     %img{:src => location.image, :class => 'center-block'}/
   .col-md-10

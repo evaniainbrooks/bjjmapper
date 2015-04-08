@@ -36,43 +36,11 @@
                         %label.control-label{:for => "event[instructor]"} Instructor
                         = f.select :instructor, location.instructors.map{|o| [o.name, o.id]}, {include_blank: true}, class: 'form-control input-md'
                       .form-group
-                        %strong Start
-                        .input-group.date.pick-time.start
-                          %input.form-control{'name' => 'event[starting]', 'type' => 'text'}/
-                          %span.input-group-addon
-                            %span.fa.fa-clock-o
+                        = render partial: 'events/start_picker'
                       .form-group
-                        %strong End
-                        .input-group.date.pick-time.end
-                          %input.form-control{'name' => 'event[ending]', 'type' => 'text'}/
-                          %span.input-group-addon
-                            %span.fa.fa-clock-o
+                        = render partial: 'events/end_picker'
                       .form-group
-                        %label.control-label{:for => "event[event_recurrence]"} Repeat
-                        .form-inline
-                          = f.select :event_recurrence, select_recurrence, {}, class: 'form-control input-md'
-                          .week-recurrence.btn-group{'data-toggle' => 'buttons'}
-                            %label.btn.btn-default
-                              %input{:name => 'event[weekly_recurrence_days][]', :type => 'checkbox', :value => '0'}/
-                              Su
-                            %label.btn.btn-default
-                              %input{:name => 'event[weekly_recurrence_days][]', :type => 'checkbox', 'data-toggle' => 'button', :value => '1'}/
-                              Mo
-                            %label.btn.btn-default
-                              %input{:name => 'event[weekly_recurrence_days][]', :type => 'checkbox', 'data-toggle' => 'button', :value => '2'}/
-                              Tu
-                            %label.btn.btn-default
-                              %input{:name => 'event[weekly_recurrence_days][]', :type => 'checkbox', 'data-toggle' => 'button', :value => '3'}/
-                              We
-                            %label.btn.btn-default
-                              %input{:name => 'event[weekly_recurrence_days][]', :type => 'checkbox', 'data-toggle' => 'button', :value => '4'}/
-                              Th
-                            %label.btn.btn-default
-                              %input{:name => 'event[weekly_recurrence_days][]', :type => 'checkbox', 'data-toggle' => 'button', :value => '5'}/
-                              Fr
-                            %label.btn.btn-default
-                              %input{:name => 'event[weekly_recurrence_days][]', :type => 'checkbox', 'data-toggle' => 'button', :value => '6'}/
-                              Sa
+                        = render partial: 'events/recurrence_controls', locals: { f: f }
         .modal-footer
           %button.btn.btn-default{:type => 'button', 'data-dismiss' => 'modal'} Cancel
           %button.btn.btn-success{:disabled => true, :type => 'submit'} Create Event
