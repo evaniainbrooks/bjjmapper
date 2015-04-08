@@ -81,6 +81,17 @@ describe Event do
           subject.schedule.recurrence_rules.first.should eq IceCube::Rule.weekly(1).day(*recurrence_days.map(&:to_i))
         end
       end
+      context 'when there is an existing schedule' do
+        subject { create(:event, event_recurrence: Event::RECURRENCE_WEEKLY, weekly_recurrence_days: ["0", "1"]) }
+        before do
+          subject.event_recurrence = Event::RECURRENCE_DAILY
+          subject.save
+        end
+        it 'only persists the newest recurrence rule' do
+          subject.schedule.rrules.count.should eq 1
+          subject.schedule.rrules.first.class.should eq IceCube::DailyRule
+        end
+      end
     end
     describe '.serialize_schedule' do
       context 'with a schedule' do

@@ -103,8 +103,14 @@ class Event
     self.schedule.try(:rrules).try(:first).try(:to_hash).try(:[], :validations).try(:[], :day)
   end
 
+  def remove_existing_recurrence_rules
+    self.schedule.rrules.each do |rule|
+      self.schedule.remove_recurrence_rule rule
+    end
+  end
+
   def create_schedule
-    self.schedule.rrules.clear
+    remove_existing_recurrence_rules
 
     case self.event_recurrence.try(:to_i)
     when RECURRENCE_DAILY
