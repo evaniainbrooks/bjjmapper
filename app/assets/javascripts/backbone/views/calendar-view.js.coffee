@@ -11,7 +11,9 @@ class RollFindr.Views.CalendarView extends Backbone.View
 
     @createEventView = new RollFindr.Views.CreateEventView()
 
-    @initializeCalendarView(options.editable)
+    @editable = options.editable
+
+    @initializeCalendarView(@editable)
 
   initializeCalendarView: (editable)->
     viewOptions = if editable
@@ -29,7 +31,7 @@ class RollFindr.Views.CalendarView extends Backbone.View
       selectable: editable,
       select: this.calendarSelected,
       eventRender: this.calendarEventRender,
-      #eventClick: this.calendarEventClick,
+      eventClick: this.calendarEventClick,
       eventDrop: this.calendarEventDrop,
       header: {
         left: 'prev,next today',
@@ -43,7 +45,9 @@ class RollFindr.Views.CalendarView extends Backbone.View
 
   calendarEventClick: (event, jsEvent, view)->
     locationId = @model.get('id')
-    window.location = Routes.location_event_path(locationId, event.id, { ref: 'cal' })
+    eventId = event.id
+
+    window.location = Routes.location_event_path(locationId, eventId)
     return true
 
   calendarEventDrop: (event, delta, revertFunc)->
@@ -62,6 +66,7 @@ class RollFindr.Views.CalendarView extends Backbone.View
   calendarEventRender: (event, element, view)->
     element.addClass("event-#{event.type}")
     element.addClass("event-color-#{event.color_ordinal}")
+    element.addClass("event-editable") if @editable
 
     element.html(@eventTemplate({event: event}))
 
