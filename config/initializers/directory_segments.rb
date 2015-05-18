@@ -3,6 +3,7 @@
 
 RollFindr::DirectoryCountries =  {
   'Canada' => 'CA',
+  'Cyprus' => 'CY',
   'Germany' => 'DE',
   'Greece' => 'GR',
   'France' => 'FR',
@@ -38,6 +39,7 @@ RollFindr::DirectoryCities = {
   'Sweden' => ['Stockholm', 'Göteborg', 'Malmö'],
   'Finland' => ['Helsinki', 'Tampere'],
   'Russia' => ['Moscow', 'Saint Petersburg', 'Novosibirsk', 'Yekaterinburg'],
-  'Mexico' => ['Mexico City', 'Ecatepec', 'Guadalajara', 'Puebla', 'Juárez']
+  'Mexico' => ['Mexico City', 'Ecatepec', 'Guadalajara', 'Puebla', 'Juárez'],
+  'Cyprus' => ['Nicosia']
 }
 
