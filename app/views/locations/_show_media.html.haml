@@ -1,0 +1,20 @@
+%h3.pull-left 
+  Media
+  %small 
+    Use the Instagram hashtag 
+    %b.text-primary 
+      %a{:title => 'Explore Instagram Hashtag', :href => "https://instagram.com/explore/tags/#{location.ig_hashtag}/"} ##{location.ig_hashtag}
+    to display images or video here
+
+%a{:name => 'reviews'}
+#instafeed.clear
+
+= content_for(:scripts) do
+  :javascript
+    var feed = new Instafeed({
+      get: 'tagged',
+      tagName: '#{location.ig_hashtag}',
+      clientId: '#{ig_client_id}'
+    });
+
+    feed.run();

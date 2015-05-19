@@ -87,6 +87,10 @@
     %hr/
     .row.reviews
       .col-md-12
+        = render :partial => 'locations/show_media', :locals => { :location => location }
+    %hr/
+    .row.reviews
+      .col-md-12
         = render :partial => 'locations/show_reviews', :locals => { :location => location }
     %hr.edit-field/
     .row.edit-field
