@@ -96,7 +96,7 @@
   &.marker-active {
     background-color: #ebeeff;
 
-    a.phone, a.website, a.email, a.facebook {
+    a.phone, a.website, a.email {
       color: blue;
     }
 
@@ -143,6 +143,16 @@
   .img-tiny { margin: 10px; }
   p { margin: 0px; }
   h5 { margin-bottom: 0px; }
+  .list-group-item-heading {
+    width: 50%;
+  }
+
+  .list-group-item-heading * {
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 }
 
 .card.location-card .thumbnail .caption {
