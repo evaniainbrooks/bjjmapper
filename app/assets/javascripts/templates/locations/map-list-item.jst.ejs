@@ -34,9 +34,18 @@
       <% if (null !== location.website && location.website.length > 0) { %>
         <li><span class="col-md-offset-1 label">Website</span> <a class="website" href="http://<%= location.website %>"><%= location.website %></a></li>
       <% } %>
-      <% if (null !== location.facebook && location.facebook.length > 0) { %>
-        <li><span class="col-md-offset-1 label"></span><a class="facebook" href="http://fb.com/<%= location.facebook %>"><i class="fa fa-facebook-square fa-2x"></i></a></li>
-      <% } %>
+      <li>
+        <span class="col-md-offset-1 label"></span>
+        <% if (null !== location.facebook && location.facebook.length > 0) { %>
+          <a class="facebook" href="http://fb.com/<%= location.facebook %>"><i class="fa fa-facebook-square fa-2x"></i></a>
+        <% } %>
+        <% if (null !== location.twitter && location.twitter.length > 0) { %>
+          <a class="twitter" href="http://twitter.com/<%= location.twitter %>"><i class="fa fa-twitter-square fa-2x"></i></a>
+        <% } %>
+        <% if (null !== location.instagram && location.instagram.length > 0) { %>
+          <a class="instagram" href="http://instagram.com/<%= location.instagram %>"><i class="fa fa-instagram fa-2x"></i></a>
+        <% } %>
+      </li>
     </ul>
     <span class="text-info distance small"><%= location.distance %></span>
   </div>
