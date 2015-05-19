@@ -2,9 +2,9 @@
   <p class="timestamp small text-right text-muted"><%= location.created_at %></p>
   <img width="100" height="100" src="<%= location.image %>" alt="<% location.title %> logo" class="logo pull-left" />
   <div class="content">
-    <a class="text-primary" href="<%= Routes.location_path(location) %>"><h3 class="list-group-item-heading"><%= location.title %></h3></a>
+    <a class="text-primary" href="<%= Routes.location_path(location, {ref: 'recent_l'}) %>"><h3 class="list-group-item-heading"><%= location.title %></h3></a>
     <p class="strong"><%= location.team_name %></p>
-    <a href="<%= Routes.map_path({center: location.coordinates}) %>" title="See <%= location.title %> on the map">
+    <a href="<%= Routes.map_path({center: location.coordinates, ref: 'recent_l'}) %>" title="See <%= location.title %> on the map">
       <img class="marker pull-left" src="marker_small.png"/>
       <span class="text-info"><%= location.address %></span>
       <span class="small">(view on map)</span>
