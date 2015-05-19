@@ -8,6 +8,9 @@ class LocationsController < ApplicationController
   helper_method :created?
   helper_method :reviewed?
   helper_method :error?
+  helper_method :deleted?
+
+  helper_method :ig_client_id
 
   RECENT_COUNT_DEFAULT = 5
   RECENT_COUNT_MAX = 10
@@ -221,6 +224,10 @@ class LocationsController < ApplicationController
   end
 
   private
+  
+  def deleted?
+    params.fetch(:deleted, 0).to_i.eql?(1)
+  end
 
   def created?
     return params.fetch(:create, 0).to_i.eql?(1)
@@ -260,7 +267,9 @@ class LocationsController < ApplicationController
       :phone,
       :email,
       :website,
-      :facebook)
+      :facebook,
+      :twitter,
+      :instagram)
 
     p[:coordinates] = JSON.parse(p[:coordinates]) if p[:coordinates].present?
     p[:modifier_id] = current_user.to_param if signed_in?
@@ -278,5 +287,9 @@ class LocationsController < ApplicationController
     # TODO: Refactor this out
     @countries = RollFindr::DirectoryCountries
     @cities = RollFindr::DirectoryCities
+  end
+
+  def ig_client_id
+    ENV['INSTAGRAM_CLIENT_ID']
   end
 end
