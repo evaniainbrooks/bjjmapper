@@ -51,8 +51,11 @@ class Location
   field :website
   field :phone
   field :email
-  field :facebook
   field :timezone
+  field :facebook
+  field :instagram
+  field :twitter
+  field :ig_hashtag
 
   validates :title, presence: true
 
@@ -133,6 +136,10 @@ class Location
   def coordinates=(coordinates)
     self.timezone = nil
     super
+  end
+
+  def ig_hashtag
+    super || 'bjjmapper' + self.title.parameterize('').first(6)
   end
 
   private
