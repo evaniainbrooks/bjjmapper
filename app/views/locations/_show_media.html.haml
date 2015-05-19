@@ -6,13 +6,14 @@
       %a{:title => 'Explore Instagram Hashtag', :href => "https://instagram.com/explore/tags/#{location.ig_hashtag}/"} ##{location.ig_hashtag}
     to display images or video here
 
-%a{:name => 'reviews'}
+%a{:name => 'media'}
 #instafeed.clear
 
 = content_for(:scripts) do
   :javascript
     var feed = new Instafeed({
       get: 'tagged',
+      sortBy: 'most-recent',
       tagName: '#{location.ig_hashtag}',
       clientId: '#{ig_client_id}'
     });

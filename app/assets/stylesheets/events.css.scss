@@ -67,7 +67,7 @@ $colors: $color0, $color1, $color2, $color3, $color4, $color5, $color6, $color7,
 @for $i from 1 through length($colors) {
   .event-color-#{$i - 1} {
     @extend .event-color-base;
-    background-color: lighten(nth($colors, $i), 40%) !important;
+    background-color: lighten(nth($colors, $i), 50%) !important;
     border-color: nth($colors, $i) !important;
   }
   
@@ -83,7 +83,6 @@ $colors: $color0, $color1, $color2, $color3, $color4, $color5, $color6, $color7,
 
   .schedule-color-#{$i - 1} {
     .color-legend div {
-      background-color: lighten(nth($colors, $i), 40%);
       border-color: nth($colors, $i) !important;
       background: repeating-linear-gradient(
         #{(($i - 1) % 13) * 30}deg,

@@ -31,15 +31,18 @@
         = render partial: 'edit_success_message' if edit_success?
         = render partial: 'review_message' if reviewed?
     .row
-      .col-md-2.col-xs-6{:style => 'margin-top: 20px; padding-right: 0px;'}
+      .col-md-11.col-md-offset-1
+        = render partial: 'subnav', :locals => { location: location }
+    .row
+      .col-md-2.col-xs-3{:style => 'margin-top: 20px; padding-right: 0px;'}
         .display-field
           %img{:src => location.image, :class => 'center-block'}/
         .edit-field
           %img{:src => location.image, :class => 'center-block edit-image'}/
-      .col-md-1.col-xs-6{:style => 'padding: 0px'}
-        = render partial: 'subnav', :locals => { location: location }
-      .col-md-5
+      .col-md-5.col-xs-9
         = render partial: 'show_header', :locals => { location: location, f: f }
+      .col-md-12.hidden-lg.hidden-md.clear
+        %hr/
       = render partial: 'show_contact', :locals => { location: location, f: f }
     %hr/
     .row
@@ -85,7 +88,7 @@
         %a{:name => 'schedule'}
         .scheduler.clear
     %hr/
-    .row.reviews
+    .row
       .col-md-12
         = render :partial => 'locations/show_media', :locals => { :location => location }
     %hr/
