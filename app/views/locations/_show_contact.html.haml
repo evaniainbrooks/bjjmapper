@@ -5,13 +5,19 @@
     = f.text_field :phone, class: 'input-sm form-control'
     = f.label :email, class: 'small'
     = f.text_field :email, class: 'input-sm form-control'
-    = f.label :website, class: 'small'
+    = f.label :website, 'Websites', class: 'small'
     .input-group
       %span.input-group-addon http://
       = f.text_field :website, class: 'input-sm form-control'
     .input-group
       %span.input-group-addon http://facebook.com/
       = f.text_field :facebook, class: 'input-sm form-control'
+    .input-group
+      %span.input-group-addon http://instagram.com/
+      = f.text_field :instagram, class: 'input-sm form-control'
+    .input-group
+      %span.input-group-addon http://twitter.com/
+      = f.text_field :twitter, class: 'input-sm form-control'
 
   - unless location.contact_info?
     %i.display-field.text-muted No contact information was provided
@@ -32,13 +38,18 @@
           %i.fa.fa-envelope
     - if location.website.present?
       %span.display-field.form-group
-        %b.small Website
+        %b.small Websites
         %br/
         = link_to 'http://' + location.website, class: 'website' do
           = location.website
           %i.fa.fa-external-link
-.col-md-1
+.col-md-1.display-field
   - if location.facebook.present?
-    %span.display-field.form-group
-      = link_to 'http://facebook.com/' + location.facebook, class: 'facebook' do
-        %i.fa.fa-facebook-square.fa-3x
+    = link_to 'http://facebook.com/' + location.facebook, class: 'facebook' do
+      %i.fa.fa-facebook-square.fa-3x
+  - if location.instagram.present?
+    = link_to 'http://instagram.com/' + location.instagram, class: 'instagram' do
+      %i.fa.fa-instagram.fa-3x
+  - if location.twitter.present?
+    = link_to 'http://facebook.com/' + location.twitter, class: 'twitter' do
+      %i.fa.fa-twitter-square.fa-3x
