@@ -8,7 +8,7 @@
       %span.report Report
 .row
   .col-md-12
-    = render partial: 'schedule_event_deleted_message'
+    = render partial: 'schedule_event_deleted_message' if deleted?
 
 .row
   .col-md-2
