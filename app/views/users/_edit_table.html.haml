@@ -1,3 +1,4 @@
+- show_biography = local_assigns[:show_biography]
 %table.table.table-user-information.edit-field
   %tbody
     %tr
@@ -29,7 +30,8 @@
       %tr
         %td.text-muted Lineage
         %td= render partial: 'users/lineage', locals: { :f => f, :user => user }
-    %tr
-      %td.text-muted Biography
-      %td
-        = f.text_area :description, rows: 5, class: 'form-control'
+    - if show_biography
+      %tr
+        %td.text-muted Biography
+        %td
+          = f.text_area :description, rows: 5, class: 'form-control'
