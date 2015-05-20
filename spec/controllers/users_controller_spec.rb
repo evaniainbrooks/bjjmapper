@@ -3,6 +3,18 @@ require 'shared/tracker_context'
 
 describe UsersController do
   include_context 'skip tracking'
+  describe 'GET reviews' do
+    context 'with json format' do
+      let(:user) { create(:user) }
+      let(:location) { create(:location) }
+      before { create(:review, user: user, location: location) }
+      it 'returns the recent reviews' do
+        get :reviews, id: user.id, format: 'json', count: 1
+        response.should be_success
+        response.body.should match(user.reviews.first.decorate.to_json)
+      end
+    end
+  end
   describe 'GET index' do
     context 'with html format' do
       before { create(:user, belt_rank: 'black') }

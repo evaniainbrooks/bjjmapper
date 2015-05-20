@@ -137,7 +137,7 @@
   .alternative { display: none; }
 }
 
-.card.nearby-card {
+.card.nearby-card, .card.location-card {
   .thumbnail .caption { margin-left: 55px; }
   .direction {  margin: 5px 10px 0px 0px; } 
   .img-tiny { margin: 10px; }

@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   end
 
   resources :users, :only => [:index, :show, :create, :update] do
+    get :reviews, on: :member
     resources :users, controller: :students, as: :students, path: '/students', only: [:create, :destroy, :index]
   end
   resources :locations do
@@ -26,7 +27,6 @@ Rails.application.routes.draw do
   end
   root 'application#homepage'
 
-  
   get '/omnischedule' => 'events#omnischedule', :as => :omnischedule
   
   get 'search/:query' => 'application#search'

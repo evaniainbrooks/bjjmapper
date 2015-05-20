@@ -9,6 +9,10 @@ class RollFindr.Models.User extends Backbone.Model
     students = new RollFindr.Collections.StudentsCollection(students, {instructor_id: id})
     this.set('lineal_children', students)
 
+    reviews = @get('reviews')
+    reviews = new RollFindr.Collections.ReviewsCollection(reviews, {user_id: id})
+    this.set('reviews', reviews)
+
   isAnonymous: ->
     @get('role') == 'anonymous'
 

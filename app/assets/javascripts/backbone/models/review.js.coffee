@@ -10,7 +10,10 @@ class RollFindr.Collections.ReviewsCollection extends Backbone.Collection
   model: RollFindr.Models.Review
   location_id: null
   initialize: (models, options)->
-    _.extend(this, _.pick(options, "location_id"))
+    _.extend(this, _.pick(options, "user_id", "location_id"))
 
   url: =>
-    Routes.location_reviews_path(@location_id)
+    if @location_id?
+      Routes.location_reviews_path(@location_id)
+    else
+      Routes.reviews_user_path(@user_id)

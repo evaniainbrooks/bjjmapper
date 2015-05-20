@@ -1,8 +1,11 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update]
+  before_action :set_user, only: [:reviews, :show, :update]
   decorates_assigned :user
 
   helper_method :welcome?
+
+  REVIEW_COUNT_DEFAULT = 5
+  REVIEW_COUNT_MAX = 50
 
   def index
     @users = User.where(:belt_rank.in => ['white', 'blue', 'purple', 'brown', 'black']).all.group_by(&:belt_rank)
@@ -11,6 +14,19 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.html
+    end
+  end
+
+  def reviews
+    count = [params.fetch(:count, REVIEW_COUNT_DEFAULT).to_i, REVIEW_COUNT_MAX].min
+
+    tracker.track('showUserReviews',
+      count: count
+    )
+
+    @reviews = @user.reviews.desc('created_at').limit(count)
+    respond_to do |format|
+      format.json { render json: ReviewDecorator.decorate_collection(@reviews) }
     end
   end
 

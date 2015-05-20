@@ -1,0 +1,14 @@
+<div class="card review">
+  <a class="thumbnail" href="<%= Routes.location_path(review.location_id, {ref: 'user_dp', anchor: 'reviews'}) %>">
+  <div class="pull-left">
+    <img class="img-tiny" src="<%= review.location_image %>" alt="<%= review.location_name %>" />   
+  </div>
+  
+  <span class="pull-right date small text-muted"><%= review.created_at %></span>
+  <span class="rating">
+    <% _.times(5, function(i) { %><span class="fa fa-<%= review.rating > i ? 'star' : 'star-o' %>"></span><% }); %>
+  </span>
+  <h4 class="list-group-item-heading"><%= review.location_name %></h4>
+  <div class="review-body"><%= review.body %></div>
+  </a>
+</div>

@@ -1,8 +1,23 @@
 .review {
   margin: 5px 0px 10px 0px !important;
+  img {
+    margin: 10px;
+  }
+  .list-group-item-heading, .list-group-item-text {
+      display: block;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+  }
+  .review-body {
+    color: #333;
+  }
+  .date {
+    margin-right: 5px;
+  }
 }
 
-.rating, .rating a, .rating a:hover {
-  color: orange;
-  text-decoration: none;
+.rating, .rating a, .rating a:hover, .rating span {
+  color: orange !important;
+  text-decoration: none !important;
 }

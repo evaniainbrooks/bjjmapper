@@ -1,5 +1,7 @@
 %li.location-card.card
   %a.thumbnail{:href => location_path(location, ref: "card#{location_counter}")}
+    .pull-left
+      %img.img-tiny{src: location.image, alt: location.title}/
     .caption
       %p.text-primary= location.title
       %b.small= location.team_name

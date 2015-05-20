@@ -1,12 +1,13 @@
 #= require templates/review
 #= require backbone/models/review
 
-class RollFindr.Views.LocationReviewsView extends Backbone.View
+class RollFindr.Views.ReviewsView extends Backbone.View
   model: null
   el: $('.reviews')
-  template: JST['templates/review']
-  initialize: ->
+  template: null
+  initialize: (options)->
     _.bindAll(this, 'render')
+    @template = JST["templates/#{options.template_name}"]
     @model.get('reviews').fetch().done(@render)
 
   render: ->
