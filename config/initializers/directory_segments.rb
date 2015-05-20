@@ -2,6 +2,7 @@
 # coding: UTF-8
 
 RollFindr::DirectoryCountries =  {
+  'Austria' => 'AT',
   'Canada' => 'CA',
   'Cyprus' => 'CY',
   'Germany' => 'DE',
@@ -23,6 +24,7 @@ RollFindr::DirectoryCountries =  {
 }
 
 RollFindr::DirectoryCities = {
+  'Austria' => ['Wien', 'Graz', 'Linz'],
   'Hungary' => ['Budapest', 'Debrecen', 'Miskolc', 'Szeged'],
   'Spain' => ['Madrid', 'Barcelona', 'Valencia', 'Sevilla'],
   'Turkey' => ['Istanbul', 'Izmir', 'Ankara'],
