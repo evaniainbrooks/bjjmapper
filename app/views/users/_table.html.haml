@@ -1,42 +1,35 @@
-%table.table.table-user-information
+%table.table.table-user-information.display-field
   %tbody
     %tr
       %td.text-muted Name
       %td
         %h1.display-field= user.name
-        .edit-field.form-group
-          = f.text_field :name, class: 'form-control input-lg'
     %tr
       %td.text-muted Rank
       %td
         .display-field
           = render partial: 'users/belt', locals: { user: user }
-        .edit-field.form-group
-          = f.select :belt_rank, options_for_select(belt_ranks, user.belt_rank), {}, class: 'form-control input-md'
-        .edit-field.form-group
-          = f.select :stripe_rank, options_for_select(stripe_ranks, user.stripe_rank), {}, class: 'form-control input-md'
-    %tr
-      %td.text-muted Born
-      %td
-        - if user.birthdate.present?
-          .display-field
-            = user.birthdate.strftime('%B %d, %Y')
-            &nbsp;&nbsp;
-            = "(#{user.age_in_years} years old)"
-        .edit-field.form-group.form-inline
-          = f.select :birth_day, options_for_select(select_days, user.birth_day), { prompt: 'Day' }, class: 'form-control'
-          = f.select :birth_month, options_for_select(select_months, user.birth_month), { prompt: 'Month' }, class: 'form-control'
-          = f.select :birth_year, options_for_select(select_years, user.birth_year), { prompt: 'Year' }, class: 'form-control'
-    %tr
-      %td
-      %td
-        %span.display-field
-          = user.birth_place
-          &nbsp;
-        = f.text_field :birth_place, placeholder: 'Place of birth', class: 'form-control edit-field'
-    - if local_assigns.key?(:force_lineal_parent) && force_lineal_parent
-      = f.hidden_field :lineal_parent, value: force_lineal_parent
-    - else 
+    
+    - if user.birthdate.present? || user.birth_place.present?
       %tr
-        %td.text-muted Lineage
-        %td= render partial: 'users/lineage', locals: { :f => f, :user => user }
+        %td.text-muted Born
+        %td
+          - if user.birthdate.present?
+            .display-field
+              = user.birthdate.strftime('%B %d, %Y')
+              &nbsp;&nbsp;
+              = "(#{user.age_in_years} years old)"
+      %tr
+        %td
+        %td
+          %span.display-field
+            = user.birth_place
+            &nbsp;
+          = f.text_field :birth_place, placeholder: 'Place of birth', class: 'form-control edit-field'
+    %tr
+      %td.text-muted Lineage
+      %td= render partial: 'users/lineage', locals: { :f => f, :user => user }
+    - if user.description?
+      %tr
+        %td.text-muted Biography
+        %td= user.description

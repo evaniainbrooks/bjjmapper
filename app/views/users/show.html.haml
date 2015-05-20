@@ -10,34 +10,30 @@
           %span.report Report
     = render partial: 'welcome_message' if welcome?
     .row
-      .col-md-4
-        %img.center-block{:alt => "#{user.name} profile image", :src => user.image}
-      .col-md-5
-        = render partial: 'users/table', locals: { :f => f, :user => user }
       .col-md-3
-        = render partial: 'users/subnav', locals: { :user => user }
+        %img.center-block{:alt => "#{user.name} profile image", :src => user.image}
+      .col-md-7
+        = render partial: 'users/table', locals: { :f => f, :user => user }
+        = render partial: 'users/edit_table', locals: { :f => f, :user => user }
+    - if user.locations.present?
+      %hr/
+      .row
+        .col-md-4
+          - if user.locations.present?
+            %h3 Teaching at
+            %ul.list-unstyled
+              - user.locations.each_with_index do |location, i|
+                %li= render partial: 'locations/card', object: location, as: 'location', locals: { location_counter: i }
     %hr/
     .row
-      .col-md-8
-        %h3 Biography
-        .display-field= user.description
-        .edit-field.form-group
-          -#= f.label:description
-          = f.text_area :description, rows: 10, class: 'form-control'
-      .col-md-4
-        %h3 Teaching at
-        %ul.list-unstyled
-          - user.locations.each_with_index do |location, i|
-            %li= render partial: 'locations/card', object: location, as: 'location', locals: { location_counter: i }
-    %hr/
-    .row.students
-      .col-md-4
+      .col-md-12.students
         %h3.pull-left Students
         %button.pull-right.edit-field.btn.btn-small.btn-default.add-student{:style => 'margin-top: -5px', :type => 'button'}
           %i.fa.fa-plus-circle
           Add Student 
-      .col-md-12
         .row.items.clear
+        .empty-message
+          %i.text-muted No students are listed for this person
     %hr.edit-field/
     .row.edit-field
       .col-md-12

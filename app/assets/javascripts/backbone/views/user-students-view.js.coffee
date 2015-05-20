@@ -13,9 +13,13 @@ class RollFindr.Views.UserStudentsView extends Backbone.View
 
   render: ->
     @$('.items').empty()
-    @model.get('lineal_children').each (student)=>
-      elem = @template({student: student.toJSON()})
-      @$('.items').append(elem)
+    if @model.get('lineal_children').size() > 0
+      @$el.removeClass('empty')
+      @model.get('lineal_children').each (student)=>
+        elem = @template({student: student.toJSON()})
+        @$('.items').append(elem)
+    else
+      @$el.addClass('empty')
 
   addStudent: ->
     $('.add-student-dialog').modal('show')

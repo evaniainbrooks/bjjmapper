@@ -4,3 +4,5 @@
   %ul.display-field.list-unstyled
     - user.full_lineage.each_with_index do |parent,i|
       %li{:style => "font-size: #{150 - i * 15}%"}= link_to(parent.try(:name), user_path(parent))
+- else
+  %i.text-danger.display-field Unknown

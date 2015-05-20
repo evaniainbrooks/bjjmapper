@@ -9,11 +9,15 @@ class UserDecorator < Draper::Decorator
   DEFAULT_IMAGE = 'default-user-250.png'
   DEFAULT_DESCRIPTION = 'No description was provided'
 
+  def description?
+    object.description.present?
+  end
+
   def description
     if object.description.present?
       object.description
     else
-      h.content_tag(:i) { DEFAULT_DESCRIPTION }
+      h.content_tag(:i, class: 'text-muted') { DEFAULT_DESCRIPTION }
     end
   end
 
@@ -37,13 +41,13 @@ class UserDecorator < Draper::Decorator
     "#{belt_rank.capitalize} belt"
   end
 
-  def description
+  #def description
     #if description_src.try(:to_sym).try(:eql?, :wikipedia)
     #  WikiCloth::Parser.new(data: object.description).to_html
     #else
-      object.description
+    #  object.description
     #end
-  end
+  #end
 
   def summary
     if description_src.try(:to_sym).try(:eql?, :wikipedia)
