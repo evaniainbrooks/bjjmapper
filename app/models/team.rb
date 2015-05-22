@@ -17,12 +17,18 @@ class Team
   field :image, type: String
   field :image_large, type: String
   field :primary_color_index, type: String
+  field :locked, type: Boolean
+
   has_many :locations
   has_many :users
   belongs_to :parent_team, class_name: 'Team', inverse_of: :child_teams
   has_many :child_teams, class_name: 'Team', inverse_of: :parent_team
 
   validates :name, presence: true
+
+  def editable_by? user
+    return !self.locked? || user.super_user?
+  end
 
   def as_json(args)
     super(args.merge(except: [:_id, :parent_team_id, :modifier_id])).merge({

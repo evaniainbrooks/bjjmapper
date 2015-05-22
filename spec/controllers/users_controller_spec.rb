@@ -62,13 +62,22 @@ describe UsersController do
   describe 'POST update' do
     let(:user) { create(:user, name: 'Buddy') }
     let(:update_params) { { :user => { :name => 'Buddy Holly' } } }
+    context 'when the user is not editable' do
+      before { User.any_instance.stub(:editable_by?).and_return(false) }
+      it 'returns forbidden' do
+        post :update, { id: user.id }.merge(update_params)
+        response.status.should eq 403
+      end
+    end
     context 'with json format' do
+      before { User.any_instance.stub(:editable_by?).and_return(true) }
       it 'updates and returns the user' do
         post :update, { id: user.id, :format => 'json' }.merge(update_params)
         response.body.should match update_params[:user][:name]
       end
     end
     context 'with html format' do
+      before { User.any_instance.stub(:editable_by?).and_return(true) }
       it 'redirects back to the location' do
         post :update, { id: user.id, :format => 'html' }.merge(update_params)
         response.body.should redirect_to(user_path(user, edit: 0))

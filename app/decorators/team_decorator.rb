@@ -1,5 +1,6 @@
 class TeamDecorator < Draper::Decorator
   DEFAULT_DESCRIPTION = 'No description was provided'
+  INDEPENDENT = 'Independent'
 
   delegate_all
   decorates_finders
@@ -8,7 +9,11 @@ class TeamDecorator < Draper::Decorator
   decorates_association :child_teams
 
   def name
-    "Team #{object.name}"
+    if INDEPENDENT.eql? object.name
+      object.name
+    else
+      "Team #{object.name}"
+    end
   end
 
   # TODO: DRY up these methods

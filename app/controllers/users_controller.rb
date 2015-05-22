@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:reviews, :show, :update]
+  before_action :check_permissions, only: [:update]
+
   decorates_assigned :user
 
   helper_method :welcome?
@@ -70,6 +72,10 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def check_permissions
+    head :forbidden and return false unless current_user.can_edit?(@user)
+  end
 
   def welcome?
     params.fetch(:welcome, 0).to_i.eql?(1)

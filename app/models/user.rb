@@ -63,9 +63,20 @@ class User
 
   scope :jitsukas, -> { where(:belt_rank.in => ['blue', 'purple', 'brown', 'black']) }
 
-  #def to_param
-  #  [id, name.parameterize].join('-')
-  #end
+  def can_edit? object
+    object.editable_by? self
+  end
+
+  def editable_by? user
+    return true if user.super_user?
+    return false if self.anonymous?
+
+    !self.locked? || user.id.eql?(self.id)
+  end
+
+  def locked?
+    self.provider.present?
+  end
 
   def jitsuka?
     self.belt_rank.present?
@@ -96,6 +107,10 @@ class User
 
   def anonymous?
     self.role.try(:to_s).try(:eql?, 'anonymous')
+  end
+
+  def super_user?
+    self.role.try(:to_s).try(:eql?, 'super_user')
   end
 
   def full_lineage

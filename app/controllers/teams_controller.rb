@@ -3,8 +3,10 @@ class TeamsController < ApplicationController
   before_action :set_teams, only: :index
   before_action :ensure_signed_in, only: [:update, :create, :new, :remove_image]
 
+  before_action :check_permissions, only: [:update]
+
   decorates_assigned :team, :teams
-  
+
   helper_method :created?
 
   def new
@@ -76,7 +78,11 @@ class TeamsController < ApplicationController
   end
 
   private
-  
+
+  def check_permissions
+    head :forbidden and return false unless current_user.can_edit?(@team)
+  end
+
   def created?
     return params.fetch(:create, 0).to_i.eql?(1)
   end

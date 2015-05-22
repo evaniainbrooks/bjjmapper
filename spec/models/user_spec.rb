@@ -60,6 +60,35 @@ describe User do
       end
     end
   end
+
+  describe '.editable_by?' do
+    context 'when the editor is a super user' do
+      let(:editor) { build(:user, role: 'super_user') }
+      subject { build(:user, role: 'user') }
+      it { subject.editable_by?(editor).should be true }
+    end
+    context 'when the editor is not a super user' do
+      let(:editor) { build(:user, role: 'user') }
+      context 'when anonymous' do
+        subject { build(:user, role: 'anonymous') }
+        it { subject.editable_by?(editor).should be false }
+      end
+      context 'when not anonymous' do
+        context 'when locked and the user and editor are not the same' do
+          subject { build(:user, role: 'user', provider: '123') }
+          it { subject.editable_by?(editor).should be false }
+        end
+        context 'when not locked' do
+          subject { build(:user, role: 'user', provider: nil) }
+          it { subject.editable_by?(editor).should be true }
+        end
+        context 'when the user and editor are the same' do
+          it { editor.editable_by?(editor).should be true }
+        end
+      end
+    end
+  end
+
   describe '.jitsuka?' do
     context 'when the user has a rank' do
       subject { build(:user, belt_rank: 'white') }

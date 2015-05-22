@@ -1,0 +1,8 @@
+- if current_user.can_edit?(team)
+  .display-field
+    %button.btn.btn-default.btn-sm{:type => "button", 'data-begin-edit' => true} Edit
+    %button.btn.btn-default.btn-sm{'data-report-item' => true}
+      %span.report Report
+  .edit-field
+    %button.btn.btn-default.btn-sm{:'data-cancel-edit' => true } Cancel
+    %button.btn.btn-primary.btn-sm{:type => 'submit'} Save

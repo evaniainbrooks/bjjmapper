@@ -9,19 +9,10 @@
 .container.page.show-team
   = form_for(team, html: { class: 'form ' + edit_mode_classes }) do |f|
     .row
-      .col-md-10
-        = render partial: 'breadcrumb', locals: { team: team }
-      .col-md-2
-        .display-field
-          %button.btn.btn-default.btn-sm{:type => "button", 'data-begin-edit' => true} Edit
-          %button.btn.btn-default.btn-sm{'data-report-item' => true}
-            %span.report Report
-        .edit-field
-          %button.btn.btn-default.btn-sm{:'data-cancel-edit' => true } Cancel
-          %button.btn.btn-primary.btn-sm{:type => 'submit'} Save
+      .col-md-10= render partial: 'breadcrumb', locals: { team: team }
+      .col-md-2.text-right= render :partial 'edit_controls', locals: { team: team }
     .row
-      .col-md-12
-        = render partial: 'teams/create_message' if created?
+      .col-md-12= render partial: 'teams/create_message' if created?
     .row
       .col-md-2{:style => 'padding-right: 0px;'}
         .display-field

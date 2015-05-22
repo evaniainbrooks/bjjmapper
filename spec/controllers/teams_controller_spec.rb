@@ -79,6 +79,14 @@ describe TeamsController do
     end
     context 'when signed in' do
       let(:session_params) { { user_id: create(:user).to_param } }
+      context 'when the team is not editable' do
+        before { Team.any_instance.stub(:editable_by?).and_return(false) }
+        it 'returns 403 forbidden' do
+          post :update, { id: team.to_param, :format => 'json' }.merge(update_params), session_params
+          team.reload.description.should eq original_description
+          response.status.should eq 403
+        end
+      end
       context 'with json format' do
         it 'updates and returns the location' do
           post :update, { id: team.to_param, :format => 'json' }.merge(update_params), session_params

@@ -34,4 +34,14 @@ describe TeamDecorator do
       it { subject.description.should eq subject.object.description }
     end
   end
+  describe '.name' do
+    context 'when independent' do
+      subject { build(:team, name: TeamDecorator::INDEPENDENT).decorate }
+      it { subject.name.should match TeamDecorator::INDEPENDENT }
+    end
+    context 'with not independent' do
+      subject { build(:team, name: 'xyz').decorate }
+      it { subject.name.should eq 'Team xyz' }
+    end
+  end
 end
