@@ -13,13 +13,11 @@
     calendarView: null,
     reviewsView: null,
     events: {
-      'click .add-instructor': 'addInstructor',
       'click .add-review': 'addReview',
       'change [name="location[team_id]"]': 'changeTeam'
     },
     initialize: function(options) {
       _.bindAll(this,
-        'addInstructor',
         'addReview',
         'changeTeam');
 

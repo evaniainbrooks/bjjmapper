@@ -3,12 +3,16 @@ class RollFindr.Views.LocationInstructorsView extends Backbone.View
   el: $('.instructors')
   template: JST['templates/locations/instructor']
   events: {
+    'click .add-instructor': 'addInstructor',
     'click .remove-instructor': 'removeInstructor'
   }
   initialize: ->
-    _.bindAll(this, 'render', 'removeInstructor')
+    _.bindAll(this, 'render', 'addInstructor', 'removeInstructor')
     this.listenTo(@model.get('instructors'), 'remove sync', @render);
     @model.get('instructors').fetch()
+
+  addInstructor: ->
+    $('.add-instructor-dialog').modal('show')
 
   render: ->
     @$('.items').empty()
