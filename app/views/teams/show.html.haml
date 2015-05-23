@@ -39,7 +39,7 @@
           = f.text_area :description, placeholder: 'Provide a description of the team/association', class: 'form-control', rows: 4
         %p.display-field= team.description
       .col-md-4.instructors
-        %h3 Head Instructors
+        %h3.pull-left Head Instructors
         %a{:name => 'instructor'}
         %button.pull-right.edit-field.btn.btn-small.btn-default.add-instructor{:style => 'margin-top: -5px', :type => 'button'}
           %i.fa.fa-plus-circle
@@ -85,6 +85,8 @@
           &nbsp;&nbsp;
           %button.btn.btn-default.btn-md{:type => 'button', 'data-cancel-edit' => true} Cancel Editing
           %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes
+
+  = render :partial => 'instructors/add_instructor_dialog'
 
 = content_for(:scripts) do
   :coffeescript

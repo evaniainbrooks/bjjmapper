@@ -10,4 +10,7 @@
           %span Add Instructor
       .modal-body
         = render partial: 'instructors/add_instructor_tabs'
-        = render partial: 'instructors/add_instructor'
+        - if defined?(@location)
+          = render partial: 'instructors/location_add_instructor'
+        - else
+          = render partial: 'instructors/team_add_instructor'
