@@ -22,7 +22,7 @@ class InstructorsController < ApplicationController
     )
 
     respond_to do |format|
-      format.html { redirect_to location_path(@location_or_team, edit: 1) }
+      format.html { redirect_to polymorphic_path(@location_or_team, edit: 1) }
       format.json { render :json => {}, :status => :ok }
     end
   end
@@ -36,7 +36,7 @@ class InstructorsController < ApplicationController
     @location_or_team.instructors.delete(@instructor)
 
     respond_to do |format|
-      format.html { redirect_to location_path(@location_or_team, edit: 1) }
+      format.html { redirect_to polymorphic_path(@location_or_team, edit: 1) }
       format.json { render :json => {}, :status => :ok }
     end
   end
