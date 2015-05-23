@@ -10,8 +10,6 @@ class LocationsController < ApplicationController
   helper_method :error?
   helper_method :deleted?
 
-  helper_method :ig_client_id
-
   RECENT_COUNT_DEFAULT = 5
   RECENT_COUNT_MAX = 10
 
@@ -289,7 +287,4 @@ class LocationsController < ApplicationController
     @cities = RollFindr::DirectoryCities
   end
 
-  def ig_client_id
-    ENV['INSTAGRAM_CLIENT_ID']
-  end
 end

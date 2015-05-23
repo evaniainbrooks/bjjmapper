@@ -2,8 +2,11 @@
   Media
   %small 
     Use the Instagram hashtag 
-    %b.text-primary 
-      %a{:title => 'Explore Instagram Hashtag', :href => "https://instagram.com/explore/tags/#{location.ig_hashtag}/"} ##{location.ig_hashtag}
+    %b.text-primary
+      %a.display-field{:title => 'Explore Instagram Hashtag', :href => "https://instagram.com/explore/tags/#{hashtag}/"} ##{hashtag}
+    %span.text-primary
+      - if local_assigns[:f]
+        = f.text_field :ig_hashtag, class: 'edit-field form-control input-md', style: 'width: inherit'
     to display images or video here
 
 %a{:name => 'media'}
@@ -11,11 +14,14 @@
 
 = content_for(:scripts) do
   :javascript
-    var feed = new Instafeed({
-      get: 'tagged',
-      sortBy: 'most-recent',
-      tagName: '#{location.ig_hashtag}',
-      clientId: '#{ig_client_id}'
-    });
+    if (#{hashtag.present?}) {
+      var feed = new Instafeed({
+        get: 'tagged',
+        sortBy: 'most-recent',
+        tagName: '#{hashtag}',
+        clientId: '#{ig_client_id}'
+      });
 
-    feed.run();
+      feed.run();
+    }
+

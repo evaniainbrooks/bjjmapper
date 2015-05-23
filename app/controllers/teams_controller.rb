@@ -88,7 +88,7 @@ class TeamsController < ApplicationController
   end
 
   def create_params
-    p = params.require(:team).permit(:name, :description, :parent_team_id, :primary_color_index, :modifier_id)
+    p = params.require(:team).permit(:name, :description, :parent_team_id, :primary_color_index, :modifier_id, :ig_hashtag)
     p[:modifier_id] = current_user.to_param if signed_in?
     p
   end

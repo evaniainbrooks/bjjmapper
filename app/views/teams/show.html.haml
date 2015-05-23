@@ -50,7 +50,11 @@
       .row
         .col-md-12
           = render partial: 'locations/table', locals: { locations: team.locations, exclude: [:team] }
-
+      - if team.ig_hashtag.present?
+        %hr/
+        .row
+          .col-md-12
+            = render partial: 'locations/show_media', locals: { f: f, hashtag: team.ig_hashtag }
     %hr.edit-field/
     .row.edit-field.edit-control
       .col-md-12
