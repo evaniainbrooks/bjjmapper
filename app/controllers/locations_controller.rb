@@ -252,6 +252,7 @@ class LocationsController < ApplicationController
 
   def create_params
     p = params.require(:location).permit(
+      :ig_hashtag,
       :city,
       :street,
       :postal_code,
