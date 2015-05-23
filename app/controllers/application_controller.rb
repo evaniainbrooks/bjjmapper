@@ -18,6 +18,8 @@ class ApplicationController < ActionController::Base
 
   helper_method :action?
 
+  helper_method :ig_client_id
+
   def homepage
     @map = {
       zoom: Map::ZOOM_CITY,
@@ -178,6 +180,10 @@ class ApplicationController < ActionController::Base
         country: r.country
       }.merge(r.geometry['location'])
     end
+  end
+  
+  def ig_client_id
+    ENV['INSTAGRAM_CLIENT_ID']
   end
 end
 
