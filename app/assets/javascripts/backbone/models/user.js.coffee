@@ -36,13 +36,21 @@ class RollFindr.Collections.UsersCollection extends Backbone.Collection
       this.sort_key = fieldName
       this.sort()
 
-class RollFindr.Collections.InstructorsCollection extends RollFindr.Collections.UsersCollection
+class RollFindr.Collections.LocationInstructorsCollection extends RollFindr.Collections.UsersCollection
   model: RollFindr.Models.Instructor
   location_id: null,
   url: =>
     Routes.location_instructors_path(@location_id)
   initialize: (models, options)->
     _.extend(this, _.pick(options, "location_id"))
+
+class RollFindr.Collections.TeamInstructorsCollection extends RollFindr.Collections.UsersCollection
+  model: RollFindr.Models.Instructor
+  team_id: null,
+  url: =>
+    Routes.team_instructors_path(@team_id)
+  initialize: (models, options)->
+    _.extend(this, _.pick(options, "team_id"))
 
 class RollFindr.Collections.StudentsCollection extends RollFindr.Collections.UsersCollection
   model: RollFindr.Models.Student

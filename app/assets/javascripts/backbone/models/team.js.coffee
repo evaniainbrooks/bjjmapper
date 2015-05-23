@@ -1,4 +1,10 @@
 class RollFindr.Models.Team extends Backbone.Model
+  initialize: ->
+    id = this.get('id')
+    instructors = @get('instructors')
+    instructors = new RollFindr.Collections.TeamInstructorsCollection(instructors, {team_id: id})
+    this.set('instructors', instructors)
+
   paramRoot: 'team'
 
   defaults:

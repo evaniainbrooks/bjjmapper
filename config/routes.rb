@@ -24,11 +24,11 @@ Rails.application.routes.draw do
   end
   resources :teams, :only => [:show, :index, :update, :create, :new] do
     post :remove_image, on: :member
+    resources :users, controller: :instructors, as: :instructors, path: '/instructors', only: [:create, :destroy, :index]
   end
   root 'application#homepage'
 
   get '/omnischedule' => 'events#omnischedule', :as => :omnischedule
-  
   get 'search/:query' => 'application#search'
   get '/bjj-academy-directory(/country/:country(/city/:city))' => 'locations#index', :as => :directory_index
   match '/signin' => 'sessions#new', :as => :signin, :via => [:post, :get]

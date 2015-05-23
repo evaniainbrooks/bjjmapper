@@ -21,9 +21,10 @@ class Team
   field :ig_hashtag, type: String
 
   has_many :locations
-  has_many :users
   belongs_to :parent_team, class_name: 'Team', inverse_of: :child_teams
   has_many :child_teams, class_name: 'Team', inverse_of: :parent_team
+
+  has_and_belongs_to_many :instructors, class_name: 'User', index: true
 
   validates :name, presence: true
 
