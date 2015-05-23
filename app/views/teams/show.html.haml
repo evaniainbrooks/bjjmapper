@@ -10,7 +10,7 @@
   = form_for(team, html: { class: 'form ' + edit_mode_classes }) do |f|
     .row
       .col-md-10= render partial: 'breadcrumb', locals: { team: team }
-      .col-md-2.text-right= render :partial 'edit_controls', locals: { team: team }
+      .col-md-2.text-right= render partial: 'edit_controls', locals: { team: team }
     .row
       .col-md-12= render partial: 'teams/create_message' if created?
     .row
