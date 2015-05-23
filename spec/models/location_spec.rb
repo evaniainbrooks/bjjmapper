@@ -16,6 +16,29 @@ describe Location do
       subject.schedule
     end
   end
+  describe '.ig_hashtag' do
+    context 'without an explicit value' do
+      context 'without a team' do
+        subject { build(:location, title: 'Instagram Test', team: nil, ig_hashtag: nil) }
+        it 'returns the default hashtag' do
+          subject.ig_hashtag.should eq 'bjjmapperinstag'
+        end
+      end
+      context 'with a team' do
+        let(:team) { create(:team) }
+        subject { build(:location, title: 'Instagram Test', team: team, ig_hashtag: nil) }
+        it 'returns the teams hashtag' do
+          subject.ig_hashtag.should eq team.ig_hashtag
+        end
+      end
+    end
+    context 'with an explicit value' do
+      subject { build(:location, title: 'Instagram Test', ig_hashtag: 'explicitvalue') }
+      it 'returns the explicit value' do
+        subject.ig_hashtag.should eq 'explicitvalue'
+      end
+    end
+  end
 
   describe '.as_json' do
     it 'returns the object as json' do

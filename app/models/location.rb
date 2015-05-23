@@ -139,10 +139,14 @@ class Location
   end
 
   def ig_hashtag
-    super || 'bjjmapper' + self.title.parameterize('').first(6)
+    super || self.team.try(:ig_hashtag) || default_ig_hashtag
   end
 
   private
+
+  def default_ig_hashtag
+    'bjjmapper' + self.title.parameterize('').first(6)
+  end
 
   def canonicalize_website
     self.website.gsub!(/^https?:\/\//, '') if self.website_changed?
