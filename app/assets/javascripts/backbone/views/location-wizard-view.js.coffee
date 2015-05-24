@@ -9,6 +9,7 @@ class RollFindr.Views.LocationWizardView extends Backbone.View
       'contactInfoChanged',
       'fullAddressKeyUp',
       'nextClicked',
+      'prevClicked',
       'searchAddress',
       'teamChanged',
       'titleChanged')
@@ -47,15 +48,19 @@ class RollFindr.Views.LocationWizardView extends Backbone.View
     hasContactInfo = @hasContactInfo()
     @setNextDisabled( !hasContactInfo )
     if hasContactInfo
-      @$('.btn-next')
-        .attr('type', 'submit')
-        .addClass('btn-success')
+      setTimeout(
+        =>
+          @$('.btn-next')
+            .attr('type', 'submit')
+            .addClass('btn-success')
+        , 50)
 
   addressValueChanged: ->
     @setNextDisabled( !@hasAddress() )
 
   prevClicked: ->
     @$('.btn-next')
+      .removeAttr('type')
       .attr('type', 'button')
       .removeClass('btn-success')
     @resetActionButtons()
