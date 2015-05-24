@@ -14,11 +14,13 @@
     reviewsView: null,
     events: {
       'click .add-review': 'addReview',
-      'change [name="location[team_id]"]': 'changeTeam'
+      'change [name="location[team_id]"]': 'changeTeam',
+      'click .add-instructor-menu': 'addInstructor'
     },
     initialize: function(options) {
       _.bindAll(this,
         'addReview',
+        'addInstructor',
         'changeTeam');
 
       this.model = new RollFindr.Models.Location(options.model);
