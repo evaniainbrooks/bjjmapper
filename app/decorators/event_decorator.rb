@@ -5,9 +5,6 @@ class EventDecorator < Draper::Decorator
   decorates_finders
   decorates_association :location
 
-  OPEN_MAT_COLOR_ORDINAL = 888
-  GUEST_INSTRUCTOR_COLOR_ORDINAL = 999 
-
   def duration
     s = object.starting.try(:strftime, '%l:%M%p').try(:strip)
     e = object.ending.try(:strftime, '%l:%M%p').try(:strip)
