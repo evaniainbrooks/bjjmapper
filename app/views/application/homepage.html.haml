@@ -31,12 +31,12 @@
       = render partial: 'application/google_adsense_banner'
   .row
     .col-md-5
-      %h3
-        Near You
-        = surround '(', ')' do
-          %a{:href => map_path(center: @map[:center], :ref => 'homepage'), :title => 'Academy Map'} See larger map
+      %h3.pull-left Near You
+      %a.pull-right.btn.btn-default.btn-sm{:href => map_path(center: @map[:center], :ref => 'homepage'), :title => 'Academy Map'}
+        %span.fa.fa-search-plus
+        See larger map
 
-      .map-canvas{:style => 'height: 350px'}
+      .map-canvas.clear{:style => 'height: 350px'}
       .map-list-view
         .location-list
           = render partial: 'locations/map_list', locals: { show_create: false }
@@ -45,11 +45,18 @@
           %span.fa.fa-search-plus
           See larger map
     .col-md-4
-      %h3 New Additions
-      .recent-locations.location-list
+      %h3.pull-left 
+        New Additions
+      = link_to wizard_locations_path(ref: 'hprec'), class: 'pull-right btn btn-success btn-sm' do
+        %i.fa.fa-map-marker
+        Create Academy
+
+      .recent-locations.location-list.clear
     .col-md-3
       %h3 &nbsp;
       .fb-page{"data-colorscheme" => "light", "data-header" => "false", "data-href" => "https://www.facebook.com/BJJMapper", "data-show-border" => "true", "data-show-faces" => "true", "data-show-posts" => "true"}
+      %br/
+      %br/
       %a{:href => 'http://parosbjj.com/camp2015', :title => 'Brazilian Jiu-Jitsu Paradise Camp 2015'}
         %img{:src => '//storage.googleapis.com/bjjmapper/paros2015_banner.png', :alt => 'Paros BJJ Camp Banner'}/
       %br/
