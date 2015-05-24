@@ -1,6 +1,7 @@
 class Admin::LocationsController < Admin::AdminController
-  def meta
-    @location = Location.find(params[:id])
+  def show
+    id_param = params.fetch(:id, '').split('-', 2).first
+    @location = Location.find(id_param)
   end
 
   def index

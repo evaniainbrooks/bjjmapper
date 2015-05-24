@@ -1,8 +1,6 @@
 Rails.application.routes.draw do
   namespace :admin do
-    resources :locations, only: [:index] do
-      get :meta, on: :member
-    end
+    resources :locations, only: [:index, :show] 
   end
 
   resources :users, :only => [:index, :show, :create, :update] do

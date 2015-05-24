@@ -4,3 +4,5 @@
   %li= link_to 'Schedule' , schedule_location_path(location)
   %li= link_to 'Media', '#media'
   %li= link_to 'Reviews', '#reviews'
+  - if current_user.super_user?
+    %li= link_to 'Admin Panel', admin_location_path(location), class: 'text-danger'
