@@ -25,14 +25,6 @@ module ApplicationHelper
     [['None', 0],['Daily', 1],['Every second day', 2], ['Weekly', 3], ['Bi-weekly', 4]]
   end
 
-  def all_instructors
-    User.jitsukas.limit(500).sort_by(&:name)
-  end
-
-  def select_instructors
-    all_instructors.map { |instructor| [instructor.name, instructor.id, {'data-img-src' => image_path(instructor.image)}] }
-  end
-
   def edit_mode_classes
     'editable' + (edit_mode? ? ' edit-mode' : '')
   end

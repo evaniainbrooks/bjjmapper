@@ -130,9 +130,9 @@ describe User do
     let(:pb) { build(:user, stripe_rank: 0, belt_rank: 'purple') }
     let(:bb) { build(:user, stripe_rank: 0, belt_rank: 'black') }
     it 'returns a key that will sort a list of users by descending rank' do
-      wb0.rank_sort_key.should > wb1.rank_sort_key
-      wb1.rank_sort_key.should > pb.rank_sort_key
-      pb.rank_sort_key.should > bb.rank_sort_key
+      User.rank_sort_key(wb0.belt_rank, wb0.stripe_rank).should > User.rank_sort_key(wb1.belt_rank, wb1.stripe_rank)
+      User.rank_sort_key(wb1.belt_rank, wb1.stripe_rank).should > User.rank_sort_key(pb.belt_rank, pb.stripe_rank)
+      User.rank_sort_key(pb.belt_rank, pb.stripe_rank).should > User.rank_sort_key(bb.belt_rank, bb.stripe_rank)
     end
   end
   describe 'before_create callback' do
