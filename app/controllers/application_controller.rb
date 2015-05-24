@@ -20,6 +20,8 @@ class ApplicationController < ActionController::Base
 
   helper_method :ig_client_id
 
+  after_action :log_production_mutative_events
+
   def homepage
     @map = {
       zoom: Map::ZOOM_CITY,
@@ -181,9 +183,21 @@ class ApplicationController < ActionController::Base
       }.merge(r.geometry['location'])
     end
   end
-  
+
   def ig_client_id
     ENV['INSTAGRAM_CLIENT_ID']
+  end
+
+  def log_production_mutative_events
+    return if params.fetch(:action, '').eql?('report') || params.fetch(:action, '').eql?('contact')
+
+    if Rails.env.production? && !request.get? && !current_user.internal?
+      reason = "Mutative event by #{current_user.try(:name)}"
+      description =  "#{request.inspect}"
+      subject_url = "#{request.original_url}"
+
+      ReportMailer.report_email(subject_url, reason, description, current_user).deliver
+    end
   end
 end
 
