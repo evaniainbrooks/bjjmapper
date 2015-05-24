@@ -1,14 +1,18 @@
 .homepage {
   margin-top: -20px;
-  background: url('//storage.googleapis.com/bjjmapper/bg.png') top center no-repeat;
+  
+  .main-logo {
+    width: 100px;
+    height: 100px;
+    margin-top: 17px;
+  }
   .welcome {
     font-size: 300%;
-    margin-top: 40px;
-    margin-bottom: 30px;
     font-family: Verdana, Geneva, sans-serif;
     small {
-      color: blue;
-      text-transform: none;
+      color: #9e4444 !important;
+      text-transform: uppercase;
+      font-size: 40%;
     }
   }
   .search-well, .contribute-well {
@@ -19,8 +23,8 @@
     }
   }
   .search-well {
-    padding-top: 20px;
-    padding-bottom: 40px;
+    padding-top: 30px;
+    padding-bottom: 30px;
     background-color: #44719e !important;
   }
 
@@ -40,16 +44,6 @@
     .content {
       color: #ddd;
       text-align: center;
-    }
-  }
-
-  @media screen and (min-width: 992px) {
-    .contribute-well, .search-well {
-      min-height: 170px;
-    }
-
-    .contribute-well .content {
-      text-align: left;
     }
   }
 }
