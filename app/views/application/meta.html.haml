@@ -1,6 +1,10 @@
+= content_for(:scripts) do
+  = render partial: 'facebook_sdk'
+
 .container.page.meta
+  %div#fb-root
   .row
-    .col-md-9.col-md-offset-1.jumbotron
+    .col-md-8.jumbotron
       %h1
         %img{:src => '//storage.googleapis.com/bjjmapper/logo.png', :alt => 'BJJMapper logo'}/
         About BJJMapper
@@ -16,7 +20,8 @@
         %li Just how many Gracie Barra locations are there in the world?
         %li How many tournaments is the IBJJF hosting in Canada this year?
       %p We hope BJJMapper can help you answer these questions, and more.
-
+    .col-md-3
+      .fb-page{"data-colorscheme" => "light", "data-header" => "false", "data-href" => "https://www.facebook.com/BJJMapper", "data-show-border" => "true", "data-show-faces" => "true", "data-show-posts" => "true"}
   .row
     .col-md-11.col-md-offset-1
       %h2
@@ -30,9 +35,10 @@
     .col-md-7.col-md-offset-1
       = render partial: 'contact_form'
     .col-md-2
-      %img{:src => image_path('evan-150.png')}/
-      %p.small
-        %strong I created BJJMapper because I love BJJ.
-        Please reach out to me if you have any questions or comments. I'd love to hear your thoughts.
-        %br/
-        %small.clear= "-Evan"
+      %a.text-info{:href => users_path('547415d4b3e83fea520000d8'), :alt => "Evan's profile"}
+        %img{:src => image_path('evan-150.png')}/
+        %p.small
+          %strong I created BJJMapper because I love BJJ.
+          Please reach out to me if you have any questions or comments. I'd love to hear your thoughts.
+          %br/
+          %small.clear= "-Evan"
