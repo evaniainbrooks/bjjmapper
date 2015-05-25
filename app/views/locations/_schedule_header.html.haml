@@ -9,6 +9,7 @@
 .row
   .col-md-12
     = render partial: 'schedule_event_deleted_message' if deleted?
+    = render partial: 'schedule_timezone_missing_message' if location.timezone.blank?
 
 .row
   .col-md-2
@@ -18,3 +19,5 @@
       Schedule for
       = link_to location.title, location_path(location, ref: 'loc_sched_title')
     = location.address
+    = surround '(', ')' do
+      = link_to 'view on map', map_path({center: location.coordinates, ref: 'schedule_adr'})

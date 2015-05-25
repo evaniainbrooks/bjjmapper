@@ -1,6 +1,6 @@
 #= require backbone/views/create-event-view
 
-class RollFindr.Views.CalendarView extends Backbone.View
+class RollFindr.Views.LocationCalendarView extends Backbone.View
   el: $('.scheduler')
   createEventView: null
   eventTemplate: JST['templates/event']

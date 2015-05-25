@@ -30,6 +30,7 @@
         = render partial: 'create_message' if created?
         = render partial: 'edit_success_message' if edit_success?
         = render partial: 'review_message' if reviewed?
+        = render partial: 'schedule_timezone_missing_message' if location.timezone.blank?
     .row
       .col-md-11.col-md-offset-1
         = render partial: 'subnav', :locals => { location: location }

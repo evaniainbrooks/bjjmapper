@@ -1,5 +1,5 @@
 = content_for(:title) do
-  = "Schedule for #{location.title} - class times, seminars, tournaments and special events"
+  = "Schedule for #{location.title} in #{location.city}, #{location.country} - class times, seminars, tournaments and special events"
 
 .container.show-location.page
   = form_for(location, html: { class: 'form ' + edit_mode_classes }) do |f|

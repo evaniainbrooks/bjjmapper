@@ -1,0 +1,9 @@
+.alert.alert-danger.buffer-top-sm{:role => 'alert'}
+  %button.close{"data-dismiss" => "alert", :type => "button"} 
+    %span{"aria-hidden" => "true"} &times;
+    %span.sr-only Close
+  %strong The timezone is not set! 
+  %span 
+    The schedule will not function correctly without a timezone. Please
+    %a{:'data-report-item' => true, :href => '#'} report this
+    and we will investigate.
