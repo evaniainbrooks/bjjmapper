@@ -8,7 +8,8 @@ class RollFindr.Views.EventViewBase extends Backbone.View
     recurrence = 0 unless recurrence?
 
     $('[name="event[event_recurrence]"]').val(recurrence)
-    $('[name="event[weekly_recurrence_days]"]').removeAttr('checked')
+    $('[name="event[weekly_recurrence_days][]"]').removeAttr('checked')
+    $('[name="event[weekly_recurrence_days][]"]').parent().removeClass('active')
     $('.week-recurrence').hide() unless recurrence > 2
 
   initializePickers: (start, end)->

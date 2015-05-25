@@ -42,7 +42,7 @@ class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
     RollFindr.Views.EventViewBase.prototype.initializePickers.call(this)
 
   showModalDialog: ->
-    @setUiDefaults()
+    RollFindr.Views.EventViewBase.prototype.setUiDefaults.call(this)
     @$el.modal('show')
 
   render: (start, end)->
