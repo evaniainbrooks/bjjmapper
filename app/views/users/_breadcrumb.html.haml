@@ -8,4 +8,8 @@
       %a{href: user_path(user)}= user.name
     %li.active= sub
   - else
-    %li.active= user.name 
+    %li.active
+      = user.name 
+      - if own_profile?
+        = surround '(', ')' do
+          %span.text-success This is your profile

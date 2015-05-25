@@ -1,13 +1,14 @@
-- user_outranks_current_user = User.rank_sort_key(user.belt_rank, user.stripe_rank) <= User.rank_sort_key(current_user.belt_rank, current_user.stripe_rank)
+- person_outranks_current_user = User.rank_sort_key(user.belt_rank, user.stripe_rank) <= User.rank_sort_key(current_user.belt_rank, current_user.stripe_rank)
+- current_user_outranks_person = User.rank_sort_key(user.belt_rank, user.stripe_rank) >= User.rank_sort_key(current_user.belt_rank, current_user.stripe_rank)
 
-- can_set_instructor = current_user.can_edit?(current_user) && user_outranks_current_user
-- can_set_student = current_user.can_edit?(user) && !user_outranks_current_user
+- can_set_instructor = !own_profile? && current_user.can_edit?(current_user) && person_outranks_current_user
+- can_set_student = !own_profile? && current_user.can_edit?(user) && current_user_outranks_person
 
 %h3 Actions
 - unless can_set_instructor || can_set_student
   %i.text-muted You cannot perform any actions on this person
 
-- if can_set_instructor 
+- if can_set_instructor
   - if current_user.lineal_parent_id.eql?(user.id)
     = link_to '#', :'data-user-id' => user.id, :'data-clear-instructor' => true, :class => 'btn btn-success btn-lg' do
       %span.fa.fa-check-square-o

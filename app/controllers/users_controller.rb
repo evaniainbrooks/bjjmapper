@@ -5,6 +5,7 @@ class UsersController < ApplicationController
   decorates_assigned :user
 
   helper_method :welcome?
+  helper_method :own_profile?
 
   REVIEW_COUNT_DEFAULT = 5
   REVIEW_COUNT_MAX = 50
@@ -88,5 +89,11 @@ class UsersController < ApplicationController
   def set_user
     @user = User.find(params[:id])
     render status: :not_found and return unless @user.present?
+  end
+
+  def own_profile?
+    return false unless defined?(@user)
+
+    return @user.id.eql?(current_user.id)
   end
 end
