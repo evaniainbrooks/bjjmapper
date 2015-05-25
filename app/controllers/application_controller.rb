@@ -192,7 +192,7 @@ class ApplicationController < ActionController::Base
     return if params.fetch(:action, '').eql?('report') || params.fetch(:action, '').eql?('contact')
 
     if Rails.env.production? && !request.get? && !current_user.internal?
-      reason = "Mutative event by #{current_user.try(:name)}"
+      reason = "Mutative #{request.params[:controller]}/#{request.params[:action]} by #{current_user.try(:name)}"
       description =  "#{request.inspect}"
       subject_url = "#{request.original_url}"
 
