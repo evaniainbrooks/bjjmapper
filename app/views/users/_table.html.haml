@@ -28,7 +28,7 @@
           = f.text_field :birth_place, placeholder: 'Place of birth', class: 'form-control edit-field'
     %tr
       %td.text-muted Lineage
-      %td= render partial: 'users/lineage', locals: { :f => f, :user => user }
+      %td= render partial: 'users/lineage', locals: { :user => user }
     - if user.description?
       %tr
         %td.text-muted Biography

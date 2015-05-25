@@ -1,5 +1,6 @@
-.edit-field.form-group
-  = f.select :lineal_parent, grouped_options_for_select(all_instructors_select_groups, user.lineal_parent.try(:id)), {include_blank: true}, class: 'form-control'
+- if local_assigns[:f]
+  .edit-field.form-group
+    = f.select :lineal_parent_id, grouped_options_for_select(all_instructors_select_groups, user.lineal_parent.try(:id)), {include_blank: true}, class: 'form-control'
 - if user.lineal_parent.present?
   %ul.display-field.list-unstyled
     - user.full_lineage.each_with_index do |parent,i|

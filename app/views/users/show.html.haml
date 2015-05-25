@@ -9,9 +9,11 @@
     .row
       .col-md-3
         %img.profile.center-block{:alt => "#{user.name} profile image", :src => user.image}
-      .col-md-7
+      .col-md-6
         = render partial: 'users/table', locals: { :f => f, :user => user }
         = render partial: 'users/edit_table', locals: { :f => f, :user => user, :show_biography => true }
+      .col-md-3
+        = render partial: 'actions'
     %hr.clear/
     .row
       - if user.locations.present?

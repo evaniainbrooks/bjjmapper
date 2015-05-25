@@ -69,7 +69,7 @@ class User
 
   def editable_by? user
     return true if user.super_user?
-    return false if self.anonymous?
+    return false if user.anonymous?
 
     !self.locked? || user.id.eql?(self.id)
   end
@@ -120,6 +120,7 @@ class User
     while u.present?
       lineage << u
       u = u.lineal_parent
+      break if lineage.count > 10
     end
     lineage
   end
