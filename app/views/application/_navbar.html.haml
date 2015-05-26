@@ -20,8 +20,10 @@
       %ul.nav.navbar-nav
         %li{:class => action?(:map) ? 'active' : nil}
           %a{href: map_path(ref: 'navbar'), title: 'Brazilian Jiu-Jitsu Academy Map'} Map
-        %li{:class => action?(:index) ? 'active' : nil}
-          %a{href: directory_index_path(ref: 'navbar'), title: 'Brazilian Jiu-Jitsu Academy Directory'} Directory
+        %li{:class => controller?(:locations) ? 'active' : nil}
+          %a{href: directory_index_path(ref: 'navbar'), title: 'Brazilian Jiu-Jitsu Academy Directory'} Academies
+        %li{:class => controller?(:users) ? 'active' : nil}
+          %a{href: users_path(ref: 'navbar'), title: 'Brazilian Jiu-Jitsu Practitioners Directory'} People
         %li{:class => action?(:meta) ? 'active' : nil}
           %a{:href => meta_path(ref: 'navbar'), title: 'Learn about BJJMapper'} Meta
       - if action?(:map)

@@ -1,0 +1,16 @@
+- new_instructor = User.new.decorate
+= form_for(new_instructor, html: { class: 'form editable edit-mode' }) do |f|
+  .container-fluid
+    .row
+      .col-md-4
+        %div.text-center
+          %img.center-block{:style => 'max-width: 150px', :alt => "default profile image", :src => image_path(UserDecorator::DEFAULT_IMAGE)}
+          %button.image-caption.center-block.btn.btn-primary.btn-small{:type => 'button'} Upload Image
+      .col-md-8
+        = render partial: 'users/edit_table', :locals => { :f => f, :user => new_instructor, :show_biography => false }
+  .modal-footer
+    %button.btn.btn-default{'data-dismiss' => 'modal'}
+      Cancel
+    %button.btn.btn-primary{:type => 'submit'}
+      Create Person
+

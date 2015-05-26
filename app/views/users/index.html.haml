@@ -1,7 +1,34 @@
-.container.page
-  - ['white', 'blue', 'purple', 'brown', 'black'].each do |belt|
-    %h3= "#{belt.capitalize} Belt"
-    - if @users.key?(belt)
-      %ul
-        - @users[belt].each do |user|
-          %li= link_to(user.name, user)
+.container.page.show-users
+  .row
+    .col-md-12
+      %h1
+        Brazilian Jiu-Jitsu People Directory
+  .row
+    .col-md-10
+      %ol.breadcrumb
+        %li
+          %a{href: root_path} Home
+        %li.active People
+    .col-md-2
+      %a.btn.btn-success.create-user{:href => '#', :title => "Add a new person to the director"}
+        %span.fa.fa-user
+        Create Person
+  .row
+    .col-md-1
+    - ['white', 'blue', 'purple', 'brown', 'black'].each do |belt|
+      .col-md-2
+        = render partial: 'users/belt', locals: { user: User.new(:belt_rank => belt).decorate }
+        - if @users.key?(belt)
+          %ul.list-unstyled
+            - @users[belt].each do |user|
+              %li= link_to(user.name, user)
+  .row
+    .col-md-8.col-md-offset-2.hidden-sm.hidden-xs
+      %br/
+      = render partial: 'application/google_adsense_banner'
+  
+  = render partial: 'instructors/add_instructor_dialog'
+
+= content_for(:scripts) do
+  :coffeescript
+    createPerson = new RollFindr.Views.UsersIndexView()

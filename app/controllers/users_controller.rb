@@ -4,6 +4,7 @@ class UsersController < ApplicationController
 
   decorates_assigned :user
 
+  helper_method :created?
   helper_method :welcome?
   helper_method :own_profile?
 
@@ -11,7 +12,7 @@ class UsersController < ApplicationController
   REVIEW_COUNT_MAX = 50
 
   def index
-    @users = User.where(:belt_rank.in => ['white', 'blue', 'purple', 'brown', 'black']).all.group_by(&:belt_rank)
+    @users = User.where(:role.ne => 'anonymous').where(:belt_rank.in => ['white', 'blue', 'purple', 'brown', 'black']).all.group_by(&:belt_rank)
 
     tracker.track('showUsersIndex')
 
@@ -53,7 +54,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.json { render json: @user }
-      format.html { redirect_to user_path(@user, edit: 1) }
+      format.html { redirect_to user_path(@user, edit: 1, create: 1) }
     end
   end
 
@@ -82,8 +83,14 @@ class UsersController < ApplicationController
     params.fetch(:welcome, 0).to_i.eql?(1)
   end
 
+  def created?
+    return params.fetch(:create, 0).to_i.eql?(1)
+  end
+
   def create_params
-    params.require(:user).permit(:name, :image, :email, :belt_rank, :stripe_rank, :birth_day, :birth_month, :birth_year, :lineal_parent_id, :birth_place, :description)
+    p = params.require(:user).permit(:name, :image, :email, :belt_rank, :stripe_rank, :birth_day, :birth_month, :birth_year, :lineal_parent_id, :birth_place, :description)
+    p[:modifier_id] = current_user.to_param if signed_in?
+    p
   end
 
   def set_user

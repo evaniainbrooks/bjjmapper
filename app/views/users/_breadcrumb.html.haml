@@ -2,12 +2,12 @@
   %li
     %a{href: root_path} Home
   %li
-    %a{href: '#'} People
+    %a{href: users_path(ref: 'breadcrumb')} People
   - if local_assigns.key?(:sub)
     %li
       %a{href: user_path(user)}= user.name
     %li.active= sub
-  - else
+  - elsif local_assigns.key?(:user)
     %li.active
       = user.name 
       - if own_profile?

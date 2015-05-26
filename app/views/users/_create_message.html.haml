@@ -1,0 +1,7 @@
+.alert.alert-success{:role => 'alert'}
+  %button.close{"data-dismiss" => "alert", :type => "button"} 
+    %span{"aria-hidden" => "true"} &times;
+    %span.sr-only Close
+  %strong Thanks for contributing to BJJMapper!
+  %span This is the new person you just created. Please take a moment to verify the existing information and fill in any missing fields. Have questions? Something broken? Mail us at 
+  = mail_to 'info@bjjmapper.com'

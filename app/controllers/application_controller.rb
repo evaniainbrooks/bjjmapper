@@ -17,6 +17,7 @@ class ApplicationController < ActionController::Base
   helper_method :correct_user?
 
   helper_method :action?
+  helper_method :controller?
 
   helper_method :ig_client_id
 
@@ -136,6 +137,10 @@ class ApplicationController < ActionController::Base
 
   def action?(action)
     params.fetch(:action, :unknown).to_sym.eql?(action)
+  end
+  
+  def controller?(controller)
+    params.fetch(:controller, :unknown).to_sym.eql?(controller)
   end
 
   def current_user

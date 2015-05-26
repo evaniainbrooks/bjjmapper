@@ -7,10 +7,17 @@
           %span.sr-only Close
         %h4.modal-title
           %i.fa.fa-user
-          %span Add Instructor
+          - if defined?(@user) || defined?(@team)
+            %span Add Instructor
+          - else
+            %span Create Person
       .modal-body
-        = render partial: 'instructors/add_instructor_tabs'
+        - if defined?(@location) || defined?(@team)
+          = render partial: 'instructors/add_instructor_tabs'
         - if defined?(@location)
           = render partial: 'instructors/location_add_instructor'
-        - else
+        - elsif defined?(@team)
           = render partial: 'instructors/team_add_instructor'
+        - else
+          = render partial: 'instructors/add_instructor'
+
