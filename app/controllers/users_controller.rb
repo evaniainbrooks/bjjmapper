@@ -12,7 +12,7 @@ class UsersController < ApplicationController
   REVIEW_COUNT_MAX = 50
 
   def index
-    @users = User.where(:role.ne => 'anonymous').where(:belt_rank.in => ['white', 'blue', 'purple', 'brown', 'black']).all.group_by(&:belt_rank)
+    @users = User.where(:role.ne => 'anonymous').where(:belt_rank.in => ['white', 'blue', 'purple', 'brown', 'black']).asc(:name).all.group_by(&:belt_rank)
 
     tracker.track('showUsersIndex')
 
