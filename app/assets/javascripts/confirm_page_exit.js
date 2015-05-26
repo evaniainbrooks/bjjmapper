@@ -1,4 +1,4 @@
-+function() {
++function(jQuery) {
   function confirmPageExitHandler(e) {
       // If we haven't been passed the event get the window.event
       e = e || window.event;
@@ -14,12 +14,18 @@
   };
 
   window.enableConfirmPageExit = function() {
-    window.onbeforeunload = confirmPageExitHandler; 
+    window.onbeforeunload = confirmPageExitHandler;
   };
 
   window.disableConfirmPageExit = function() {
     window.onbeforeunload = null;
   };
 
-}();
+  $(document).ready(function() {
+    $('button[type="submit"]').click(function(e) {
+      disableConfirmPageExit();
+    });
+  });
+
+}($);
 
