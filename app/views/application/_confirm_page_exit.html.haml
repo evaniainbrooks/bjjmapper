@@ -1,0 +1,13 @@
+:javascript
+  RollFindr.GlobalEvents.on('editing', function(editing) {
+    if (editing) {
+      enableConfirmPageExit();
+    } else {
+      disableConfirmPageExit();
+    }
+  });
+
+  if (#{edit_mode?}) {
+    enableConfirmPageExit();
+  }
+

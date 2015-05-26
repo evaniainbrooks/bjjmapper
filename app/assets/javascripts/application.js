@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require confirm_page_exit
 //= require mixpanel
 //= require mixpanel_init
 //= require mixpanel_track_links
