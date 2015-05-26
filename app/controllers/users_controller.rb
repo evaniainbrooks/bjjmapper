@@ -12,7 +12,7 @@ class UsersController < ApplicationController
   REVIEW_COUNT_MAX = 50
 
   def index
-    @users = User.where(:role.ne => 'anonymous').where(:belt_rank.in => ['white', 'blue', 'purple', 'brown', 'black']).asc(:name).all.group_by(&:belt_rank)
+    @users = User.jitsukas.where(:role.ne => 'anonymous').asc(:name).all.group_by(&:belt_rank)
 
     tracker.track('showUsersIndex')
 
@@ -88,7 +88,7 @@ class UsersController < ApplicationController
   end
 
   def create_params
-    p = params.require(:user).permit(:name, :image, :email, :belt_rank, :stripe_rank, :birth_day, :birth_month, :birth_year, :lineal_parent_id, :birth_place, :description)
+    p = params.require(:user).permit(:name, :image, :email, :belt_rank, :stripe_rank, :birth_day, :birth_month, :birth_year, :lineal_parent_id, :birth_place, :description, :female)
     p[:modifier_id] = current_user.to_param if signed_in?
     p
   end

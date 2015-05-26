@@ -37,6 +37,7 @@ class User
   field :birth_year, type: Integer
   field :birth_place, type: String
   field :internal, type: Boolean
+  field :female, type: Boolean
 
   validates :name, presence: true
 

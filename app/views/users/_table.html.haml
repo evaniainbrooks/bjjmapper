@@ -1,18 +1,19 @@
 %table.table.table-user-information.display-field
   %tbody
     %tr
-      %td.text-muted Name
+      %td.text-muted.text-right Name
       %td
-        %h1.display-field= user.name
+        %h1.display-field
+          = user.name
     %tr
-      %td.text-muted Rank
+      %td.text-muted.text-right Rank
       %td
         .display-field
           = render partial: 'users/belt', locals: { user: user }
     
     - if user.birthdate.present? || user.birth_place.present?
       %tr
-        %td.text-muted Born
+        %td.text-muted.text-right Born
         %td
           - if user.birthdate.present?
             .display-field
@@ -27,9 +28,17 @@
             &nbsp;
           = f.text_field :birth_place, placeholder: 'Place of birth', class: 'form-control edit-field'
     %tr
-      %td.text-muted Lineage
+      %td.text-muted.text-right Lineage
       %td= render partial: 'users/lineage', locals: { :user => user }
+    - unless user.female.nil?
+      %tr
+        %td.text-muted.text-right Gender
+        %td
+          - if user.female?
+            Female
+          - else
+            Male
     - if user.description?
       %tr
-        %td.text-muted Biography
+        %td.text-muted.text-right Biography
         %td= simple_format(user.description)

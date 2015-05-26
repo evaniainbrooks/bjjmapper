@@ -14,14 +14,35 @@
         %span.fa.fa-user
         Create Person
   .row
-    .col-md-1
-    - ['white', 'blue', 'purple', 'brown', 'black'].each do |belt|
-      .col-md-2
+    .col-md-12
+      %div.pull-left{:style => 'width: 60px'}
+        %span.text-info.small Legend
+      %div.pull-left{:style => 'width: 80px'}
+        %span.fa.fa-female
+        %span.text-muted Female
+      %div.pull-left{:style => 'width: 90px'}
+        %span.fa.fa-map-marker
+        %span.text-muted Instructor
+      %div.pull-left{:style => 'width: 80px'}
+        %span.fa.fa-star
+        %span.text-muted Reviewer
+      %br/
+      %br.clear/
+  .row
+    - ['blue', 'purple', 'brown', 'black'].each do |belt|
+      .col-md-3
         = render partial: 'users/belt', locals: { user: User.new(:belt_rank => belt).decorate }
         - if @users.key?(belt)
           %ul.list-unstyled
             - @users[belt].each do |user|
-              %li= link_to(user.name, user)
+              %li
+                = link_to(user.name, user)
+                - if user.female?
+                  %span.fa.fa-female
+                - if user.location_ids.count > 0
+                  %span.fa.fa-map-marker
+                - if user.review_ids.count > 0
+                  %span.fa.fa-star
   .row
     .col-md-8.col-md-offset-2.hidden-sm.hidden-xs
       %br/
