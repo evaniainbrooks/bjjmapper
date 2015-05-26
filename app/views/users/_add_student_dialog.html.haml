@@ -27,7 +27,7 @@
                     %img.center-block{:style => 'max-width: 150px', :alt => "default profile image", :src => image_path(UserDecorator::DEFAULT_IMAGE)}
                     %button.image-caption.center-block.btn.btn-primary.btn-small{:type => 'button'} Upload Image
                 .col-md-8
-                  = render partial: 'users/table', :locals => { :force_lineal_parent => instructor, :f => f, :user => new_student }
+                  = render partial: 'users/edit_table', :locals => { :force_lineal_parent => instructor, :f => f, :user => new_student }
             .modal-footer
               %button.btn.btn-default{'data-dismiss' => 'modal'}
                 Cancel
