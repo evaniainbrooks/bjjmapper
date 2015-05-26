@@ -48,7 +48,7 @@ describe UsersController do
         anonymous_user
         expect do
           post :create, create_params.merge({:format => 'html'}), session_params
-          response.should redirect_to(user_path(assigns(:user), edit: 1))
+          response.should redirect_to(user_path(assigns(:user), edit: 1, create: 1))
         end.to change { User.count }.by(1)
       end
     end
