@@ -32,4 +32,4 @@
     - if user.description?
       %tr
         %td.text-muted Biography
-        %td= user.description
+        %td= simple_format(user.description)
