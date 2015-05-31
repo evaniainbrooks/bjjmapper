@@ -14,7 +14,10 @@
         = render partial: 'users/table', locals: { :f => f, :user => user }
         = render partial: 'users/edit_table', locals: { :f => f, :user => user, :show_biography => true }
       .col-md-3
-        = render partial: 'actions'
+        - if own_profile?
+          = render partial: 'profile_actions', locals: { :f => f }
+        - else
+          = render partial: 'actions'
     %hr.clear/
     .row
       - if user.locations.present?
@@ -23,11 +26,16 @@
           %ul.list-unstyled
             - user.locations.each_with_index do |location, i|
               %li= render partial: 'locations/card', object: location, as: 'location', locals: { location_counter: i }
-      .col-md-4.reviews
-        %h3 Reviews
-        .items.clear
-        .empty-message
-          %i.text-muted This person has not written any reviews
+      - if own_profile? || user.flag_display_reviews?
+        .col-md-4.reviews
+          %h3
+            Reviews
+            - unless user.flag_display_reviews?
+              %small
+                %i Not displayed publicly
+          .items.clear
+          .empty-message
+            %i.text-muted This person has not written any reviews
     %hr/
     .row
       .col-md-12.students

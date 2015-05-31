@@ -17,10 +17,16 @@ describe UsersController do
   end
   describe 'GET index' do
     context 'with html format' do
-      before { create(:user, belt_rank: 'black') }
+      let(:invisible_bb) { create(:user, flag_display_directory: false, belt_rank: 'black') }
+      let(:bb) { create(:user, belt_rank: 'black') }
+      let(:pb) { create(:user, belt_rank: 'purple') }
+      before { invisible_bb; bb; pb }
       it 'returns the grouped users' do
         get :index, { format: 'html' }
         response.should be_ok
+        assigns[:users]['black'].should include(bb)
+        assigns[:users]['black'].should_not include(invisible_bb)
+        assigns[:users]['purple'].should include(pb)
       end
     end
   end

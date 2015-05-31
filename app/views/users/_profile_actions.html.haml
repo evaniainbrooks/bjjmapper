@@ -1,0 +1,14 @@
+.edit-field
+  %h3 Profile Options
+  %label.form-control
+    = f.check_box :flag_display_email
+    Display email address
+  %label.form-control
+    = f.check_box :flag_display_directory
+    Display profile in directory
+  %label.form-control
+    = f.check_box :flag_display_reviews
+    Display reviews on profile
+  %label.form-control
+    = f.check_box :flag_locked
+    Prevent other users from editing

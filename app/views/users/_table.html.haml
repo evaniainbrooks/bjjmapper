@@ -5,6 +5,15 @@
       %td
         %h1.display-field
           = user.name
+    - if own_profile? || user.flag_display_email?
+      %tr
+        %td.text-muted.text-right Email
+        %td
+          .display-field
+            %span= mail_to(user.email)
+            - unless user.flag_display_email?
+              = surround '(', ')' do
+                %i.text-muted Not displayed publicly
     %tr
       %td.text-muted.text-right Rank
       %td

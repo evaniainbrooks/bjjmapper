@@ -39,6 +39,11 @@ class User
   field :internal, type: Boolean
   field :female, type: Boolean
 
+  field :flag_display_email, type: Boolean, default: false
+  field :flag_display_directory, type: Boolean, default: true
+  field :flag_display_reviews, type: Boolean, default: true
+  field :flag_locked, type: Boolean, default: -> { self.provider.present? }
+
   validates :name, presence: true
 
   geocoded_by :ip_address
@@ -72,11 +77,7 @@ class User
     return true if user.super_user?
     return false if user.anonymous?
 
-    !self.locked? || user.id.eql?(self.id)
-  end
-
-  def locked?
-    self.provider.present?
+    !self.flag_locked? || user.id.eql?(self.id)
   end
 
   def jitsuka?
@@ -142,7 +143,7 @@ class User
   end
 
   def as_json(args={})
-    super(args.merge(except: [:internal, :description_src, :oauth_token, :oauth_expires_at, :modifier_id, :lineal_parent_id, :ip_address, :coordinates, :uid, :provider, :email, :_id])).merge({
+    result = super(args.merge(except: [:internal, :description_src, :oauth_token, :oauth_expires_at, :modifier_id, :lineal_parent_id, :ip_address, :coordinates, :uid, :provider, :email, :_id])).merge({
       :id => self.to_param.to_s,
       :modifier_id => self.modifier_id.to_s,
       :lineal_parent_id => self.lineal_parent_id.to_s,
@@ -151,6 +152,9 @@ class User
         { :id => u.to_param, :name => u.name }
       end
     })
+
+    result[:email] = self.email if self.flag_display_email?
+    result
   end
 
   private
