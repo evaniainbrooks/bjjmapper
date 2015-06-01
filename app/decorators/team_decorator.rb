@@ -46,6 +46,10 @@ class TeamDecorator < Draper::Decorator
     object.created_at.present? ? "created #{h.time_ago_in_words(object.created_at)} ago" : nil
   end
 
+  def description?
+    object.description.present?
+  end
+
   def description
     if object.description.present?
       object.description
