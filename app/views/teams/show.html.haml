@@ -1,9 +1,9 @@
 = content_for(:title) do
   = "#{team.name} - Brazilian Jiu-Jitsu Academy Directory"
 = content_for(:head) do
-  %meta{:name => 'description', :content => team.description? ? truncate(team.description, 155) : "Brazilian Jiu-Jitsu Academy Directory"}/
+  %meta{:name => 'description', :content => team.description? ? truncate(team.description, length: 155) : "Brazilian Jiu-Jitsu Academy Directory"}/
   %meta{:property => 'og:title', :content => team.name}/
-  %meta{:property => 'og:description', :content => team.description? ? truncate(team.description, 155) : "Brazilian Jiu-Jitsu Academy Directory"}/
+  %meta{:property => 'og:description', :content => team.description? ? truncate(team.description, length: 155) : "Brazilian Jiu-Jitsu Academy Directory"}/
   %meta{:property => 'og:image', :content => "#{team.image}"}/
 
 .container.page.show-team
