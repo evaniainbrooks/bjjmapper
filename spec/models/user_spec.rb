@@ -68,21 +68,28 @@ describe User do
       it { subject.editable_by?(editor).should be true }
     end
     context 'when the editor is not a super user' do
-      let(:editor) { build(:user, role: 'user') }
       context 'when anonymous' do
-        subject { build(:user, role: 'anonymous') }
+        subject { build(:user, role: 'user') }
+        let(:editor) { build(:user, role: 'anonymous') }
         it { subject.editable_by?(editor).should be false }
       end
       context 'when not anonymous' do
         context 'when locked and the user and editor are not the same' do
-          subject { build(:user, role: 'user', provider: '123') }
+          subject { build(:user, role: 'user', flag_locked: true, provider: '123') }
+          let(:editor) { build(:user, role: 'user') }
+          before do
+            subject.stub(:id).and_return(999)
+            editor.stub(:id).and_return(1)
+          end
           it { subject.editable_by?(editor).should be false }
         end
         context 'when not locked' do
           subject { build(:user, role: 'user', provider: nil) }
+          let(:editor) { build(:user, role: 'user') }
           it { subject.editable_by?(editor).should be true }
         end
         context 'when the user and editor are the same' do
+          let(:editor) { build(:user, role: 'user') }
           it { editor.editable_by?(editor).should be true }
         end
       end
