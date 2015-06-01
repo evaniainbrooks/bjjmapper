@@ -34,22 +34,32 @@
 .belt-white {
   color: black;
   background-color: white;
+  background-image: linear-gradient(transparent 90%, rgba(180,180,180,.5) 50%);
+  background-size: 100% 6px;
 }
 
 .belt-blue {
   background-color: #0000CC;
+  background-image: linear-gradient(transparent 90%, rgba(100,100,180,.5) 50%);
+  background-size: 100% 6px;
 }
 
 .belt-purple {
   background-color: #660066;
+  background-image: linear-gradient(transparent 90%, rgba(180,100,180,.5) 50%);
+  background-size: 100% 6px;
 }
 
 .belt-brown {
   background-color: #663300;
+  background-image: linear-gradient(transparent 90%, rgba(180,50,100,.5) 50%);
+  background-size: 100% 6px;
 }
 
 .belt-black {
   background-color: black;
+  background-image: linear-gradient(transparent 90%, rgba(90,90,90,.5) 50%);
+  background-size: 100% 6px;
   color: white;
   .grade {
     background-color: #CC0000;
