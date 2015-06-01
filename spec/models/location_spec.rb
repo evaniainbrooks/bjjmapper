@@ -9,6 +9,43 @@ describe Location do
     Location.new.decorate.should be_decorated
   end
 
+  describe '.editable_by?' do
+    context 'when the editor is a super user' do
+      let(:editor) { build(:user, role: 'super_user') }
+      subject { build(:location) }
+      it { subject.editable_by?(editor).should be true }
+    end
+    context 'when editor not superuser' do
+      context 'when anonymous' do
+        subject { build(:location) }
+        let(:editor) { build(:user, role: 'anonymous') }
+        it { subject.editable_by?(editor).should be false }
+      end
+      context 'when not anonymous' do
+        context 'when claimed and the editor is not the owner' do
+          subject { build(:location) }
+          before { subject.stub(:owner).and_return(double(id: 1234)) }
+          let(:editor) { build(:user, role: 'user') }
+          it { subject.editable_by?(editor).should be false }
+        end
+        context 'when not claimed' do
+          subject { build(:location, owner: nil) }
+          let(:editor) { build(:user, role: 'user') }
+          it { subject.editable_by?(editor).should be true }
+        end
+        context 'when claimed and the editor is the owner' do
+          subject { build(:location) }
+          let(:editor) { build(:user, role: 'user') }
+          before do
+            subject.stub(:owner).and_return(double(id: 1234))
+            editor.stub(:id).and_return(1234)
+          end
+          it { subject.editable_by?(editor).should be true }
+        end
+      end
+    end
+  end
+
   describe '.schedule' do
     subject { create(:location) }
     before { LocationSchedule.should_receive(:new).with(subject.id) }

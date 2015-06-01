@@ -10,6 +10,9 @@ class Location
 
   extend MongoidSearchExt::Search
 
+  TYPE_ACADEMY = 0
+  TYPE_EVENT_VENUE = 1
+
   track_history   :on => :all,
                   :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier
                   :modifier_field_inverse_of => :nil, # adds an ":inverse_of" option to the "belongs_to :modifier" relation, default is not set
@@ -38,7 +41,7 @@ class Location
   before_save :canonicalize_facebook
   before_save :populate_timezone
 
-  field :coordinates, :type => Array
+  field :coordinates, type: Array
   field :street
   field :city
   field :state
@@ -56,10 +59,14 @@ class Location
   field :instagram
   field :twitter
   field :ig_hashtag
+  field :loctype, type: Integer, default: TYPE_ACADEMY
+
+  field :flag_closed, type: Boolean, default: false
 
   validates :title, presence: true
 
   belongs_to :team, index: true
+  belongs_to :owner, class_name: 'User', index: true
   has_and_belongs_to_many :instructors, class_name: 'User', index: true
   has_many :events
   has_many :reviews, :order => :created_at.desc
@@ -95,6 +102,20 @@ class Location
       :email => 10
     }
   })
+
+  scope :academies, -> { where(:type => TYPE_ACADEMY) }
+  scope :event_venue, -> { where(:type => TYPE_EVENT_VENUE) }
+
+  def editable_by? user
+    return true if user.super_user?
+    return false if user.anonymous?
+
+    !self.flag_claimed? || user.id.eql?(self.owner.id)
+  end
+
+  def flag_claimed?
+    self.owner.present?
+  end
 
   def to_param
     [id, title.parameterize].join('-')
