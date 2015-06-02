@@ -2,6 +2,7 @@
   = "#{location.title} #{"BJJ" unless location.title.end_with?("BJJ")} academy in #{location.city}, #{location.country}"
 
 .container.show-location.page
+  %div#fb-root
   = form_for(location, html: { class: 'form ' + edit_mode_classes }) do |f|
     .row
       .col-md-10
@@ -90,7 +91,10 @@
         .scheduler.clear
     %hr/
     .row
-      .col-md-12
+      - if location.facebook.present?
+        .col-md-5
+          = render :partial => 'locations/show_news_feed', :locals => { :location => location }
+      %div{:class => location.facebook.present? ? 'col-md-7' : 'col-md-12'}
         = render :partial => 'locations/show_media', :locals => { :f => f, :hashtag => location.ig_hashtag }
     %hr/
     .row.reviews
@@ -126,6 +130,9 @@
   :coffeescript
     $(document).ready ->
       mapView = new RollFindr.Views.LocationShowView({ editable: #{edit_mode?}, model: #{location.to_json}, mapModel: #{@map.to_json}, el: $('.show-location')})
+
+= content_for(:scripts) do
+  = render partial: 'facebook_sdk'
 
 = content_for(:head) do
   = render partial: 'opengraph_tags', locals: { location: location }

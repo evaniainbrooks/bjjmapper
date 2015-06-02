@@ -22,7 +22,7 @@
     if (#{hashtag.present?}) {
       var load_more = $('.load-more');
       var feed = new Instafeed({
-        limit: 21,
+        limit: 16,
         get: 'tagged',
         sortBy: 'most-recent',
         tagName: '#{hashtag}',
