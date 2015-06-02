@@ -20,6 +20,8 @@ class User
   field :uid, type: String
   field :name, type: String
   field :email, type: String
+  field :image_tiny, type: String
+  field :image_large, type: String
   field :image, type: String
   field :ip_address, type: String
   field :coordinates, type: Array

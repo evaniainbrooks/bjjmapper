@@ -1,9 +1,9 @@
 +function() {
   $(document).ready(function() {
     $('body').delegate('[data-clear-avatar]', 'click', function(e) {
-      var team = $(e.currentTarget).data('id');
+      var url = $(e.currentTarget).data('url');
       $.ajax({
-        url: Routes.remove_image_team_path(team), 
+        url: url,
         type: 'POST',
         dataType: 'json',
         success: function() {
@@ -13,18 +13,17 @@
           toastr.error('Please try again later. If you believe this to be a bug, please email us at info@bjjmapper.com', 'Image removal failed');
         }
       })
-      
     });
-    
+
     $('body').delegate('[data-upload-avatar]', 'change', function(e) {
       var files = e.currentTarget.files;
-      var team = $(e.currentTarget).data('id');
+      var url = $(e.currentTarget).data('url');
 
       var data = new FormData();
       data.append('file', files[0]);
 
       $.ajax({
-        url: '/service/avatar/upload/teams/' + team + '/async',
+        url:  url,
         type: 'POST',
         cache: false,
         dataType: 'html',

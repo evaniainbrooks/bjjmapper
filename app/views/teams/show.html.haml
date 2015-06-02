@@ -20,9 +20,9 @@
         .edit-field
           %img.center-block.edit-image{:src => team.image}
           %br/
-          %input{:'data-id' => team.id, :'data-upload-avatar' => true, :type => 'file', :class => 'input-md form-control'}/
+          %input{:'data-url' => upload_image_team_path(team), :'data-upload-avatar' => true, :type => 'file', :class => 'input-md form-control'}/
           - if team.object.image.present?
-            %input{:'data-id' => team.id, :'data-clear-avatar' => true, :type => 'button', :value => 'Remove Image', :class => 'btn btn-default btn-small btn-block'}/
+            %input{:'data-url' => remove_image_team_path(team), :'data-clear-avatar' => true, :type => 'button', :value => 'Remove Image', :class => 'btn btn-default btn-small btn-block'}/
       .col-md-6
         .edit-field
           = f.label :name, class: 'small'

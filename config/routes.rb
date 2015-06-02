@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   resources :users, :only => [:index, :show, :create, :update] do
     get :reviews, on: :member
+    post :remove_image, on: :member
     resources :users, controller: :students, as: :students, path: '/students', only: [:create, :destroy, :index]
   end
   resources :locations do

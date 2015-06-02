@@ -102,7 +102,7 @@ describe TeamsController do
     end
   end
   describe 'POST remove_image' do
-    let(:team) { create(:team, image: 'xyz', image_large: 'abc') }
+    let(:team) { create(:team, image_tiny: 'evan', image: 'xyz', image_large: 'abc') }
     context 'when not signed in' do
       it 'returns not_authorized' do
         post :remove_image, { id: team.to_param, :format => 'json' }
@@ -116,6 +116,7 @@ describe TeamsController do
           post :remove_image, { id: team.to_param, :format => 'json' }, session_params
           assigns[:team].image.should eq nil
           assigns[:team].image_large.should eq nil
+          assigns[:team].image_tiny.should eq nil
         end
       end
     end

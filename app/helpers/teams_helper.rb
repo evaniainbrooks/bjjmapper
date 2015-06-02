@@ -1,4 +1,7 @@
 module TeamsHelper
+  def upload_image_team_path(team)
+    "/service/avatar/upload/teams/#{team.id}/async"
+  end
   def all_teams
     Team.all.limit(50).to_a.sort_by(&:name)
   end

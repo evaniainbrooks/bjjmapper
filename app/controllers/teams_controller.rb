@@ -53,7 +53,8 @@ class TeamsController < ApplicationController
 
     @team.update!({
       :image => nil,
-      :image_large => nil
+      :image_large => nil,
+      :image_tiny => nil
     })
 
     respond_to do |format|

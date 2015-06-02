@@ -46,12 +46,12 @@ describe UsersController do
     end
   end
   describe 'POST create' do
-    let(:anonymous_user) { create(:user, role: 'anonymous') }
-    let(:session_params) { { :user_id => anonymous_user.to_param } }
+    let(:user) { create(:user, role: 'user') }
+    let(:session_params) { { :user_id => user.to_param } }
     let(:create_params) { { :user => { :name => 'Buddy', :email => 'buddy@hotmale.com', :belt_rank => 'purple', :stripe_rank => 3 } } }
     context 'with html format' do
       it 'creates and redirects to a new user in edit mode' do
-        anonymous_user
+        user
         expect do
           post :create, create_params.merge({:format => 'html'}), session_params
           response.should redirect_to(user_path(assigns(:user), edit: 1, create: 1))
@@ -66,27 +66,59 @@ describe UsersController do
     end
   end
   describe 'POST update' do
-    let(:user) { create(:user, name: 'Buddy') }
+    let(:user) { create(:user, role: 'user') }
+    let(:session_params) { { :user_id => user.to_param } }
+    let(:new_user) { create(:user, name: 'Buddy') }
     let(:update_params) { { :user => { :name => 'Buddy Holly' } } }
     context 'when the user is not editable' do
       before { User.any_instance.stub(:editable_by?).and_return(false) }
       it 'returns forbidden' do
-        post :update, { id: user.id }.merge(update_params)
+        post :update, { id: new_user.id }.merge(update_params), session_params
         response.status.should eq 403
       end
     end
     context 'with json format' do
       before { User.any_instance.stub(:editable_by?).and_return(true) }
       it 'updates and returns the user' do
-        post :update, { id: user.id, :format => 'json' }.merge(update_params)
+        post :update, { id: user.id, :format => 'json' }.merge(update_params), session_params
         response.body.should match update_params[:user][:name]
       end
     end
     context 'with html format' do
       before { User.any_instance.stub(:editable_by?).and_return(true) }
-      it 'redirects back to the location' do
-        post :update, { id: user.id, :format => 'html' }.merge(update_params)
+      it 'redirects back to the user' do
+        post :update, { id: user.id, :format => 'html' }.merge(update_params), session_params
         response.body.should redirect_to(user_path(user, edit: 0))
+      end
+    end
+  end
+  describe 'POST remove_image' do
+    let(:user) { create(:user, image_tiny: 'evan', image: 'xyz', image_large: 'abc') }
+    context 'when not signed in' do
+      it 'returns not_authorized' do
+        post :remove_image, { id: user.to_param, :format => 'json' }
+        response.status.should eq 401
+      end
+    end
+    context 'when locked and no permissions' do
+      let(:session_params) { { user_id: create(:user, role: 'user').to_param } }
+      let(:locked_user) { create(:user, provider: '1234', flag_locked: true, image_tiny: 'evan', image: 'xyz', image_large: 'abc') }
+      context 'with json format' do
+        it 'returns forbidden' do
+          post :remove_image, { id: locked_user.to_param, :format => 'json' }, session_params
+          response.status.should eq 403
+        end
+      end
+    end
+    context 'when signed in' do
+      let(:session_params) { { user_id: create(:user).to_param } }
+      context 'with json format' do
+        it 'clears the images and returns the location' do
+          post :remove_image, { id: user.to_param, :format => 'json' }, session_params
+          assigns[:user].image.should eq nil
+          assigns[:user].image_large.should eq nil
+          assigns[:user].image_tiny.should eq nil
+        end
       end
     end
   end

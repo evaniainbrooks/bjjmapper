@@ -1,4 +1,8 @@
 module UsersHelper
+  def upload_image_user_path(user)
+    "/service/avatar/upload/users/#{user.id}/async"
+  end
+  
   def all_instructors
     User.jitsukas.limit(1000).sort_by(&:name)
   end

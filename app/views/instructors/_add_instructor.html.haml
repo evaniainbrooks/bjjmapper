@@ -5,7 +5,7 @@
       .col-md-4
         %div.text-center
           %img.center-block{:style => 'max-width: 150px', :alt => "default profile image", :src => image_path(UserDecorator::DEFAULT_IMAGE)}
-          %button.image-caption.center-block.btn.btn-primary.btn-small{:type => 'button'} Upload Image
+          %p.text-info.small Note: You can upload an image on the next page.
       .col-md-8
         = render partial: 'users/edit_table', :locals => { :f => f, :user => new_instructor, :show_biography => false }
   .modal-footer

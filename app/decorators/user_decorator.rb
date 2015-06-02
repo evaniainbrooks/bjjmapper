@@ -21,6 +21,10 @@ class UserDecorator < Draper::Decorator
     end
   end
 
+  def image?
+    object.image.present?
+  end
+
   def image
     h.image_url(object.image || DEFAULT_IMAGE)
   end

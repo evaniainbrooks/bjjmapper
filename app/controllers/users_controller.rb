@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:reviews, :show, :update]
-  before_action :check_permissions, only: [:update]
+  before_action :set_user, only: [:reviews, :show, :update, :remove_image]
+  before_action :ensure_signed_in, only: [:update, :create, :remove_image]
+  before_action :check_permissions, only: [:update, :remove_image]
 
   decorates_assigned :user
 
@@ -76,6 +77,23 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.json { render json: @user }
       format.html { redirect_to user_path(@user, edit: 0) }
+    end
+  end
+  
+  def remove_image
+    tracker.track('removeUserImage',
+      id: @user.to_param,
+      image: @user.image
+    )
+
+    @user.update!({
+      :image => nil,
+      :image_large => nil,
+      :image_tiny => nil
+    })
+
+    respond_to do |format|
+      format.json { render json: @user }
     end
   end
 
