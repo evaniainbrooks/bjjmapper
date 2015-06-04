@@ -66,8 +66,10 @@ class Location
   validates :title, presence: true
 
   belongs_to :team, index: true
-  belongs_to :owner, class_name: 'User', index: true
-  has_and_belongs_to_many :instructors, class_name: 'User', index: true
+  belongs_to :owner, class_name: 'User', index: true, inverse_of: :owned_locations
+  has_and_belongs_to_many :instructors, class_name: 'User', index: true, inverse_of: :locations
+  has_and_belongs_to_many :favorited_by, class_name: 'User', index: true, inverse_of: :locations
+
   has_many :events
   has_many :reviews, :order => :created_at.desc
 

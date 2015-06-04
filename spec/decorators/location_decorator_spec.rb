@@ -37,6 +37,20 @@ describe LocationDecorator do
       end
     end
   end
+  describe '.facebook_group?' do
+    context 'when facebook field is a group' do
+      subject { build(:location, facebook: 'fb.com/groups/12345').decorate }
+      it { subject.should be_facebook_group }
+    end
+    context 'when facebook field is not group' do
+      subject { build(:location, facebook: 'fb.com/nubjj').decorate }
+      it { subject.should_not be_facebook_group }
+    end
+    context 'when facebook field is nil' do
+      subject { build(:location, facebook: nil).decorate }
+      it { subject.should_not be_facebook_group }
+    end
+  end
   describe '.distance' do
     context 'when the context has a center point' do
       subject { build(:location).decorate(context: context) }

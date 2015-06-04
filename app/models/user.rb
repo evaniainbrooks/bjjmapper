@@ -54,9 +54,11 @@ class User
   belongs_to :lineal_parent, class_name: 'User', inverse_of: :lineal_children
   has_many :lineal_children, class_name: 'User', inverse_of: :lineal_parent
   has_many :reviews, inverse_of: :user
+  has_many :owned_locations, class_name: 'Location', inverse_of: :owner
 
   has_and_belongs_to_many :teams
-  has_and_belongs_to_many :locations
+  has_and_belongs_to_many :locations, index: true, inverse_of: :instructors
+  has_and_belongs_to_many :favorite_locations, class_name: 'Location', index: true, inverse_of: :favorited_by
 
   before_create do
     if :instructor == role.try(:to_sym)

@@ -139,7 +139,30 @@ describe LocationsController do
       end
     end
   end
-
+  describe 'POST favorite' do
+    let(:current_user) { create(:user) }
+    let(:session_params) { { user_id: current_user.id } }
+    let(:location) { create(:location) }
+    context 'with delete param' do
+      before do
+        current_user.favorite_locations << location
+      end
+      it 'deletes the location from the current_user favorites list' do
+        expect do
+          post :favorite, { delete: 1, id: location.to_param, format: 'json' }, session_params
+          current_user.reload.favorite_locations.should_not include(location)
+        end.to change { current_user.favorite_locations.count }.by(-1)
+      end
+    end
+    context 'without delete param' do
+      it 'adds the location to the current_user favorites list' do
+        expect do
+          post :favorite, { delete: 0, id: location.to_param, format: 'json' }, session_params
+          current_user.reload.favorite_locations.should include(location)
+        end.to change { current_user.favorite_locations.count }.by(1)
+      end
+    end
+  end
   describe 'POST update' do
     let(:update_params) { { :location => { :title => 'New title', :description => 'New description' } } }
     let(:original_description) { 'xyz' }

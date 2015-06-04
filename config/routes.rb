@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     resources :users, controller: :students, as: :students, path: '/students', only: [:create, :destroy, :index]
   end
   resources :locations do
+    post :favorite, on: :member
     get :search, on: :collection
     get :wizard, on: :collection
     get :recent, on: :collection

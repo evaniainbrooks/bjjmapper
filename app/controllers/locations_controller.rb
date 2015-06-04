@@ -1,6 +1,6 @@
 class LocationsController < ApplicationController
   before_action :set_directory_segments, only: [:index]
-  before_action :set_location, only: [:schedule, :destroy, :show, :update, :nearby, :move]
+  before_action :set_location, only: [:favorite, :schedule, :destroy, :show, :update, :nearby, :move]
   before_action :set_map, only: :show
   before_action :ensure_signed_in, only: [:wizard, :destroy, :create, :update, :move]
   decorates_assigned :location, :locations
@@ -213,7 +213,26 @@ class LocationsController < ApplicationController
       format.json { render json: locations }
     end
   end
+  
+  def favorite
+    delete = params.fetch(:delete, 0).to_i.eql?(1)
 
+    tracker.track('favoriteLocation',
+      delete: delete,
+      id: @location.to_param,
+      user_id: current_user.to_param
+    )
+    
+    unless delete 
+      current_user.favorite_locations << @location
+    else
+      current_user.favorite_locations.delete(@location)
+    end
+
+    respond_to do |format|
+      format.json { render json: @location }
+    end
+  end
 
   private
 

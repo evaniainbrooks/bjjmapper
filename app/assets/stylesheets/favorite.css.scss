@@ -1,0 +1,21 @@
+.favorite {
+  a, a:visited, a:active { color: maroon; }
+  a:hover { color: red; }
+
+  margin-top: 10px;
+  &.saved {
+    .clear-favorite { 
+      display: inline;
+    }
+    .save-favorite {
+      display: none;
+    }
+  }
+
+  .save-favorite {
+    display: inline;
+  }
+  .clear-favorite {
+    display: none;
+  }
+}

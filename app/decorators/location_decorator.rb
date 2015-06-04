@@ -129,6 +129,10 @@ class LocationDecorator < Draper::Decorator
     object.phone.present? || object.email.present? || object.website.present? || object.facebook.present?
   end
 
+  def facebook_group?
+    !object.facebook.try(:index, 'groups').nil?
+  end
+
   def as_json(args)
     # Select which decorator methods override the defaults from object
     object.as_json(args).symbolize_keys.merge(

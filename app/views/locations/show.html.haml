@@ -36,11 +36,17 @@
       .col-md-11.col-md-offset-1
         = render partial: 'subnav', :locals => { location: location }
     .row
-      .col-md-2.col-xs-3{:style => 'margin-top: 20px; padding-right: 0px;'}
+      .col-md-2.col-xs-3{:style => 'padding-right: 0px;'}
         .display-field
           %img{:src => location.image, :class => 'center-block'}/
         .edit-field
           %img{:src => location.image, :class => 'center-block edit-image'}/
+        %div.text-center.favorite{:class => current_user.favorite_location_ids.include?(location.id) ? 'saved' : nil}
+          %a.save-favorite{:title => 'Save Favorite', :href => 'javascript:void(0)', :'data-id' => location.id}
+            %span.fa.fa-heart-o.fa-2x
+          %a.clear-favorite{:title => 'Clear Favorite', :href => 'javascript:void(0)', :'data-id' => location.id}
+            %span.fa.fa-heart.fa-2x
+
       .col-md-6.col-xs-9
         = render partial: 'show_header', :locals => { location: location, f: f }
       .col-md-12.hidden-lg.hidden-md.clear
@@ -91,10 +97,10 @@
         .scheduler.clear
     %hr/
     .row
-      - if location.facebook.present?
+      - if location.facebook.present? && !location.facebook_group?
         .col-md-5
           = render :partial => 'locations/show_news_feed', :locals => { :location => location }
-      %div{:class => location.facebook.present? ? 'col-md-7' : 'col-md-12'}
+      %div{:class => location.facebook.present? && !location.facebook_group? ? 'col-md-7' : 'col-md-12'}
         = render :partial => 'locations/show_media', :locals => { :f => f, :hashtag => location.ig_hashtag }
     %hr/
     .row.reviews
