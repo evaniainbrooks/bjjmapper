@@ -5,6 +5,7 @@ class UserDecorator < Draper::Decorator
   decorates_association :lineal_parent
   decorates_association :lineal_children
   decorates_association :locations
+  decorates_association :favorite_locations
 
   DEFAULT_IMAGE = '//storage.googleapis.com/bjjmapper/default-user-250.png'
   DEFAULT_DESCRIPTION = 'No description was provided'

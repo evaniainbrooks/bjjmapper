@@ -43,6 +43,12 @@
           .items.clear
           .empty-message
             %i.text-muted This person has not written any reviews
+      - if user.favorite_locations.present?
+        .col-md-4
+          %h3 Favorite Academies
+          %ul.list-unstyled
+            - user.favorite_locations.each_with_index do |location, i|
+              %li= render partial: 'locations/card', object: location, as: 'location', locals: { location_counter: i }
     %hr/
     .row
       .col-md-12.students

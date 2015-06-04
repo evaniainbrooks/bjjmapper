@@ -147,8 +147,10 @@ class User
   end
 
   def as_json(args={})
-    result = super(args.merge(except: [:internal, :description_src, :oauth_token, :oauth_expires_at, :modifier_id, :lineal_parent_id, :ip_address, :coordinates, :uid, :provider, :email, :_id])).merge({
+    result = super(args.merge(except: [:locations, :favorite_locations, :internal, :description_src, :oauth_token, :oauth_expires_at, :modifier_id, :lineal_parent_id, :ip_address, :coordinates, :uid, :provider, :email, :_id])).merge({
       :id => self.to_param.to_s,
+      :location_ids => self.location_ids.map(&:to_s),
+      :favorite_location_ids => self.favorite_location_ids.map(&:to_s),
       :modifier_id => self.modifier_id.to_s,
       :lineal_parent_id => self.lineal_parent_id.to_s,
       :rank_sort_key => User.rank_sort_key(self.belt_rank, self.stripe_rank),
