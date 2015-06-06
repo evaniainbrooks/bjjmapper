@@ -22,7 +22,7 @@
   };
 
   $(document).ready(function() {
-    $('button[type="submit"]').click(function(e) {
+    $('html').delegate('button[type="submit"]', 'click', function(e) {
       disableConfirmPageExit();
     });
   });
