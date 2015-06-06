@@ -1,0 +1,9 @@
+//= require jquery
+//= require underscore
+//= require backbone
+//= require js-routes
+//= require moment
+//= require fullcalendar
+//= require bootstrap
+//= require bootstrap-datetimepicker
+//= require_tree ../templates

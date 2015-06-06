@@ -6,5 +6,8 @@ if defined?(Konacha)
   end
   Konacha.configure do |config|
     config.driver = :slow_poltergeist
+    config.javascripts = %w(chai chai-backbone jquery chai-jquery chai-changes sinon konacha konacha/iframe)
+    config.spec_dir = 'spec/javascripts'
+    config.stylesheets = %w{application}
   end
 end

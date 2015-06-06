@@ -1,5 +1,7 @@
 #= require spec_helper
-#
+#= require backbone/rollfindr
+#= require backbone/models/map
+#= require backbone/models/location
 
 describe "Models.Map", ->
   subject = new RollFindr.Models.Map()

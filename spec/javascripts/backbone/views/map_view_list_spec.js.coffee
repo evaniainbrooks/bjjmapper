@@ -1,12 +1,14 @@
 #= require spec_helper
-#
+#= require backbone/rollfindr
+#= require backbone/models/location
+#= require backbone/views/map/locations_list_view
 
 describe 'Views.MapViewList', ->
   collection = new RollFindr.Collections.LocationsCollection()
   view = null
 
   beforeEach ->
-    view = new RollFindr.Views.MapViewList({el: $('body'), filteredCount: 99, collection: collection})
+    view = new RollFindr.Views.MapLocationsListView({el: $('body'), filteredCount: 99, collection: collection})
 
   it 'listens on the global markerActive event', ->
 

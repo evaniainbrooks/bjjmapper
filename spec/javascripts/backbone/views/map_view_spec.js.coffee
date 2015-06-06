@@ -1,5 +1,7 @@
 #= require spec_helper
-#
+#= require backbone/rollfindr
+#= require backbone/models/map
+#= require backbone/views/map/map_view
 
 describe 'Views.MapView', ->
   viewModel = new RollFindr.Models.Map({"zoom":12,"center":[80.0,80.0],"geolocate":1,"locations":[]})

@@ -1,37 +1,39 @@
-//= require jquery
-//= require sinon
-//= require chai-changes
-//= require js-factories
-//= require chai-backbone
-//= require chai-jquery
-
 chai.config.includeStack = true;
 
-$.fn.addHtml = function(element_type, opt) {
-  var elem = $(document.createElement(element_type));
-  elem.attr(opt).html('testText').appendTo($(this));
-  return elem;
-}
+ENV = {
+    TESTING: true
+};
 
-window.stubGoogleMapsApi = function() {
+beforeEach(function() {
+  window.SANDBOX = $("#konacha");
+  $.fn.addHtml = function(element_type, opt) {
+    var elem = $(document.createElement(element_type));
+    elem.attr(opt).html('testText').appendTo($(this));
+    return elem;
+  };
+});
+
+var noop = function() {};
+
+var stubGoogleMapsApi = function() {
   return window.google = {
     maps: {
       ControlPosition: {
         TOP_LEFT: 0
       },
+      DirectionsRenderer: noop,
+      DirectionsService: noop,
       event: {
-        addListener: function() {},
-        addListenerOnce: function() {}
+        addListener: noop,
+        addListenerOnce: noop,
       },
-      InfoWindow: function() {
-
-      },
+      InfoWindow: noop,
       LatLng: function() {
         return {};
       },
       LatLngBounds: function() {
         return {
-          contains: function(){}
+          contains: noop
         };
       },
       MapTypeId: {
@@ -40,32 +42,32 @@ window.stubGoogleMapsApi = function() {
       },
       Map: function() {
         return {
-          controls: [{ push: function() {} }],
-          getBounds: function(){},
-          setCenter: function(){},
-          setTilt: function(){},
+          controls: [{ push: noop }],
+          getBounds: noop,
+          setCenter: noop,
+          setTilt: noop,
           mapTypes: {
-            set: function() {}
+            set: noop
           },
           overlayMapTypes: {
-            insertAt: function() {},
-            removeAt: function() {}
+            insertAt: noop,
+            removeAt: noop
           }
         };
       },
-      Marker: function() {},
+      Marker: noop,
       MaxZoomService: function() {
         return {
-          getMaxZoomAtLatLng: function() {}
+          getMaxZoomAtLatLng: noop
         };
       },
-      ImageMapType: function() {},
-      Size: function() {},
-      Point: function() {},
+      ImageMapType: noop,
+      Size: noop,
+      Point: noop,
       places: {
         AutocompleteService: function() {
           return {
-            getPlacePredictions: function() {}
+            getPlacePredictions: noop
           };
         }
       }
@@ -84,5 +86,5 @@ window.stubAnonymousUser = function() {
   RollFindr.CurrentUser.set('role', 'anonymous');
 };
 
-window.stubGoogleMapsApi();
+stubGoogleMapsApi();
 

@@ -1,5 +1,6 @@
 #= require spec_helper
-#= require application
+#= require backbone/rollfindr
+#= require edit-mode
 
 describe 'edit mode', ->
   beforeEach ->
@@ -23,12 +24,20 @@ describe 'edit mode', ->
         $('.editable').should.have.class('edit-mode')
 
       it 'follows the link if the [data-follow-href] attribute is set', ->
+        @timeout(1000)
         $('[data-begin-edit]').data('follow-href', true)
-        $('[data-begin-edit]').trigger('click').should.equal(false)
+        $('body').delegate '.editable [data-begin-edit]', 'click', (e)->
+          e.isDefaultPrevented().should.equal(false)
+
+        $('[data-begin-edit]').trigger('click')
 
       it 'does not follow the link if the [data-follow-href] attribute is missing or false', ->
+        @timeout(1000)
         $('[data-begin-edit]').data('follow-href', false)
-        $('[data-begin-edit]').trigger('click').should.equal(true)
+        $('html').delegate '.editable [data-begin-edit]', 'click', (e)->
+          e.isDefaultPrevented().should.equal(true)
+
+        $('[data-begin-edit]').trigger('click')
 
   describe 'when not authenticated', ->
     beforeEach ->
