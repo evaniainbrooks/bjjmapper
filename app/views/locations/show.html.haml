@@ -41,12 +41,7 @@
           %img{:src => location.image, :class => 'center-block'}/
         .edit-field
           %img{:src => location.image, :class => 'center-block edit-image'}/
-        %div.text-center.favorite{:class => current_user.favorite_location_ids.include?(location.id) ? 'saved' : nil}
-          %a.save-favorite{:title => 'Save Favorite', :href => 'javascript:void(0)', :'data-id' => location.id}
-            %span.fa.fa-heart-o.fa-2x
-          %a.clear-favorite{:title => 'Clear Favorite', :href => 'javascript:void(0)', :'data-id' => location.id}
-            %span.fa.fa-heart.fa-2x
-
+        = render partial: 'favorite_button', :locals => { location: location }
       .col-md-6.col-xs-9
         = render partial: 'show_header', :locals => { location: location, f: f }
       .col-md-12.hidden-lg.hidden-md.clear
