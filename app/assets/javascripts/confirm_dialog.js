@@ -2,7 +2,7 @@
   "use strict";
 
   var template = JST['templates/confirm_dialog']; 
-  $('body').delegate('.confirm-dialog button.confirm', 'click', function(e) {
+  $('html').delegate('.confirm-dialog button.confirm', 'click', function(e) {
     var method = $(e.target).data('method') || 'POST';
     var url = $(e.target).data('url');
     var returnTo = $(e.target).data('returnto');

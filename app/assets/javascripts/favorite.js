@@ -17,12 +17,12 @@
       }
     });
   };
-  
+
   $(document).ready(function() {
-    $('body').delegate('.save-favorite', 'click', function(e) {
+    $('html').delegate('.save-favorite', 'click', function(e) {
       set_favorite(e, 0);
     });
-    $('body').delegate('.clear-favorite', 'click', function(e) {
+    $('html').delegate('.clear-favorite', 'click', function(e) {
       set_favorite(e, 1);
     });
   });
