@@ -29,7 +29,6 @@ describe 'Views.LocationShowView', ->
       $('.remove-instructor').click()
       view.model.get('instructors').length.should.equal(1)
 
-
   describe "subviews", ->
     it 'has a calendar subview', ->
       view.calendarView.should.be.instanceof(RollFindr.Views.LocationCalendarView)

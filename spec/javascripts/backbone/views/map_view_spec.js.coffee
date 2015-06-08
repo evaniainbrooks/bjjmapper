@@ -47,15 +47,12 @@ describe 'Views.MapView', ->
     RollFindr.Views.MapView.prototype.setCenterGeolocate.restore()
     RollFindr.Views.MapView.prototype.render.restore()
 
-  it 'has a template', ->
-    view.template.should.be.an('function')
-
   it 'listens to global search event', ->
-    RollFindr.GlobalEvents.trigger('search')
+    RollFindr.GlobalEvents.trigger('search', {})
     sinon.assert.called(searchSpy)
 
   it 'listens to global geolocate event', ->
-    RollFindr.GlobalEvents.trigger('geolocate')
+    RollFindr.GlobalEvents.trigger('geolocate', {})
     sinon.assert.called(geolocateSpy)
 
   it 'renders itself when the location list is updated', ->
