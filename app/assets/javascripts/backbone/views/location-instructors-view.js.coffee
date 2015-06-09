@@ -31,9 +31,10 @@ class RollFindr.Views.LocationInstructorsView extends Backbone.View
     instructors = @model.get('instructors');
     instructor = instructors.findWhere({id: instructorId});
 
-    instructor.set('location_id', locationId)
-    instructor.destroy({
-      success: ->
-        instructors.remove(instructor)
-    }) if instructor?
+    if instructor?
+      instructor.set('location_id', locationId)
+      instructor.destroy({
+        success: ->
+          instructors.remove(instructor)
+      })
 

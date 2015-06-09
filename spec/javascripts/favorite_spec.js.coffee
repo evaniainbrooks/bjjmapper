@@ -2,7 +2,7 @@
 #= require backbone/rollfindr
 #= require favorite
 
-describe 'Favorite button', ->
+describe 'Favorite Button', ->
   ajaxSpy = null
   id = 5000
 

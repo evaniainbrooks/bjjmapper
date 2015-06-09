@@ -2,7 +2,7 @@
 #= require backbone/rollfindr
 #= require confirm_page_exit
 
-describe 'confim page exit', ->
+describe 'Confim Page Exit', ->
   it 'enableConfirmPageExit installs the onbeforeunload handler', ->
     should.not.exist(window.onbeforeunload)
     window.enableConfirmPageExit()

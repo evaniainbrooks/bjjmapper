@@ -2,7 +2,7 @@
 #= require backbone/rollfindr
 #= require edit-mode
 
-describe 'edit mode', ->
+describe 'Edit Mode', ->
   beforeEach ->
     e = $('body').addHtml('div', { 'class': 'editable edit-mode' })
     e.addHtml('a', { 'data-cancel-edit': true })

@@ -8,29 +8,44 @@ describe 'Views.LocationShowView', ->
   view = null
   testInstructorId = viewModel.instructors[0]
   beforeEach ->
-    $('body').addHtml('a', {'class': 'add-instructor'})
-    $('body').addHtml('div', {'class': 'add-instructor-dialog modal'})
-    $('body').addHtml('a', {'data-id': testInstructorId, 'class': 'remove-instructor'})
+    b = $('body')
+    b.addHtml('a', {'class': 'add-instructor-menu'})
+    b.addHtml('div', {'class': 'add-instructor-dialog modal'})
+    b.addHtml('a', {'data-id': testInstructorId, 'class': 'remove-instructor'})
+    b.addHtml('a', {'class': 'add-review'})
+    b.addHtml('a', {'class': 'add-review-dialog modal'})
     view = new RollFindr.Views.LocationShowView({
       model: viewModel,
       mapModel: {},
-      el: $('body'),
+      el: b,
     })
 
-  describe "add instructor", ->
-    it 'click .add-instructor shows the instructor modal', ->
-      $('.add-instructor').click()
+  describe "add instructor menu", ->
+    it 'click .add-instructor-menu shows the instructor modal', ->
+      $('.add-instructor-menu').click()
       modalData = $('.add-instructor-dialog').data('bs.modal')
       modalData.isShown.should.equal(true)
 
-  describe "remove instructor", ->
-    it 'click .remove-instructor removes the instructor', ->
-      view.model.get('instructors').length.should.equal(2)
-      $('.remove-instructor').click()
-      view.model.get('instructors').length.should.equal(1)
+  describe "add review", ->
+    it 'click .add-review shows the review modal', ->
+      $('.add-review').click()
+      modalData = $('.add-review-dialog').data('bs.modal')
+      modalData.isShown.should.equal(true)
 
   describe "subviews", ->
     it 'has a calendar subview', ->
       view.calendarView.should.be.instanceof(RollFindr.Views.LocationCalendarView)
+    it 'has a map subview', ->
+      view.mapView.should.be.instanceof(RollFindr.Views.MapView)
+
+    it 'has a nearby locations subview', ->
+      view.nearbyView.should.be.instanceof(RollFindr.Views.LocationNearbyView)
+
+    it 'has an instructors subview', ->
+      view.instructorsView.should.be.instanceof(RollFindr.Views.LocationInstructorsView)
+
+    it 'has a reviews subview', ->
+      view.reviewsView.should.be.instanceof(RollFindr.Views.ReviewsView)
+
     it 'has a map subview', ->
       view.mapView.should.be.instanceof(RollFindr.Views.MapView)

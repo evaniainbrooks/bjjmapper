@@ -1,7 +1,7 @@
 +function($,_) {
   "use strict";
 
-  var template = JST['templates/confirm_dialog']; 
+  var template = JST['templates/confirm_dialog'];
   $('html').delegate('.confirm-dialog button.confirm', 'click', function(e) {
     var method = $(e.target).data('method') || 'POST';
     var url = $(e.target).data('url');
@@ -14,7 +14,7 @@
       data: extraData,
       dataType: 'json',
       url: url,
-      success: function(response, status, xhr) {  
+      success: function(response, status, xhr) {
         $(e.target).parents('.confirm-dialog').modal('hide');
         window.location = returnTo;
       },
@@ -36,7 +36,6 @@
 
     var templateArgs = $.extend({}, defaults, data);
     var dialog = template(templateArgs);
-
 
     $('.confirm-dialog').remove();
     $(dialog).modal('show');
