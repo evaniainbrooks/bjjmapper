@@ -1,6 +1,6 @@
 +function() {
   $(document).ready(function() {
-    $('body').delegate('[data-clear-avatar]', 'click', function(e) {
+    $('html').delegate('[data-clear-avatar]', 'click', function(e) {
       var url = $(e.currentTarget).data('url');
       $.ajax({
         url: url,
@@ -15,7 +15,7 @@
       })
     });
 
-    $('body').delegate('[data-upload-avatar]', 'change', function(e) {
+    $('html').delegate('[data-upload-avatar]', 'change', function(e) {
       var files = e.currentTarget.files;
       var url = $(e.currentTarget).data('url');
 

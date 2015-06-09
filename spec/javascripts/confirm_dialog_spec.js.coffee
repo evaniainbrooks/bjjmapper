@@ -36,8 +36,7 @@ describe 'App#ConfirmDialog', ->
 
     it 'submits an ajax POST request', ->
       $('body').delegate '.confirm-dialog button.confirm', 'click', (e)->
-        ajaxSpy.callCount.should.equal(1)
-        ajaxSpy.getCall(0).args[0].should.have.property('url', 'testurl')
+        ajaxSpy.calledWithMatch({'url': 'testurl'})
 
       $('button[type="submit"]').click()
 
@@ -45,7 +44,7 @@ describe 'App#ConfirmDialog', ->
       toastrSpy = sinon.spy(toastr, 'error')
 
       $('body').delegate '.confirm-dialog button.confirm', 'click', (e)=>
-        ajaxSpy.getCall(0).args[0].error()
+        ajaxSpy.yieldTo('error', {})
         toastrSpy.callCount.should.equal(1)
 
       $('button[type="submit"]').click()
