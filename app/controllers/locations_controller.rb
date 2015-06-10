@@ -1,6 +1,6 @@
 class LocationsController < ApplicationController
   before_action :set_directory_segments, only: [:index]
-  before_action :set_location, only: [:favorite, :schedule, :destroy, :show, :update, :nearby, :move]
+  before_action :set_location, only: [:favorite, :schedule, :destroy, :show, :update, :move]
   before_action :set_map, only: :show
   before_action :ensure_signed_in, only: [:wizard, :destroy, :create, :update, :move]
   decorates_assigned :location, :locations
@@ -55,12 +55,20 @@ class LocationsController < ApplicationController
     distance = params.fetch(:distance, NEARBY_DISTANCE_DEFAULT).to_i
     count = params.fetch(:count, NEARBY_COUNT_DEFAULT).to_i
 
-    @nearby_locations = Location.near(@location.to_coordinates, distance).limit(count+1).to_a
-    @nearby_locations.reject!{|loc| loc.to_param.eql?(@location.to_param)}
+    lat = params.fetch(:lat, nil).try(:to_f)
+    lng = params.fetch(:lng, nil).try(:to_f)
+    reject = params.fetch(:reject, nil)
+
+    fetch_count = count + (reject.present? ? 1 : 0)
+
+    head :bad_request and return false unless lat.present? && lng.present?
+
+    @nearby_locations = Location.near([lat, lng], distance).limit(fetch_count).to_a
+    @nearby_locations.reject!{|loc| loc.to_param.eql?(reject)} if reject.present?
 
     head :no_content and return false unless @nearby_locations.present?
 
-    @nearby_locations = decorated_locations_with_distance_to_center(@nearby_locations, @location.to_coordinates)
+    @nearby_locations = decorated_locations_with_distance_to_center(@nearby_locations, [lat, lng])
 
     respond_to do |format|
       format.json { render status: :ok, json: @nearby_locations }

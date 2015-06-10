@@ -25,19 +25,34 @@ describe LocationsController do
   describe 'GET nearby' do
     let(:location) { create(:location, title: 'self location') }
     context 'with json format' do
+      context 'with missing lat, lng params' do
+        it 'returns 400 bad request' do
+          get :nearby, format: 'json'
+          response.status.should eq 400
+        end
+      end
       context 'when there are locations nearby' do
         let(:other_location) { build(:location, title: 'near you location') }
-        before { Location.stub_chain(:near, :limit, :to_a).and_return([other_location]) }
-        it 'returns the nearby locations' do
-          get :nearby, format: 'json', id: location
-          response.body.should_not include(location.title)
-          response.body.should include(other_location.title)
+        before { Location.stub_chain(:near, :limit, :to_a).and_return([location, other_location]) }
+        context 'with reject parameter' do
+          it 'returns the nearby locations without the rejected location' do
+            get :nearby, format: 'json', reject: location.to_param, lat: 80.0, lng: 80.0
+            response.body.should_not include(location.title)
+            response.body.should include(other_location.title)
+          end
+        end
+        context 'without reject parameter' do
+          it 'returns the nearby locations' do
+            get :nearby, format: 'json', lat: 80.0, lng: 80.0
+            response.body.should include(location.title)
+            response.body.should include(other_location.title)
+          end
         end
       end
       context 'when there are no locations nearby' do
         before { Location.stub_chain(:near, :limit, :to_a).and_return([]) }
         it 'returns 204 no content' do
-          get :nearby, format: 'json', id: location
+          get :nearby, format: 'json', lat: 80.0, lng: 80.0
           response.status.should eq 204
         end
       end

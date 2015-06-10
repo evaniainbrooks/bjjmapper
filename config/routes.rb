@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     get :search, on: :collection
     get :wizard, on: :collection
     get :recent, on: :collection
-    get :nearby, on: :member
+    get :nearby, on: :collection
     get :schedule, on: :member
     post :move, on: :member
     resources :reviews, only: [:create, :destroy, :index]

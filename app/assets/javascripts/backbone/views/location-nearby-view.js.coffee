@@ -7,7 +7,9 @@ class RollFindr.Views.LocationNearbyView extends Backbone.View
     _.bindAll(this, 'render')
 
     @collection = new RollFindr.Collections.NearbyLocationsCollection({
-      location: @model.get('id')
+      lat: @model.get('coordinates')[0],
+      lng: @model.get('coordinates')[1],
+      reject: @model.get('id')
     })
 
     @collection.fetch().done(@render)
@@ -15,6 +17,7 @@ class RollFindr.Views.LocationNearbyView extends Backbone.View
   render: ->
     @$('.items').empty()
     if @collection.size() > 0
+      @$el.removeClass('empty')
       _.each @collection.models, (loc)=>
         id = loc.get('id')
         locElement = @template({location: loc.toJSON(), active: @activeMarkerId == id})

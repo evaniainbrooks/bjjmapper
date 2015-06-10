@@ -1,5 +1,6 @@
 class RollFindr.Views.LocationWizardView extends Backbone.View
   el: $('.wizard')
+  nearbyLocationsView = null
   initialize: (options)->
     @$el.wizard()
 
@@ -7,6 +8,7 @@ class RollFindr.Views.LocationWizardView extends Backbone.View
       'addressChanged',
       'addressValueChanged',
       'contactInfoChanged',
+      'fetchNearbyLocations',
       'fullAddressKeyUp',
       'nextClicked',
       'prevClicked',
@@ -136,11 +138,13 @@ class RollFindr.Views.LocationWizardView extends Backbone.View
     elem.length > 0 && elem.val().length > cmplength
 
   addressChanged: (e)->
-    teamImg = $('option:selected', e.currentTarget).data('')
     _.each ['street', 'city', 'postal_code', 'state', 'country'], (i)=>
       value = $('option:selected', e.currentTarget).data(i)
       @$("[name='location[#{i}]']").val(value)
 
+    lat = $('option:selected', e.currentTarget).data('lat')
+    lng = $('option:selected', e.currentTarget).data('lng')
+    @fetchNearbyLocations(lat, lng)
     @setNextDisabled( !@hasAddress() )
 
   fullAddressKeyUp: (e)->
@@ -177,12 +181,21 @@ class RollFindr.Views.LocationWizardView extends Backbone.View
             .data('postal_code', result.postal_code)
             .data('state', result.state)
             .data('country', result.country)
+            .data('lat', result.lat)
+            .data('lng', result.lng)
             .text(result.address))
 
         _.each ['street', 'city', 'postal_code', 'state', 'country'], (i)=>
           @$("[name='location[#{i}]']").val(results[0][i])
 
+        @fetchNearbyLocations(results[0]['lat'], results[0]['lng'])
         @setNextDisabled( !@hasAddress() )
 
     })
 
+  fetchNearbyLocations: (lat, lng)->
+    model = new RollFindr.Models.Location({
+      id: null
+      coordinates: [lat, lng]
+    })
+    @nearbyLocationsView = new RollFindr.Views.LocationNearbyView({ model: model })
