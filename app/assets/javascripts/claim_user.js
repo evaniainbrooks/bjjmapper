@@ -2,7 +2,7 @@
   $(document).ready(function() {
     var set_lineal_parent = function(student, teacher) {
       var url = Routes.user_path(student);
-      var data = { 
+      var data = {
         format: 'json',
         _method: 'patch',
         user: {
@@ -22,24 +22,24 @@
         }
       })
     };
-    
-    $('body').delegate('[data-claim-instructor]', 'click', function(e) {
+
+    $('html').delegate('[data-claim-instructor]', 'click', function(e) {
       var target = $(e.currentTarget);
       var teacher = target.data('user-id');
       set_lineal_parent(currentUserId(), teacher);
     });
-    $('body').delegate('[data-claim-student]', 'click', function(e) {
+    $('html').delegate('[data-claim-student]', 'click', function(e) {
       var target = $(e.currentTarget);
       var student = target.data('user-id');
       set_lineal_parent(student, currentUserId());
     });
-    $('body').delegate('[data-clear-instructor]', 'click', function(e) {
+    $('html').delegate('[data-clear-instructor]', 'click', function(e) {
       var target = $(e.currentTarget);
       var teacher = target.data('user-id');
       set_lineal_parent(currentUserId(), null);
     });
 
-    $('body').delegate('[data-clear-student]', 'click', function(e) {
+    $('html').delegate('[data-clear-student]', 'click', function(e) {
       var target = $(e.currentTarget);
       var student = target.data('user-id');
       set_lineal_parent(student, null);

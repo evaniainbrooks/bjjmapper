@@ -36,7 +36,7 @@ describe 'App#ConfirmDialog', ->
 
     it 'submits an ajax POST request', ->
       $('body').delegate '.confirm-dialog button.confirm', 'click', (e)->
-        ajaxSpy.calledWithMatch({'url': 'testurl'})
+        ajaxSpy.calledWithMatch({'url': 'testurl'}).should.equal(true)
 
       $('button[type="submit"]').click()
 

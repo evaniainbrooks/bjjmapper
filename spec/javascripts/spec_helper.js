@@ -78,6 +78,7 @@ var stubGoogleMapsApi = function() {
 // Stub CurrentUser
 window.stubCurrentUser = function() {
   RollFindr.CurrentUser = new RollFindr.Models.User();
+  RollFindr.CurrentUser.set('id', '12345');
   RollFindr.CurrentUser.set('role', 'super_user');
 };
 

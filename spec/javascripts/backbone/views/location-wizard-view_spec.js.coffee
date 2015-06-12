@@ -74,66 +74,65 @@ describe 'Views.LocationWizardView', ->
       $.prototype.wizard.callCount.should.equal(1)
 
   describe 'Step 1', ->
-    describe '.next button', ->
+    beforeEach ->
+      subject.$el.addHtml('input', name: 'location[title]')
+
+    it '.next button is initially disabled with type=button', ->
+      $('.btn-next', subject.$el).should.have.prop('disabled', true)
+      $('.btn-next', subject.$el).should.have.prop('type', 'button')
+
+    describe 'Step 2 transition', ->
       beforeEach ->
         subject.$el.addHtml('input', name: 'location[title]')
 
-      it 'is initially disabled with type=button', ->
+      it '.next is enabled when a title is entered', ->
+        $('input[name="location[title]"]').val(testTitle).trigger('change')
+        $('.btn-next', subject.$el).should.have.prop('disabled', false)
+
+      it '.next is disabled after pressed', ->
+        sinon.stub(subject, 'currentStep').returns(2)
+
+        $('.btn-next', subject.$el).prop('disabled', false)
+        $('.btn-next', subject.$el).trigger('click')
         $('.btn-next', subject.$el).should.have.prop('disabled', true)
-        $('.btn-next', subject.$el).should.have.prop('type', 'button')
 
-      describe 'Step 2 transition', ->
+      describe 'Step 3 transition', ->
+        searchForAddress = ->
+          e = $.Event('keyup', which: 13, keyCode: 13)
+          $('#full_address', subject.$el).val(testAddress.street).trigger(e)
+          server.respond()
+
         beforeEach ->
-          subject.$el.addHtml('input', name: 'location[title]')
+          subject.$el.addHtml('input', id: 'full_address')
+          subject.$el.addHtml('input', name: 'location[postal_code]')
+          subject.$el.addHtml('input', name: 'location[street]')
 
-        it '.next is enabled when a title is entered', ->
-          $('input[name="location[title]"]').val(testTitle).trigger('change')
+        it '.next is enabled when an address is selected', ->
+          searchForAddress()
+
           $('.btn-next', subject.$el).should.have.prop('disabled', false)
 
-        it '.next is disabled after pressed', ->
-          sinon.stub(subject, 'currentStep').returns(2)
+        it 'populates the address fields after searching for the address', ->
+          searchForAddress()
+
+          $('[name="location[postal_code]"]', subject.$el).should.have.value(testAddress.postal_code)
+          $('[name="location[street]"]', subject.$el).should.have.value(testAddress.street)
+
+        describe 'Nearby Locations', ->
+          beforeEach ->
+            $(subject.$el).addHtml('div', class: 'nearby-locations').addHtml('div', class: 'items')
+
+            searchForAddress()
+            server.respond()
+
+          xit 'shows nearby locations', ->
+            $('.nearby-locations .items').html().should.match(new RegExp(testNearbyLocation.title))
+
+        it '.next is disabled after press', ->
+          sinon.stub(subject, 'currentStep').returns(3)
 
           $('.btn-next', subject.$el).prop('disabled', false)
           $('.btn-next', subject.$el).trigger('click')
           $('.btn-next', subject.$el).should.have.prop('disabled', true)
-
-        describe 'Step 3 transition', ->
-          searchForAddress = ->
-            e = $.Event('keyup', which: 13, keyCode: 13)
-            $('#full_address', subject.$el).val(testAddress.street).trigger(e)
-            server.respond()
-
-          beforeEach ->
-            subject.$el.addHtml('input', id: 'full_address')
-            subject.$el.addHtml('input', name: 'location[postal_code]')
-            subject.$el.addHtml('input', name: 'location[street]')
-
-          it '.next is enabled when an address is selected', ->
-            searchForAddress()
-
-            $('.btn-next', subject.$el).should.have.prop('disabled', false)
-
-          it 'populates the address fields after searching for the address', ->
-            searchForAddress()
-
-            $('[name="location[postal_code]"]', subject.$el).should.have.value(testAddress.postal_code)
-            $('[name="location[street]"]', subject.$el).should.have.value(testAddress.street)
-
-          describe 'Nearby Locations', ->
-            beforeEach ->
-              $(subject.$el).addHtml('div', class: 'nearby-locations').addHtml('div', class: 'items')
-
-              searchForAddress()
-              server.respond()
-
-            xit 'shows nearby locations', ->
-              $('.nearby-locations .items').html().should.match(new RegExp(testNearbyLocation.title))
-
-          it '.next is disabled after press', ->
-            sinon.stub(subject, 'currentStep').returns(3)
-
-            $('.btn-next', subject.$el).prop('disabled', false)
-            $('.btn-next', subject.$el).trigger('click')
-            $('.btn-next', subject.$el).should.have.prop('disabled', true)
 
 
