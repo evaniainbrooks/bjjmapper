@@ -84,7 +84,7 @@
       var address = model.get('address');
       RollFindr.ConfirmDialog({
         url: Routes.move_location_path(id, { lat: e.latLng.lat(), lng: e.latLng.lng() }),
-        return_to: Routes.location_path(id, { success: 1 }),
+        returnto: Routes.location_path(id, { success: 1 }),
         method: 'POST',
         type: 'warning',
         title: 'Are you sure you want to move this academy?',
