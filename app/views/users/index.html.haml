@@ -23,9 +23,12 @@
       %div.pull-left{:style => 'width: 90px'}
         %span.fa.fa-map-marker
         %span.text-muted Instructor
-      %div.pull-left{:style => 'width: 80px'}
+      %div.pull-left{:style => 'width: 95px'}
         %span.fa.fa-star
         %span.text-muted Reviewer
+      %div.pull-left{:style => 'width: 150px'}
+        %span.fa.fa-group
+        %span.text-muted Team Leader
       %br/
       %br.clear/
   .row
@@ -43,6 +46,8 @@
                   %span.fa.fa-map-marker
                 - if user.review_ids.count > 0
                   %span.fa.fa-star
+                - if user.team_ids.count > 0
+                  %span.fa.fa-group
   .row
     .col-md-8.col-md-offset-2.hidden-sm.hidden-xs
       %br/
