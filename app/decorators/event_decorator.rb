@@ -4,6 +4,7 @@ class EventDecorator < Draper::Decorator
   delegate_all
   decorates_finders
   decorates_association :location
+  decorates_association :instructor
 
   def duration
     s = object.starting.try(:strftime, '%l:%M%p').try(:strip)
