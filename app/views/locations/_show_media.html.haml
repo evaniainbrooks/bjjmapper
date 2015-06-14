@@ -10,36 +10,15 @@
     to display images or video here
 
 %a{:name => 'media'}
-#instafeed.clear
-%br/
-.div.center-block.text-center
-  %button.btn.btn-default.load-more.btn-lg{:type => 'button', :style => 'display: none'}
-    %span.fa.fa-refresh
-    Load More Media
+.instafeed
+  #instafeed.clear
+  %br/
+  .div.center-block.text-center
+    %button.btn.btn-default.load-more.btn-lg{:type => 'button', :style => 'display: none'}
+      %span.fa.fa-refresh
+      Load More Media
 
 = content_for(:scripts) do
-  :javascript
-    if (#{hashtag.present?}) {
-      var load_more = $('.load-more');
-      var feed = new Instafeed({
-        limit: 16,
-        get: 'tagged',
-        sortBy: 'most-recent',
-        tagName: '#{hashtag}',
-        clientId: '#{ig_client_id}',
-        after: function() {
-          if (!this.hasNext()) {
-            load_more.attr('disabled', true);
-          } else {
-            load_more.css('display', 'inline-block');
-          }
-        }
-      });
-
-      load_more.click(function() {
-        feed.next();
-      });
-
-      feed.run();
-    }
+  :coffeescript
+    feedView = new RollFindr.Views.InstaFeedView(client_id: '#{ig_client_id}', hashtag: '#{hashtag}')
 
