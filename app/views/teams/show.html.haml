@@ -34,7 +34,7 @@
             %small= link_to "Part of #{team.parent_team.name}", team_path(team.parent_team)
         .edit-field
           = f.label :parent_team_id, class: 'small'
-          = f.select :parent_team_id, options_for_select(all_teams.map { |team| [team.name, team.id, {'data-img-src' => team.image}] }, team.parent_team_id), {:include_blank => true}, class: 'form-control  input-md'
+          = f.select :parent_team_id, grouped_options_for_select(all_teams_select_groups), {:include_blank => true}, class: 'form-control  input-md'
           = f.label :description, class: 'small'
           = f.text_area :description, placeholder: 'Provide a description of the team/association', class: 'form-control', rows: 4
         .display-field= simple_format(team.description)

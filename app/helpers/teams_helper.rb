@@ -19,8 +19,8 @@ module TeamsHelper
     grouped_teams.each_pair do |parent_team_id, member_group|
       member_group.reject!{|team| grouped_teams[team.to_param] } if parent_team_id.blank?
     end.map do |parent_team_id, member_group|
-      [parent_team_id.present? ? member_group[0].name : 'Teams', member_group.map { |team| team=team.decorate; [team.name, team.id.to_s, {:'data-img-src' => team.image}] }]
-    end
+      [parent_team_id.present? ? member_group[0].name : ' Teams', member_group.map { |team| team=team.decorate; [team.name, team.id.to_s, {:'data-img-src' => team.image}] }]
+    end.sort
   end
   def all_teams_select_options
     all_teams.map { |team| [team.name, team.id, {:'data-img-src' => team.image}] }
