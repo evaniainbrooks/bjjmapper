@@ -26,7 +26,7 @@
             = location.team_name
       %td
         - location.instructors.each do |o|
-          = link_to(o.name, user_path(o, ref: "index#{i}"), class: "belt belt-#{o.belt_rank}")
+          = link_to(o.name, user_path(o, ref: "index#{i}"), class: "belt-sm belt-#{o.belt_rank}", title: "#{o.rank_in_words} #{o.name}")
       %td
         = link_to(location.address, map_path(center: location.to_coordinates))
       - if local_assigns[:show_legend] && show_legend
