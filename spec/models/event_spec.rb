@@ -5,31 +5,69 @@ describe Event do
     build(:event).should be_valid
   end
   describe 'scopes' do
-    before do
-      create(:event, starting: 4.hours.ago, ending: 3.hours.ago)
-      create(:event, starting: 2.hours.ago, ending: 1.hours.ago)
-      create(:event, starting: 1.hours.ago, ending: Time.now)
-    end
-    describe '#before_time' do
-      subject { Event.before_time(2.hours.ago) }
-      it 'returns events before the start_time' do
-        subject.count.should eq 2
-        subject.first.ending.should > 2.hours.ago
+    describe 'times' do
+      before do
+        create(:event, starting: 4.hours.ago, ending: 3.hours.ago)
+        create(:event, starting: 2.hours.ago, ending: 1.hours.ago)
+        create(:event, starting: 1.hours.ago, ending: Time.now)
+      end
+      describe '#before_time' do
+        subject { Event.before_time(2.hours.ago) }
+        it 'returns events before the start_time' do
+          subject.count.should eq 2
+          subject.first.ending.should > 2.hours.ago
+        end
+      end
+      describe '#after_time' do
+        subject { Event.after_time(2.hours.ago) }
+        it 'returns events after the end_time' do
+          subject.count.should eq 2
+          subject.first.starting.should < 2.hours.ago
+        end
+      end
+      describe '#between_time' do
+        subject { Event.between_time(2.hours.ago, 1.hours.ago) }
+        it 'returns events after start_time but before end_time' do
+          subject.count.should eq 1
+          subject.first.starting.should > 2.hours.ago
+          subject.first.starting.should < 1.hours.ago
+        end
       end
     end
-    describe '#after_time' do
-      subject { Event.after_time(2.hours.ago) }
-      it 'returns events after the end_time' do
-        subject.count.should eq 2
-        subject.first.starting.should < 2.hours.ago
+    describe 'types' do
+      before do
+        create(:event, event_type: Event::EVENT_TYPE_CLASS)
+        create(:event, event_type: Event::EVENT_TYPE_SEMINAR)
+        create(:event, event_type: Event::EVENT_TYPE_CAMP)
+        create(:event, event_type: Event::EVENT_TYPE_TOURNAMENT)
       end
-    end
-    describe '#between_time' do
-      subject { Event.between_time(2.hours.ago, 1.hours.ago) }
-      it 'returns events after start_time but before end_time' do
-        subject.count.should eq 1
-        subject.first.starting.should > 2.hours.ago
-        subject.first.starting.should < 1.hours.ago
+      describe '#classes' do
+        subject { Event.classes }
+        it 'returns only events with type=class' do
+          subject.count.should eq 1
+          subject.first.event_type.should eq Event::EVENT_TYPE_CLASS
+        end
+      end
+      describe '#seminars' do
+        subject { Event.seminars }
+        it 'returns only events with type=seminar' do
+          subject.count.should eq 1
+          subject.first.event_type.should eq Event::EVENT_TYPE_SEMINAR
+        end
+      end
+      describe '#camps' do
+        subject { Event.camps }
+        it 'returns only events with type=camp' do
+          subject.count.should eq 1
+          subject.first.event_type.should eq Event::EVENT_TYPE_CAMP
+        end
+      end
+      describe '#tournaments' do
+        subject { Event.tournaments }
+        it 'returns only events with type=tournament' do
+          subject.count.should eq 1
+          subject.first.event_type.should eq Event::EVENT_TYPE_TOURNAMENT
+        end
       end
     end
   end
@@ -115,7 +153,7 @@ describe Event do
   describe '.as_json' do
     it 'returns the object as json' do
       json = build(:event).as_json({})
-      [:id, :title, :description, :start, :end, :type, :instructor, :location, :allDay, :recurring, :recurrence_type, :recurrence_days].each {|x| json.should have_key(x) }
+      [:id, :title, :description, :start, :end, :event_type, :instructor, :location, :allDay, :recurring, :recurrence_type, :recurrence_days].each {|x| json.should have_key(x) }
     end
   end
 end

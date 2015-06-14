@@ -8,6 +8,11 @@ class Event
   RECURRENCE_WEEKLY = 3
   RECURRENCE_2WEEKLY = 4
 
+  EVENT_TYPE_CLASS = 0
+  EVENT_TYPE_SEMINAR = 1
+  EVENT_TYPE_TOURNAMENT = 2
+  EVENT_TYPE_CAMP = 3
+
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::History::Trackable
@@ -20,12 +25,17 @@ class Event
   field :ending, type: Time
   field :is_all_day, type: Boolean
   field :price, type: String
-  field :type, type: String
+  field :event_type, type: Integer, default: EVENT_TYPE_CLASS
 
   scope :before_time, ->(time) { where(:ending.gte => time) }
   scope :after_time, ->(time) { where(:starting.lte => time) }
   scope :between_time, ->(start_time, end_time) { where(:starting.gte => start_time, :starting.lte => end_time) }
 
+  scope :classes, -> { where(:event_type => EVENT_TYPE_CLASS) }
+  scope :seminars, -> { where(:event_type => EVENT_TYPE_SEMINAR) }
+  scope :camps, -> { where(:event_type => EVENT_TYPE_CAMP) }
+  scope :tournaments, -> { where(:event_type => EVENT_TYPE_TOURNAMENT) }
+  
   belongs_to :modifier, class_name: 'User'
   belongs_to :location
   belongs_to :instructor, class_name: 'User'
@@ -65,7 +75,7 @@ class Event
       :description => self.description,
       :start => self.starting,
       :end => self.ending,
-      :type => self.type,
+      :event_type => self.event_type,
       :instructor => self.instructor.as_json,
       :location => self.location.try(:to_param),
       :allDay => self.is_all_day ? true : false,
