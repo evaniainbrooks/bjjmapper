@@ -267,14 +267,14 @@ class LocationsController < ApplicationController
   end
 
   def set_map
-    @map = {
+    @map = Map.new(
       :zoom => Map::ZOOM_LOCATION,
       :minZoom => Map::ZOOM_CITY,
       :center => @location.to_coordinates,
       :geolocate => 0,
       :locations => [],
       :refresh => 0
-    }
+    )
   end
 
   def create_params

@@ -24,13 +24,13 @@ class ApplicationController < ActionController::Base
   after_action :log_production_mutative_events
 
   def homepage
-    @map = {
+    @map = Map.new(
       zoom: Map::ZOOM_CITY,
       minZoom: Map::DEFAULT_MIN_ZOOM,
       geolocate: 1,
       locations: [],
       refresh: 0
-    }
+    )
     @countries = RollFindr::DirectoryCountries
     @cities = RollFindr::DirectoryCities
   end
@@ -62,7 +62,7 @@ class ApplicationController < ActionController::Base
     geolocate = center.blank? && query.blank? && location.blank? ? 1 : 0
     zoom = params.fetch(:zoom, nil).try(:to_i)
     zoom ||= center.present? ? Map::ZOOM_LOCATION : Map::ZOOM_DEFAULT
-    @map = {
+    @map = Map.new(
       zoom: zoom,
       center: center,
       query: query,
@@ -71,7 +71,7 @@ class ApplicationController < ActionController::Base
       geolocate: geolocate,
       locations: [],
       refresh: 1
-    }
+    )
 
     tracker.track('showMap',
       zoom: zoom,
