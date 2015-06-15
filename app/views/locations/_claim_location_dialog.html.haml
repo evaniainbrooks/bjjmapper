@@ -1,0 +1,30 @@
+.claim-location-dialog.modal.fade{'aria-hidden' => 'true', 'aria-labelledby' => 'claimLocationDialog', 'role' => 'dialog', 'tabindex' => '-1'}
+  %form{:action => verifications_path, :method => 'post'}
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+          %h4.modal-title
+            %i.fa.fa-lock
+            Academy Ownership Verification
+        .modal-body
+          %p 
+            If you take ownership of this academy, you will be solely responsible for keeping this academy listing up to date. After you verify that you are the academy owner, other users will not be able to modify this academy. 
+          %p 
+            BJJMapper is a communal effort, so taking this action is 
+            %b NOT recommended. 
+            If you wish to continue, you will need to verify the email address attached to this academy. 
+          .form-group
+            %label{:for => 'reason'} Email Address
+            %input.form-control.input-md{:name => 'email', :type => 'text', :value => location.email}
+            %input.form-control.input-md{:type => 'hidden', :value => location.id, :name => 'location_id'}/
+          .form-group
+            %input{:name => 'authenticity_token', :type => 'hidden', :value => form_authenticity_token}/
+        .modal-footer
+          %button.btn.btn-default{'data-dismiss' => 'modal', 'type' => 'button'} Cancel
+          %button.btn.btn-primary{:disabled => true, 'type' => 'submit'} Continue with Verification &raquo;
+
+= content_for(:scripts) do
+  :coffeescript
+    $(document).ready ->
+      mapView = new RollFindr.Views.ClaimLocationDialogView({ el: $('.claim-location-dialog') })

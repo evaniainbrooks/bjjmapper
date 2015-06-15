@@ -16,12 +16,15 @@ describe LocationOwnerVerificationsController do
     end
 
     context 'when the solicitation is valid' do
-      let(:verification) { create(:location_owner_verification) }
-      it 'updates the location owner' do
+      let(:email) { 'new_email_addr' }
+      let(:verification) { create(:location_owner_verification, email: email) }
+      it 'updates the location owner and email' do
         verification.location.owner.should eq nil
         get :verify, { id: verification.id }
-        response.should redirect_to(location_path(verification.location, claimed: 1))
+
+        response.should redirect_to(location_path(verification.location, verified: 1))
         verification.reload.location.owner.should eq verification.user
+        verification.location.email.should eq email
       end
     end
   end

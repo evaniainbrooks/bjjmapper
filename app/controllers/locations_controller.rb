@@ -1,20 +1,36 @@
 class LocationsController < ApplicationController
   before_action :set_directory_segments, only: [:index]
-  before_action :set_location, only: [:favorite, :schedule, :destroy, :show, :update, :move]
+  before_action :set_location, only: [:favorite, :schedule, :destroy, :show, :update, :move, :unlock]
   before_action :set_map, only: :show
-  before_action :ensure_signed_in, only: [:wizard, :destroy, :create, :update, :move]
+  before_action :ensure_signed_in, only: [:wizard, :destroy, :create, :update, :move, :unlock]
+  before_action :check_permissions, only: [:destroy, :update, :move, :unlock]
+
   decorates_assigned :location, :locations
 
   helper_method :created?
   helper_method :reviewed?
   helper_method :error?
   helper_method :deleted?
+  helper_method :verified?
 
   RECENT_COUNT_DEFAULT = 5
   RECENT_COUNT_MAX = 10
 
   NEARBY_DISTANCE_DEFAULT = 5
   NEARBY_COUNT_DEFAULT = 4
+
+  def unlock
+    tracker.track('unlockLocation',
+      location: @location.to_param
+    )
+
+    @location.update_attribute(:owner_id, nil)
+
+    respond_to do |format|
+      format.html { redirect_to location_path(@location) }
+      format.json { render json: location }
+    end
+  end
 
   def recent
     count = [params.fetch(:count, RECENT_COUNT_DEFAULT).to_i, RECENT_COUNT_MAX].min
@@ -249,7 +265,11 @@ class LocationsController < ApplicationController
   end
 
   private
-  
+
+  def verified?
+    params.fetch(:verified, 0).to_i.eql?(1)
+  end
+
   def deleted?
     params.fetch(:deleted, 0).to_i.eql?(1)
   end
@@ -315,4 +335,7 @@ class LocationsController < ApplicationController
     @cities = RollFindr::DirectoryCities
   end
 
+  def check_permissions
+    head :forbidden and return false unless current_user.can_edit?(@location)
+  end
 end

@@ -1,0 +1,7 @@
+%button.btn.btn-default.btn-sm{:type => "button", 
+  :data => { :method => :post, 
+             :url => unlock_location_path(location, ref: 'locdp_menu'), 
+             :title => 'Are you sure you want to unlock this academy?',
+             :body => 'This will clear the ownership of this academy and allow anyone to modify it. In order to lock it again, you will need to complete the email verification process. Press \'Confirm\' to continue.' } }
+  %span.fa.fa-lock
+  Edit

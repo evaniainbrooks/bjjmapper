@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Location do
   it 'has a factory' do
-    build(:location).should be_present
+    build(:location).should be_valid
   end
 
   it 'has a decorator' do

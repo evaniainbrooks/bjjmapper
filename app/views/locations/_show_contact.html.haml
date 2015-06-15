@@ -23,21 +23,21 @@
     %i.display-field.text-muted No contact information was provided
   - else
     - if location.phone.present?
-      %span.display-field.form-group
+      %span.display-field
         %b.small Phone
         %br/
         %a{:class => 'phone', :href => "tel:#{location.phone}"}
           = location.phone
           %i.fa.fa-phone
     - if location.email.present?
-      %span.display-field.form-group
+      %span.display-field
         %b.small Email
         %br/
         = link_to 'mailto:' + location.email, class: 'email' do
           = location.email
           %i.fa.fa-envelope
     - if location.website.present?
-      %span.display-field.form-group
+      %span.display-field
         %b.small Websites
         %br/
         = link_to 'http://' + location.website, class: 'website' do

@@ -8,26 +8,10 @@
       .col-md-10
         = render partial: 'breadcrumb', locals: { location: location }
       .col-md-2
-        .display-field
-          .btn-group
-            %button.btn.btn-default.btn-sm{:type => "button", 'data-begin-edit' => true} Edit
-            %button.btn.btn-default.btn-sm.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", :type => "button"}
-              %span.caret
-              %span.sr-only Toggle Dropdown
-            %ul.dropdown-menu{:role => "menu"}
-              %li
-                %a.add-instructor-menu{:href => "#instructor"} Add Instructor
-              %li
-                %a{:href => schedule_location_path(location, edit: 1)} Add Event
-              %li
-                %a.add-review{:href => '#reviews'} Add Review
-          %button.btn.btn-default.btn-sm{'data-report-item' => true}
-            %span.report Report
-        .edit-field
-          %button.btn.btn-default.btn-sm{:'data-cancel-edit' => true } Cancel
-          %button.btn.btn-primary.btn-sm{:type => 'submit'} Save
+        = render partial: 'edit_controls', locals: { location: location }
     .row
       .col-md-12
+        = render partial: 'verify_message' if verified?
         = render partial: 'create_message' if created?
         = render partial: 'edit_success_message' if edit_success?
         = render partial: 'review_message' if reviewed?
@@ -127,6 +111,7 @@
   = render :partial => 'instructors/add_instructor_dialog'
   = render :partial => 'reviews/add_review_dialog'
   = render :partial => 'events/add_event_modal', locals: { location: location }
+  = render :partial => 'claim_location_dialog', locals: { location: location }
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->

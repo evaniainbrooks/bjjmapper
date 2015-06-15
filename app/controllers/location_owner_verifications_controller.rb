@@ -6,26 +6,36 @@ class LocationOwnerVerificationsController < ApplicationController
 
   def create
     tracker.track('createLocationOwnerVerification',
+      email: params.fetch(:email, nil),
       owner: current_user,
       location: @location.to_param
     )
 
     @verification = LocationOwnerVerification.create(
+      :email => params.fetch(:email, nil),
       :location => @location,
       :user => current_user
     )
 
-    head :created
+    LocationOwnerVerificationMailer.verification_email(
+      @verification,
+      verify_verification_url(@verification, ref: 'email')).deliver
+
+    respond_to do |format|
+      format.json { render :status => :created, :json => @location }
+      format.html { redirect_to location_path(@location, claimed: 1) }
+    end
   end
 
   def verify
     tracker.track('verifyLocationOwner',
+      email: @verification.email,
       owner: @verification.user.to_param,
       location: @verification.location.to_param
     )
 
-    @verification.location.update_attribute(:owner, @verification.user)
-    redirect_to location_path(@verification.location, claimed: 1)
+    @verification.verify!
+    redirect_to location_path(@verification.location, verified: 1)
   end
 
   private

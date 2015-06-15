@@ -1,0 +1,5 @@
+%html
+  %body
+    %p= "Hello #{@user.name},"
+    %p= "You are receiving this email because you claimed ownership of #{@location.title} on #{link_to('BJJMapper.com', 'http://bjjmapper.com?ref=ver_email')}. #{link_to('Click here to finalize your ownership request', @url)}"
+    %p= "Please ignore this message if you believe it was sent in error."
