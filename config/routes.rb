@@ -22,6 +22,9 @@ Rails.application.routes.draw do
     end
     resources :users, controller: :instructors, as: :instructors, path: '/instructors', only: [:create, :destroy, :index]
   end
+  resources :verifications, controller: :location_owner_verifications, as: :verifications, path: '/verifications', only: [:create] do
+    get :verify, on: :member
+  end
   resources :teams, :only => [:show, :index, :update, :create, :new] do
     post :remove_image, on: :member
     resources :users, controller: :instructors, as: :instructors, path: '/instructors', only: [:create, :destroy, :index]
