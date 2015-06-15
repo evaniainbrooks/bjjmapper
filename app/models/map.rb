@@ -17,6 +17,7 @@ class Map
     @geolocate = options.fetch(:geolocate, 1)
     @locations = options.fetch(:locations, [])
     @refresh = options.fetch(:refresh, 0)
+    @center = options.fetch(:center, [])
   end
 
   def [](index)
