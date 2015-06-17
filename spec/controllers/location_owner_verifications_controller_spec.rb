@@ -29,14 +29,20 @@ describe LocationOwnerVerificationsController do
     end
   end
   describe 'POST create' do
-    let(:location) { create(:location) }
+    let(:location) { create(:location, email: 'testemail') }
     context 'when signed in' do
       let(:session_params) { { user_id: create(:user).id } }
-      it 'creates a new verification context' do
+      before do
+        mailer = double
+        mailer.should_receive(:deliver)
+        LocationOwnerVerificationMailer.should_receive(:verification_email).and_return(mailer)
+      end
+      it 'creates a new verification context and sends an email' do
         expect do
           post :create, { location_id: location.id, format: 'json' }, session_params
           assigns[:verification].location.should eq location
           assigns[:verification].user.id.should eq session_params[:user_id]
+          response.status.should eq 201
         end.to change { LocationOwnerVerification.count }.by(1)
       end
     end

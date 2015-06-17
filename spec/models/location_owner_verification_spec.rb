@@ -4,6 +4,17 @@ describe LocationOwnerVerification do
   it 'has a factory' do
     build(:location_owner_verification).should be_valid
   end
+  describe 'validations' do
+    it 'is invalid without an email' do
+      build(:location_owner_verification, email: nil).should_not be_valid
+    end
+    it 'is invalid without a location' do
+      build(:location_owner_verification, location: nil).should_not be_valid
+    end
+    it 'is invalid without a user' do
+      build(:location_owner_verification, user: nil).should_not be_valid
+    end
+  end
   describe 'before create' do
     let(:verification) { create(:location_owner_verification) }
     it 'sets the expires at field' do

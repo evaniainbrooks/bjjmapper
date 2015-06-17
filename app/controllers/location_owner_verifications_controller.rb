@@ -19,7 +19,7 @@ class LocationOwnerVerificationsController < ApplicationController
 
     LocationOwnerVerificationMailer.verification_email(
       @verification,
-      verify_verification_url(@verification, ref: 'email')).deliver
+      verify_verification_url(@verification.to_param, ref: 'email')).deliver
 
     respond_to do |format|
       format.json { render :status => :created, :json => @location }
