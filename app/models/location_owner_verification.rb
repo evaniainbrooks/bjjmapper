@@ -9,6 +9,10 @@ class LocationOwnerVerification
   field :closed_at, type: Time
   field :email, type: String
 
+  validates :email, presence: true
+  validates :user, presence: true
+  validates :location, presence: true
+
   before_create :set_expires
 
   scope :with_token, ->(token) { where(:_id => token).where(:expires_at.gte => Time.now) }
@@ -22,11 +26,9 @@ class LocationOwnerVerification
   end
 
   def verify!
-    attributes = { :owner => self.user }
-    attributes.merge!({:email => self.email }) if self.email.present?
-
+    attributes = { :owner => self.user, :email => self.email }
     location.update_attributes(attributes)
-    
+
     self.update_attribute(:closed_at, Time.now)
   end
 

@@ -12,7 +12,7 @@ class LocationOwnerVerificationsController < ApplicationController
     )
 
     @verification = LocationOwnerVerification.create(
-      :email => params.fetch(:email, nil),
+      :email => params.fetch(:email, @location.email),
       :location => @location,
       :user => current_user
     )
