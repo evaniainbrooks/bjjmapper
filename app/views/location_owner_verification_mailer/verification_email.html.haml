@@ -1,4 +1,8 @@
-%html
+!!! 5
+%html(lang="en")
+  %head
+    %meta(charset="utf-8")
+    %meta(http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1")
   %body
     %p= "Hello #{@user.name},"
     %p= "You are receiving this email because you claimed ownership of #{@location.title} on #{link_to('BJJMapper.com', 'http://bjjmapper.com?ref=ver_email')}. #{link_to('Click here to finalize your ownership request', @url)}"
