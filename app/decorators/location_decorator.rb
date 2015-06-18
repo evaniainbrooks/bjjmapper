@@ -154,7 +154,8 @@ class LocationDecorator < Draper::Decorator
   private
 
   def avatar_service_url(name)
-    "/service/avatar/100x100/#{CGI.escape(name)}/image.png"
+    clean_name = CGI.escape(name.gsub(/[\/?&]/, ' '))
+    "/service/avatar/100x100/#{clean_name}/image.png"
   end
 end
 

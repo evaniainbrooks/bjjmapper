@@ -3,8 +3,9 @@
 +function() {
 
   window.RollFindr.AvatarService = function(name) {
-    return "/service/avatar/100x100/" + encodeURI(name) + "/image.png";
-  }
+    var cleanName = name.replace(/[/&?]/g, ' ');
+    return "/service/avatar/100x100/" + encodeURI(cleanName) + "/image.png";
+  };
 
 }();
 

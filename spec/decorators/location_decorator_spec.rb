@@ -107,6 +107,10 @@ describe LocationDecorator do
         it 'returns the avatar service image' do
           subject.image.should match("/service/avatar/100x100/#{subject.title}/image.png")
         end
+        it 'escapes the title and replaces forward slashes' do
+          subject.title = 'Test/Name'
+          subject.image.should match("/service/avatar/100x100/Test+Name/image.png")
+        end
       end
       context 'with team image' do
         subject do
