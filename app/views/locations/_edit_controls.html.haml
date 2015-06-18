@@ -1,13 +1,9 @@
-- if location.owner.present?
-  - if location.editable_by?(current_user)
-    = render partial: 'edit_unlock', locals: { location: location }
-  - else
-    %button.btn.btn-default.btn-sm{:type => "button", :disabled => true}
-      %span.fa.fa-lock
-      Edit
-
+- if !location.editable_by?(current_user)
+  %button.btn.btn-default.btn-sm{:type => "button", :disabled => true}
+    %span.fa.fa-lock
+    Edit
   = render partial: 'report_button'
-- else 
+- else
   .display-field
     .btn-group
       %button.btn.btn-default.btn-sm{:type => "button", 'data-begin-edit' => true} Edit
@@ -29,9 +25,12 @@
             Add Review
         %li.divider
         %li
-          %a{:href => 'javascript:void(0)', :'data-claim-location' => true}
-            %span.fa.fa-lock
-            I am the owner
+          - if location.owner.present? && location.editable_by?(current_user)
+            = render partial: 'edit_unlock', locals: { location: location }
+          - else
+            %a{:href => 'javascript:void(0)', :'data-claim-location' => true}
+              %span.fa.fa-lock
+              I am the owner
     = render partial: 'report_button'
   .edit-field
     %button.btn.btn-default.btn-sm{:'data-cancel-edit' => true } Cancel
