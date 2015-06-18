@@ -8,8 +8,10 @@ class Map
   GLOBAL_MIN_ZOOM = 4
 
   attr_accessor :zoom, :center, :query
-  attr_accessor :location, :minZoom, :geolocate
+  attr_accessor :location, :query
+  attr_accessor :minZoom, :geolocate
   attr_accessor :locations, :refresh
+  
 
   def initialize(options = {})
     @zoom = options.fetch(:zoom, ZOOM_DEFAULT)
@@ -18,6 +20,8 @@ class Map
     @locations = options.fetch(:locations, [])
     @refresh = options.fetch(:refresh, 0)
     @center = options.fetch(:center, [])
+    @location = options.fetch(:location, nil)
+    @query = options.fetch(:query, nil)
   end
 
   def [](index)

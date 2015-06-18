@@ -14,14 +14,23 @@ describe Map do
     let(:center) { [122.0, 45.0] }
     let(:minZoom) { 3 }
     let(:geolocate) { 0 }
+    let(:location) { 'kuzey kibris' }
+    let(:query) { 'near east university' }
     subject do
-      Map.new(:zoom => zoom, :minZoom => minZoom, :geolocate => geolocate, :center => center)
+      Map.new(:zoom => zoom,
+              :minZoom => minZoom,
+              :geolocate => geolocate,
+              :location => location,
+              :query => query,
+              :center => center)
     end
     it 'has zoom, minZoom, geolocate and center params' do
       subject.zoom.should eq zoom
       subject.minZoom.should eq minZoom
       subject.geolocate.should eq geolocate
       subject.center.should eq center
+      subject.location.should eq location
+      subject.query.should eq query
     end
   end
 end
