@@ -61,6 +61,22 @@ describe User do
     end
   end
 
+  describe '.birthdate' do
+    context 'with invalid date' do
+      subject { build(:user).birthdate }
+      before { Date.stub(:new).and_raise('an error') }
+      it 'returns nil' do
+        subject.should be_nil
+      end
+    end
+    context 'with valid date' do
+      subject { build(:user, birth_day: 24, birth_month: 9, birth_year: 1986).birthdate }
+      it 'returns a date object' do
+        subject.should be_kind_of(Date)
+      end
+    end
+  end
+
   describe '.editable_by?' do
     context 'when the editor is a super user' do
       let(:editor) { build(:user, role: 'super_user') }

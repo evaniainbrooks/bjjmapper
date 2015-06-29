@@ -133,7 +133,7 @@ class User
 
   def birthdate
     return nil unless birth_year.present? && birth_month.present? && birth_day.present?
-    Date.new(birth_year, birth_month, birth_day)
+    Date.new(birth_year, birth_month, birth_day) rescue nil
   end
 
   def age_in_years
