@@ -33,3 +33,9 @@ class RollFindr.Views.InstaFeedView extends Backbone.View
       @$('.load-more').attr('disabled', false)
       @$('.load-more').css('display', 'inline-block')
 
+    @showTeaser() unless $('.media-teaser img').length
+
+  showTeaser: ->
+    someImages = @$('img').slice(0, 6).clone()
+    $('.media-teaser').append(someImages)
+

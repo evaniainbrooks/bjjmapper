@@ -48,6 +48,18 @@ describe 'Views.InstaFeedView', ->
     it 'renders itself on create', ->
       renderSpy.callCount.should.equal(1)
 
+  describe 'teaser', ->
+    beforeEach ->
+      stubFeed()
+      createSubject()
+
+      $('#instafeed').addHtml('img', class: 'test-img')
+      $('body').addHtml('div', class: 'media-teaser')
+
+    it 'is populated on load', ->
+      subject.afterLoadCallback()
+      $('.media-teaser img').length.should.equal(1)
+
   describe 'load button', ->
     nextSpy = null
     beforeEach ->
