@@ -20,7 +20,7 @@ class Team
   field :locked, type: Boolean
   field :ig_hashtag, type: String
 
-  has_many :locations
+  has_many :locations, order: :title.asc
   belongs_to :parent_team, class_name: 'Team', inverse_of: :child_teams
   has_many :child_teams, class_name: 'Team', inverse_of: :parent_team
 
