@@ -38,6 +38,7 @@
           = f.label :description, class: 'small'
           = f.text_area :description, placeholder: 'Provide a description of the team/association', class: 'form-control', rows: 4
         .display-field= simple_format(team.description)
+        %a.media-teaser.hidden-xs.display-field{:href => '#media', :title => 'View more media'}
       .col-md-4.instructors
         %h3.pull-left Head Instructors
         %a{:name => 'instructor'}
