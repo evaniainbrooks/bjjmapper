@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:reviews, :show, :update, :remove_image]
+  before_action :set_user, only: [:merge, :reviews, :show, :update, :remove_image]
   before_action :ensure_signed_in, only: [:update, :create, :remove_image]
   before_action :check_permissions, only: [:update, :remove_image]
 
@@ -103,7 +103,35 @@ class UsersController < ApplicationController
     end
   end
 
+  def merge
+    tracker.track('mergeUser',
+      src_id: @user.to_param,
+      dst_id: current_user.to_param
+    )
+
+    update_attributes = current_user.attributes.symbolize_keys.slice(*merge_params).merge(@user.attributes.symbolize_keys.slice(*merge_params))
+
+    current_user.update_attributes(update_attributes)
+    @user.update_attributes({
+      :redirect_to_user => current_user,
+      :provider => nil,
+      :location_ids => [],
+      :favorite_location_ids => [],
+      :team_ids => [],
+      :oauth_token => nil,
+      :uid => nil,
+      :role => 'stub',
+      :internal => false
+    })
+
+    redirect_to user_path(current_user, merge: 1)
+  end
+
   private
+
+  def merge_params
+    [:name, :email, :image_tiny, :image_large, :image, :description, :belt_rank, :stripe_rank, :birth_day, :birth_month, :birth_year, :birth_place, :female, :lineal_parent_id, :location_ids, :team_ids, :favorite_location_ids]
+  end
 
   def check_permissions
     head :forbidden and return false unless current_user.can_edit?(@user)
@@ -119,21 +147,21 @@ class UsersController < ApplicationController
 
   def create_params
     p = params.require(:user).permit(
-      :name, 
-      :image, 
-      :email, 
-      :belt_rank, 
-      :stripe_rank, 
-      :birth_day, 
-      :birth_month, 
-      :birth_year, 
-      :lineal_parent_id, 
-      :birth_place, 
-      :description, 
-      :female, 
-      :flag_display_email, 
-      :flag_display_directory, 
-      :flag_display_reviews, 
+      :name,
+      :image,
+      :email,
+      :belt_rank,
+      :stripe_rank,
+      :birth_day,
+      :birth_month,
+      :birth_year,
+      :lineal_parent_id,
+      :birth_place,
+      :description,
+      :female,
+      :flag_display_email,
+      :flag_display_directory,
+      :flag_display_reviews,
       :flag_locked)
 
     p[:modifier_id] = current_user.to_param if signed_in?

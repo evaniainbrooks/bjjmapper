@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   end
 
   resources :users, :only => [:index, :show, :create, :update] do
+    post :merge, on: :member
     get :reviews, on: :member
     post :remove_image, on: :member
     resources :users, controller: :students, as: :students, path: '/students', only: [:create, :destroy, :index]
