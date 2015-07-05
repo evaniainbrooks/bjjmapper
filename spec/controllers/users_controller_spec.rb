@@ -31,17 +31,28 @@ describe UsersController do
     end
   end
   describe 'GET show' do
-    let(:user) { create(:user) }
+    let(:user) { build(:user) }
+    before { User.stub(:find).and_return(user) }
     context 'with json format' do
       it 'returns the user' do
-        get :show, id: user.id, format: 'json'
+        get :show, id: '1234', format: 'json'
         response.body.should eq user.to_json
       end
     end
     context 'with html format' do
-      it 'renders the show page' do
-        get :show, id: user.id, format: 'html'
-        response.should render_template('users/show')
+      context 'when the redirect_to_user field is blank' do
+        it 'renders the show page' do
+          get :show, id: '1234', format: 'html'
+          response.should render_template('users/show')
+        end
+      end
+      context 'when the redirect_to_user field is set' do
+        let(:other_user) { create(:user) }
+        before { user.stub(:redirect_to_user).and_return(other_user) }
+        it 'redirects to the other user' do
+          get :show, id: '1234', format: 'html'
+          response.should redirect_to(user_path(other_user))
+        end
       end
     end
   end

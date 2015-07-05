@@ -47,8 +47,14 @@ class UsersController < ApplicationController
     )
 
     respond_to do |format|
-      format.json { render json: @user }
-      format.html
+      format.json { render json: @user.redirect_to_user.present? ? @user.redirect_to_user : @user }
+      format.html do
+        if @user.redirect_to_user.present?
+          redirect_to user_path(@user.redirect_to_user)
+        else
+          render
+        end
+      end
     end
   end
 
