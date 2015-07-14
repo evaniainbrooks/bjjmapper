@@ -14,13 +14,23 @@ describe ApplicationController do
       end
     end
     context 'when there is a session user' do
-      let(:user) { create(:user) }
-      it 'returns the session user' do
-        expect do
-          get :meta, {}, { user_id: user.to_param }
-          controller.send(:current_user).should eq user
-          controller.send(:signed_in?).should be_truthy
-        end.to change { User.count }.by(1)
+      context 'with super_user and impersonate param' do
+        let(:user) { create(:user, role: 'super_user') }
+        let(:impersonated_user) { create(:user) }
+        it 'returns the impersonated user' do
+          get :meta, { impersonate: impersonated_user.to_param }, { user_id: user.to_param }
+          controller.send(:current_user).should eq impersonated_user
+        end
+      end
+      context 'without impersonate param' do
+        let(:user) { create(:user) }
+        it 'returns the session user' do
+          expect do
+            get :meta, {}, { user_id: user.to_param }
+            controller.send(:current_user).should eq user
+            controller.send(:signed_in?).should be_truthy
+          end.to change { User.count }.by(1)
+        end
       end
     end
   end

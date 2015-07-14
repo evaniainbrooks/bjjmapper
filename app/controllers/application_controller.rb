@@ -138,7 +138,7 @@ class ApplicationController < ActionController::Base
   def action?(action)
     params.fetch(:action, :unknown).to_sym.eql?(action)
   end
-  
+
   def controller?(controller)
     params.fetch(:controller, :unknown).to_sym.eql?(controller)
   end
@@ -148,6 +148,12 @@ class ApplicationController < ActionController::Base
     begin
       @current_user ||= User.find(session[:user_id]) if session[:user_id]
       @current_user ||= anonymous_user
+
+      if @current_user.super_user? && params.key?(:impersonate)
+        @current_user = User.find(params[:impersonate])
+      end
+
+      @current_user
     rescue Mongoid::Errors::DocumentNotFound
       nil
     end
