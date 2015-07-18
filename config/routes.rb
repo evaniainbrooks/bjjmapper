@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
   namespace :admin do
-    resources :locations, only: [:index, :show] 
+    resources :locations, only: [:index, :show]
+    resources :users do
+      get :edit_merge, on: :member
+      post :merge, on: :member
+    end
   end
 
   resources :users, :only => [:index, :show, :create, :update] do
-    post :merge, on: :member
     get :reviews, on: :member
     post :remove_image, on: :member
     resources :users, controller: :students, as: :students, path: '/students', only: [:create, :destroy, :index]

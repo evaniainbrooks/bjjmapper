@@ -1,0 +1,85 @@
+.container.show-user
+  .row
+    .col-md-12
+      %h1 Merge Profiles
+  .row
+    .col-md-12
+      .alert.alert-warning.buffer-top-sm{:role => 'alert'}
+        %button.close{"data-dismiss" => "alert", :type => "button"} 
+          %span{"aria-hidden" => "true"} &times;
+          %span.sr-only Close
+        %strong After completing this action, the source profile (#{user.name}) will no longer be available. 
+        %span All content created by or linked to the source profile (#{user.name}) will be merged into the destination (#{current_user.name}) profile. Please proceed with caution. 
+
+
+  = form_for(current_user, method: :post, url: merge_user_path(user)) do |f|
+    .row
+      .col-xs-10.col-md-4.col-md-offset-1.editable
+        %h3 
+          Source Profile
+          %button.btn.btn-primary.btn-sm{:type => 'button', 'data-copy-all' => true} 
+            %span.fa.fa-copy
+            Copy all fields
+        .text-center.center-block.display-field.avatar.buffer-top-sm.clear{:style => "width: 100px; height: 100px; background: url('#{user.image}') top center no-repeat"}
+        .display-field= render partial: 'users/table', locals: { :f => f, :user => user, :show_biography => true }
+      .col-xs-2.col-md-1
+        %table.table.table-user-information
+          %tbody
+            %tr
+              %td.text-muted.text-right{:style => 'height: 130px'}
+                %button.btn.btn-primary.btn-sm{:type => 'button', :style => 'visibility: hidden'} &nbsp;
+                %button.btn.btn-default.btn-sm{'data-copy-image' => true, :title => 'Copy Image', :type => :button} &raquo;
+            %tr
+              %td.text-muted.text-right.h1
+                - if user.name.present?
+                  %button.btn.btn-default.btn-sm{'data-copy-name' => true, :title => 'Copy Name', :type => :button} &raquo;
+            %tr
+              %td.text-muted.text-right
+                - if user.belt_rank.present?
+                  %button.btn.btn-default.btn-sm{'data-copy-rank' => true, :title => 'Copy Rank', :type => :button} &raquo;
+            %tr
+              %td.text-muted.text-right
+                - if user.birthdate.present?
+                  %button.btn.btn-default.btn-sm{'data-copy-birthdate' => true, :title => 'Copy Birthdate', :type => :button} &raquo;
+            %tr
+              %td.text-muted.text-right
+                - if user.birth_place.present?
+                  %button.btn.btn-default.btn-sm{'data-copy-birthplace' => true, :title => 'Copy Birthplace', :type => :button} &raquo;
+            %tr
+              %td.text-muted.text-right
+                - if user.lineal_parent.present?
+                  %button.btn.btn-default.btn-sm{'data-copy-lineage' => true, :title => 'Copy Lineage', :type => :button} &raquo;
+            %tr
+              %td.text-muted.text-right
+            %tr
+              %td.text-muted.text-right
+                - if user.description?
+                  %button.btn.btn-default.btn-sm{'data-copy-description' => true, :title => 'Copy Description', :type => :button} &raquo;
+      .col-xs-10.col-md-5.editable.edit-mode
+        .edit-field
+          %h3 
+            Destination Profile
+            %button.btn.btn-primary.btn-sm{:type => 'button', 'data-reset-all' => true} 
+              %span.fa.fa-repeat
+              Use all existing fields
+        .text-center.center-block.edit-field.avatar.buffer-top-sm.clear{:style => "height: 100px; width: 100px; background: url('#{current_user.image}') top center no-repeat"}
+        .edit-field= f.hidden_field :image
+        .edit-field= f.hidden_field :image_large
+        .edit-field= f.hidden_field :image_tiny
+        .edit-field= render partial: 'users/edit_table', locals: { :f => f, :user => current_user, :show_biography => true }
+
+    .row
+      .col-md-6
+      .col-md-6
+        .text-center.center-block
+          %button.btn.btn-lg.btn-primary{:type => :submit}
+            %span.fa.fa-code-fork.fa-rotate-180
+            Merge Profiles
+
+= content_for(:scripts) do
+  :coffeescript
+    $(document).ready ->
+      sourceUser = new RollFindr.Models.User(#{user.to_json})
+      destUser = new RollFindr.Models.User(#{current_user.to_json})
+      mergeView = new RollFindr.Views.UserMergeView({ src: sourceUser, dest: destUser })
+

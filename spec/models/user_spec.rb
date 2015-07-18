@@ -2,6 +2,20 @@ require 'spec_helper'
 require 'wikipedia'
 
 describe User do
+  describe 'validations' do
+    describe '.name' do
+      it 'is invalid without a name' do
+        build(:user, name: 'hello world').should be_valid
+        build(:user, name: nil).should_not be_valid
+      end
+    end
+    describe '.image, .image_tiny, .image_large' do
+      it 'must have a valid prefix' do
+        build(:user, image: 'https://commondatastorage.googleapis.com/bjjmapper/test.png').should be_valid
+        build(:user, image: 'hacks.com/test.png').should_not be_valid
+      end
+    end
+  end
   describe '#jitsukas' do
     before do
       create(:user, name: 'included', belt_rank: 'black')

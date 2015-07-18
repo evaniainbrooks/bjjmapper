@@ -7,6 +7,8 @@ class User
 
   include Mongoid::History::Trackable
 
+  VALID_IMAGE_MATCH = /^https:\/\/commondatastorage.googleapis.com\/bjjmapper\//
+
   track_history   :on => :all,
                   :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier
                   :modifier_field_inverse_of => :nil, # adds an ":inverse_of" option to the "belongs_to :modifier" relation, default is not set
@@ -48,6 +50,8 @@ class User
 
   validates :name, presence: true
 
+  validate :valid_image_prefix?
+
   geocoded_by :ip_address
   after_validation :safe_geocode
 
@@ -74,6 +78,7 @@ class User
     end
   end
 
+  default_scope -> { where(:redirect_to_user_id => nil) }
   scope :jitsukas, -> { where(:belt_rank.in => ['blue', 'purple', 'brown', 'black']) }
 
   def can_edit? object
@@ -168,6 +173,18 @@ class User
   end
 
   private
+
+  def valid_image_prefix?
+    if self.image_tiny.present? && VALID_IMAGE_MATCH.match(self.image_tiny).blank?
+      errors.add(:image_tiny, 'invalid image url')
+    end
+    if self.image.present? && VALID_IMAGE_MATCH.match(self.image).blank?
+      errors.add(:image, 'invalid image url')
+    end
+    if self.image_large.present? && VALID_IMAGE_MATCH.match(self.image_large).blank?
+      errors.add(:image_large, 'invalid image url')
+    end
+  end
 
   def safe_geocode
     begin
