@@ -15,7 +15,10 @@ class SessionsController < ApplicationController
       user.save
       tracker.alias(user.to_param, session[:user_id])
       session[:user_id] = user.to_param
-      redirect_to user_path(user, edit: 1)
+
+      send_welcome_email(user)
+
+      redirect_to user_path(user, edit: 1, welcome: 1)
     else
       user.update_attribute(:last_seen_at, Time.now)
       tracker.alias(user.to_param, session[:user_id])
@@ -42,6 +45,17 @@ class SessionsController < ApplicationController
   end
 
   private
+
+  def send_welcome_email(user)
+    urls = {
+      profile: user_url(user, edit: 1, welcome: 1, ref: 'welcome_email'),
+      home: root_url(ref: 'welcome_email'),
+      map: map_url(ref: 'welcome_email'),
+      create: wizard_locations_url(ref: 'welcome_email')
+    }
+
+    WelcomeMailer.welcome_email(user, urls).deliver
+  end
 
   def auth_info
     request.env['omniauth.auth']

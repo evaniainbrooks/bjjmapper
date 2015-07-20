@@ -21,6 +21,11 @@ describe SessionsController do
         .with(an_instance_of(String), session_params[:user_id])
     end
     context 'when the user does not exist' do
+      before do
+        mailer = double
+        mailer.should_receive(:deliver)
+        WelcomeMailer.should_receive(:welcome_email).and_return(mailer)
+      end
       it 'creates a user' do
         expect do
           post :create, { provider: omniauth_provider }, session_params
@@ -33,7 +38,7 @@ describe SessionsController do
       end
       it 'redirects to the edit profile page with the new user' do
         post :create, { provider: omniauth_provider }, session_params
-        response.should redirect_to user_path(User.last.to_param, edit: 1)
+        response.should redirect_to user_path(User.last.to_param, welcome: 1, edit: 1)
       end
     end
     context 'when the user does exist' do
