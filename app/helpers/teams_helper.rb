@@ -3,7 +3,7 @@ module TeamsHelper
     "/service/avatar/upload/teams/#{team.id}/async"
   end
   def all_teams
-    Team.all.limit(50).to_a.sort_by(&:name)
+    Team.all.limit(100).to_a.sort_by(&:name)
   end
   def all_teams_groups
     teams = TeamDecorator.decorate_collection(all_teams)
