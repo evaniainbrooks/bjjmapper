@@ -7,7 +7,7 @@ class User
 
   include Mongoid::History::Trackable
 
-  VALID_IMAGE_MATCH = /^https:\/\/commondatastorage.googleapis.com\/bjjmapper\//
+  VALID_IMAGE_MATCH = /^https:\/\/(common)?datastorage.googleapis.com\/bjjmapper\//
 
   track_history   :on => :all,
                   :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier

@@ -6,6 +6,10 @@ FactoryGirl.define do
     uid '1234'
     email 'test@rollfindr.com'
     provider :twitter
+    image 'https://commondatastorage.googleapis.com/bjjmapper/image.png'
+    image_large 'https://commondatastorage.googleapis.com/bjjmapper/large.png'
+    image_tiny 'https://commondatastorage.googleapis.com/bjjmapper/tiny.png'
+
 
     factory :white_belt do
       belt_rank 'white'

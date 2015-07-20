@@ -104,7 +104,7 @@ describe UsersController do
     end
   end
   describe 'POST remove_image' do
-    let(:user) { create(:user, image_tiny: 'evan', image: 'xyz', image_large: 'abc') }
+    let(:user) { create(:user) }
     context 'when not signed in' do
       it 'returns not_authorized' do
         post :remove_image, { id: user.to_param, :format => 'json' }
@@ -113,7 +113,7 @@ describe UsersController do
     end
     context 'when locked and no permissions' do
       let(:session_params) { { user_id: create(:user, role: 'user').to_param } }
-      let(:locked_user) { create(:user, provider: '1234', flag_locked: true, image_tiny: 'evan', image: 'xyz', image_large: 'abc') }
+      let(:locked_user) { create(:user, provider: '1234', flag_locked: true) }
       context 'with json format' do
         it 'returns forbidden' do
           post :remove_image, { id: locked_user.to_param, :format => 'json' }, session_params

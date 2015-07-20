@@ -2,6 +2,9 @@ require 'spec_helper'
 require 'wikipedia'
 
 describe User do
+  it 'has a factory' do
+    build(:user).should be_valid
+  end
   describe 'validations' do
     describe '.name' do
       it 'is invalid without a name' do
