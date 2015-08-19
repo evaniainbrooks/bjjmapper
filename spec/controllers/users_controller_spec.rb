@@ -103,6 +103,30 @@ describe UsersController do
       end
     end
   end
+  describe 'DELETE destroy' do
+    let(:user) { create(:user, role: 'user') }
+    let(:session_params) { { :user_id => user.to_param } }
+    let(:new_user) { create(:user, name: 'Buddy') }
+    before { user; new_user }
+    context 'when the user is not editable' do
+      before { User.any_instance.stub(:editable_by?).and_return(false) }
+      it 'returns forbidden' do
+        expect do
+          post :destroy, { id: new_user.id }, session_params
+          response.status.should eq 403
+        end.to change { User.count }.by(0)
+      end
+    end
+    context 'when the user is editable' do
+      before { User.any_instance.stub(:editable_by?).and_return(true) }
+      it 'destroys the user' do
+        expect do
+          post :destroy, { id: user.id, :format => 'json' }, session_params
+          response.status.should eq 200
+        end.to change { User.count }.by(-1)
+      end
+    end
+  end
   describe 'POST remove_image' do
     let(:user) { create(:user) }
     context 'when not signed in' do

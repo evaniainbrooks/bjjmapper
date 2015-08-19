@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:reviews, :show, :update, :remove_image]
+  before_action :set_user, only: [:destroy, :reviews, :show, :update, :remove_image]
   before_action :ensure_signed_in, only: [:update, :create, :remove_image]
-  before_action :check_permissions, only: [:update, :remove_image]
+  before_action :check_permissions, only: [:destroy, :update, :remove_image]
 
   decorates_assigned :user
 
@@ -86,7 +86,21 @@ class UsersController < ApplicationController
       format.html { redirect_to user_path(@user, edit: 0) }
     end
   end
-  
+
+  def destroy
+    tracker.track('deleteUser',
+      id: @user.to_param,
+      user: @user.as_json({})
+    )
+
+    @user.destroy
+
+    respond_to do |format|
+      format.html { redirect_to users_path }
+      format.json { render status: :ok, json: @user }
+    end
+  end
+
   def remove_image
     tracker.track('removeUserImage',
       id: @user.to_param,
