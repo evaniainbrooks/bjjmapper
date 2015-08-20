@@ -13,7 +13,11 @@
   = f.select :team_id, grouped_options_for_select(all_teams_select_groups, location.team_id), { include_blank: true }, { class: 'form-control  input-md' }
   = f.label :description, class: 'small'
   = f.text_area :description, placeholder: 'Provide a description of the academy', class: 'form-control', rows: 3
-%h5.display-field
+%div.display-field.description
   = simple_format(location.description)
 
 %a.media-teaser.hidden-xs.display-field{:href => '#media', :title => 'View more media'}
+
+= content_for(:scripts) do
+  :coffeescript
+    $('.description').readmore(collapsedHeight: 100)
