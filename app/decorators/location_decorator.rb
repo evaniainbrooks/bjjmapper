@@ -70,7 +70,7 @@ class LocationDecorator < Draper::Decorator
     if object.description.present?
       object.description
     else
-      h.content_tag(:i, class: 'text-muted') { DEFAULT_DESCRIPTION }
+      h.content_tag(:i, class: 'text-muted') { generated_description }
     end
   end
 
@@ -152,6 +152,35 @@ class LocationDecorator < Draper::Decorator
   end
 
   private
+
+  def generated_description
+    # TODO: Move this to string resources yml
+    desc = if self.team.present?
+      "'#{self.object.title}' is a #{self.object.team.name} affiliated Brazilian Jiu-Jitsu academy located at #{self.object.street} in #{self.object.city}, #{self.object.country}."
+    else
+      "'#{self.object.title}' is an independent Brazilian Jiu-Jitsu academy located at #{self.object.street} in #{self.object.city}, #{self.object.country}."
+    end
+
+    if self.instructors.present?
+      instructors = self.instructors.collect do |instructor|
+        "#{instructor.name} (#{instructor.rank_in_words})"
+      end
+
+      instructor_desc = if instructors.length > 1
+        "Instructors are #{instructors.join(',')}"
+      else
+        "The instructor is #{instructors.first}"
+      end
+
+      desc = "#{desc}. #{instructor_desc}"
+    end
+
+    if self.object.email.present?
+      desc = "#{desc}. Contact #{h.mail_to(self.object.email)} for more information."
+    end
+
+    desc.html_safe
+  end
 
   def avatar_service_url(name)
     clean_name = CGI.escape(name.gsub(/[\/?&]/, ' '))

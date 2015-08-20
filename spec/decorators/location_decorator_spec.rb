@@ -93,7 +93,7 @@ describe LocationDecorator do
   describe '.description' do
     context 'with blank description' do
       subject { build(:location, description: nil).decorate }
-      it { subject.description.should match LocationDecorator::DEFAULT_DESCRIPTION }
+      it { subject.description.should match subject.title }
     end
     context 'with explicit description' do
       subject { build(:location, description: 'xyz').decorate }
