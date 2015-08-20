@@ -1,12 +1,9 @@
-%address.display-field
+%address.display-field.text-info
   = location.street
   %br/
   = "#{location.city}, #{location.state}"
   %br/
   = "#{location.postal_code} #{location.country}"
-.display-field
-  %span.text-info.small= "GPS: #{location.gps}"
-  %br/
   %br/
 .form-group.edit-field
   = f.label :street, class: 'small'
@@ -22,5 +19,9 @@
 .form-group.edit-field
   = f.label :directions, class: 'small'
   = f.text_area :directions, placeholder: 'Provide any extra directions to the academy (eg. signage missing; go around the back)', class: 'form-control', rows: 3
-%p.display-field
+%p.display-field.directions
   = location.directions
+
+= content_for(:scripts) do
+  :coffeescript
+    $('.directions').readmore(collapsedHeight: 175)

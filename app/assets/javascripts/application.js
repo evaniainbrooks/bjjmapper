@@ -28,6 +28,7 @@
 //= require underscore
 //= require bootstrap-datetimepicker
 //= require instafeed.min
+//= require readmore.min
 //= require_tree ./templates
 //= require backbone
 //= require backbone_rails_sync
