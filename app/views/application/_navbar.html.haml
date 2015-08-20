@@ -35,7 +35,7 @@
               %input.form-control{:name => 'location', :size => '10', :placeholder => "Anywhere", :type => "text", :value => params[:location]}/
               %a.input-group-addon{'data-geolocate' => 'true', :href => '#geolocate'}
                 %i.fa.fa-location-arrow
-          %button.btn.btn-default{:type => "submit"} Search
+          %button.btn.btn-default{'data-nodisable' => true, :type => "submit"} Search
       = render partial: 'profile_or_login'
     / /.navbar-collapse
   / /.container-fluid

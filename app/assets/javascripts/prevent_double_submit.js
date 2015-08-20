@@ -1,7 +1,8 @@
 +function($) {
   $(document).ready(function() {
     $('form').submit(function() {
-      $(this).find("button[type='submit']").prop('disabled',true);
+      var btn = $(this).find("button[type='submit']:not([data-nodisable])");
+      btn.prop('disabled',true);
     });
   });
 }(jQuery);
