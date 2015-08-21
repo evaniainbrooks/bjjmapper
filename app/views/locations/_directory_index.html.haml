@@ -12,10 +12,6 @@
             - @cities[country].sort.each do |city|
               %li.small= link_to city, directory_index_path(country, city), title: "List of Brazilian Jiu-Jitsu gyms in #{city}, #{country}"
   .col-md-3.col-md-offset-1
-    %a{:href => 'http://parosbjj.com/camp2015', :title => 'Brazilian Jiu-Jitsu Paradise Camp 2015'}
-      %img{:src => '//storage.googleapis.com/bjjmapper/paros2015_banner.png', :alt => 'Paros BJJ Camp Banner'}/
-    %br/
-    %br/
     = render partial: 'google_adsense'
 %hr/
 .row
