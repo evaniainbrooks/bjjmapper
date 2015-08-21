@@ -53,6 +53,11 @@
             %ul.list-unstyled.items
           .alternative
             = render partial: 'application/google_adsense'
+
+          - more_schools = [location.city, location.state || location.country].compact.join(', ')
+          = link_to map_path(ref: 'loc_dp', location: more_schools), title: "Brazilian Jiu-Jitsu schools in #{more_schools}" do
+            %p See more Brazilian Jiu-Jitsu schools in #{more_schools}
+
     %hr/
     .row
       .col-md-4.instructors

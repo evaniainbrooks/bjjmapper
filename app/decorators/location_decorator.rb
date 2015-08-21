@@ -156,9 +156,9 @@ class LocationDecorator < Draper::Decorator
   def generated_description
     # TODO: Move this to string resources yml
     desc = if self.team.present?
-      "'#{self.object.title}' is a #{self.object.team.name} affiliated Brazilian Jiu-Jitsu academy located at #{self.object.street} in #{self.object.city}, #{self.object.country}."
+      "'#{self.object.title}' is a #{self.object.team.name} affiliated Brazilian Jiu-Jitsu academy located at #{self.object.street} in #{self.object.city}, #{self.object.country}"
     else
-      "'#{self.object.title}' is an independent Brazilian Jiu-Jitsu academy located at #{self.object.street} in #{self.object.city}, #{self.object.country}."
+      "'#{self.object.title}' is an independent Brazilian Jiu-Jitsu academy located at #{self.object.street} in #{self.object.city}, #{self.object.country}"
     end
 
     if self.instructors.present?
