@@ -1,0 +1,10 @@
+.location-metadata-dialog.modal.fade{'aria-hidden' => 'true', 'aria-labelledby' => 'locationMetadataDialog', 'role' => 'dialog', 'tabindex' => '-1'}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+        %h4.modal-title
+          %i.fa.fa-info-circle
+          = "#{location.title} Metadata"
+      .modal-body
+        %pre.small= JSON.pretty_generate(location.as_json({})) 

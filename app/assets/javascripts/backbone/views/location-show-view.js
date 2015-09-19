@@ -15,13 +15,15 @@
     events: {
       'click .add-review': 'addReview',
       'change [name="location[team_id]"]': 'changeTeam',
-      'click .add-instructor-menu': 'addInstructor'
+      'click .add-instructor-menu': 'addInstructor',
+      'click .show-metadata': 'showMetadataDialog'
     },
     initialize: function(options) {
       _.bindAll(this,
         'addReview',
         'addInstructor',
-        'changeTeam');
+        'changeTeam',
+        'showMetadataDialog');
 
       this.model = new RollFindr.Models.Location(options.model);
       this.addInstructorView = new RollFindr.Views.AddInstructorView();
@@ -44,6 +46,9 @@
       var teamImg = $('option:selected', e.currentTarget).data('img-src');
       var imgElem = this.$('.edit-image');
       imgElem.attr('src', teamImg);
+    },
+    showMetadataDialog: function() {
+      $('.location-metadata-dialog').modal('show');
     }
   });
 }(jQuery);

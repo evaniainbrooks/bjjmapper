@@ -93,12 +93,12 @@
     %hr.edit-field/
     .row.edit-field
       .col-md-12
-        %h3 Edit Controls
-      .col-md-12
-        %pre.small= JSON.pretty_generate(location.as_json({}))
-        %br/
-      .col-md-12
         .pull-right
+          %button.show-metadata.btn.btn-default.btn-md{:type => 'button'}
+            %i.fa.fa-info-circle
+            Show Metadata
+
+          &nbsp;&nbsp;
           %button.delete-field.btn.btn-danger.btn-md{:type => 'button',
             :data => { :method => :delete,
                        :url => location_path(location),
@@ -106,17 +106,13 @@
                        :body => "You are performing this action as <b>#{current_user.try(:name)}</b>. Press 'Confirm' to permanently delete this academy. Note that this action cannot be un-done." } }
             %i.fa.fa-trash
             Delete Academy
-
-          &nbsp;&nbsp;
-          %button.btn.btn-default.btn-md{:type => 'button', 'data-cancel-edit' => true} Cancel Editing
-          %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes
-
     %br/
 
   = render :partial => 'instructors/add_instructor_dialog'
   = render :partial => 'reviews/add_review_dialog'
   = render :partial => 'events/add_event_modal', locals: { location: location }
   = render :partial => 'claim_location_dialog', locals: { location: location }
+  = render :partial => 'metadata_dialog', locals: { location: location }
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->
