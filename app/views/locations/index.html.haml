@@ -1,12 +1,12 @@
 - seo_name = [@criteria[:city], @criteria[:country]].compact.join(", ")
+- title = locations.present? ? "Brazilian Jiu-Jitsu Academies in #{seo_name}" : "Brazilian Jiu-Jitsu Academy Directory"
 = content_for :title do
-  = locations.present? ? "Brazilian Jiu-Jitsu Academies in #{seo_name}" : "Brazilian Jiu-Jitsu Academy Directory"
-
+  = title
 .container.page.directory
   .row
     .col-md-12
       %h1
-        Brazilian Jiu-Jitsu Academy Directory
+        = title
         - if locations.blank?
           %span.small= "#{Location.count} academies worldwide"
   .row
@@ -41,10 +41,7 @@
     .row
       .col-md-12
         %h3
-          - if @criteria[:city].present?
-            %span= "Found #{pluralize(locations.count, 'academy')} near #{@criteria[:city]}, #{@criteria[:country]}"
-          - else
-            %span= "Found #{pluralize(locations.count, 'academy')} in #{@criteria[:country]}"
+          %span= "Showing #{pluralize(locations.count, 'academy')}"
           %span
             = surround '(', ')' do
               = link_to 'See locations on map', map_path(zoom: Map::ZOOM_CITY, center: locations.first.to_coordinates), title: "See map of Brazilian Jiu-Jitsu gyms in #{seo_name}"
