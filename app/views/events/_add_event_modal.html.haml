@@ -6,41 +6,27 @@
           %button.close{'data-dismiss' => 'modal', 'type' => 'button'}
             %span{'aria-hidden' => 'true'} &times;
             %span.sr-only Close
-          %h4
+          %h4.modal-title
             %i.fa.fa-calendar
             Create Event
         .modal-body
-          %ul.nav.nav-tabs{:role => 'tablist'}
-            %li.active
-              %a{:href => '#class-event', 'role' => 'tab', 'data-toggle' => 'tab'} Scheduled Class
-            %li
-              %a{:href => '#special-event', 'role' => 'tab', 'data-toggle' => 'tab'} Seminar
-            %li
-              %a{:href => '#tournament-event', 'role' => 'tab', 'data-toggle' => 'tab'} Tournament
-          .tab-content
-            .tab-pane#special-event
-              %h4.text-danger Coming soon
-            .tab-pane#tournament-event
-              %h4.text-danger Coming soon
-            .active.tab-pane#class-event
-              .container-fluid
-                .row
-                  %br/
-                  .col-md-12
-                    %fieldset
-                      / Text input
-                      .form-group
-                        %label.control-label{:for => "event[title]"} Title
-                        = f.text_field :title, placeholder: 'eg. BJJ Beginners, Competition Class', class: 'form-control input-lg'
-                      .form-group
-                        %label.control-label{:for => "event[instructor]"} Instructor
-                        = f.select :instructor, location.instructors.map{|o| [o.name, o.id]}, {include_blank: true}, class: 'form-control input-md'
-                      .form-group
-                        = render partial: 'events/start_picker'
-                      .form-group
-                        = render partial: 'events/end_picker'
-                      .form-group
-                        = render partial: 'events/recurrence_controls', locals: { f: f }
+          .container-fluid
+            .row
+              .col-md-12
+                %fieldset.small
+                  / Text input
+                  .form-group
+                    %label.control-label{:for => "event[title]"} Title
+                    = f.text_field :title, placeholder: 'eg. BJJ Beginners, Competition Class', class: 'form-control input-lg'
+                  .form-group
+                    %label.control-label{:for => "event[instructor]"} Instructor
+                    = f.select :instructor, location.instructors.map{|o| [o.name, o.id]}, {include_blank: true}, class: 'form-control input-md'
+                  .form-group
+                    = render partial: 'events/start_picker'
+                  .form-group
+                    = render partial: 'events/end_picker'
+                  .form-group
+                    = render partial: 'events/recurrence_controls', locals: { f: f }
         .modal-footer
           %button.btn.btn-default{:type => 'button', 'data-dismiss' => 'modal'} Cancel
           %button.btn.btn-success{:disabled => true, :type => 'submit'} Create Event

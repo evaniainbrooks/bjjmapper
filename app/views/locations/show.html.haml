@@ -78,7 +78,8 @@
             = surround '(', ')' do
               = link_to 'view full schedule', schedule_location_path(location, ref: 'loc_sched_full')
         %a{:name => 'schedule'}
-        .scheduler.clear
+        .scheduler-container.clear
+          .scheduler
     %hr/
     .row
       - if location.facebook.present? && !location.facebook_group?

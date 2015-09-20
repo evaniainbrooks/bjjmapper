@@ -1,11 +1,16 @@
 #= require backbone/views/create-event-view
 
 class RollFindr.Views.LocationCalendarView extends Backbone.View
-  el: $('.scheduler')
+  el: $('.scheduler-container')
   createEventView: null
   eventTemplate: JST['templates/event']
   initialize: (options)->
-    _.bindAll(this, 'initializeCalendarView', 'calendarSelected', 'calendarEventDrop', 'calendarEventRender', 'calendarEventClick')
+    _.bindAll this,
+      'initializeCalendarView',
+      'calendarSelected',
+      'calendarEventDrop',
+      'calendarEventRender',
+      'calendarEventClick'
 
     RollFindr.GlobalEvents.on('editing', @initializeCalendarView)
 
@@ -21,8 +26,10 @@ class RollFindr.Views.LocationCalendarView extends Backbone.View
     else
       "basicWeek,basicDay"
 
+    @$el.html('<div class="scheduler"></div>')
+
     locationId = @model.get('id')
-    @$el.fullCalendar({
+    @$('.scheduler').fullCalendar({
       events: Routes.location_events_path(locationId),
       eventDurationEditable: false,
       editable: editable,
@@ -72,3 +79,4 @@ class RollFindr.Views.LocationCalendarView extends Backbone.View
 
   calendarSelected: (start, end, event)->
     @createEventView.render(start, end)
+

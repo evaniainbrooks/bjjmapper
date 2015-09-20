@@ -10,7 +10,8 @@
         %small.pull-left.text-muted= "All times shown using the #{location.timezone} timezone."
         %small.pull-right.text-info.edit-field To add an event to the schedule, click the time/day that the event falls on.
         %a{:name => 'schedule'}
-        .scheduler.clear
+        .scheduler-container.clear
+          .scheduler
 
 = render :partial => 'events/add_event_modal', locals: { location: location }
 = content_for(:scripts) do

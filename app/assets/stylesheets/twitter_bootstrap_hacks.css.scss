@@ -3,6 +3,10 @@ html {
   overflow-y: scroll;
 }
 
+body.modal-open {
+  overflow: visible;
+}
+
 .toast-info {
   background-color: #449d44 !important;
 }

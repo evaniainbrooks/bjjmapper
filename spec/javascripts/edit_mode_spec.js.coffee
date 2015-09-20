@@ -23,15 +23,7 @@ describe 'Edit Mode', ->
         $('[data-begin-edit]').trigger('click')
         $('.editable').should.have.class('edit-mode')
 
-      it 'follows the link if the [data-follow-href] attribute is set', ->
-        @timeout(1000)
-        $('[data-begin-edit]').data('follow-href', true)
-        $('body').delegate '.editable [data-begin-edit]', 'click', (e)->
-          e.isDefaultPrevented().should.equal(false)
-
-        $('[data-begin-edit]').trigger('click')
-
-      it 'does not follow the link if the [data-follow-href] attribute is missing or false', ->
+      it 'prevents the default link action', ->
         @timeout(1000)
         $('[data-begin-edit]').data('follow-href', false)
         $('html').delegate '.editable [data-begin-edit]', 'click', (e)->
