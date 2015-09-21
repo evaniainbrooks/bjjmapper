@@ -213,6 +213,9 @@ GEM
       activesupport
       easy_diff
       mongoid (>= 3.0)
+    mongoid-slug (4.0.0)
+      mongoid (>= 3.0)
+      stringex (~> 2.0)
     moped (2.0.0.rc1)
       bson (~> 2.2)
       connection_pool (~> 2.0)
@@ -367,6 +370,7 @@ GEM
       colorize
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
+    stringex (2.5.2)
     therubyrhino (2.0.3)
       therubyrhino_jar (>= 1.7.3)
     therubyrhino_jar (1.7.4)
@@ -428,6 +432,7 @@ DEPENDENCIES
   mixpanel-ruby
   mongoid (~> 4.0.0.beta)
   mongoid-history
+  mongoid-slug
   omniauth-facebook
   omniauth-google-oauth2
   omniauth-identity

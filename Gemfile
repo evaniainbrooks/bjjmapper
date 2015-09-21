@@ -39,6 +39,7 @@ gem 'geocoder', require: false
 gem 'mixpanel-ruby', require: false
 gem 'ice_cube', require: false
 gem 'bootstrap3-datetimepicker-rails', '~> 3.1.3'
+gem 'mongoid-slug'
 
 group :development do
   gem 'capistrano', require: false
