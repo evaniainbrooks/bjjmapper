@@ -323,8 +323,8 @@ class LocationsController < ApplicationController
   end
 
   def set_location
-    id_param = params.fetch(:id, '').split('-', 2).first
-    @location = Location.where(id: id_param).first
+    id_param = params.fetch(:id, '')
+    @location = Location.find(id_param)
 
     head :not_found and return false unless @location.present?
   end

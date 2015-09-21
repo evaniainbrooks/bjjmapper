@@ -3,6 +3,7 @@ require 'mongoid_search_ext'
 
 class Location
   include Mongoid::Document
+  include Mongoid::Slug
   include Mongoid::Timestamps
   include Geocoder::Model::Mongoid
 
@@ -47,7 +48,10 @@ class Location
   field :state
   field :country
   field :postal_code
+
   field :title
+  slug :title, history: true
+
   field :description
   field :directions
   field :image
@@ -120,7 +124,7 @@ class Location
   end
 
   def to_param
-    [id, title.parameterize].join('-')
+    slug
   end
 
   def address_components

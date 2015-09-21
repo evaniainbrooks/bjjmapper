@@ -1,6 +1,6 @@
 class Admin::LocationsController < Admin::AdminController
   def show
-    id_param = params.fetch(:id, '').split('-', 2).first
+    id_param = params.fetch(:id, '')
     @location = Location.find(id_param)
   end
 

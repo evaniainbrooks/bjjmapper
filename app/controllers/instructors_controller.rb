@@ -70,12 +70,12 @@ class InstructorsController < ApplicationController
   end
 
   def fetch_team
-    id_param = params.fetch(:team_id, '').split('-', 2).first
+    id_param = params.fetch(:team_id, '')
     Team.find(id_param)
   end
 
   def fetch_location
-    id_param = params.fetch(:location_id, '').split('-', 2).first
+    id_param = params.fetch(:location_id, '')
     Location.find(id_param)
   end
 

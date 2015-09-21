@@ -2,6 +2,7 @@ require 'wikipedia'
 
 class User
   include Mongoid::Document
+  include Mongoid::Slug
   include Geocoder::Model::Mongoid
   include Mongoid::Timestamps
 
@@ -21,6 +22,8 @@ class User
   field :provider, type: String
   field :uid, type: String
   field :name, type: String
+  slug :name, history: true
+
   field :email, type: String
   field :image_tiny, type: String
   field :image_large, type: String
@@ -103,8 +106,8 @@ class User
     return -key
   end
 
-  def self.create_anonymous(ip_address)
-    User.create(provider: 'anonymous', role: 'anonymous', ip_address: ip_address, name: "Anonymous #{ip_address}", last_seen_at: Time.now)
+  def self.anonymous(ip_address)
+    User.where(ip_address: ip_address).first_or_create(provider: 'anonymous', role: 'anonymous', name: "Anonymous #{ip_address}", last_seen_at: Time.now)
   end
 
   def self.from_omniauth(auth, ip_address)
@@ -152,6 +155,10 @@ class User
         (birth_month >= d.month and birth_day > d.day)
     )
     a
+  end
+
+  def to_param
+    slug
   end
 
   def as_json(args={})

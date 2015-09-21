@@ -131,14 +131,12 @@ private
   end
 
   def set_locations
-    id_params = params[:ids].collect{|id| id.split('-', 2).first}
-    
-    @locations = Location.where(:_id.in => id_params)
+    @locations = Location.find(params[:ids])
     head :bad_request and return false unless @locations.present?
   end
 
   def set_location
-    id_param = params.fetch(:location_id, '').split('-', 2).first
+    id_param = params.fetch(:location_id, '')
     @location = Location.find(id_param)
     head :bad_request and return false unless @location.present?
   end

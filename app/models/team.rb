@@ -2,6 +2,7 @@ require 'mongoid-history'
 
 class Team
   include Mongoid::Document
+  include Mongoid::Slug
   include Mongoid::Timestamps
   include Mongoid::History::Trackable
   track_history   :on => :all,
@@ -12,6 +13,8 @@ class Team
                   :track_update   =>  true,     # track document updates, default is true
                   :track_destroy  =>  true     # track document destruction, default is false
   field :name, type: String
+  slug :name, history: true
+
   field :description, type: String
   field :image_tiny, type: String
   field :image, type: String
@@ -41,7 +44,7 @@ class Team
   end
 
   def to_param
-    [id, name.parameterize].join('-')
+    slug
   end
 
   def ig_hashtag

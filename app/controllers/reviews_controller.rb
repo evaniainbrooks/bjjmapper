@@ -35,7 +35,7 @@ class ReviewsController < ApplicationController
   end
 
   def set_location
-    id_param = params.fetch(:location_id, '').split('-', 2).first
+    id_param = params.fetch(:location_id, '')
     @location = Location.find(id_param)
 
     render status: :not_found and return unless @location.present?

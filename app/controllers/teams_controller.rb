@@ -100,7 +100,7 @@ class TeamsController < ApplicationController
   end
 
   def set_team
-    id_param = params.fetch(:id, '').split('-', 2).first
+    id_param = params.fetch(:id, '')
     @team = Team.find(id_param)
     render status: :not_found and return unless @team.present?
   end
