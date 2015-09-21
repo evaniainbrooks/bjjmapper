@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:destroy, :reviews, :show, :update, :remove_image]
+  before_action :redirect_legacy_bsonid, only: [:destroy, :reviews, :show, :update, :remove_image]
   before_action :ensure_signed_in, only: [:update, :create, :remove_image]
   before_action :check_permissions, only: [:destroy, :update, :remove_image]
 
@@ -152,6 +153,10 @@ class UsersController < ApplicationController
 
     p[:modifier_id] = current_user.to_param if signed_in?
     p
+  end
+
+  def redirect_legacy_bsonid
+    redirect_to(@user, status: :moved_permanently) and return false if /^[a-f0-9]{24}$/ =~ params[:id]
   end
 
   def set_user

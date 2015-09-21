@@ -9,9 +9,16 @@ describe UsersController do
       let(:location) { create(:location) }
       before { create(:review, user: user, location: location) }
       it 'returns the recent reviews' do
-        get :reviews, id: user.id, format: 'json', count: 1
+        get :reviews, id: user.to_param, format: 'json', count: 1
         response.should be_success
         response.body.should match(user.reviews.first.decorate.to_json)
+      end
+    end
+    context 'with legacy bsonid' do
+      let(:user) { create(:user) }
+      it 'redirects to slug' do
+        get :reviews, id: user.id, format: 'json', count: 1
+        response.should redirect_to(user)
       end
     end
   end
@@ -31,27 +38,25 @@ describe UsersController do
     end
   end
   describe 'GET show' do
-    let(:user) { build(:user) }
-    before { User.stub_chain(:unscoped, :find).and_return(user) }
+    let(:user) { create(:user) }
     context 'with json format' do
       it 'returns the user' do
-        get :show, id: '1234', format: 'json'
+        get :show, id: user.to_param, format: 'json'
         response.body.should eq user.to_json
       end
     end
     context 'with html format' do
       context 'when the redirect_to_user field is blank' do
         it 'renders the show page' do
-          get :show, id: '1234', format: 'html'
+          get :show, id: user.to_param, format: 'html'
           response.should render_template('users/show')
         end
       end
       context 'when the redirect_to_user field is set' do
-        let(:other_user) { create(:user) }
-        before { user.stub(:redirect_to_user).and_return(other_user) }
+        let(:other_user) { create(:user, redirect_to_user: user) }
         it 'redirects to the other user' do
-          get :show, id: '1234', format: 'html'
-          response.should redirect_to(user_path(other_user))
+          get :show, id: other_user.to_param, format: 'html'
+          response.should redirect_to(user_path(user))
         end
       end
     end
@@ -79,26 +84,26 @@ describe UsersController do
   describe 'POST update' do
     let(:user) { create(:user, role: 'user') }
     let(:session_params) { { :user_id => user.to_param } }
-    let(:new_user) { create(:user, name: 'Buddy') }
-    let(:update_params) { { :user => { :name => 'Buddy Holly' } } }
+    let(:new_user) { create(:user, description: 'Buddy') }
+    let(:update_params) { { :user => { :description => 'Buddy Holly' } } }
     context 'when the user is not editable' do
       before { User.any_instance.stub(:editable_by?).and_return(false) }
       it 'returns forbidden' do
-        post :update, { id: new_user.id }.merge(update_params), session_params
+        post :update, { id: new_user.to_param }.merge(update_params), session_params
         response.status.should eq 403
       end
     end
     context 'with json format' do
       before { User.any_instance.stub(:editable_by?).and_return(true) }
       it 'updates and returns the user' do
-        post :update, { id: user.id, :format => 'json' }.merge(update_params), session_params
-        response.body.should match update_params[:user][:name]
+        post :update, { id: user.to_param, :format => 'json' }.merge(update_params), session_params
+        response.body.should match update_params[:user][:description]
       end
     end
     context 'with html format' do
       before { User.any_instance.stub(:editable_by?).and_return(true) }
       it 'redirects back to the user' do
-        post :update, { id: user.id, :format => 'html' }.merge(update_params), session_params
+        post :update, { id: user.to_param, :format => 'html' }.merge(update_params), session_params
         response.body.should redirect_to(user_path(user, edit: 0))
       end
     end
@@ -112,7 +117,7 @@ describe UsersController do
       before { User.any_instance.stub(:editable_by?).and_return(false) }
       it 'returns forbidden' do
         expect do
-          post :destroy, { id: new_user.id }, session_params
+          post :destroy, { id: new_user.to_param }, session_params
           response.status.should eq 403
         end.to change { User.count }.by(0)
       end
@@ -121,7 +126,7 @@ describe UsersController do
       before { User.any_instance.stub(:editable_by?).and_return(true) }
       it 'destroys the user' do
         expect do
-          post :destroy, { id: user.id, :format => 'json' }, session_params
+          post :destroy, { id: user.to_param, :format => 'json' }, session_params
           response.status.should eq 200
         end.to change { User.count }.by(-1)
       end

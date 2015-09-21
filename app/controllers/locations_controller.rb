@@ -1,6 +1,7 @@
 class LocationsController < ApplicationController
   before_action :set_directory_segments, only: [:index]
   before_action :set_location, only: [:favorite, :schedule, :destroy, :show, :update, :move, :unlock]
+  before_action :redirect_legacy_bsonid, only: [:favorite, :schedule, :destroy, :show, :update, :move, :unlock]
   before_action :set_map, only: :show
   before_action :ensure_signed_in, only: [:wizard, :destroy, :create, :update, :move, :unlock]
   before_action :check_permissions, only: [:destroy, :update, :move, :unlock]
@@ -320,6 +321,10 @@ class LocationsController < ApplicationController
     p[:coordinates] = JSON.parse(p[:coordinates]) if p[:coordinates].present?
     p[:modifier_id] = current_user.to_param if signed_in?
     p
+  end
+
+  def redirect_legacy_bsonid
+    redirect_to(@location, status: :moved_permanently) and return false if /^[a-f0-9]{24}$/ =~ params[:id]
   end
 
   def set_location
