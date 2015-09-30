@@ -40,6 +40,7 @@ gem 'mixpanel-ruby', require: false
 gem 'ice_cube', require: false
 gem 'bootstrap3-datetimepicker-rails', '~> 3.1.3'
 gem 'mongoid-slug'
+gem 'redis-rails'
 
 group :development do
   gem 'capistrano', require: false
