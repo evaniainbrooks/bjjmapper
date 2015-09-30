@@ -109,6 +109,7 @@ class Location
     }
   })
 
+  default_scope -> { includes(:team).includes(:owner) }
   scope :academies, -> { where(:type => TYPE_ACADEMY) }
   scope :event_venue, -> { where(:type => TYPE_EVENT_VENUE) }
 

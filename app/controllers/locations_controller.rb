@@ -319,7 +319,7 @@ class LocationsController < ApplicationController
       :instagram)
 
     p[:coordinates] = JSON.parse(p[:coordinates]) if p[:coordinates].present?
-    p[:modifier_id] = current_user.to_param if signed_in?
+    p[:modifier] = current_user if signed_in?
     p
   end
 

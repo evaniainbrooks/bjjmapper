@@ -29,12 +29,12 @@ describe User do
       User.jitsukas.first.name.should eq 'included'
     end
   end
-  describe '#create_anonymous' do
+  describe '#anonymous' do
     let(:ip_addr) { '192.168.1.1' }
     context 'when geocoding succeeds' do
       it 'creates a new anonymous user' do
         expect do
-          anon_user = described_class.create_anonymous(ip_addr)
+          anon_user = described_class.anonymous(ip_addr)
           anon_user.should be_anonymous
         end.to change { User.count }.by(1)
       end
@@ -45,7 +45,7 @@ describe User do
       end
       it 'creates a new anonymous user' do
         expect do
-          anon_user = described_class.create_anonymous(ip_addr)
+          anon_user = described_class.anonymous(ip_addr)
           anon_user.should be_anonymous
         end.to change { User.count }.by(1)
       end

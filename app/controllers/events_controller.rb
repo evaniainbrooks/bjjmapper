@@ -15,6 +15,7 @@ class EventsController < ApplicationController
     @location.events << @event
 
     status = @event.valid? ? :ok : :bad_request
+
     respond_to do |format|
       format.json { render status: status, json: event }
     end
@@ -111,7 +112,7 @@ private
     head :bad_request and return false unless end_param.present?
     @end_param = DateTime.parse(end_param).to_time
   end
-  
+
   def set_location_tz(&block)
     tz = (defined?(@location) ? @location.timezone : @locations.first.timezone) || 'UTC'
     Time.use_zone(tz, &block)
@@ -119,7 +120,7 @@ private
 
   def create_params
     p = params.require(:event).permit(:starting, :ending, :event_recurrence, :title, :description, :instructor, :location, :weekly_recurrence_days => [])
-    p[:modifier_id] = current_user.to_param if signed_in?
+    p[:modifier] = current_user if signed_in?
     p[:starting] = Time.zone.parse(p[:starting]) if p.key?(:starting)
     p[:ending] = Time.zone.parse(p[:ending]) if p.key?(:ending)
     p
@@ -131,13 +132,13 @@ private
   end
 
   def set_locations
-    @locations = Location.find(params[:ids])
+    @locations = Location.includes(:events).find(params[:ids])
     head :bad_request and return false unless @locations.present?
   end
 
   def set_location
     id_param = params.fetch(:location_id, '')
-    @location = Location.find(id_param)
+    @location = Location.includes(:events).find(id_param)
     head :bad_request and return false unless @location.present?
   end
 end

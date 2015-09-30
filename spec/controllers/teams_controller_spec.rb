@@ -50,7 +50,7 @@ describe TeamsController do
   describe 'GET show' do
     let(:team) { create(:team) }
     it 'returns the team' do
-      get :show, { id: team.id }
+      get :show, { id: team.to_param }
       response.should render_template('teams/show')
     end
   end

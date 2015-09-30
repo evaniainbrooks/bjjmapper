@@ -214,7 +214,7 @@ describe LocationsController do
     let(:location) { create(:location, description: original_description) }
     context 'when not signed in' do
       it 'returns not_authorized' do
-        post :update, { id: location.id, :format => 'json' }.merge(update_params)
+        post :update, { id: location.to_param, :format => 'json' }.merge(update_params)
         location.reload.description.should eq original_description
         response.status.should eq 401
       end
@@ -223,7 +223,7 @@ describe LocationsController do
       let(:session_params) { { user_id: create(:user).to_param } }
       context 'with json format' do
         it 'updates and returns the location' do
-          post :update, { id: location.id, :format => 'json' }.merge(update_params), session_params
+          post :update, { id: location.to_param, :format => 'json' }.merge(update_params), session_params
           response.body.should match update_params[:location][:description]
         end
       end
@@ -239,7 +239,7 @@ describe LocationsController do
     let(:move_params) { { :lat => 90.0, :lng => 90.0 } }
     let(:original_coords) { [99.9, 99.9] }
     let(:location) { create(:location, coordinates: original_coords) }
-    let(:common_params) { { id: location.id, format: 'json' } }
+    let(:common_params) { { id: location.to_param, format: 'json' } }
     context 'when not signed in' do
       it 'returns not_authorized' do
         post :move, common_params.merge(move_params)

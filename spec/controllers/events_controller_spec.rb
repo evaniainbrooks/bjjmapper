@@ -22,7 +22,7 @@ describe EventsController do
         end
         context 'when logged in' do
           let(:user) { create(:user) }
-          let(:session_params) { { user_id: user.id } }
+          let(:session_params) { { user_id: user.to_param } }
           it 'creates a new event' do
             expect do
               post :create, valid_params, session_params
