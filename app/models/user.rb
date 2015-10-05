@@ -22,7 +22,9 @@ class User
   field :provider, type: String
   field :uid, type: String
   field :name, type: String
-  slug :name, history: true
+  slug :name, history: true do |obj|
+    obj.anonymous? ? obj.ip_address.try(:to_url) : obj.name.to_url
+  end
 
   field :email, type: String
   field :image_tiny, type: String
@@ -158,7 +160,7 @@ class User
   end
 
   def to_param
-    slug
+    slug || id
   end
 
   def as_json(args={})

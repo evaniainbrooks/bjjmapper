@@ -9,7 +9,7 @@ FactoryGirl.define do
     image 'https://commondatastorage.googleapis.com/bjjmapper/image.png'
     image_large 'https://commondatastorage.googleapis.com/bjjmapper/large.png'
     image_tiny 'https://commondatastorage.googleapis.com/bjjmapper/tiny.png'
-
+    ip_address '24.222.58.100'
 
     factory :white_belt do
       belt_rank 'white'

@@ -156,7 +156,9 @@ class UsersController < ApplicationController
   end
 
   def redirect_legacy_bsonid
-    redirect_to(@user, status: :moved_permanently) and return false if /^[a-f0-9]{24}$/ =~ params[:id]
+    unless @user.slug.try(:empty?)
+      redirect_to(@user, status: :moved_permanently) and return false if /^[a-f0-9]{24}$/ =~ params[:id]
+    end
   end
 
   def set_user

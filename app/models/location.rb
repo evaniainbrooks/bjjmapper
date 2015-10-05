@@ -11,6 +11,8 @@ class Location
 
   extend MongoidSearchExt::Search
 
+  SLUG_STOP_WORDS = ['the', 'and', 'a', 's', 'on', 'is', 'slash', 'by'].freeze
+
   TYPE_ACADEMY = 0
   TYPE_EVENT_VENUE = 1
 
@@ -50,7 +52,9 @@ class Location
   field :postal_code
 
   field :title
-  slug :title, history: true
+  slug :title, history: true do |obj|
+    (obj.title.parameterize.split('-') - SLUG_STOP_WORDS).join('-')
+  end
 
   field :description
   field :directions
