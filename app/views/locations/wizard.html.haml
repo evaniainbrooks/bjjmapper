@@ -43,7 +43,7 @@
                 = f.select :team_id, grouped_options_for_select(all_teams_select_groups, params[:team]), { include_blank: true }, { class: 'form-control  input-lg' }
       .step-pane.alert.editable{'data-step' => 2}
         .row.display-field
-          .col-md-8.col-md-offset-2
+          .col-md-offset-2.col-md-8
             %p.text-info.small Please enter at least the street and postal/zip code.
             .form-group
               %label.control-label Address
@@ -53,7 +53,7 @@
                   %span.fa-2x.fa.fa-search
 
         .row.edit-field
-          .col-md-8.col-md-offset-2
+          .col-md-offset-2.col-md-8
             %p.text-info.small Please enter at least the street and postal/zip code.
             .form-group
               %label.control-label Address
@@ -62,18 +62,18 @@
                 %a.btn.btn-default.input-group-addon{'data-cancel-edit' => true}
                   %span.fa-2x.fa.fa-close
         .row.edit-field
-          .col-md-offset-2.col-md-8
+          .col-md-12
             %hr/
             %h4 Refine Address
         .row.edit-field
-          .col-md-4.col-md-offset-2
+          .col-md-6
             = f.label :street, 'Street *', class: 'small'
             = f.text_field :street, class: 'form-control input-sm'
             = f.label :city, class: 'small'
             = f.text_field :city, class: 'form-control input-sm'
             = f.label :postal_code, 'Postal code *', class: 'small'
             = f.text_field :postal_code, class: 'form-control input-sm'
-          .col-md-4
+          .col-md-6
             = f.label :state, class: 'small'
             = f.text_field :state, class: 'form-control input-sm'
             = f.label :country, class: 'small'
@@ -81,31 +81,19 @@
             %br/
             %span.pull-left.small.clear *Denotes required field
         .row.edit-field
-          .col-md-offset-2.col-md-8
+          .col-md-6
             %hr/
+            %h4 Map
+            %div.map-canvas{:style => 'height: 300px'}
+          .col-md-6
+            %hr/
+            %h4 Nearby Academies
             %div.nearby-locations
+              .empty-message
+                %i.text-muted There are no nearby academies.
               .content
                 %h4 Nearby Academies
                 %ul.list-unstyled.items
-        .row.display-field
-          .col-md-offset-2.col-md-8
-            %hr/
-            %h4.text-muted Refine Address
-        .row.display-field
-          .col-md-4.col-md-offset-2
-            = f.label :street, 'Street *', class: 'small text-muted'
-            = f.text_field :street, class: 'form-control input-sm', disabled: true
-            = f.label :city, class: 'small text-muted'
-            = f.text_field :city, class: 'form-control input-sm', disabled: true
-            = f.label :postal_code, 'Postal code *', class: 'small text-muted'
-            = f.text_field :postal_code, class: 'form-control input-sm', disabled: true
-          .col-md-4
-            = f.label :state, class: 'small text-muted'
-            = f.text_field :state, class: 'form-control input-sm', disabled: true
-            = f.label :country, class: 'small text-muted'
-            = f.text_field :country, class: 'form-control input-sm', disabled: true
-            %br/
-            %span.pull-left.small.clear.text-muted *Denotes required field
       .step-pane.alert{'data-step' => 3}
         .row.edit-field
           .col-md-8.col-md-offset-2

@@ -1,6 +1,10 @@
+#= require backbone/views/map/map_view
+#= require backbone/models/map
+
 class RollFindr.Views.LocationWizardView extends Backbone.View
   el: $('.wizard')
-  nearbyLocationsView = null
+  nearbyLocationsView: null
+  map: null
   initialize: (options)->
     @$el.wizard()
 
@@ -10,6 +14,7 @@ class RollFindr.Views.LocationWizardView extends Backbone.View
       'contactInfoChanged',
       'fetchNearbyLocations',
       'fullAddressKeyUp',
+      'initializeMapView',
       'nextClicked',
       'prevClicked',
       'searchAddress',
@@ -144,13 +149,14 @@ class RollFindr.Views.LocationWizardView extends Backbone.View
 
     lat = $('option:selected', e.currentTarget).data('lat')
     lng = $('option:selected', e.currentTarget).data('lng')
+    title = $('option:selected', e.currentTarget).data('value')
+    @initializeMapView(title, lat, lng)
     @fetchNearbyLocations(lat, lng)
     @setNextDisabled( !@hasAddress() )
 
   fullAddressKeyUp: (e)->
     if e.keyCode == 13
       @searchAddress()
-
 
   searchAddress: ->
     $.ajax({
@@ -189,9 +195,27 @@ class RollFindr.Views.LocationWizardView extends Backbone.View
           @$("[name='location[#{i}]']").val(results[0][i])
 
         @fetchNearbyLocations(results[0]['lat'], results[0]['lng'])
+        @initializeMapView(results[0]['address'], results[0]['lat'], results[0]['lng'])
         @setNextDisabled( !@hasAddress() )
 
     })
+
+  initializeMapView: (title, lat, lng)->
+    center = new google.maps.LatLng(lat, lng)
+    mapOptions = {
+      zoom: 12
+      minZoom: 12
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+      center: center
+    }
+    mapCanvas = @$('.map-canvas')[0]
+    @map = new google.maps.Map(mapCanvas, mapOptions)
+
+    marker = new google.maps.Marker(
+      map: @map
+      title: title
+      position: center
+    )
 
   fetchNearbyLocations: (lat, lng)->
     model = new RollFindr.Models.Location({
