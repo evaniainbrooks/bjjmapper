@@ -13,6 +13,14 @@ describe ApplicationController do
         end.to change { User.count }.by(1)
       end
     end
+    context 'when the session user cannot be found' do
+      it 'returns an anonymous user' do
+        expect do
+          get :meta, {}, { user_id: 'notauser' }
+          controller.send(:current_user).should be_anonymous
+        end.to change { User.count }.by(1)
+      end
+    end
     context 'when there is a session user' do
       context 'with super_user and impersonate param' do
         let(:user) { create(:user, role: 'super_user') }

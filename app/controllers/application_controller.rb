@@ -155,7 +155,7 @@ class ApplicationController < ActionController::Base
 
       @current_user
     rescue Mongoid::Errors::DocumentNotFound
-      nil
+      @current_user ||= anonymous_user
     end
   end
 
