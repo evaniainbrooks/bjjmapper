@@ -1,4 +1,4 @@
-- if !location.editable_by?(current_user)
+- if signed_in? && !location.editable_by?(current_user)
   %button.btn.btn-default.btn-sm{:type => "button", :disabled => true}
     %span.fa.fa-lock
     Edit

@@ -7,7 +7,7 @@
     .row
       .col-md-10
         = render partial: 'breadcrumb', locals: { location: location }
-      .col-md-2
+      .col-md-2.pull-right
         = render partial: 'edit_controls', locals: { location: location }
     .row
       .col-md-12
@@ -17,14 +17,14 @@
         = render partial: 'review_message' if reviewed?
         = render partial: 'schedule_timezone_missing_message' if location.timezone.blank?
     .row
-      .col-md-11.col-md-offset-1
+      .col-md-11.col-md-offset-1.hidden-xs
         = render partial: 'subnav', :locals => { location: location }
     .row
       .col-md-2.col-xs-3{:style => 'padding-right: 0px;'}
         .display-field
-          %img{:src => location.image, :class => 'center-block'}/
+          %img{:src => location.image, :class => 'logo center-block'}/
         .edit-field
-          %img{:src => location.image, :class => 'center-block edit-image'}/
+          %img{:src => location.image, :class => 'logo center-block edit-image'}/
         = render partial: 'favorite_button', :locals => { location: location }
       .col-md-6.col-xs-9
         = render partial: 'show_header', :locals => { location: location, f: f }
@@ -40,10 +40,6 @@
       .col-md-5
         %div.map-canvas{:style => 'height: 300px'}
         -# This is filled in by google maps
-        %h4.display-field.text-center
-          = link_to map_path(:center => location.to_coordinates, :ref => 'loc_map_full'), :data => { :'no-turbolink' => true } do
-            %span.fa.fa-search-plus
-            See on larger map
         %p.edit-field.text-info.small Note: you can drag the marker to a new location to change the address of this academy.
       .col-md-4
         %div.nearby-locations
