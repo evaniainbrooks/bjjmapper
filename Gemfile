@@ -26,7 +26,6 @@ gem 'less-rails'
 gem 'js-routes'
 gem 'wikipedia-client'
 gem 'rails-backbone', :git => 'git://github.com/codebrew/backbone-rails.git', :branch => :master
-gem 'yui-compressor'
 gem 'dotenv-rails'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
 gem 'user-agent'
