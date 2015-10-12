@@ -149,8 +149,10 @@
   &.empty {
     .content { display: none; }
     .alternative { display: inherit; }
+    .empty-message { display: inherit; }
   }
 
+  .empty-message { display: none; }
   .content { display: inherit; }
   .alternative { display: none; }
 }
