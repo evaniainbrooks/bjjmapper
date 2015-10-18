@@ -40,7 +40,7 @@ RollFindr::DirectoryCities = {
   'Greece' => ['Athens', 'Thessaloniki', 'Volos'],
   'Sweden' => ['Stockholm', 'Göteborg', 'Malmö'],
   'Finland' => ['Helsinki', 'Tampere'],
-  'Russia' => ['Moscow', 'Saint Petersburg', 'Novosibirsk', 'Yekaterinburg'],
+  'Russia' => ['Moskva', 'Saint Petersburg', 'Novosibirsk', 'Yekaterinburg'],
   'Mexico' => ['Mexico City', 'Ecatepec', 'Guadalajara', 'Puebla', 'Juárez'],
   'Cyprus' => ['Nicosia']
 }

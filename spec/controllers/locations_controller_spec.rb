@@ -157,7 +157,7 @@ describe LocationsController do
     end
   end
   describe 'POST create' do
-    let(:create_params) { { :location => { :title => 'New title', :description => 'New description' } } }
+    let(:create_params) { { :location => { :city => 'New York', :country => 'USA', :title => 'New title', :description => 'New description' } } }
     context 'when not signed in' do
       it 'returns not_authorized' do
         expect do
@@ -237,8 +237,8 @@ describe LocationsController do
   end
   describe 'POST move' do
     let(:move_params) { { :lat => 90.0, :lng => 90.0 } }
-    let(:original_coords) { [99.9, 99.9] }
-    let(:location) { create(:location, coordinates: original_coords) }
+    let(:location) { create(:location) }
+    let(:original_coords) { location.coordinates }
     let(:common_params) { { id: location.to_param, format: 'json' } }
     context 'when not signed in' do
       it 'returns not_authorized' do
@@ -264,39 +264,6 @@ describe LocationsController do
       end
     end
   end
-  describe 'GET index' do
-    context 'with country and city filter' do
-      let(:filter) { { :city => 'New York', :country => 'US' } }
-      before do
-        create(:location, filter)
-        create(:location, city: 'Paris', country: 'FR')
-      end
-      it 'renders the locations' do
-        pending 'geocoding is stubbed, need to move this to an integration test'
-        get :index, filter
-        assigns[:locations].count.should eq 1
-      end
-    end
-    context 'with country filter' do
-      let(:filter) { { :country => 'US' } }
-      before do
-        create(:location, country: 'US')
-        create(:location, country: 'BR')
-      end
-      it 'renders the directory' do
-        pending 'where are the extra locations coming from'
-        get :index, filter
-        assigns(:locations).count.should eq 1
-      end
-    end
-    context 'without filter' do
-      before { create(:location, country: 'BR') }
-      it 'renders the directory index' do
-        get :index
-        assigns(:locations).count.should eq 0
-      end
-    end
-  end
   describe 'GET search' do
     context 'with invalid params' do
       it 'returns bad request' do
@@ -308,7 +275,7 @@ describe LocationsController do
       context 'with existing locations' do
         let(:location) { create(:location, title: 'Wow super location') }
         it 'returns the locations' do
-          get :search, center: location.coordinates, distance: 10.0, format: 'json'
+          get :search, center: location.to_coordinates, distance: 10.0, format: 'json'
           response.body.should include(location.title)
         end
       end
@@ -325,7 +292,7 @@ describe LocationsController do
         let(:red_location) { create(:location, team: red_team, title: 'Red location') }
         let(:blue_location) { create(:location, team: blue_team, title: 'Blue location', coordinates: red_location.coordinates) }
         it 'returns specific team locations' do
-          get :search, center: blue_location.coordinates, distance: 10.0, team: [blue_team.id], format: 'json'
+          get :search, center: blue_location.to_coordinates, distance: 10.0, team: [blue_team.id], format: 'json'
           response.body.should include(blue_location.title)
           response.body.should_not include(red_location.title)
         end

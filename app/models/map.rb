@@ -11,7 +11,6 @@ class Map
   attr_accessor :location, :query
   attr_accessor :minZoom, :geolocate
   attr_accessor :locations, :refresh
-  
 
   def initialize(options = {})
     @zoom = options.fetch(:zoom, ZOOM_DEFAULT)

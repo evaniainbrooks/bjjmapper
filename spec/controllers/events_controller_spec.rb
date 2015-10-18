@@ -62,7 +62,7 @@ describe EventsController do
     end
   end
   describe 'GET omnischedule' do
-    let(:start_date) { 5.hours.ago.iso8601 }
+    let(:start_time) { 5.hours.ago.iso8601 }
     let(:end_date) { Time.now.iso8601 }
     let(:locations) { create_list(:location, 5) }
     let(:ids) { locations.collect(&:to_param) }
@@ -74,7 +74,7 @@ describe EventsController do
           create(:event, location: locations[1], title: 'excluded789', starting: 10.hours.ago.to_i, ending: 9.hours.ago.to_i)
         end
         it 'returns events for all locations that are within the date range' do
-          get :omnischedule, { ids: ids, format: 'json', start: start_date, end: end_date }
+          get :omnischedule, { ids: ids, format: 'json', start: start_time, end: end_date }
           assigns(:events).count.should eq 2
           response.body.should match('included123')
           response.body.should match('included456')
@@ -90,13 +90,13 @@ describe EventsController do
     end
     context 'without date range' do
       it 'returns bad request' do
-        get :omnischedule, { ids: ids, format: 'json', start: start_date }
+        get :omnischedule, { ids: ids, format: 'json', start: start_time }
         response.should_not be_ok
       end
     end
   end
   describe 'GET index' do
-    let(:start_date) { 5.hours.ago.iso8601 }
+    let(:start_time) { 5.hours.ago.iso8601 }
     let(:end_date) { Time.now.iso8601 }
     let(:location) { create(:location) }
     context 'with date range' do
@@ -106,7 +106,7 @@ describe EventsController do
           create(:event, location: location, title: 'excluded event 456', starting: 10.hours.ago.to_i, ending: 9.hours.ago.to_i)
         end
         it 'returns events that are within the date range' do
-          get :index, { location_id: location.id, format: 'json', start: start_date, end: end_date }
+          get :index, { location_id: location.id, format: 'json', start: start_time, end: end_date }
           assigns(:events).count.should eq 1
           response.body.should match('included event 123')
           response.body.should_not match('excluded event 456')
@@ -121,7 +121,7 @@ describe EventsController do
     end
     context 'without date range' do
       it 'returns bad request' do
-        get :index, { location_id: location.id, format: 'json', start: start_date }
+        get :index, { location_id: location.id, format: 'json', start: start_time }
         response.should_not be_ok
       end
     end

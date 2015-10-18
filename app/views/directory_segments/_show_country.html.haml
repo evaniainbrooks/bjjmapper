@@ -1,0 +1,44 @@
+- title = "Brazilian Jiu-Jitsu Academies in #{segment.full_name}"
+= content_for :title do
+  = title
+.container.page.directory
+  .row
+    .col-md-12
+      %h1
+        = title
+  .row
+    .col-md-10
+      = render partial: 'breadcrumb'
+    .col-md-2.text-right.pull-right
+      = render partial: 'create_location_button'
+  .row
+    .col-md-6.map-view
+      .map-canvas{:style => 'height: 400px;'}
+    .col-md-6
+      %h3 Popular cities in #{segment.full_name}
+      %ul.list-inline
+        - segment.child_segments.sort.each do |city|
+          %li= link_to city.name, directory_index_path(country: segment, city: city), title: "List of Brazilian Jiu-Jitsu gyms in #{segment.full_name}" 
+
+  - if segment.locations.present?
+    %hr/
+    .row
+      .col-md-12
+        %h3
+          %span= "Showing #{pluralize(segment.locations.count, 'academy')}"
+          %span
+            = surround '(', ')' do
+              = link_to 'See on map', map_path(zoom: segment.zoom, center: segment.to_coordinates), title: "See map of Brazilian Jiu-Jitsu gyms in #{segment.full_name}"
+    .row
+      .col-md-12
+        = render partial: 'table', locals: { locations: segment.locations, show_legend: segment.child? }
+
+= content_for(:scripts) do
+  :coffeescript
+    $(document).ready ->
+      segmentModel = new RollFindr.Models.DirectorySegment(#{segment.to_json})
+      mapModel = new RollFindr.Models.Map(#{map.to_json})
+      cityView = new RollFindr.Views.DirectorySegmentCountryView({ model: segmentModel, mapModel: mapModel, el: $('.directory') })
+
+
+

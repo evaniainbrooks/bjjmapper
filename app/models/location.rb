@@ -25,8 +25,8 @@ class Location
                   :track_destroy  =>  true     # track document destruction, default is false
 
   geocoded_by :address
-  after_validation :geocode, if: ->(obj) { obj.address.present? and obj.changed? }
-  after_validation :reverse_geocode
+  before_validation :geocode, if: ->(obj) { obj.address.present? and obj.changed? }
+  before_validation :reverse_geocode
 
   reverse_geocoded_by :coordinates do |obj, results|
     geo = results.first
@@ -77,6 +77,8 @@ class Location
   has_one :moved_from_location, class_name: 'Location', inverse_of: :moved_to_location
 
   validates :title, presence: true
+  validates :country, presence: true
+  validates :city, presence: true
 
   belongs_to :team, index: true
   belongs_to :owner, class_name: 'User', index: true, inverse_of: :owned_locations
@@ -158,11 +160,11 @@ class Location
     team.try(:name)
   end
 
-  def as_json(args)
+  def as_json(args = {})
     # Hack around mongo ugly ids
-    super(args.merge(except: [:coordinates, :_id, :modifier_id, :team_id, :instructor_ids])).merge({
+    super(args.merge(except: [:coordinates, :_id, :modifier_id, :team_id, :instructor_ids, :_slugs])).merge({
       :id => self.to_param,
-      :team_id => self.team_id.to_s,
+      :team_id => self.team.try(:to_param),
       :modifier_id => self.modifier_id.to_s,
       :coordinates => self.to_coordinates,
       :timezone => self.timezone,

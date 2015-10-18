@@ -3,6 +3,8 @@ FactoryGirl.define do
     title 'LakeCityBJJ'
     description 'A short test description'
     coordinates [80.0, 80.0]
+    country 'Canada'
+    city 'Halifax'
     team
 
     factory :location_with_instructors do

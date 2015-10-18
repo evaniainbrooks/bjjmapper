@@ -15,6 +15,7 @@ feature "Top Level Pages" do
     expect(page).to have_selector('.map-canvas')
   end
   scenario "user visits the directory" do
+    create(:directory_segment)
     visit directory_index_path
     expect(page).to have_selector('.directory')
   end

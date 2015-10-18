@@ -1,20 +1,4 @@
 .row
-  .col-md-12
-    %h2 Browse by Location
-.row
-  - per_column = (@countries.size / 2.0).ceil
-  - @countries.keys.sort.each_slice(per_column).each do |countries|
-    .col-md-4
-      - countries.each do |country|
-        %h3= link_to country, directory_index_path(country), title: "List of Brazilian Jiu-Jitsu gyms in #{country}"
-        - if (@cities.has_key?(country))
-          %ul.list-inline
-            - @cities[country].sort.each do |city|
-              %li.small= link_to city, directory_index_path(country, city), title: "List of Brazilian Jiu-Jitsu gyms in #{city}, #{country}"
-  .col-md-3.col-md-offset-1
-    = render partial: 'google_adsense'
-%hr/
-.row
   .col-md-10
     %h2
       Browse by Team

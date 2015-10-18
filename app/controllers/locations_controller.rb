@@ -1,5 +1,4 @@
 class LocationsController < ApplicationController
-  before_action :set_directory_segments, only: [:index]
   before_action :set_location, only: [:favorite, :schedule, :destroy, :show, :update, :move, :unlock]
   before_action :redirect_legacy_bsonid, only: [:favorite, :schedule, :destroy, :show, :update, :move, :unlock]
   before_action :set_map, only: :show
@@ -109,7 +108,10 @@ class LocationsController < ApplicationController
   end
 
   def wizard
-
+    tracker.track('showLocationWizard')
+    respond_to do |format|
+      format.html
+    end
   end
 
   def create
@@ -217,30 +219,6 @@ class LocationsController < ApplicationController
     end
   end
 
-  def index
-    @criteria = params.slice(:city, :country) || {}
-    if @criteria.key?(:city) && @criteria.key?(:country)
-      @locations = Location.near(@criteria.values.join(','), 30).asc(:title).decorate
-    elsif @criteria.key?(:country)
-      country_abbrev = @countries[ @criteria[:country] ]
-      country_criteria = [@criteria[:country], country_abbrev].compact
-      @locations = Location.where(:country.in => country_criteria).asc(:title).decorate
-    else
-      @locations = []
-    end
-
-    tracker.track('showLocationsIndex',
-      city: @criteria[:city],
-      country: @criteria[:country],
-      count: @locations.count,
-    )
-
-    respond_to do |format|
-      format.html
-      format.json { render json: locations }
-    end
-  end
-  
   def favorite
     delete = params.fetch(:delete, 0).to_i.eql?(1)
 
@@ -342,12 +320,6 @@ class LocationsController < ApplicationController
     @location = Location.find(id_param)
 
     head :not_found and return false unless @location.present?
-  end
-
-  def set_directory_segments
-    # TODO: Refactor this out
-    @countries = RollFindr::DirectoryCountries
-    @cities = RollFindr::DirectoryCities
   end
 
   def check_permissions

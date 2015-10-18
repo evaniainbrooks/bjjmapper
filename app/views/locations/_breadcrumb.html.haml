@@ -5,9 +5,9 @@
   %li
     %a{href: directory_index_path, title: 'List of Brazilian Jiu-Jitsu schools by country'} BJJ Academy Directory
   %li
-    %a{href: directory_index_path(country_name), title: "List of Brazilian Jiu-Jitsu schools in #{country_name}"}= country_name
+    %a{href: directory_segment_path(country_name), title: "List of Brazilian Jiu-Jitsu schools in #{country_name}"}= country_name
   %li
-    %a{href: directory_index_path(country_name, location.city), title: "List of Brazilian Jiu-Jitsu schools in #{location.city}"}= location.city
+    %a{href: directory_segment_path(country_name, location.city), title: "List of Brazilian Jiu-Jitsu schools in #{location.city}"}= location.city
   - if local_assigns.key?(:sub)
     %li
       %a{href: location_path(location)}= location.title

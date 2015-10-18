@@ -1,0 +1,15 @@
+.row
+  .col-md-12
+    %h2 Browse by Location
+.row
+  - per_column = (@segments.size / 3.0).ceil
+  - @segments.each_slice(per_column).each do |segments|
+    .col-md-3
+      - segments.each do |country|
+        %h3= link_to country.name, directory_segment_path(country.name), title: "List of Brazilian Jiu-Jitsu gyms in #{country.name}"
+        - unless country.child_segments.empty?
+          %ul.list-inline
+            - country.child_segments.each do |city|
+              %li.small= link_to city.name, directory_segment_path(country.name, city.name), title: "List of Brazilian Jiu-Jitsu gyms in #{city.name}, #{country.name}"
+  .col-md-3
+    = render partial: 'google_adsense'

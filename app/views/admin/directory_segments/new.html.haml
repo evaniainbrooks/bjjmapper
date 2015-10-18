@@ -1,0 +1,27 @@
+.container
+  .row
+    .col-md-12
+      %h1 Create New Directory Segment
+      .form
+        = form_for(:directory_segment, url: admin_directory_segments_path) do |f|
+          .form-group
+            = f.label :name
+            = f.text_field :name, class: 'form-control'
+          .form-group
+            = f.label :description
+            = f.text_area :description, class: 'form-control'
+          .form-group
+            = f.label :parent_segment_id
+            = f.collection_select :parent_segment_id, DirectorySegment.where(:parent_segment_id => nil), :id, :name, { include_blank: true }, { class: 'form-control' }
+          .form-group
+            = f.label :zoom
+            = f.text_area :zoom, class: 'form-control'
+          .form-group
+            = f.label :distance
+            = f.text_area :distance, class: 'form-control'
+          .form-group
+            = f.label :abbreviations
+            = f.text_area :abbreviations, class: 'form-control'
+          .form-group
+            = f.submit
+

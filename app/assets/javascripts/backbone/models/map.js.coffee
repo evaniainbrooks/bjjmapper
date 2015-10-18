@@ -2,7 +2,7 @@ class RollFindr.Models.Map extends Backbone.Model
   paramRoot: 'map'
 
   initialize: ->
-    locationsCollection = new RollFindr.Collections.LocationsCollection()
+    locationsCollection = new RollFindr.Collections.LocationsCollection(arguments[0].locations)
     this.set('locations', locationsCollection)
 
   defaults:

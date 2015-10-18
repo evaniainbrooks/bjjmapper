@@ -1,0 +1,23 @@
+- title = "Brazilian Jiu-Jitsu Academy Directory"
+= content_for :title do
+  = title
+.container.page.directory
+  .row
+    .col-md-12
+      %h1
+        = title
+        %span.small= "#{Location.count} academies worldwide"
+  .row
+    .col-md-10
+      = render partial: 'breadcrumb'
+    .col-md-2.text-right
+      = render partial: 'create_location_button'
+  .row
+    .col-md-12
+      = render partial: 'directory_welcome_message'
+  .row
+    .col-md-12
+      = render partial: 'directory_index'
+      %hr/
+      = render partial: 'teams/index'
+
