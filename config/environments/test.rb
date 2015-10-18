@@ -38,4 +38,7 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.mixpanel_key = 'bogus'
+
+  config.redis_host = 'bjjmapper.localhost'
+  config.redis_password = ENV['REDIS_PASS']
 end
