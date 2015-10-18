@@ -34,6 +34,9 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
   config.mixpanel_key = '1e7bb3eeec6a0b672500488273fe57f5'
+
+  config.redis_host = 'bjjmapper.localhost'
+  config.redis_password = ENV['REDIS_PASS']
 end
 
 GA.tracker = 'UA-24220947-1'
