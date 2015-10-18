@@ -1,11 +1,11 @@
 .col-md-3.col-xs-12
-  %h3 Contact
+  %h3.hidden-md.hidden-lg.hidden-xl Contact
   .edit-field
-    = f.label :phone, class: 'small'
+    = f.label :phone, class: 'small text-muted upcase'
     = f.text_field :phone, class: 'input-sm form-control'
-    = f.label :email, class: 'small'
+    = f.label :email, class: 'small text-muted upcase'
     = f.text_field :email, class: 'input-sm form-control'
-    = f.label :website, 'Websites', class: 'small'
+    = f.label :website, 'Websites', class: 'small text-muted upcase'
     .input-group
       %span.input-group-addon http://
       = f.text_field :website, class: 'input-sm form-control'
@@ -24,21 +24,21 @@
   - else
     - if location.phone.present?
       %span.display-field
-        %b.small Phone
+        %b.small.text-muted.upcase Phone
         %br/
         %a{:class => 'phone', :href => "tel:#{location.phone}"}
           = location.phone
           %i.fa.fa-phone
     - if location.email.present?
       %span.display-field
-        %b.small Email
+        %b.small.text-muted.upcase Email
         %br/
         = link_to 'mailto:' + location.email, class: 'email' do
           = location.email
           %i.fa.fa-envelope
     - if location.website.present?
       %span.display-field
-        %b.small Websites
+        %b.small.text-muted.upcase Websites
         %br/
         = link_to 'http://' + location.website, class: 'website' do
           = location.website

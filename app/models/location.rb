@@ -70,6 +70,7 @@ class Location
   field :loctype, type: Integer, default: TYPE_ACADEMY
 
   field :flag_closed, type: Boolean, default: false
+  field :rating, default: 0.0
 
   validates :title, presence: true
 
@@ -130,6 +131,14 @@ class Location
 
   def to_param
     slug
+  end
+
+  def stars
+    rating.floor
+  end
+
+  def half_star?
+    (rating - rating.floor) >= 0.5
   end
 
   def address_components

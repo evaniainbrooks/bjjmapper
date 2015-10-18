@@ -7,11 +7,11 @@
     - else
       = location.team_name
 .edit-field
-  = f.label :title, class: 'small'
+  = f.label :title, class: 'small text-muted upcase'
   = f.text_field :title, class: 'form-control input-lg'
-  = f.label :team_id, 'Team', class: 'small'
+  = f.label :team_id, 'Team', class: 'small text-muted upcase'
   = f.select :team_id, grouped_options_for_select(all_teams_select_groups, location.team_id), { include_blank: true }, { class: 'form-control  input-md' }
-  = f.label :description, class: 'small'
+  = f.label :description, class: 'small text-muted upcase'
   = f.text_area :description, placeholder: 'Provide a description of the academy', class: 'form-control', rows: 3
 %div.display-field.description
   = simple_format(location.description)

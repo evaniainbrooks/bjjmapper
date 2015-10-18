@@ -25,6 +25,7 @@
           %img{:src => location.image, :class => 'logo center-block'}/
         .edit-field
           %img{:src => location.image, :class => 'logo center-block edit-image'}/
+        = render partial: 'rating', :locals => { location: location }
         = render partial: 'favorite_button', :locals => { location: location }
       .col-md-6.col-xs-9
         = render partial: 'show_header', :locals => { location: location, f: f }

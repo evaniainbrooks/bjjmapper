@@ -1,0 +1,9 @@
+%div.text-center.center-block
+  %a.rating{:href => '#reviews'}
+    - 1.upto(5) do |n|
+      - if location.stars >= n
+        %span.fa.fa-star
+      - elsif location.stars == n - 1 && location.half_star?
+        %span.fa.fa-star-half-o
+      - else
+        %span.fa.fa-star-o
