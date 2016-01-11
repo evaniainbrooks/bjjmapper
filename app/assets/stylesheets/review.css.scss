@@ -17,6 +17,11 @@
   }
 }
 
+.rating-container {
+  min-width: 85px;
+  margin-left: -5px !important;
+}
+
 .rating, .rating a, .rating a:hover, .rating span {
   color: orange !important;
   text-decoration: none !important;
