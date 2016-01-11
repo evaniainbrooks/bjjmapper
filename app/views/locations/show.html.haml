@@ -5,7 +5,7 @@
   %div#fb-root
   = form_for(location, html: { class: 'form ' + edit_mode_classes }) do |f|
     .row
-      .col-md-10
+      .col-md-10.hidden-xs
         = render partial: 'breadcrumb', locals: { location: location }
       .col-md-2.pull-right
         = render partial: 'edit_controls', locals: { location: location }
