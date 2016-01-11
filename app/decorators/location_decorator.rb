@@ -1,3 +1,5 @@
+require 'i18n'
+
 class LocationDecorator < Draper::Decorator
   DEFAULT_DESCRIPTION = 'No description was provided'
   DEFAULT_DIRECTIONS = 'No extra directions were provided'
@@ -183,7 +185,8 @@ class LocationDecorator < Draper::Decorator
   end
 
   def avatar_service_url(name)
-    clean_name = CGI.escape(name.gsub(/[\/?&]/, ' '))
+    clean_name = I18n.transliterate(name)
+    clean_name = CGI.escape(clean_name.gsub(/[\/?&]/, ' '))
     "/service/avatar/100x100/#{clean_name}/image.png"
   end
 end
