@@ -5,12 +5,12 @@
       %td
         %h1.display-field
           = user.name
-    - if own_profile? || user.flag_display_email?
+    - if user.contact_email.present? && (own_profile? || user.flag_display_email?)
       %tr
         %td.text-muted.text-right Email
         %td
           .display-field
-            %span= mail_to(user.email)
+            %span= mail_to(user.contact_email)
             - unless user.flag_display_email?
               = surround '(', ')' do
                 %i.text-muted Not displayed publicly
@@ -19,23 +19,25 @@
       %td
         .display-field
           = render partial: 'users/belt', locals: { user: user }
-    
-    - if user.birthdate.present? || user.birth_place.present?
+
+    - if user.birthdate.present?
       %tr
         %td.text-muted.text-right Born
-        %td
-          - if user.birthdate.present?
+        - if user.birthdate.present?
+          %td
             .display-field
               = user.birthdate.strftime('%B %d, %Y')
               &nbsp;&nbsp;
               = "(#{user.age_in_years} years old)"
+    - if user.birth_place.present?
       %tr
         %td
         %td
           %span.display-field
-            = user.birth_place
-            &nbsp;
-          = f.text_field :birth_place, placeholder: 'Place of birth', class: 'form-control edit-field'
+            = link_to map_path({location: user.birth_place, ref: 'user_dp'}) do
+              %img{:src => '//storage.googleapis.com/bjjmapper/markers/marker_blank.png'}
+              = user.birth_place
+              &nbsp;
     %tr
       %td.text-muted.text-right Lineage
       %td= render partial: 'users/lineage', locals: { :user => user }

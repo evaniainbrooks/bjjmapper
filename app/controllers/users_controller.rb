@@ -137,6 +137,7 @@ class UsersController < ApplicationController
     p = params.require(:user).permit(
       :name,
       :email,
+      :contact_email,
       :belt_rank,
       :stripe_rank,
       :birth_day,
@@ -146,6 +147,8 @@ class UsersController < ApplicationController
       :birth_place,
       :description,
       :female,
+      :thumbnailx,
+      :thumbnaily,
       :flag_display_email,
       :flag_display_directory,
       :flag_display_reviews,

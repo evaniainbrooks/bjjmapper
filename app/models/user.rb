@@ -27,6 +27,9 @@ class User
   end
 
   field :email, type: String
+  field :contact_email, type: String
+  field :thumbnailx, type: Integer
+  field :thumbnaily, type: Integer
   field :image_tiny, type: String
   field :image_large, type: String
   field :image, type: String
@@ -113,10 +116,12 @@ class User
   end
 
   def self.from_omniauth(auth, ip_address)
+    email = auth.try(:[], 'info').try(:[], 'email')
     User.where(provider: auth['provider'], uid: auth['uid'])
         .first_or_initialize(
           name: auth.try(:[], 'info').try(:[], 'name'),
-          email: auth.try(:[], 'info').try(:[], 'email'),
+          email: email,
+          contact_email: email,
           ip_address: ip_address,
           oauth_token: auth.try(:credentials).try(:token),
           oauth_expires_at: Time.at(auth.try(:credentials).try(:expires_at) || 0),
@@ -164,7 +169,7 @@ class User
   end
 
   def as_json(args={})
-    result = super(args.merge(except: [:team_ids, :location_ids, :locations, :favorite_locations, :internal, :description_src, :oauth_token, :oauth_expires_at, :modifier_id, :lineal_parent_id, :ip_address, :coordinates, :uid, :provider, :email, :_id])).merge({
+    result = super(args.merge(except: [:team_ids, :location_ids, :locations, :favorite_locations, :internal, :description_src, :oauth_token, :oauth_expires_at, :modifier_id, :lineal_parent_id, :ip_address, :coordinates, :uid, :provider, :email, :contact_email, :_id])).merge({
       :id => self.to_param.to_s,
       :locations => self.locations.map {|o| { title: o.title, id: o.to_param } },
       :favorite_location_ids => self.favorite_location_ids.map(&:to_s),
@@ -177,7 +182,7 @@ class User
       end
     })
 
-    result[:email] = self.email if self.flag_display_email?
+    result[:contact_email] = self.contact_email if self.flag_display_email?
     result
   end
 

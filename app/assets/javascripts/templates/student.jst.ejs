@@ -1,7 +1,11 @@
 <div class="col-md-4 card student-card">
   <button class="edit-field close remove-student" aria-hidden="true" type="button" data-id="<%= student.id %>">&times;</button>
   <a class="thumbnail" data-user-id="<%= student.id %>" href="<%= Routes.user_path(student) %>">
-    <div class="avatar pull-left" style="background: url('<%= student.image %>') top center no-repeat"></div>
+    <% if (student.thumbnailx && student.thumbnaily) { %>
+      <div class="avatar pull-left" style="background: url('<%= student.image %>') top -<%= student.thumbnaily %>px left -<%= student.thumbnailx %>px no-repeat"></div>
+    <% } else { %>
+      <div class="avatar pull-left" style="background: url('<%= student.image %>') top center no-repeat"></div>
+    <% } %>
     <div class="caption">
       <h3 style="margin-top: 10px !important"><%= student.name %></h3>
       <div class="belt-<%= student.belt_rank %> belt">

@@ -11,7 +11,8 @@
       .col-md-3
         .display-field
           %img.profile.center-block{:src => user.image}
-        .edit-field
+        .edit-field.edit-image-container
+          %div.thumbnail-overlay
           %img.profile.center-block.edit-image{:src => user.image}
           %br/
           %input{:'data-url' => upload_image_user_path(user), :'data-upload-avatar' => true, :type => 'file', :class => 'input-md form-control'}/
