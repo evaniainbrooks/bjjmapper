@@ -13,6 +13,7 @@
           %img.profile.center-block{:src => user.image}
         .edit-field.edit-image-container
           %div.thumbnail-overlay
+            %span.text-info.upcase Thumbnail
           %img.profile.center-block.edit-image{:src => user.image}
           %br/
           %input{:'data-url' => upload_image_user_path(user), :'data-upload-avatar' => true, :type => 'file', :class => 'input-md form-control'}/
@@ -62,11 +63,6 @@
           %i.text-muted No students are listed for this person
     %hr.edit-field/
     .row.edit-field
-      .col-md-12
-        %h3 Edit Controls
-      .col-md-12
-        %pre.small= JSON.pretty_generate(user.as_json({}))
-        %br/
       .col-md-12
         .pull-right
           %button.delete-field.btn.btn-danger.btn-md{:type => 'button',

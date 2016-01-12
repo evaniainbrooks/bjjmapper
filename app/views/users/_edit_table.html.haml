@@ -6,7 +6,7 @@
       %td
         .edit-field.form-group
           = f.text_field :name, class: 'form-control input-lg'
-    - if defined?(own_profile) && own_profile? || user.flag_display_email?
+    - if defined?(own_profile?) && own_profile? || user.flag_display_email?
       %tr
         %td.text-muted.text-right Email
         %td

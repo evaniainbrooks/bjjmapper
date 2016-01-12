@@ -169,7 +169,7 @@ class LocationDecorator < Draper::Decorator
       end
 
       instructor_desc = if instructors.length > 1
-        "Instructors are #{instructors.join(',')}"
+        "Instructors are #{instructors.join(', ')}"
       else
         "The instructor is #{instructors.first}"
       end

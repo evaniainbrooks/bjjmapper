@@ -1,9 +1,12 @@
 class Admin::UsersController < Admin::AdminController
   before_action :set_user
-  
+
+  def show
+  end
+
   def edit_merge
   end
-  
+
   def merge
     tracker.track('mergeUser',
       src_id: @user.to_param,

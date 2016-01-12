@@ -154,7 +154,7 @@ class UsersController < ApplicationController
       :flag_display_reviews,
       :flag_locked)
 
-    p[:modifier] = current_user.to_param if signed_in?
+    p[:modifier] = current_user if signed_in?
     p
   end
 

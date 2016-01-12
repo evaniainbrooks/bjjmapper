@@ -8,6 +8,9 @@ class User
 
   include Mongoid::History::Trackable
 
+  DEFAULT_THUMBNAIL_X = 50
+  DEFAULT_THUMBNAIL_Y = 0
+
   VALID_IMAGE_MATCH = /^https:\/\/(common)?datastorage.googleapis.com\/bjjmapper\//
 
   track_history   :on => :all,
@@ -28,8 +31,8 @@ class User
 
   field :email, type: String
   field :contact_email, type: String
-  field :thumbnailx, type: Integer
-  field :thumbnaily, type: Integer
+  field :thumbnailx, type: Integer, default: DEFAULT_THUMBNAIL_X
+  field :thumbnaily, type: Integer, default: DEFAULT_THUMBNAIL_Y
   field :image_tiny, type: String
   field :image_large, type: String
   field :image, type: String

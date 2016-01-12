@@ -1,0 +1,23 @@
+.container
+  %h3 Model
+  %pre.small= JSON.pretty_generate(@user.as_json({}))
+  %h3= pluralize(@user.history_tracks.count, "Changes")
+  %table.table.table-striped
+    %tr
+      %th Action
+      %th Modified
+      %th Original
+      %th Version
+      %th Modifier
+      %th Time
+
+    - @user.history_tracks.sort_by { |o| -o.version }.each do |history|
+      %tr
+        %td= history.action
+        %td
+          %pre= JSON.pretty_generate(history.modified)
+        %td
+          %pre= JSON.pretty_generate(history.original)
+        %td= history.version
+        %td= history.modifier.present? ? link_to(history.modifier.name, history.modifier) : '(none)'
+        %td= time_ago_in_words(history.created_at)
