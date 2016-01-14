@@ -187,7 +187,7 @@ describe User do
         Wikipedia.stub(:find).and_return(page)
       end
       subject { create(:user, :role => :instructor) }
-      it 'populates description, summary and image from wikipedia' do
+      xit 'populates description, summary and image from wikipedia' do
         subject.description.should eq content
         subject.image.should match img
         subject.description_src.to_sym.should eq :wikipedia
