@@ -52,4 +52,10 @@
     - if user.description?
       %tr
         %td.text-muted.text-right Biography
-        %td= simple_format(user.description)
+        %td
+          %pre= user.description
+          = simple_format(user.description)
+          - if user.description_read_more_url.present?
+            = link_to user.description_read_more_url do
+              = surround '(', ')' do
+                %span Read more

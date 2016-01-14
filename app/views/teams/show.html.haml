@@ -16,9 +16,9 @@
     .row
       .col-md-2{:style => 'padding-right: 0px;'}
         .display-field
-          %img.center-block{:src => team.image}
+          %img.center-block.profile{:src => team.image}
         .edit-field
-          %img.center-block.edit-image{:src => team.image}
+          %img.center-block.edit-image.profile{:src => team.image}
           %br/
           %input{:'data-url' => upload_image_team_path(team), :'data-upload-avatar' => true, :type => 'file', :class => 'input-md form-control'}/
           - if team.object.image.present?

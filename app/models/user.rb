@@ -1,4 +1,5 @@
 require 'wikipedia'
+require 'mongoid_search_ext'
 
 class User
   include Mongoid::Document
@@ -7,11 +8,12 @@ class User
   include Mongoid::Timestamps
 
   include Mongoid::History::Trackable
+  include MongoidSearchExt::Search
 
   DEFAULT_THUMBNAIL_X = 50
   DEFAULT_THUMBNAIL_Y = 0
 
-  VALID_IMAGE_MATCH = /^https:\/\/(common)?datastorage.googleapis.com\/bjjmapper\//
+  VALID_IMAGE_MATCH = /(^https:\/\/(common)?datastorage.googleapis.com\/bjjmapper\/)|(^https:\/\/upload.wikimedia.org)/
 
   track_history   :on => :all,
                   :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier
@@ -40,6 +42,7 @@ class User
   field :coordinates, type: Array
   field :last_seen_at, type: Integer
   field :description, type: String
+  field :description_read_more_url, type: String
   field :description_src, type: String
 
   field :oauth_token, type: String
@@ -78,19 +81,34 @@ class User
   has_and_belongs_to_many :locations, index: true, inverse_of: :instructors
   has_and_belongs_to_many :favorite_locations, class_name: 'Location', index: true, inverse_of: :favorited_by
 
-  before_create do
-    if :instructor == role.try(:to_sym)
-      page = Wikipedia.find(name)
-      if page.content.present?
-        self.image = page.image_urls.last
-        self.description_src = :wikipedia
-        self.description = page.content
-      end
-    end
-  end
+  index({
+      :name => 'text',
+      :contact_email => 'text',
+      :description => 'text'
+    },
+    {
+      :name => 'user_text_index',
+      :weights => {
+        :name => 20,
+        :description => 10,
+        :contact_email => 10
+      }
+    }
+  )
 
   default_scope -> { where(:redirect_to_user_id => nil) }
   scope :jitsukas, -> { where(:belt_rank.in => ['blue', 'purple', 'brown', 'black']) }
+
+  def populate_from_wikipedia!
+    page = Wikipedia.find(name)
+    if page.content.present?
+      self.image = page.image_urls.detect { |x| !x.end_with?('svg') } unless self.image.present?
+      self.description_src = :wikipedia
+      self.description = page.summary.gsub(/\n/, "\r\n\r\n")
+      self.description_read_more_url = page.fullurl
+      self.save
+    end
+  end
 
   def can_edit? object
     object.editable_by? self
