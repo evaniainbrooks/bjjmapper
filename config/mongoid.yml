@@ -1,4 +1,6 @@
 production:
+  options:
+    raise_not_found_error: false
   sessions:
     default:
       database: rollfindr_prod
@@ -6,9 +8,11 @@ production:
         - localhost:27017
 
 development:
+  options:
+    raise_not_found_error: false
   sessions:
     default:
-      database: mongoid
+      database: rollfindr
       hosts:
         - localhost:27017
 test:
