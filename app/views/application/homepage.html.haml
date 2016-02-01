@@ -2,28 +2,7 @@
   = render partial: 'facebook_sdk'
 
 .container.homepage
-  %div#fb-root
-  .row.welcome
-    .col-md-10.col-md-offset-2
-      %img.pull-left.hidden-sm.hidden-xs.main-logo{:src => 'https://storage.googleapis.com/bjjmapper/logo.png', :style => 'width: 100px; height: 100px'}/
-      %div.pull-left
-        %h1.welcome
-          %span.hidden-sm.hidden-xs Welcome to 
-          %span BJJMapper
-        %h3 The authoritative Brazilian Jiu-Jitsu academy directory
-  .row.buffer-top-md
-    .col-md-offset-1.col-lg-9.col-md-8.col-xs-12.text-center
-      %form.form.form-horizontal{:action => map_path(ref: 'home'), :method => 'GET'}
-        .control-group.well.center-block.search-well
-          .controls.form-inline
-            %input.form-control.input-lg{:name => 'query', :size => '40', :placeholder => "Example: Carlson Gracie, Art of Jiu-Jitsu", :type => "text"}/
-            .input-group
-              %input.input-lg{:name => 'location', :size => '10', :placeholder => "Anywhere", :type => "text"}/
-              %button.btn.btn-default.btn-lg.input-group-addon-lg{:type => "submit"}
-                %span.fa.fa-search
-  -#.row
-    .col-md-8.col-md-offset-2.hidden-sm.hidden-xs
-      = render partial: 'application/google_adsense_banner'
+  .div#fb-root
   .row
     .col-md-5
       %h3.pull-left Near You
@@ -40,7 +19,7 @@
           %span.fa.fa-search-plus
           See larger map
     .col-md-4
-      %h3.pull-left 
+      %h3.pull-left
         New Additions
       = link_to wizard_locations_path(ref: 'hprec'), class: 'pull-right title-btn btn btn-success btn-sm' do
         %i.fa.fa-map-marker

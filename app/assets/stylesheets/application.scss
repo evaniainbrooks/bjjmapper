@@ -223,3 +223,13 @@ html, body {
   padding: 2px 7px;
   border: 1px solid silver;
 }
+
+body > .container {
+  margin-top: 60px;
+}
+
+.homepage {
+  .title-btn {
+    margin-top: 15px; 
+  }
+}

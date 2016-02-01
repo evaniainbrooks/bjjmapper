@@ -15,6 +15,11 @@ class RollFindr.Views.NavbarView extends Backbone.View
   search: (e)->
     searchQuery = @$('[name="query"]').val()
     searchLocation = @$('[name="location"]').val()
+
+    alert(window.location.pathname)
+
+    window.location = Routes.map_path({query: searchQuery, location: searchLocation}) if (window.location.pathname != '/map')
+
     RollFindr.GlobalEvents.trigger('search', {
       query: searchQuery
       location: searchLocation

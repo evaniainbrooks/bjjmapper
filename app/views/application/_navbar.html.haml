@@ -1,4 +1,4 @@
-%nav.navbar.navbar-inverse{:role => "navigation"}
+%nav.navbar.navbar-inverse.navbar-fixed-top{:role => "navigation"}
   .container-fluid
     / Brand and toggle get grouped for better mobile display
     .navbar-header
@@ -23,8 +23,7 @@
         %li{:class => controller?(:locations) ? 'active' : nil}
           %a{href: directory_index_path(ref: 'navbar'), title: 'Brazilian Jiu-Jitsu Academy Directory'} Academies
         %li{:class => action?(:meta) ? 'active' : nil}
-          %a{:href => meta_path(ref: 'navbar'), title: 'Learn about BJJMapper'} Meta
-      - if action?(:map)
+          %a{:href => meta_path(ref: 'navbar'), title: 'Learn about BJJMapper'} About
         %form.navbar-form.navbar-left{:role => "search"}
           .form-group.has-feedback
             %input.form-control{:name => 'query', :size => '8', :placeholder => "Search", :type => "text", :value => params[:query]}/
