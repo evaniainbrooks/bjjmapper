@@ -39,6 +39,7 @@ class Location
     end
   end
 
+  before_save :set_closed_flag
   before_save :canonicalize_phone
   before_save :canonicalize_website
   before_save :canonicalize_facebook
@@ -71,6 +72,9 @@ class Location
 
   field :flag_closed, type: Boolean, default: false
   field :rating, default: 0.0
+
+  belongs_to :moved_to_location, class_name: 'Location', inverse_of: :moved_from_location
+  has_one :moved_from_location, class_name: 'Location', inverse_of: :moved_to_location
 
   validates :title, presence: true
 
@@ -184,6 +188,10 @@ class Location
   end
 
   private
+
+  def set_closed_flag
+    self.flag_closed = true if self.moved_to_location.present?
+  end
 
   def default_ig_hashtag
     'bjjmapper' + self.title.parameterize('').first(6)

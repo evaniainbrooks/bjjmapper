@@ -119,6 +119,24 @@ describe Location do
     end
   end
 
+  describe 'flag_closed' do
+    context 'when moved_to_location is present' do
+      let(:moved_to) { create(:location) }
+      subject { build(:location, flag_closed: false, moved_to_location: moved_to) }
+      before { subject.save }
+      it 'is automatically set' do
+        subject.flag_closed.should eq true
+      end
+    end
+    context 'when moved_to_location is blank' do
+      subject { build(:location, flag_closed: false, moved_to_location: nil) }
+      before { subject.save }
+      it 'is unchanged' do
+        subject.flag_closed.should eq false
+      end
+    end
+  end
+
   describe 'before save callback' do
     subject { build(:location, phone: '(902)', website: 'http://test.com', facebook: 'http://www.facebook.com/page') }
     before { subject.save }
