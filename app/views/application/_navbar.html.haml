@@ -33,6 +33,9 @@
               %a.input-group-addon{'data-geolocate' => 'true', :href => '#geolocate'}
                 %i.fa.fa-location-arrow
           %button.btn.btn-default{'data-nodisable' => true, :type => "submit"} Search
+          -# link_to wizard_locations_path(ref: 'nav'), class: 'btn btn-success' do
+            %i.fa.fa-map-marker
+            Create Academy
       = render partial: 'profile_or_login'
     / /.navbar-collapse
   / /.container-fluid

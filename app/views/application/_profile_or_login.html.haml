@@ -1,11 +1,29 @@
 %ul.nav.navbar-nav.navbar-right{:style => 'margin-right: 5px;'}
   - if signed_in?
-    %li
-      = link_to(user_path(current_user)) do
-        %i.fa.fa-user
+    %li.dropdown
+      %a{:href => '#', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button', :'aria-haspopup' => 'true', :'aria-expanded' => 'false'}
+        %i.fa.fa-sign-in
         = current_user.name
-    %li= link_to('Sign out', signout_path, 'data-no-turbolink' => true)
+        %span.caret
+      %ul.dropdown-menu
+        %li
+          = link_to(user_path(current_user)) do
+            %i.fa.fa-user
+            View profile
+        %li
+          = link_to(wizard_locations_path(ref: 'nav')) do
+            %i.fa.fa-map-marker
+            Create Academy
+        %li
+          = link_to(signout_path, 'data-no-turbolink' => true) do
+            %i.fa.fa-sign-out
+            Sign out
+        - unless current_user.favorite_locations.empty?
+          %li.divider{:role => 'separator'}
+          - current_user.favorite_locations.each do |favorite_loc|
+            %li= link_to(favorite_loc.title, favorite_loc, ref: 'nav_profile')
   - else
     %li
       %button.navbar-btn.btn.btn-primary{"data-target" => ".login-modal", "data-toggle" => "modal"}
+        %i.fa.fa-sign-in
         Login or Sign up
