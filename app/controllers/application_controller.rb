@@ -124,6 +124,9 @@ class ApplicationController < ActionController::Base
   def meta
   end
 
+  def privacy_policy
+  end
+
   protected
 
   def ensure_signed_in

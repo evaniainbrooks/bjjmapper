@@ -47,6 +47,7 @@ Rails.application.routes.draw do
   post '/report' => 'application#report', :as => :report
   get '/map' => 'application#map', :as => :map
   get '/meta' => 'application#meta', :as => :meta
+  get '/privacy-policy' => 'application#privacy_policy', :as => :privacy_policy
   get '/people' => 'application#people'
   get '/geocode' => 'application#geocode'
   post '/contact' => 'application#contact', :as => :contact
