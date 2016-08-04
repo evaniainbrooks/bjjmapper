@@ -13,6 +13,8 @@ class LocationsController < ApplicationController
   helper_method :error?
   helper_method :deleted?
   helper_method :verified?
+  helper_method :closed?
+  helper_method :moved?
 
   RECENT_COUNT_DEFAULT = 5
   RECENT_COUNT_MAX = 10
@@ -267,6 +269,14 @@ class LocationsController < ApplicationController
 
   private
 
+  def moved?
+    location.flag_closed? && location.moved_to_location.present?
+  end
+
+  def closed?
+    location.flag_closed? && location.moved_to_location.blank?
+  end
+  
   def verified?
     params.fetch(:verified, 0).to_i.eql?(1)
   end

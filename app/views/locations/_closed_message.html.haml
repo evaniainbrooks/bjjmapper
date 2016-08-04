@@ -1,0 +1,16 @@
+.alert.alert-danger.buffer-top-sm{:role => 'alert'}
+  %button.close{"data-dismiss" => "alert", :type => "button"} 
+    %span{"aria-hidden" => "true"} &times;
+    %span.sr-only Close
+  - if !moved?
+    %strong Academy has been permanently closed! 
+    %span This page is retained for historical purposes only and may be out of date. We have no information about a new address.
+  - else
+    %strong This academy has changed locations!
+    %span
+      = link_to location_path(location.moved_to_location, ref: 'loc_changed') do
+        %i.fa.fa-location-arrow
+        %span 
+          Click here to visit the new location at 
+          = location.moved_to_location.address
+

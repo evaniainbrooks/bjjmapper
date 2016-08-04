@@ -1,4 +1,10 @@
 %address.display-field.text-info
+  - if moved?
+    %strong.text.text-danger
+      This academy has moved to
+      = link_to location.moved_to_location.address, location_path(location.moved_to_location, ref: 'loc_changed_address')
+    %br/
+    %br/
   = link_to map_path(:center => location.to_coordinates, :ref => 'loc_map_full'), :data => { :'no-turbolink' => true } do
     %span.address
       = location.street

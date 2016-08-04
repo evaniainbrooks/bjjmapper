@@ -125,6 +125,7 @@ class Location
   def editable_by? user
     return true if user.super_user?
     return false if user.anonymous?
+    return false if self.flag_closed?
 
     !self.flag_claimed? || user.id.eql?(self.owner.id)
   end

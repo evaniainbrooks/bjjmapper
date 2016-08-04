@@ -16,6 +16,11 @@ describe Location do
       it { subject.editable_by?(editor).should be true }
     end
     context 'when editor not superuser' do
+      context 'when closed or moved' do
+        subject { build(:location, flag_closed: true) }
+        let(:editor) { build(:user, role: 'user') }
+        it { subject.editable_by?(editor).should be false }
+      end
       context 'when anonymous' do
         subject { build(:location) }
         let(:editor) { build(:user, role: 'anonymous') }

@@ -1,7 +1,7 @@
 = content_for(:title) do
   = "#{location.title} #{"BJJ" unless location.title.end_with?("BJJ")} academy in #{location.city}, #{location.country}"
 
-.container.show-location.page
+.container.show-location.page{ class: moved? || closed? ? 'moved' : (closed? ? 'closed' : '') }
   %div#fb-root
   = form_for(location, html: { class: 'form ' + edit_mode_classes }) do |f|
     .row
@@ -16,6 +16,7 @@
         = render partial: 'edit_success_message' if edit_success?
         = render partial: 'review_message' if reviewed?
         = render partial: 'schedule_timezone_missing_message' if location.timezone.blank?
+        = render partial: 'closed_message' if closed? || moved?
     .row
       .col-md-11.col-md-offset-1.hidden-xs
         = render partial: 'subnav', :locals => { location: location }
