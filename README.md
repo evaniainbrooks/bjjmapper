@@ -3,6 +3,6 @@
 
 To start the dev server:
 
-scripts/setup_server.sh
-scripts/start_nginx.sh
-scripts/start_puma.sh
+script/setup_server.sh
+script/start_nginx.sh
+script/start_puma.sh
