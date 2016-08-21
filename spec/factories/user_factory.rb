@@ -17,6 +17,9 @@ FactoryGirl.define do
     factory :blue_belt do
       belt_rank 'blue'
     end
+    factory :purple_belt do
+      belt_rank 'blue'
+    end
     factory :black_belt do
       belt_rank 'black'
     end

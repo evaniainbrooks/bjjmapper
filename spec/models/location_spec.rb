@@ -142,6 +142,32 @@ describe Location do
     end
   end
 
+  describe 'flag_has_black_belt' do
+    context 'when the instructors relation has a black belt' do
+      subject { build(:location) }
+      let(:bb) { build(:black_belt) }
+      before do
+        subject.instructors << bb
+        subject.save
+      end
+      it 'is true' do
+        subject.flag_has_black_belt.should eq true
+      end
+    end
+    context 'when the instructors relation has no black belt' do
+      subject { build(:location) }
+      let(:pb) { build(:purple_belt) }
+      before do
+        subject.instructors << pb
+        subject.save
+      end
+      it 'is false' do
+        subject.flag_has_black_belt.should eq false
+      end
+    end
+  end
+
+
   describe 'before save callback' do
     subject { build(:location, phone: '(902)', website: 'http://test.com', facebook: 'http://www.facebook.com/page') }
     before { subject.save }

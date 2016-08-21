@@ -44,6 +44,7 @@ class Location
   before_save :canonicalize_website
   before_save :canonicalize_facebook
   before_save :populate_timezone
+  before_save :set_has_black_belt_flag
 
   field :coordinates, type: Array
   field :street
@@ -70,6 +71,7 @@ class Location
   field :ig_hashtag
   field :loctype, type: Integer, default: TYPE_ACADEMY
 
+  field :flag_has_black_belt, type: Boolean, default: false
   field :flag_closed, type: Boolean, default: false
   field :rating, default: 0.0
 
@@ -83,6 +85,7 @@ class Location
   belongs_to :team, index: true
   belongs_to :owner, class_name: 'User', index: true, inverse_of: :owned_locations
   has_and_belongs_to_many :instructors, class_name: 'User', index: true, inverse_of: :locations
+
   has_and_belongs_to_many :favorited_by, class_name: 'User', index: true, inverse_of: :locations
 
   has_many :events
@@ -123,6 +126,7 @@ class Location
   default_scope -> { includes(:team).includes(:owner) }
   scope :academies, -> { where(:type => TYPE_ACADEMY) }
   scope :event_venue, -> { where(:type => TYPE_EVENT_VENUE) }
+  scope :with_black_belt, -> { where(:flag_has_black_belt => true) }
 
   def editable_by? user
     return true if user.super_user?
@@ -194,6 +198,7 @@ class Location
 
   def set_closed_flag
     self.flag_closed = true if self.moved_to_location.present?
+    return true
   end
 
   def default_ig_hashtag
@@ -217,5 +222,10 @@ class Location
     if (self.coordinates_changed? || (timezone.blank? && self.coordinates.present?))
       self.timezone = RollFindr::TimezoneService.timezone_for(self.to_coordinates[0], self.to_coordinates[1]) rescue nil
     end
+  end
+
+  def set_has_black_belt_flag
+    self.flag_has_black_belt = self.instructors.any?{|i| i.belt_rank == 'black'}
+    return true
   end
 end
