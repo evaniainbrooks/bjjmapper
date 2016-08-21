@@ -2,8 +2,9 @@ class RollFindr.Models.DirectorySegment extends Backbone.Model
   defaults:
     name: null
 
-  initialize: ->
-    locationsCollection = new RollFindr.Collections.LocationsCollection(arguments[0].locations)
+  initialize: (options)->
+    locations = options.locations if options?
+    locationsCollection = new RollFindr.Collections.LocationsCollection(locations)
     this.set('locations', locationsCollection)
 
     id = @get('id')
