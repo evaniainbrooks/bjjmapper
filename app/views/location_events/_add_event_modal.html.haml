@@ -22,11 +22,11 @@
                     %label.control-label{:for => "event[instructor]"} Instructor
                     = f.select :instructor, location.instructors.map{|o| [o.name, o.id]}, {include_blank: true}, class: 'form-control input-md'
                   .form-group
-                    = render partial: 'events/start_picker'
+                    = render partial: 'location_events/start_picker'
                   .form-group
-                    = render partial: 'events/end_picker'
+                    = render partial: 'location_events/end_picker'
                   .form-group
-                    = render partial: 'events/recurrence_controls', locals: { f: f }
+                    = render partial: 'location_events/recurrence_controls', locals: { f: f }
         .modal-footer
           %button.btn.btn-default{:type => 'button', 'data-dismiss' => 'modal'} Cancel
           %button.btn.btn-success{:disabled => true, :type => 'submit'} Create Event

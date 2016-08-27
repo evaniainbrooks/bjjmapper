@@ -7,6 +7,7 @@ feature "Top Level Pages" do
   end
 
   scenario "user visits the main page" do
+    create(:directory_segment)
     visit root_path
     expect(page).to have_selector('.homepage')
   end

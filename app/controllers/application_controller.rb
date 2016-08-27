@@ -31,59 +31,8 @@ class ApplicationController < ActionController::Base
       locations: [],
       refresh: 0
     )
-    @countries = RollFindr::DirectoryCountries
-    @cities = RollFindr::DirectoryCities
-  end
 
-  def geocode
-    search_query = params.fetch(:query, '')
-    search_result = Geocoder.search(search_query)
-
-    tracker.track('geocodeQuery',
-      query: search_query,
-      result_count: search_result.count
-    )
-
-    respond_to do |format|
-      format.json do
-        if search_result.count > 0
-          render json: json_geocode_response(search_result) #[0].geometry['location']
-        else
-          render status: :not_found, json: {}
-        end
-      end
-    end
-  end
-
-  def map
-    center = params.fetch(:center, [])
-    query = params.fetch(:query, "")
-    location = params.fetch(:location, "")
-    geolocate = center.blank? && query.blank? && location.blank? ? 1 : 0
-    zoom = params.fetch(:zoom, nil).try(:to_i)
-    zoom ||= center.present? ? Map::ZOOM_LOCATION : Map::ZOOM_DEFAULT
-    @map = Map.new(
-      zoom: zoom,
-      center: center,
-      query: query,
-      location: location,
-      minZoom: Map::DEFAULT_MIN_ZOOM,
-      geolocate: geolocate,
-      locations: [],
-      refresh: 1
-    )
-
-    tracker.track('showMap',
-      zoom: zoom,
-      center: center,
-      query: query,
-      location: location,
-      geolocate: geolocate
-    )
-
-    respond_to do |format|
-      format.html { render layout: 'map' }
-    end
+    @countries = DirectorySegment.parent_segments.asc(:name)
   end
 
   def contact
@@ -183,19 +132,6 @@ class ApplicationController < ActionController::Base
     ep = Rails.configuration.google_maps_endpoint
     key = Rails.configuration.google_maps_api_key
     "#{ep}?key=#{key}&v=3.exp&sensor=false"
-  end
-
-  def json_geocode_response(result)
-    result.map do |r|
-      {
-        address: r.address,
-        street: r.street_address,
-        postal_code: r.postal_code,
-        city: r.city,
-        state: r.state,
-        country: r.country
-      }.merge(r.geometry['location'])
-    end
   end
 
   def ig_client_id

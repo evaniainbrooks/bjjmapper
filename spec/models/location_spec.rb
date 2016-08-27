@@ -109,10 +109,14 @@ describe Location do
     end
     context 'when the timezone service raises an error' do
       before { RollFindr::TimezoneService.stub(:timezone_for).and_raise(StandardError.new) }
-      subject { build(:location, coordinates: [80.0, 80.0], timezone: nil) }
-      before { subject.save }
-      it 'rescues and assigns nil' do
-        subject.timezone.should be_nil
+      let(:previous_value) { 'some/timezone' }
+      subject { build(:location, coordinates: [80.0, 80.0], timezone: previous_value) }
+      before do 
+        subject.save
+        subject.update_attribute(:timezone, previous_value)
+      end
+      it 'rescues and retains previous value' do
+        subject.timezone.should eq previous_value
         subject.should be_persisted
       end
     end

@@ -1,4 +1,4 @@
-<div data-id="<%= location.id %>" class="map-list-item location-list-item <%= active ? 'marker-active' : ''%> list-group-item">
+<div data-id="<%= location.id %>" class="map-list-item location-list-item <%= active ? 'marker-active' : ''%> list-group-item academy">
   <div class="inactive-content">
     <div class="list-index">
       <span><%= location.marker_id %></span>
@@ -48,5 +48,10 @@
       </li>
     </ul>
     <span class="text-info distance small"><%= location.distance %></span>
+    <% _.each(location.events, function(event) { %>
+      <%= event.name %>
+      <%= event.starting %>
+      <%= event.event_type %>
+    <% }) %>
   </div>
 </div>

@@ -3,40 +3,34 @@
 #= require backbone/views/map/directions_dialog_view
 
 class RollFindr.Views.MapView extends Backbone.View
-  directionsDisplay: new google.maps.DirectionsRenderer()
-  directionsDialog: null
   el: $('.wrapper')
   map: null
-  teamFilter: null
+  directionsView: null
   markerView: null
   listView: null
   events: {
     'change [name="sort_order"]': 'sortOrderChanged'
     'click .refresh-button': 'clearSearchAndFetchViewport'
-    'click a.directions': 'getDirections'
-    'click .directions-panel .close' : 'hideDirectionsOverlay'
   }
   initialize: (options)->
     _.bindAll(this,
       'activeMarkerChanged',
+      'clearSearchAndFetchViewport',
       'search',
       'setCenterFromModelAndRefresh',
-      'setDirectionsOverlay',
-      'hideDirectionsOverlay',
       'initializeMarkerView',
-      'setCenterAndFetchLocations',
+      'initializeMap',
       'setCenterGeolocate',
-      'clearSearchAndFetchViewport',
+      'setCenterGeocode',
       'fetchViewport',
-      'fetchGlobal',
       'geolocate',
       'render')
 
     @setupGoogleMap()
 
-    @listView = new RollFindr.Views.MapLocationsListView({
+    @listView = new RollFindr.Views.MapListView({
       el: @$('.location-list')
-      collection: @model.get('locations')
+      model: @model
       filteredCount: 0
     })
 
@@ -44,7 +38,8 @@ class RollFindr.Views.MapView extends Backbone.View
 
     if @map?
       @setupEventListeners()
-      @setCenterAndFetchLocations()
+      @initializeMap()
+      @directionsView = new RollFindr.Views.DirectionsOverlayView({el: @el, model: @model, map: @map})
 
   initializeMarkerView: (editable)->
     shouldRender = @markerView?
@@ -52,10 +47,6 @@ class RollFindr.Views.MapView extends Backbone.View
 
     @markerView = new RollFindr.Views.MapMarkerView({editable: editable, map: @map, collection: @model.get('locations')})
     @markerView.render() if shouldRender
-
-  hideDirectionsOverlay: ->
-    @map.controls[google.maps.ControlPosition.RIGHT_CENTER].clear()
-    @directionsDisplay.setMap(null)
 
   setupGoogleMap: ->
     mapOptions = {
@@ -73,20 +64,27 @@ class RollFindr.Views.MapView extends Backbone.View
       @map.controls[google.maps.ControlPosition.TOP_LEFT].push($(refreshButton)[0])
       @createLocationView = new RollFindr.Views.MapCreateLocationView({map: @map})
 
+    if @model.get('legend')
+      @legendView = new RollFindr.Views.MapLegendView({map: @map, model: @model})
+
   setupEventListeners: ->
     @listenTo(@model.get('locations'), 'sort sync reset', @render)
+
+    filtersChanged = _.debounce(@fetchViewport, 500)
+    @model.on('change:event_type', filtersChanged)
+    @model.on('change:location_type', filtersChanged)
 
     RollFindr.GlobalEvents.on('geolocate', @geolocate)
     RollFindr.GlobalEvents.on('search', @search)
     RollFindr.GlobalEvents.on('markerActive', @activeMarkerChanged)
-    RollFindr.GlobalEvents.on('directions', @setDirectionsOverlay)
     RollFindr.GlobalEvents.on('editing', @initializeMarkerView)
 
   activeMarkerChanged: (e)->
     if null != e.id
       locationModel = @model.get('locations').findWhere({id: e.id})
-      coordinates = locationModel.get('coordinates')
-      newCenter = new google.maps.LatLng(coordinates[0], coordinates[1])
+      lat = locationModel.get('lat')
+      lng = locationModel.get('lng')
+      newCenter = new google.maps.LatLng(lat, lng)
       @map.setCenter(newCenter)
 
   visibleLocations: ->
@@ -109,7 +107,8 @@ class RollFindr.Views.MapView extends Backbone.View
     @model.set('query', e.query)
     @model.set('location', e.location)
 
-    @fetchGlobal()
+    @setCenterGeocode =>
+      @fetchViewport()
 
   geolocate: ->
     @setCenterGeolocate =>
@@ -127,40 +126,47 @@ class RollFindr.Views.MapView extends Backbone.View
 
     navigator.geolocation.getCurrentPosition(geolocateSuccessCallback, geolocateFailedCallback) if navigator? && navigator.geolocation?
 
-  setCenterAndFetchLocations: ->
+  initializeMap: ->
     shouldGeolocate = @model.get('geolocate')
     hasQuery = @model.get('query')? && @model.get('query').length > 0
-    hasCenter = @model.get('center')? && @model.get('center').length > 0
+    hasCenter = @model.get('lat')? && @model.get('lng')?
+
     if (shouldGeolocate && navigator.geolocation)
       @setCenterGeolocate =>
         @fetchViewport()
     else if !hasQuery && hasCenter
       @setCenterFromModelAndRefresh()
     else
-      @fetchGlobal()
+      @setCenterGeocode =>
+        @fetchViewport()
 
   setCenterFromModelAndRefresh: ->
-    defaultCenter = @model.get('center')
-    defaultCenter = [47.718415099999994, -122.31384220000001] if defaultCenter.length < 2
-
-    defaultLocation = new google.maps.LatLng(defaultCenter[0], defaultCenter[1])
+    defaultLat = @model.get('lat')
+    defaultLng = @model.get('lng')
+    defaultLocation = new google.maps.LatLng(defaultLat, defaultLng)
     google.maps.event.addListenerOnce(@map, 'idle', @fetchViewport)
     @map.setCenter(defaultLocation)
 
-  setDirectionsOverlay: (e)->
-    directionsOverlay = JST['templates/directions_overlay']()
-    @map.controls[google.maps.ControlPosition.RIGHT_CENTER].push($(directionsOverlay)[0])
-
-    @directionsDisplay.setDirections(e.result)
-    @directionsDisplay.setPanel($('.directions-panel')[0])
-    @directionsDisplay.setMap(@map)
-
-    RollFindr.GlobalEvents.trigger('markerActive', {id: null})
-
+  setCenterGeocode: (doneCallback)->
+    $.ajax({
+      url: Routes.geocoder_path(),
+      data: {
+        query: @model.get('location'),
+      },
+      type: 'GET',
+      dataType: 'json',
+      success: (results) =>
+        google.maps.event.addListenerOnce(@map, 'idle', doneCallback)
+        newCenter = new google.maps.LatLng(results[0].lat, results[0].lng)
+        @map.setZoom(7)
+        @map.setCenter(newCenter)
+    })
 
   fetchGlobal: ->
     @model.get('locations').fetch({
       data:
+        event_type: @model.get('event_type')
+        location_type: @model.get('location_type')
         query: @model.get('query')
         location: @model.get('location')
       complete: =>
@@ -174,7 +180,8 @@ class RollFindr.Views.MapView extends Backbone.View
 
           @$('.refresh-button .fa').removeClass('fa-spin')
         else if @model.get('location')?
-          @setMapCenterFromLocationQuery()
+          @setCenterGeocode =>
+            @fetchViewport()
         else if !@map.getCenter()?
           toastr.warning('Your search query did not return any results', 'Oops')
           @setCenterFromModelAndRefresh()
@@ -182,23 +189,6 @@ class RollFindr.Views.MapView extends Backbone.View
       error: =>
         toastr.error('Failed to refresh map', 'Error')
     })
-
-
-  setMapCenterFromLocationQuery: ->
-    $.ajax({
-      url: Routes.geocode_path(),
-      data: {
-        query: @model.get('location'),
-      },
-      type: 'GET',
-      dataType: 'json',
-      success: (results) =>
-        google.maps.event.addListenerOnce(@map, 'idle', @fetchViewport)
-        newCenter = new google.maps.LatLng(results[0].lat, results[0].lng)
-        @map.setZoom(7)
-        @map.setCenter(newCenter)
-    })
-
 
   clearSearch: ->
     @model.set('query', null)
@@ -213,18 +203,21 @@ class RollFindr.Views.MapView extends Backbone.View
       google.maps.event.addListenerOnce(@map, 'idle', @fetchViewport)
       return
 
-    center = @model.get('center')
-    center[0] = @map.getCenter().lat()
-    center[1] = @map.getCenter().lng()
+    lat = @map.getCenter().lat()
+    lng = @map.getCenter().lng()
 
     distance = Math.circleDistance(@map.getCenter(), @map.getBounds().getNorthEast())
 
-    @model.set('center', center)
+    @model.set('lat', lat)
+    @model.set('lng', lng)
     @$('.refresh-button .fa').addClass('fa-spin')
 
     @model.get('locations').fetch({
       data:
-        center: center
+        location_type: @model.get('location_type')
+        event_type: @model.get('event_type')
+        lat: lat
+        lng: lng
         distance: distance
         query: @model.get('query')
         location: @model.get('location')
@@ -233,12 +226,4 @@ class RollFindr.Views.MapView extends Backbone.View
       error: =>
         toastr.error('Failed to refresh map', 'Error')
     })
-
-  getDirections: (e)->
-    id = $(e.currentTarget).data('id')
-    location = @model.get('locations').get(id)
-
-    @directionsDialog.undelegateEvents() if @directionsDialog?
-    @directionsDialog = new RollFindr.Views.DirectionsDialogView({el: $('.directions-dialog-container'), model: location})
-    return false
 

@@ -14,9 +14,9 @@ class RollFindr.Views.StaticMapView extends Backbone.View
 
     @setupGoogleMap()
 
-    @listView = new RollFindr.Views.MapLocationsListView({
+    @listView = new RollFindr.Views.MapListView({
       el: @$('.location-list')
-      collection: @model.get('locations')
+      model: @model
       filteredCount: 0
     })
 
@@ -51,8 +51,9 @@ class RollFindr.Views.StaticMapView extends Backbone.View
   activeMarkerChanged: (e)->
     if null != e.id
       locationModel = @model.get('locations').findWhere({id: e.id})
-      coordinates = locationModel.get('coordinates')
-      newCenter = new google.maps.LatLng(coordinates[0], coordinates[1])
+      lat = locationModel.get('lat')
+      lng = locationModel.get('lng')
+      newCenter = new google.maps.LatLng(lat, lng)
       @map.setCenter(newCenter)
 
   render: ->
@@ -60,10 +61,10 @@ class RollFindr.Views.StaticMapView extends Backbone.View
     @markerView.render()
 
   setCenterAndRefresh: ->
-    defaultCenter = @model.get('center')
-    defaultCenter = [47.718415099999994, -122.31384220000001] if defaultCenter.length < 2
+    lat = @model.get('lat')
+    lng = @model.get('lng')
 
-    defaultLocation = new google.maps.LatLng(defaultCenter[0], defaultCenter[1])
+    defaultLocation = new google.maps.LatLng(lat, lng)
     google.maps.event.addListenerOnce(@map, 'idle', @fetchViewport)
     @map.setCenter(defaultLocation)
 

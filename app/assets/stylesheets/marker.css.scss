@@ -1,0 +1,47 @@
+$markerRed: #ff0000;
+$markerBlue:  #0000ff;
+$markerGreen: #00ff00;
+
+.map-label-content {
+  position: relative;
+  border-radius: 4px;
+  padding: 5px;
+  color: #ffffff;
+  font-size: 20px;
+  width: 100%;
+  line-height: 20px;
+  text-align: center;
+  
+  &:after {
+    content:'';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    width: 0;
+    height: 0;
+    border-left: solid 5px transparent;
+    border-right: solid 5px transparent;
+  }
+}
+
+.map-label-content.academy {
+  background-color: $markerRed;
+  &:after {
+    border-top: solid 5px $markerRed;
+  }
+}
+
+.map-label-content.tournament {
+  background-color: $markerBlue;
+  &:after {
+    border-top: solid 5px $markerBlue;
+  }
+}
+
+.map-label-content.seminar {
+  background-color: $markerGreen;
+  &:after {
+    border-top: solid 5px $markerGreen;
+  }
+}

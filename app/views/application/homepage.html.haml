@@ -37,12 +37,12 @@
       %h3 Around The World
   .row
     - per_column = (@countries.size / 4.0).ceil
-    - @countries.keys.sort.each_slice(per_column).each do |countries|
+    - @countries.each_slice(per_column).each do |countries|
       .col-md-3
         - countries.each do |country|
-          = link_to directory_index_path(country), class: 'small block', title: "List of BJJ gyms in #{country}" do
+          = link_to directory_segment_path(country: country.name), class: 'small block', title: "List of BJJ gyms in #{country.name}" do
             Brazilian Jiu-Jitsu academies in
-            %strong= country
+            %strong= country.name
   .row
     .col-md-8.col-md-offset-2.hidden-sm.hidden-xs
       %br/

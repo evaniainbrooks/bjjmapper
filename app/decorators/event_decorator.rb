@@ -5,6 +5,7 @@ class EventDecorator < Draper::Decorator
   decorates_finders
   decorates_association :location
   decorates_association :instructor
+  decorates_association :organization
 
   def duration
     s = object.starting.try(:strftime, '%l:%M%p').try(:strip)
@@ -20,6 +21,26 @@ class EventDecorator < Draper::Decorator
       color_ordinal: color_ordinal,
       instructor_name: instructor.try(:name)
     )
+  end
+
+  def image
+    if object.organization.present?
+      object.organization.image
+    elsif object.instructor.present?
+      object.instructor.image
+    else
+      object.location.image
+    end
+  end
+
+  def image_large
+    if object.organization.present?
+      object.organization.image_large
+    elsif object.instructor.present?
+      object.instructor.image_large
+    else
+      object.location.image_large
+    end
   end
   
   def description

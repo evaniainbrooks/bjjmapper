@@ -1,10 +1,13 @@
 FactoryGirl.define do
   factory :location do
-    title 'LakeCityBJJ'
+    sequence :title do |i|
+      "Academy#{i}"
+    end
     description 'A short test description'
     coordinates [80.0, 80.0]
     country 'Canada'
     city 'Halifax'
+    loctype Location::LOCATION_TYPE_ACADEMY
     team
 
     factory :location_with_instructors do

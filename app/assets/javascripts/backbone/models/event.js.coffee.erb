@@ -1,0 +1,43 @@
+class RollFindr.Models.Event extends Backbone.Model
+  @EVENT_TYPE_CLASS: <%= Event::EVENT_TYPE_CLASS %>
+  @EVENT_TYPE_SEMINAR: <%= Event::EVENT_TYPE_SEMINAR %>
+  @EVENT_TYPE_TOURNAMENT: <%= Event::EVENT_TYPE_TOURNAMENT %>
+  @EVENT_TYPE_CAMP: <%= Event::EVENT_TYPE_CAMP %>
+
+  initialize: ->
+    id = this.get('id')
+    instructor = @get('instructor')
+    instructor = new RollFindr.Models.User(instructor)
+    @set('instructor', instructor)
+  
+  getColor: ->
+    if (@get('event_type') == RollFindr.Models.Event.EVENT_TYPE_TOURNAMENT)
+      return 'tournament'
+
+    return 'seminar'
+
+  paramRoot: 'event'
+  urlRoot: ->
+    Routes.location_event_path(@location, @id)
+  defaults:
+    id: null
+    title: null
+    description: null
+    location: null
+    start: null
+    end: null
+    instructor: null
+    recurrence: null
+    type: null
+
+class RollFindr.Collections.EventsCollection extends Backbone.Collection
+  model: RollFindr.Models.Event
+  url: Routes.search_map_path()
+  sort_key: 'name'
+  comparator:
+    (item)->
+      return item.get(this.sort_key)
+  sortByField:
+    (fieldName)->
+      this.sort_key = fieldName
+      this.sort()

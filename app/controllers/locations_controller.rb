@@ -41,7 +41,7 @@ class LocationsController < ApplicationController
       count: count
     )
 
-    @locations = Location.all.desc('created_at').limit(count)
+    @locations = Location.academies.desc('created_at').limit(count)
 
     respond_to do |format|
       format.json { render json: locations }
@@ -165,57 +165,6 @@ class LocationsController < ApplicationController
     respond_to do |format|
       format.json { render json: @location }
       format.html { redirect_to location_path(location, success: 1, edit: 0) }
-    end
-  end
-
-  def search
-    center = params.fetch(:center, nil)
-    team = params.fetch(:team, nil)
-    distance = params.fetch(:distance, 5.0)
-    text_filter = params.fetch(:query, nil)
-    location = params.fetch(:location, nil)
-
-    if location.present? && center.blank?
-      geocode_result = Geocoder.search(location)
-      if geocode_result.present?
-        location = geocode_result[0].geometry['location']
-        center = [location['lat'], location['lng']]
-        distance = 50.0
-      end
-    end
-
-    if center.present? && center.is_a?(Array)
-      filter_ids = Location.search_ids(text_filter).try(:to_set) if text_filter.present?
-
-      @locations = Location.near(center, distance)
-      @locations = @locations.where(:team_id.in => team) if team.present?
-      @locations = @locations.to_a
-
-      if text_filter.present?
-        @locations.select! do |location|
-          filter_ids.include?(location.id.to_s)
-        end
-      end
-    elsif text_filter.present?
-      @locations = Location.search(text_filter)
-      center = @locations.first.coordinates unless @locations.empty?
-    else
-      head :bad_request and return false
-    end
-
-    tracker.track('searchLocations',
-      center: center,
-      team: team,
-      distance: distance,
-      query: text_filter,
-      results: @locations.count
-    )
-
-    head :no_content and return unless @locations.present?
-
-    @locations = decorated_locations_with_distance_to_center(@locations, center)
-    respond_to do |format|
-      format.json { render json: @locations }
     end
   end
 

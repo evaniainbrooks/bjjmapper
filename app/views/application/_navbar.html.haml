@@ -18,9 +18,9 @@
     / Collect the nav links, forms, and other content for toggling
     .main-navbar-collapse.collapse.navbar-collapse
       %ul.nav.navbar-nav
-        %li{:class => action?(:map) ? 'active' : nil}
+        %li{:class => controller?(:maps) ? 'active' : nil}
           %a{href: map_path(ref: 'navbar'), title: 'Brazilian Jiu-Jitsu Academy Map'} Map
-        %li{:class => controller?(:locations) ? 'active' : nil}
+        %li{:class => controller?(:directory_segments) ? 'active' : nil}
           %a{href: directory_index_path(ref: 'navbar'), title: 'Brazilian Jiu-Jitsu Academy Directory'} Academies
         %li{:class => action?(:meta) ? 'active' : nil}
           %a{:href => meta_path(ref: 'navbar'), title: 'Learn about BJJMapper'} About

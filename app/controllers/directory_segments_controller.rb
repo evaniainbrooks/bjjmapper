@@ -42,7 +42,8 @@ class DirectorySegmentsController < ApplicationController
 
   def map
     @_map ||= Map.new(
-      center: segment.to_coordinates,
+      lat: segment.lat,
+      lng: segment.lng,
       zoom: segment.zoom,
       minZoom: Map::DEFAULT_MIN_ZOOM,
       geolocate: 0,

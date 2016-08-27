@@ -56,12 +56,12 @@
           = f.select :instructor, options_for_select(location.instructors.map{|o| [o.name, o.id]}, event.instructor.try(:to_param)), {include_blank: true}, class: 'form-control input-md'
     .row.edit-field
       .form-group.col-md-4.col-md-offset-2.small
-        = render partial: 'events/start_picker'
+        = render partial: 'location_events/start_picker'
       .form-group.col-md-4.small
-        = render partial: 'events/end_picker'
+        = render partial: 'location_events/end_picker'
     .row.edit-field
       .form-group.col-md-8.col-md-offset-2.small
-        = render partial: 'events/recurrence_controls', locals: { f: f }
+        = render partial: 'location_events/recurrence_controls', locals: { f: f }
     .row.edit-field
       .col-md-8.col-md-offset-2
         %p

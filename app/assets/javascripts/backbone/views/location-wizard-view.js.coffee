@@ -160,7 +160,7 @@ class RollFindr.Views.LocationWizardView extends Backbone.View
 
   searchAddress: ->
     $.ajax({
-      url: Routes.geocode_path(),
+      url: Routes.geocoder_path(),
       data: {
         query: $('#full_address').val()
       }

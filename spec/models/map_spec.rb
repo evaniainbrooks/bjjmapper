@@ -22,13 +22,15 @@ describe Map do
               :geolocate => geolocate,
               :location => location,
               :query => query,
-              :center => center)
+              :lat => center[0],
+              :lng => center[1])
     end
     it 'has zoom, minZoom, geolocate and center params' do
       subject.zoom.should eq zoom
       subject.minZoom.should eq minZoom
       subject.geolocate.should eq geolocate
-      subject.center.should eq center
+      subject.lat.should eq center[0]
+      subject.lng.should eq center[1]
       subject.location.should eq location
       subject.query.should eq query
     end

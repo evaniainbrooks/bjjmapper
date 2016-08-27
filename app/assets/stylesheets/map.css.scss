@@ -1,0 +1,148 @@
+@import "marker";
+
+.map-legend {
+  margin-top: 10px;
+  margin-right: 10px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px;
+  width: 100px;
+  h5 {
+    text-align: center;
+    margin-top: 2px;
+    margin-bottom: 4px;
+  }
+
+  button.close {
+    font-size: 16px !important;
+  }
+
+  &.collapsed {
+    .close-btn { display: none; }
+    .open-btn { display: block; }
+    .content { display: none; }
+  }
+  
+  .close-btn { display: block; }
+  .open-btn { display: none; }
+  .content { display: block; }
+}
+
+.location-list {
+  padding: 0px !important;
+  .map-list-item {
+    h4 {
+      color: #428bca;
+    }
+    .team-title {
+      color: #777;
+    }
+    .address {
+      color: black;
+    }
+    .label {
+      color: black;
+      min-width: 60px;
+      display: inline-block;
+      text-align: left;
+    }
+    .location-link:hover {
+      text-decoration: none;
+    }
+    .active-content { display: none; }
+    .inactive-content { display: inherit; }
+    &:hover {
+      cursor: pointer;
+    }
+
+    &.academy .list-index span {
+      background-color: lighten($markerRed, 30%);
+      border: 1px solid $markerRed;
+    }
+    &.tournament .list-index span {
+      background-color: lighten($markerBlue, 30%);
+      border: 1px solid $markerBlue;
+    }
+    &.seminar .list-index span {
+      background-color: lighten($markerGreen, 30%);
+      border: 1px solid $markerGreen;
+    }
+  }
+  .list-index {
+    color: white;
+    padding: 7px 0px;
+    height: 100%;
+    float: left;
+    width: 40px;
+    text-align: center;
+    span {
+      font-size: 150%;
+      border-radius: 5px;
+      padding: 3px;
+      color: white;
+    }
+  }
+  .distance {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+  .empty-message {
+    div { padding: 12px; }
+    display: none;
+  }
+  &.empty {
+    .empty-message { display: inherit; }
+  }
+  .empty-message {
+    margin: 10px 20px;
+    display: none;
+  }
+  .list-group-item-heading, .list-group-item-text {
+      display: block;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+  }
+  .list-group-item-text {
+    margin-left: 98px;
+  }
+  img.logo {
+    opacity: 0.7;
+    width: 50px;
+    height: 50px;
+    margin-right: 7px;
+  }
+}
+
+.map-list-item {
+  opacity: 0.7;
+  
+  &.marker-active {
+    opacity: 1.0;
+
+    a.phone, a.website, a.email {
+      color: blue;
+    }
+
+    .active-content { display: inherit; }
+    .inactive-content { display: none; }
+
+    &.academy .list-index span {
+      background-color: $markerRed;
+      border: 1px solid $markerRed;
+    }
+    
+    &.tournament .list-index span {
+      background-color: $markerBlue;
+      border: 1px solid $markerBlue;
+    }
+    
+    &.seminar .list-index span {
+      background-color: $markerGreen;
+      border: 1px solid $markerGreen;
+    }
+  }
+}
+

@@ -11,7 +11,7 @@ describe UsersController do
       it 'returns the recent reviews' do
         get :reviews, id: user.to_param, format: 'json', count: 1
         response.should be_success
-        response.body.should match(user.reviews.first.decorate.to_json)
+        assigns[:reviews].collect(&:to_param).should include(user.reload.reviews.first.to_param)
       end
     end
     context 'with legacy bsonid' do

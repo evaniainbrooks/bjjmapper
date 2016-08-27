@@ -43,23 +43,23 @@
       var icon;
       var position;
       var marker;
+
       var markerExists = "undefined" !== typeof(self.markers[id]);
-      var markerBase = "//storage.googleapis.com/bjjmapper/markers/number_"
       if (markerExists) {
         return;
       }
 
       loc.attributes['marker_id'] = this.idFactory.nextId();
-      icon = markerBase + loc.get('marker_id') + ".png";
-      position = new google.maps.LatLng(loc.get('coordinates')[0], loc.get('coordinates')[1]),
-      marker = new google.maps.Marker({
+      position = new google.maps.LatLng(loc.get('lat'), loc.get('lng'));
+
+      marker = new RichMarker({
          id: id,
          map: self.map,
-         title: loc.get('address'),
          position: position,
-         icon: icon,
+         content: self.getMarkerContent(loc),
          draggable: self.draggable,
          cursor: 'pointer',
+         shadow: false,
          flat: false,
       });
 
@@ -77,6 +77,18 @@
           RollFindr.GlobalEvents.trigger('markerActive', {id: id});
         });
       }
+    },
+    getMarkerContent: function(loc) {
+      var markerContent = $('<div></div>');
+      var markerInnerContent = $('<div></div>')
+
+      markerInnerContent.addClass('map-label-content');
+      markerInnerContent.addClass(loc.getColor());
+      markerInnerContent.text(loc.get('marker_id').toString());
+
+      markerContent.html(markerInnerContent);
+
+      return markerContent.html();
     },
     markerDragEnd: function(e) {
       var model = this.collection.models[0];

@@ -42,37 +42,12 @@ describe ApplicationController do
       end
     end
   end
-  describe 'GET geocode' do
-    context 'with json format' do
-      context 'when the geocoder service returns results' do
-        let(:location) { { 'lat' => 80.0, 'lng' => 80.0 } }
-        before do
-          search_result = double('search result', city: '', address: '', street_address: '', state: '', postal_code: '', country: '')
-          search_result.stub('geometry') { { 'location' => location } }
-          search_result.stub('coordinates') { [location['lat'], location['lng']] }
-          Geocoder.stub('search') { [search_result, search_result] }
-        end
-        it 'returns the location of the first search result' do
-          get :geocode, query: 'test', format: 'json'
-          response.should be_ok
-        end
-      end
-      context 'when the geocoder service returns nothing' do
-        before { Geocoder.stub(:search) { [] } }
-        it 'returns 404' do
-          get :geocode, query: 'test', format: 'json'
-          response.status.should eq 404
-        end
-      end
+  describe 'GET homepage' do
+    it 'renders the homepage' do
+      get :homepage
+      response.should render_template('application/homepage')
     end
   end
-  describe 'GET map' do
-    it 'renders the map' do
-      get :map
-      response.should render_template('application/map')
-    end
-  end
-
   describe 'GET meta' do
     it 'renders the content' do
       get :meta

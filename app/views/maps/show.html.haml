@@ -3,12 +3,33 @@
 .col-md-4.map-list-view
   %ul.nav.nav-tabs.nav-justified.map-list
     %li.active
-      %a.show-locations{:href => '#tab-pane-location-list', 'data-toggle' => 'tab'} 
+      %a.show-locations{:href => '#tab-pane-location-list', 'data-toggle' => 'tab'}
         %strong Academies
+    %li
+      %a.show-filters{:href => '#tab-pane-filter-list', 'data-toggle' => 'tab'}
+        %strong Filters
   .tab-content
     %div#tab-pane-location-list.tab-pane.location-list.fade.in.active
       = render partial: 'locations/map_list', locals: { show_create: true }
     %div#tab-pane-filter-list.filter-list.tab-pane.fade.in
+      .container-fluid
+        %h4 Map display 
+        %label.form-label
+          %input{:type => 'checkbox', :name => 'show_academies', :data => { :type => 'location', :id => Location::LOCATION_TYPE_ACADEMY } }
+            &nbsp;Academies
+        %br/
+        %label.form-label
+          %input{:type => 'checkbox', :name => 'show_tournaments', :data => { :type => 'event', :id => Event::EVENT_TYPE_TOURNAMENT } }
+            &nbsp;Tournaments
+        %br/
+        %label.form-label
+          %input{:type => 'checkbox', :name => 'show_seminars', :data => { :type => 'event', :id => Event::EVENT_TYPE_SEMINAR } }
+            &nbsp;Seminars
+        %br/
+        %label.form-label
+          %input{:type => 'checkbox', :name => 'show_camps', :data => { :type => 'event', :id => Event::EVENT_TYPE_CAMP } }
+            &nbsp;Training Camps
+        %br/
       .term-filter.container-fluid
         %h4 Search terms
         .input-group

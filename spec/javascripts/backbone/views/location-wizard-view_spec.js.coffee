@@ -45,7 +45,7 @@ describe 'Views.LocationWizardView', ->
     ]
     this.server.respondWith(
       'GET',
-      Routes.geocode_path({query: testAddress.street}),
+      Routes.geocoder_path({query: testAddress.street}),
       geocodeResponse
     )
 

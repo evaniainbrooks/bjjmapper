@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe LocationDecorator do
-  let(:context) { { center: [80.0, 80.0] } }
+  let(:context) { { lat: 80.0, lng: 80.0 } }
   describe '.instructor_color_ordinal' do
     context 'with nil instructor' do
       subject { build(:location).decorate }

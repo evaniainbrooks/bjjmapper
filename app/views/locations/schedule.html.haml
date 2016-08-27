@@ -13,7 +13,7 @@
         .scheduler-container.clear
           .scheduler
 
-= render :partial => 'events/add_event_modal', locals: { location: location }
+= render :partial => 'location_events/add_event_modal', locals: { location: location }
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->
