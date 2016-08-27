@@ -14,9 +14,14 @@ Rails.application.routes.draw do
     resources :users, controller: :students, as: :students, path: '/students', only: [:create, :destroy, :index]
   end
 
+  resource :map, only: [:show] do
+    get :search, on: :collection
+  end
+
+  resource :geocoder, only: [:show]
+
   resources :locations, only: [:create, :destroy, :update, :show] do
     post :favorite, on: :member
-    get :search, on: :collection
     get :wizard, on: :collection
     get :recent, on: :collection
     get :nearby, on: :collection
@@ -28,7 +33,7 @@ Rails.application.routes.draw do
 
     resources :users, controller: :instructors, as: :instructors, path: '/instructors', only: [:create, :destroy, :index]
 
-    resources :events, only: [:create, :index, :show, :destroy, :update] do
+    resources :events, controller: :location_events, only: [:create, :index, :show, :destroy, :update] do
       post :move, on: :member
     end
   end
@@ -42,28 +47,24 @@ Rails.application.routes.draw do
     resources :users, controller: :instructors, as: :instructors, path: '/instructors', only: [:create, :destroy, :index]
   end
 
+  resources :events, :only => [:index, :create] do
+    get :wizard, on: :collection
+  end
+
   root 'application#homepage'
-  get '/omnischedule' => 'events#omnischedule', :as => :omnischedule
-  get 'search/:query' => 'application#search'
   get '/bjj-academy-directory' => 'directory_segments#index', :as => :directory_index
   get '/bjj-academy-directory/country/:country(/city/:city)' => 'directory_segments#show', :as => :directory_segment
-  get '/bjj-academy-directory/country/:country(/city/:city)/data' => 'directory_segments#data', :as => :directory_segment_data
-  
-  
+
   match '/signin' => 'sessions#new', :as => :signin, :via => [:post, :get]
   match '/auth/:provider/callback' => 'sessions#create', :via => [:post, :get]
   match '/auth/failure' => 'sessions#failure', :via => [:post, :get]
   match '/signout' => 'sessions#destroy', :as => :signout, :via => [:post, :get, :delete]
 
   post '/report' => 'application#report', :as => :report
-  get '/map' => 'application#map', :as => :map
   get '/meta' => 'application#meta', :as => :meta
   get '/privacy-policy' => 'application#privacy_policy', :as => :privacy_policy
   get '/people' => 'application#people'
-  get '/geocode' => 'application#geocode'
   post '/contact' => 'application#contact', :as => :contact
-
-  post '/paroscamp/contact' => 'paroscamp#contact'
 
   get '/sitemap.xml' => 'sitemaps#index', :format => 'xml', :as => :sitemap
 end

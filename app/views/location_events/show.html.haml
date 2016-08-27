@@ -1,0 +1,7 @@
+- case @event.event_type
+- when Event::EVENT_TYPE_CLASS
+  = render partial: 'show_event'
+- when Event::EVENT_TYPE_SEMINAR
+  = render partial: 'show_seminar'
+- when Event::EVENT_TYPE_TOURNAMENT
+  = render partial: 'show_tournament'

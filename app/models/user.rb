@@ -190,8 +190,9 @@ class User
   end
 
   def as_json(args={})
-    result = super(args.merge(except: [:team_ids, :location_ids, :locations, :favorite_locations, :internal, :description_src, :oauth_token, :oauth_expires_at, :modifier_id, :lineal_parent_id, :ip_address, :coordinates, :uid, :provider, :email, :contact_email, :_id])).merge({
+    result = super(args.merge(except: [:team_ids, :location_ids, :locations, :favorite_locations, :internal, :description_src, :oauth_token, :oauth_expires_at, :modifier_id, :lineal_parent_id, :ip_address, :coordinates, :uid, :provider, :email, :contact_email, :_id, :role])).merge({
       :id => self.to_param.to_s,
+      :hash => self._id.to_s,
       :locations => self.locations.map {|o| { title: o.title, id: o.to_param } },
       :favorite_location_ids => self.favorite_location_ids.map(&:to_s),
       :modifier_id => self.modifier_id.to_s,

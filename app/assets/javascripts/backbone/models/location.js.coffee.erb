@@ -1,12 +1,39 @@
 class RollFindr.Models.Location extends Backbone.Model
-  initialize: ->
+  @LOCATION_TYPE_ACADEMY: <%= Location::LOCATION_TYPE_ACADEMY %>
+  @LOCATION_TYPE_EVENT_VENUE: <%= Location::LOCATION_TYPE_EVENT_VENUE %>
+
+  initialize: (options)->
     id = this.get('id')
     instructors = @get('instructors')
     instructors = new RollFindr.Collections.LocationInstructorsCollection(instructors, {location_id: id})
     this.set('instructors', instructors)
+    
     reviews = @get('reviews')
     reviews = new RollFindr.Collections.ReviewsCollection(reviews, {location_id: id})
     this.set('reviews', reviews)
+    
+    events = @get('events')
+    events = new RollFindr.Collections.EventsCollection(events, {location_id: id})
+    this.set('events', events)
+  
+  getColor: ->
+    if (@get('loctype') == RollFindr.Models.Location.LOCATION_TYPE_EVENT_VENUE)
+      if @get('events').length > 0
+        return @get('events').first().getColor()
+
+    return 'academy'
+
+  toJSON: ->
+    locationJson = Backbone.Model.prototype.toJSON.call(this)
+    typeIsArray = Array.isArray || ( value ) -> return {}.toString.call( value ) is '[object Array]'
+
+    _.each ['events', 'instructors', 'reviews'], (o)=>
+      collection = @get(o)
+      unless typeIsArray(collection)
+        collectionJson = collection.toJSON()
+        locationJson[o] = collectionJson
+
+    return locationJson
 
   isVisible: (center, radius)->
   paramRoot: 'location'
@@ -27,7 +54,7 @@ class RollFindr.Models.Location extends Backbone.Model
 
 class RollFindr.Collections.LocationsCollection extends Backbone.Collection
   model: RollFindr.Models.Location
-  url: Routes.search_locations_path()
+  url: Routes.search_map_path()
   sort_key: 'name'
   comparator:
     (item)->

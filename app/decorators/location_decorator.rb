@@ -19,14 +19,14 @@ class LocationDecorator < Draper::Decorator
 
   def initialize(object, options = EMPTY_HASH)
     super(object, options)
-    if (context.key?(:center))
+    if (context.key?(:lat) && context.key?(:lng))
       @distance = Geocoder::Calculations.distance_between(
-        context[:center],
+        [ context[:lat], context[:lng] ],
         object.to_coordinates
       )
 
       @bearing = Geocoder::Calculations.bearing_between(
-        context[:center],
+        [ context[:lat], context[:lng] ],
         object.to_coordinates,
         method: :linear
       )

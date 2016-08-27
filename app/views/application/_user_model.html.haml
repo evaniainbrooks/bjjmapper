@@ -1,4 +1,4 @@
 :javascript
   window.RollFindr.CurrentUser = new RollFindr.Models.User(#{current_user.to_json});
-  mixpanel.init(RollFindr.CurrentUser.get('id'));
+  mixpanel.init(RollFindr.CurrentUser.get('hash'));
 

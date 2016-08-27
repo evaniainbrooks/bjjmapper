@@ -2,20 +2,27 @@ require 'mongoid-history'
 require 'ice_cube'
 
 class Event
+  include Canonicalized
+
   RECURRENCE_NONE = 0
   RECURRENCE_DAILY = 1
   RECURRENCE_2DAILY = 2
   RECURRENCE_WEEKLY = 3
   RECURRENCE_2WEEKLY = 4
 
-  EVENT_TYPE_CLASS = 0
-  EVENT_TYPE_SEMINAR = 1
-  EVENT_TYPE_TOURNAMENT = 2
-  EVENT_TYPE_CAMP = 3
+  EVENT_TYPE_CLASS = 1
+  EVENT_TYPE_SEMINAR = 2
+  EVENT_TYPE_TOURNAMENT = 4
+  EVENT_TYPE_CAMP = 8
+  EVENT_TYPE_SUBEVENT = 16
+
+  EVENT_TYPE_ALL = [EVENT_TYPE_CLASS, EVENT_TYPE_SEMINAR, EVENT_TYPE_TOURNAMENT, EVENT_TYPE_CAMP]
 
   include Mongoid::Document
+  include Mongoid::Slug
   include Mongoid::Timestamps
   include Mongoid::History::Trackable
+
   attr_accessor :event_recurrence
   attr_accessor :weekly_recurrence_days
 
@@ -25,7 +32,11 @@ class Event
   field :ending, type: Time
   field :is_all_day, type: Boolean
   field :price, type: String
-  field :event_type, type: Integer, default: EVENT_TYPE_CLASS
+  field :website, type: String
+  field :facebook, type: String
+  field :event_type, type: Integer, default: EVENT_TYPE_CLASS 
+
+  default_scope -> { where(:event_type.ne => EVENT_TYPE_SUBEVENT) }
 
   scope :before_time, ->(time) { where(:ending.gte => time) }
   scope :after_time, ->(time) { where(:starting.lte => time) }
@@ -35,12 +46,18 @@ class Event
   scope :seminars, -> { where(:event_type => EVENT_TYPE_SEMINAR) }
   scope :camps, -> { where(:event_type => EVENT_TYPE_CAMP) }
   scope :tournaments, -> { where(:event_type => EVENT_TYPE_TOURNAMENT) }
-  
+
   belongs_to :modifier, class_name: 'User'
   belongs_to :location
   belongs_to :instructor, class_name: 'User'
+  belongs_to :organization
+
+  belongs_to :parent_event, class_name: 'Event', :inverse_of => :sub_events
+  has_many :sub_events, class_name: 'Event', :inverse_of => :parent_event
 
   validates :title, :presence => true
+  slug :title, history: true
+
   validates :location, :presence => true
   validates :modifier, :presence => true
 
@@ -52,6 +69,18 @@ class Event
 
   before_save :create_schedule
   before_save :serialize_schedule
+  before_save :set_event_type
+
+  canonicalize :website, as: :website
+  canonicalize :facebook, as: :facebook
+
+  index :event_type => 1
+  index :ending => 1
+  index :starting => 1
+
+  def to_param
+    slug || id
+  end
 
   def schedule=(s)
     @schedule = s
@@ -131,6 +160,13 @@ class Event
       self.schedule.add_recurrence_rule IceCube::Rule.weekly(1).day(*weekly_recurrence_days.try(:map, &:to_i))
     when RECURRENCE_2WEEKLY
       self.schedule.add_recurrence_rule IceCube::Rule.weekly(2).day(*weekly_recurrence_days.try(:map, &:to_i))
+    end
+  end
+
+  def set_event_type
+    if self.parent_event.present?
+      self.location = self.parent_event.location
+      self.event_type = EVENT_TYPE_SUBEVENT
     end
   end
 end

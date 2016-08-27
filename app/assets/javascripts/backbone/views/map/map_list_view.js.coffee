@@ -1,35 +1,37 @@
-class RollFindr.Views.MapLocationsListView extends Backbone.View
+class RollFindr.Views.MapListView extends Backbone.View
   el: $('.location-list')
   tagName: 'div'
-  template: JST['templates/locations/map-list-item']
+  locationTemplate: JST['templates/map/location-list-item']
+  eventTemplate: JST['templates/map/event-list-item']
   activeMarkerId: null
-  collection: null
+  model: null
   events: {
-    'click .location-list-item': 'listItemClicked'
+    'click .map-list-item': 'listItemClicked'
   }
   initialize: ->
     _.bindAll(this, 'listItemClicked', 'activeMarkerChanged', 'render')
     RollFindr.GlobalEvents.on('markerActive', @activeMarkerChanged)
 
   render: (filteredCount)->
-    if @collection.length == 0
+    if @model.get('locations').length == 0
       @$el.addClass('empty')
     else
       @$el.removeClass('empty')
 
     if (undefined != filteredCount)
-      @$('.list-count').text("Displaying #{@collection.length} locations (#{filteredCount} filtered)")
+      @$('.list-count').text("Displaying #{@model.get('locations').length} locations (#{filteredCount} filtered)")
 
     @$('.items').empty()
-    _.each @collection.models, (loc)=>
+    _.each @model.get('locations').models, (loc)=>
+      templateType = if loc.get('events')? && loc.get('events').length > 0 then @eventTemplate else @locationTemplate
       id = loc.get('id')
-      locElement = @template({location: loc.toJSON(), active: @activeMarkerId == id})
+      locElement = templateType({location: loc.toJSON(), active: @activeMarkerId == id})
       @$('.items').append(locElement)
 
   activeMarkerChanged: (e)->
     @activeMarkerId = e.id
     if null != @activeMarkerId
-      listElem = $('[data-id="' + @activeMarkerId + '"]')
+      listElem = $("[data-id='#{@activeMarkerId}']")
 
       if 'fixed' == $('.map-canvas').css('position')
         $('html, body').animate({
@@ -39,6 +41,8 @@ class RollFindr.Views.MapLocationsListView extends Backbone.View
 
   listItemClicked: (e)->
     id = $(e.currentTarget).data('id')
+    type = $(e.currentTarget).data('type')
+
     $(e.currentTarget).siblings().removeClass('marker-active')
     $(e.currentTarget).addClass('marker-active')
     RollFindr.GlobalEvents.trigger('markerActive', {id: id})

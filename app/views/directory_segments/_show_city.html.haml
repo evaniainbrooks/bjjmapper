@@ -23,7 +23,7 @@
           %span= "Showing #{pluralize(segment.locations.count, 'academy')}"
           %span
             = surround '(', ')' do
-              = link_to 'See on map', map_path(zoom: segment.zoom, center: segment.to_coordinates), title: "See map of Brazilian Jiu-Jitsu gyms in #{segment.full_name}"
+              = link_to 'See on map', map_path(zoom: segment.zoom, lat: segment.lat, lng: segment.lng), title: "See map of Brazilian Jiu-Jitsu gyms in #{segment.full_name}"
     .row
       .col-md-12
         = render partial: 'table', locals: { locations: segment.locations, show_legend: segment.child? }
@@ -37,6 +37,6 @@
   :coffeescript
     $(document).ready ->
       segmentModel = new RollFindr.Models.DirectorySegment(#{segment.to_json})
-      mapModel = new RollFindr.Models.Map(#{map.to_json})
+      mapModel = new RollFindr.Models.Map(#{render partial: 'maps/map', formats: [:json], locals: { map: map }})
       cityView = new RollFindr.Views.DirectorySegmentCityView({ model: segmentModel, mapModel: mapModel, el: $('.directory') })
 

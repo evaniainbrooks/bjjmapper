@@ -57,6 +57,14 @@ class DirectorySegment
     super || (populate_timezone unless self.destroyed?)
   end
 
+  def lat
+    self.to_coordinates[0]
+  end
+
+  def lng
+    self.to_coordinates[1]
+  end
+
   def coordinates=(coordinates)
     self.timezone = nil
     super

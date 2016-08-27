@@ -8,5 +8,5 @@ class RollFindr.Views.DirectorySegmentCountryView extends Backbone.View
     @initializeMap(options.mapModel)
 
   initializeMap: (model)->
-    mapView = new RollFindr.Views.MapView(model: model, el: @$el)
+    mapView = new RollFindr.Views.StaticMapView(model: model, el: @$el)
 

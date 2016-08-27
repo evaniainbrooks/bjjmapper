@@ -7,7 +7,7 @@ Spork.prefork do
   # need to restart spork for it take effect.
   # This file is copied to spec/ when you run 'rails generate rspec:install'
   abort("ABORTING: specs must be run under test environment")  unless ENV["RAILS_ENV"] == 'test'
-  #require 'simplecov'
+  require 'simplecov'
 
   #SimpleCov.minimum_coverage 94
   #SimpleCov.maximum_coverage_drop 2

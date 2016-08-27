@@ -13,7 +13,7 @@ class RollFindr.Views.OmniCalendarView extends Backbone.View
     @ids = @collection.pluck("id")
 
     @$el.fullCalendar({
-      events: Routes.omnischedule_path({ids: @ids}),
+      events: Routes.events_path({ids: @ids}),
       eventDurationEditable: false,
       editable: false,
       height: 'auto',

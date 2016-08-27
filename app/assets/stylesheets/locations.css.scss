@@ -1,7 +1,3 @@
-// Place all the styles related to the Locations controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
-
 .show-location {
   h1 { 
     font-size: 175%; 
@@ -49,95 +45,6 @@
     .empty-message { display: inherit; }
   }
 }
-
-.location-list {
-  padding: 0px !important;
-  .location-list-item {
-    h4 {
-      color: #428bca;
-    }
-    .team-title {
-      color: #777;
-    }
-    .address {
-      color: black;
-    }
-    .label {
-      color: black;
-      min-width: 60px;
-      display: inline-block;
-      text-align: left;
-    }
-    .location-link:hover {
-      text-decoration: none;
-    }
-    .active-content { display: none; }
-    .inactive-content { display: inherit; }
-    &:hover {
-      cursor: pointer;
-    }
-  }
-  .list-index {
-    color: #777;
-    padding: 7px 0px;
-    height: 100%;
-    float: left;
-    width: 40px;
-    text-align: center;
-    span {
-      font-size: 150%;
-    }
-  }
-  .distance {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-  }
-  .empty-message {
-    div { padding: 12px; }
-    display: none;
-  }
-  &.empty {
-    .empty-message { display: inherit; }
-  }
-  .empty-message {
-    margin: 10px 20px;
-    display: none;
-  }
-  .list-group-item-heading, .list-group-item-text {
-      display: block;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-  }
-  .list-group-item-text {
-    margin-left: 98px;
-  }
-  img.logo {
-    opacity: 0.7;
-    width: 50px;
-    height: 50px;
-    margin-right: 7px;
-  }
-}
-
-.map-list-item {
-  &.marker-active {
-    background-color: #ebeeff;
-
-    a.phone, a.website, a.email {
-      color: blue;
-    }
-
-    .active-content { display: inherit; }
-    .inactive-content { display: none; }
-    img { opacity: 1.0; }
-    .list-index {
-      color: black;
-    }
-  }
-}
-
 
 .location-list.recent-locations {
   p.timestamp {

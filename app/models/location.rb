@@ -2,6 +2,8 @@ require 'mongoid-history'
 require 'mongoid_search_ext'
 
 class Location
+  include Canonicalized
+
   include Mongoid::Document
   include Mongoid::Slug
   include Mongoid::Timestamps
@@ -13,8 +15,10 @@ class Location
 
   SLUG_STOP_WORDS = ['the', 'and', 'a', 's', 'on', 'is', 'slash', 'by'].freeze
 
-  TYPE_ACADEMY = 0
-  TYPE_EVENT_VENUE = 1
+  LOCATION_TYPE_ACADEMY = 1
+  LOCATION_TYPE_EVENT_VENUE = 2
+
+  LOCATION_TYPE_ALL = [LOCATION_TYPE_ACADEMY, LOCATION_TYPE_EVENT_VENUE]
 
   track_history   :on => :all,
                   :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier
@@ -40,9 +44,6 @@ class Location
   end
 
   before_save :set_closed_flag
-  before_save :canonicalize_phone
-  before_save :canonicalize_website
-  before_save :canonicalize_facebook
   before_save :populate_timezone
   before_save :set_has_black_belt_flag
 
@@ -69,11 +70,15 @@ class Location
   field :instagram
   field :twitter
   field :ig_hashtag
-  field :loctype, type: Integer, default: TYPE_ACADEMY
+  field :loctype, type: Integer, default: LOCATION_TYPE_ACADEMY
 
   field :flag_has_black_belt, type: Boolean, default: false
   field :flag_closed, type: Boolean, default: false
   field :rating, default: 0.0
+
+  canonicalize :website, as: :website
+  canonicalize :facebook, as: :facebook
+  canonicalize :phone, as: :phone
 
   belongs_to :moved_to_location, class_name: 'Location', inverse_of: :moved_from_location
   has_one :moved_from_location, class_name: 'Location', inverse_of: :moved_to_location
@@ -91,6 +96,9 @@ class Location
   has_many :events
   has_many :reviews, :order => :created_at.desc
 
+  index :loctype => 1
+  index :flag_closed => 1
+  index :flag_has_black_belt => 1
   index({
     :street => 'text',
     :city => 'text',
@@ -124,8 +132,8 @@ class Location
   })
 
   default_scope -> { includes(:team).includes(:owner) }
-  scope :academies, -> { where(:type => TYPE_ACADEMY) }
-  scope :event_venue, -> { where(:type => TYPE_EVENT_VENUE) }
+  scope :academies, -> { where(:loctype => LOCATION_TYPE_ACADEMY) }
+  scope :event_venue, -> { where(:loctype => LOCATION_TYPE_EVENT_VENUE) }
   scope :with_black_belt, -> { where(:flag_has_black_belt => true) }
 
   def editable_by? user
@@ -185,6 +193,14 @@ class Location
     super || (populate_timezone unless self.destroyed?)
   end
 
+  def lat
+    self.to_coordinates[0]
+  end
+
+  def lng
+    self.to_coordinates[1]
+  end
+
   def coordinates=(coordinates)
     self.timezone = nil
     super
@@ -205,22 +221,11 @@ class Location
     'bjjmapper' + self.title.parameterize('').first(6)
   end
 
-  def canonicalize_website
-    self.website.gsub!(/^https?:\/\//, '') if self.website_changed?
-  end
-
-  def canonicalize_facebook
-    self.facebook.gsub!(/(^https?:\/\/(www\.)?)|facebook\.com\/|fb\.com\//, '') if self.facebook_changed?
-  end
-
-  def canonicalize_phone
-    self.phone.gsub!(/[^\d]/, '') if self.phone_changed?
-  end
-
   def populate_timezone
     timezone = self.attributes['timezone']
     if (self.coordinates_changed? || (timezone.blank? && self.coordinates.present?))
-      self.timezone = RollFindr::TimezoneService.timezone_for(self.to_coordinates[0], self.to_coordinates[1]) rescue nil
+      response = RollFindr::TimezoneService.timezone_for(self.lat, self.lng) rescue nil
+      self.timezone = response unless response.blank?
     end
   end
 
