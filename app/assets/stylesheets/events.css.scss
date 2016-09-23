@@ -107,3 +107,21 @@ $colors: $color0, $color1, $color2, $color3, $color4, $color5, $color6, $color7,
   border-color: #aaa !important;
 }
 
+.show-event {
+  h1 { 
+    font-size: 175%; 
+    margin-top: 5px !important;
+  }
+  
+  @media screen and (max-width: 767px) {
+    h1 {
+      font-size: 150%;
+    }
+    h3 {
+      font-size: 120%;
+    }
+    .description {
+      font-size: 90%;
+    }
+  }
+}

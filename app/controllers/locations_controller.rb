@@ -228,7 +228,8 @@ class LocationsController < ApplicationController
     @map = Map.new(
       :zoom => Map::ZOOM_LOCATION,
       :minZoom => Map::ZOOM_CITY,
-      :center => @location.to_coordinates,
+      :lat => @location.lat,
+      :lng => @location.lng,
       :geolocate => 0,
       :locations => [],
       :refresh => 0

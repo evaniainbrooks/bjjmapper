@@ -4,6 +4,8 @@ class LocationEventsController < ApplicationController
   before_action :set_event, only: [:show, :destroy, :update, :move]
   before_action :validate_time_range, only: [:index]
   
+  before_action :set_map, only: [:show]
+  
   before_action :ensure_signed_in, only: [:destroy, :create, :update]
   decorates_assigned :location, :event, :events
 
@@ -108,7 +110,7 @@ private
   end
 
   def set_event
-    @event = @location.events.where(id: params[:id]).first
+    @event = @location.events.find(params[:id])
     head :not_found and return false unless @event.present?
   end
 
@@ -116,5 +118,17 @@ private
     id_param = params.fetch(:location_id, '')
     @location = Location.includes(:events).find(id_param)
     head :bad_request and return false unless @location.present?
+  end
+  
+  def set_map
+    @map = Map.new(
+      :zoom => Map::ZOOM_LOCATION,
+      :minZoom => Map::ZOOM_CITY,
+      :lat => @location.lat,
+      :lng => @location.lng,
+      :geolocate => 0,
+      :locations => [],
+      :refresh => 0
+    )
   end
 end

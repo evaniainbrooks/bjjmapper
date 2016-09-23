@@ -40,6 +40,14 @@ describe Event do
         create(:event, event_type: Event::EVENT_TYPE_SEMINAR)
         create(:event, event_type: Event::EVENT_TYPE_CAMP)
         create(:event, event_type: Event::EVENT_TYPE_TOURNAMENT)
+        create(:event, event_type: Event::EVENT_TYPE_SUBEVENT)
+      end
+      describe '#default_scope' do
+        subject { Event.all }
+        it 'does not return sub events' do
+          subject.count.should eq 4
+          subject.collect(&:event_type).should_not include(Event::EVENT_TYPE_SUBEVENT)
+        end
       end
       describe '#classes' do
         subject { Event.classes }
@@ -95,6 +103,20 @@ describe Event do
     end
   end
   describe 'before_save callback' do
+    describe '.set_event_type' do
+      context 'when there is a parent event' do
+        subject { create(:event, event_type: Event::EVENT_TYPE_CLASS, parent_event: create(:event)) }
+        it 'sets event_type to EVENT_TYPE_SUBEVENT' do
+          subject.event_type.should eq Event::EVENT_TYPE_SUBEVENT
+        end
+      end
+      context 'when there is no parent event' do
+        subject { create(:event, event_type: Event::EVENT_TYPE_CLASS, parent_event: nil) }
+        it 'retains the original event_type' do
+          subject.event_type.should eq Event::EVENT_TYPE_CLASS
+        end
+      end
+    end
     describe '.create_schedule' do
       context 'when .event_recurrence is NONE' do
         subject { build(:event, event_recurrence: Event::RECURRENCE_NONE) }

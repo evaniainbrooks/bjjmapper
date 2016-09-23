@@ -14,6 +14,7 @@ class Event
   EVENT_TYPE_SEMINAR = 2
   EVENT_TYPE_TOURNAMENT = 4
   EVENT_TYPE_CAMP = 8
+  EVENT_TYPE_SUBEVENT = 16
 
   include Mongoid::Document
   include Mongoid::Slug
@@ -30,7 +31,10 @@ class Event
   field :is_all_day, type: Boolean
   field :price, type: String
   field :website, type: String
-  field :event_type, type: Integer, default: EVENT_TYPE_CLASS
+  field :facebook, type: String
+  field :event_type, type: Integer, default: EVENT_TYPE_CLASS 
+
+  default_scope -> { where(:event_type.ne => EVENT_TYPE_SUBEVENT) }
 
   scope :before_time, ->(time) { where(:ending.gte => time) }
   scope :after_time, ->(time) { where(:starting.lte => time) }
@@ -46,6 +50,9 @@ class Event
   belongs_to :instructor, class_name: 'User'
   belongs_to :organization
 
+  belongs_to :parent_event, class_name: 'Event', :inverse_of => :sub_events
+  has_many :sub_events, class_name: 'Event', :inverse_of => :parent_event
+
   validates :title, :presence => true
   slug :title, history: true
 
@@ -60,8 +67,10 @@ class Event
 
   before_save :create_schedule
   before_save :serialize_schedule
+  before_save :set_event_type
 
   canonicalize :website, as: :website
+  canonicalize :facebook, as: :facebook
 
   index :event_type => 1
   index :ending => 1
@@ -149,6 +158,13 @@ class Event
       self.schedule.add_recurrence_rule IceCube::Rule.weekly(1).day(*weekly_recurrence_days.try(:map, &:to_i))
     when RECURRENCE_2WEEKLY
       self.schedule.add_recurrence_rule IceCube::Rule.weekly(2).day(*weekly_recurrence_days.try(:map, &:to_i))
+    end
+  end
+
+  def set_event_type
+    if self.parent_event.present?
+      self.location = self.parent_event.location
+      self.event_type = EVENT_TYPE_SUBEVENT
     end
   end
 end

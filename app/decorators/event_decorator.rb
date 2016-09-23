@@ -24,23 +24,11 @@ class EventDecorator < Draper::Decorator
   end
 
   def image
-    if object.organization.present?
-      object.organization.image
-    elsif object.instructor.present?
-      object.instructor.image
-    else
-      object.location.image
-    end
+    organization.try(:image) || instructor.try(:image) || location.try(:image)
   end
 
   def image_large
-    if object.organization.present?
-      object.organization.image_large
-    elsif object.instructor.present?
-      object.instructor.image_large
-    else
-      object.location.image_large
-    end
+    organization.try(:image_large) || instructor.try(:image_large) || location.try(:image_large)
   end
   
   def description

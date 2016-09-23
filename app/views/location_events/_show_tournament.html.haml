@@ -1,0 +1,145 @@
+= content_for(:title) do
+  = "Tournament information for #{event.title} on #{event.starting.to_s}"
+
+.page.container.show-event
+  = form_for([location, event], html: { class: 'form ' + edit_mode_classes }) do |f|
+    .row
+      .col-md-10
+        - country_name = country_name_for(event.location.country)
+        %ol.breadcrumb
+          %li
+            %a{href: root_path} Home
+          %li
+            %a{href: directory_index_path(ref: 'event_bc', focus: 'event')} BJJ Event Directory
+          %li
+            %a{href: directory_index_path(country_name, ref: 'event_bc', focus: 'event')}= country_name
+          %li
+            %a{href: directory_index_path(country_name, location.city, ref: 'event_bc', focus: 'event')}= location.city
+          %li.active= event.title
+      .col-md-2
+        .display-field
+          -#%button.btn.btn-default.btn-sm{:type => "button", 'data-begin-edit' => true} Edit
+          %button.btn.btn-default.btn-sm{'data-report-item' => true}
+            %span.report Report
+        .edit-field
+          %button.btn.btn-default.btn-sm{:'data-cancel-edit' => true } Cancel
+          %button.btn.btn-primary.btn-sm{:type => 'submit'} Save
+    .row
+      .col-md-12
+        = render partial: 'locations/edit_success_message' if edit_success?
+    .row
+      .col-md-2.text-center.center-block
+        %img{:src => event.image, :alt => event.title}/
+      .col-md-7.display-field
+        %h1
+          = event.title
+          - if event.organization.present?
+            .small
+              hosted by
+              = link_to event.organization.name, '#'
+        %p.text-info= event.schedule.try(:to_s)
+        %p.display-field.description= event.description
+      .col-md-3.display-field
+        %h3.hidden-md.hidden-lg.hidden-xl Contact
+        %span.display-field
+          %b.small.text-muted.upcase Websites
+          %br/
+          - if event.website.present?
+            = link_to 'http://' + event.website, class: 'website' do
+              = event.website
+              %i.fa.fa-external-link
+            %br/
+          - if event.organization.try(:website).present?
+            = link_to 'http://' + event.organization.website, class: 'website' do
+              = event.organization.website
+              %i.fa.fa-external-link
+            %br/
+          - if event.facebook.present?
+            = link_to 'http://facebook.com/' + event.facebook, class: 'facebook website' do
+              = event.facebook
+              %i.fa.fa-facebook
+            %br/
+        - if event.organization.try(:email).present?
+          %span.display-field
+            %b.small.text-muted.upcase Email
+            %br/
+            = link_to 'mailto:' + event.organization.email, class: 'email' do
+              = event.organization.email
+              %i.fa.fa-envelope
+            %br/
+
+    %hr/
+    .row
+      .col-md-3.display-field
+        %h3 Venue
+        %a{:name => 'location'}
+        = link_to location do  
+          %h4.name= location.title
+        = link_to map_path(lat: location.lat, lng: location.lng, ref: 'event_dp') do
+          %span.address
+            = location.street
+            %br/
+            = "#{location.city}, #{location.state}"
+            %br/
+            = "#{location.postal_code} #{location.country}"
+            %br/
+          %span.small
+            = surround '(', ')' do
+              %span.fa.fa-search-plus
+              View on larger map
+        %br/
+        %br/
+        %p.display-field.directions
+          = location.directions
+      .col-md-5
+        %div.map-canvas{:style => 'height: 300px'}
+          -# This is filled in by google maps
+      .col-md-4
+        %h3 Schedule
+        %ul.list-unstyled
+          - event.sub_events.unscoped.each do |sub_event|
+            %li
+              %span.pull-right= sub_event.title
+              %span.pull-left.text-muted= sub_event.starting.strftime('%v')
+    .row.edit-field
+      .form-group.col-md-4.col-md-offset-2.small
+        = render partial: 'location_events/start_picker'
+      .form-group.col-md-4.small
+        = render partial: 'location_events/end_picker'
+    .row.edit-field
+      .form-group.col-md-8.col-md-offset-2.small
+        = render partial: 'location_events/recurrence_controls', locals: { f: f }
+    .row.edit-field
+      .col-md-8.col-md-offset-2
+        %p
+          = f.label :description, class: 'small'
+          = f.text_area :description, class: 'input-md form-control'
+    .row.edit-field
+      .col-md-12
+        %h3 Metadata
+      .col-md-12
+        %pre.small= JSON.pretty_generate(event.as_json({}))
+        %br/
+      .col-md-12
+        .pull-right
+          %a.delete-field.btn.btn-danger.btn-md{:type => 'button',
+            :data => { :method => :delete,
+                       :url => location_event_path(location, event),
+                       :returnto => schedule_location_path(location, deleted: 1, edit: 1),
+                       :title => 'Are you sure you want to delete this event?',
+                       :body => "You are performing this action as <b>#{current_user.try(:name)}</b>. press 'confirm' to permanently delete all occurrences of this event. note that this action cannot be un-done." } }
+            %i.fa.fa-trash
+            Delete Event
+
+          &nbsp;&nbsp;
+          %button.btn.btn-default.btn-md{:type => 'button', 'data-cancel-edit' => true} Cancel Editing
+          %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes
+  
+= content_for(:scripts) do
+  :coffeescript
+    $(document).ready ->
+      eventModel = new RollFindr.Models.Event(#{event.to_json})
+      showView = new RollFindr.Views.EventShowView({ model: eventModel })
+      mapModel = new RollFindr.Models.Map(#{@map.to_json})
+      mapView = new RollFindr.Views.MapView({editable: false, model: mapModel, el: $('.show-event')})
+    $('.directions').readmore(collapsedHeight: 175)
