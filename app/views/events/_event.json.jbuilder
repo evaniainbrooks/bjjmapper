@@ -6,6 +6,8 @@ json.price event.price
 json.starting event.starting
 json.ending event.ending
 json.event_type event.event_type
+json.website event.website
+json.facebook event.facebook
 json.organization do
   if event.organization.present?
     json.partial! 'organizations/organization', organization: event.organization

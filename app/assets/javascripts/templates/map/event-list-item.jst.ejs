@@ -7,7 +7,7 @@
     <div>
       <h4 class="list-group-item-heading"><%= location.events[0].title %></h4>
       <p class="team-title strong list-group-item-text small"><%= location.events[0].organization.name %></p>
-      <p class="address list-group-item-text small">Starts on <%= moment(location.events[0].starting).format('MMMM Do YYYY, h:mm a') %></p>
+      <p class="address list-group-item-text small">Starts on <%= moment(location.events[0].starting).format('MMMM Do') %></p>
     </div>
     <span class="text-info distance small"><%= location.distance %></span>
   </div>
@@ -20,14 +20,19 @@
       <div>
         <h4 class="list-group-item-heading"><%= location.events[0].title %></h4>
         <p class="strong list-group-item-text small team-title"><%= location.events[0].organization.name %></p>
-        <p class="list-group-item-text small address">Starts on <%= moment(location.events[0].starting).format('MMMM Do, h:mm a') %></p>
-        <p class="list-group-item-text small address">Ends on <%= moment(location.events[0].ending).format('MMMM Do, h:mm a') %></p>
+        <p class="list-group-item-text small address">Starts on <%= moment(location.events[0].starting).format('MMMM Do') %></p>
       </div>
       <br/>
     </a>
     <ul class="small list-unstyled">
       <% if (null !== location.events[0].organization.website && location.events[0].organization.website.length > 0) { %>
-        <li><span class="col-md-offset-1 label">Website</span> <a class="website" href="http://<%= location.events[0].organization.website %>"><%= location.events[0].organization.website %></a></li>
+        <li><span class="col-md-offset-1 label">Org website</span> <a class="website" href="http://<%= location.events[0].organization.website %>"><%= location.events[0].organization.website %></a></li>
+      <% } %>
+      <% if (null !== location.events[0].website && location.events[0].website.length > 0) { %>
+        <li><span class="col-md-offset-1 label">Website</span> <a class="website" href="http://<%= location.events[0].website %>"><%= location.events[0].website %></a></li>
+      <% } %>
+      <% if (null !== location.events[0].facebook && location.events[0].facebook.length > 0) { %>
+        <li><span class="col-md-offset-1 label">Facebook</span> <a class="website" href="http://facebook.com/<%= location.events[0].facebook %>"><%= location.events[0].facebook %></a></li>
       <% } %>
     </ul>
     <span class="text-info distance small"><%= location.distance %></span>

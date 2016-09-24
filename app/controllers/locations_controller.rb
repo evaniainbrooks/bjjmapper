@@ -230,6 +230,7 @@ class LocationsController < ApplicationController
       :minZoom => Map::ZOOM_CITY,
       :lat => @location.lat,
       :lng => @location.lng,
+      :location_type => Location::LOCATION_TYPE_ALL, 
       :geolocate => 0,
       :locations => [],
       :refresh => 0

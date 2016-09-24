@@ -28,6 +28,7 @@ class ApplicationController < ActionController::Base
       zoom: Map::ZOOM_CITY,
       minZoom: Map::DEFAULT_MIN_ZOOM,
       geolocate: 1,
+      location_type: Location::LOCATION_TYPE_ALL,
       locations: [],
       refresh: 0
     )

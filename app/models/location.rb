@@ -18,6 +18,8 @@ class Location
   LOCATION_TYPE_ACADEMY = 1
   LOCATION_TYPE_EVENT_VENUE = 2
 
+  LOCATION_TYPE_ALL = [LOCATION_TYPE_ACADEMY, LOCATION_TYPE_EVENT_VENUE]
+
   track_history   :on => :all,
                   :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier
                   :modifier_field_inverse_of => nil, # adds an ":inverse_of" option to the "belongs_to :modifier" relation, default is not set

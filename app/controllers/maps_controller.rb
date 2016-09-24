@@ -1,6 +1,9 @@
 class MapsController < ApplicationController
   DEFAULT_SEARCH_DISTANCE = 10.0
 
+  DEFAULT_EVENT_START_OFFSET = 15.days
+  DEFAULT_EVENT_END_OFFSET = 1.year
+
   before_filter :set_map, only: [:show]
 
   def show
@@ -43,7 +46,10 @@ class MapsController < ApplicationController
       end
     end
 
-    @events = Event.where(
+    @events = Event.between_time(
+      Time.now - DEFAULT_EVENT_START_OFFSET,
+      Time.now + DEFAULT_EVENT_END_OFFSET)
+    .where(
       :location_id.in => @locations.collect(&:id),
       :event_type.in => event_filter).to_a
 

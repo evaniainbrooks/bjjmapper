@@ -18,7 +18,8 @@ class RollFindr.Models.Location extends Backbone.Model
   
   getColor: ->
     if (@get('loctype') == RollFindr.Models.Location.LOCATION_TYPE_EVENT_VENUE)
-      return @get('events').first().getColor()
+      if @get('events').length > 0
+        return @get('events').first().getColor()
 
     return 'academy'
 

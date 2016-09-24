@@ -16,6 +16,8 @@ class Event
   EVENT_TYPE_CAMP = 8
   EVENT_TYPE_SUBEVENT = 16
 
+  EVENT_TYPE_ALL = [EVENT_TYPE_CLASS, EVENT_TYPE_SEMINAR, EVENT_TYPE_TOURNAMENT, EVENT_TYPE_CAMP]
+
   include Mongoid::Document
   include Mongoid::Slug
   include Mongoid::Timestamps
