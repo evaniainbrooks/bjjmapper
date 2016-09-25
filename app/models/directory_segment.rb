@@ -104,10 +104,10 @@ class DirectorySegment
     distance = params.fetch(:distance, DEFAULT_DISTANCE_MILES).to_i
 
     DirectorySegment.new.tap do |segment|
-      segment.geocode
-      segment.parent_segment = parent_segment
       segment.name = params[:city] || params[:country]
-
+      segment.parent_segment = parent_segment
+      segment.geocode
+      segment.timezone
       segment.synthetic = true
     end
   end

@@ -11,4 +11,12 @@ feature "Teams Pages" do
     visit team_path(Team.last.id)
     expect(page).to have_text('Test Team')
   end
+
+  scenario 'user visits a team with locations detail page' do
+    Team.create(name: 'Test Team', description: 'Test Description')
+    Location.create(title: 'Location 123', city: 'Prague', country: 'CZ', team: Team.last)
+
+    visit team_path(Team.last.id)
+    expect(page).to have_text('Location 123')
+  end
 end

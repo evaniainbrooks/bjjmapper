@@ -60,7 +60,7 @@
             Create Academy
       .row
         .col-md-12
-          = render partial: 'locations/table', locals: { locations: team.locations, exclude: [:team] }
+          = render partial: 'directory_segments/table', locals: { locations: team.locations, exclude: [:team] }
       - if team.ig_hashtag.present?
         %hr/
         .row
