@@ -42,7 +42,7 @@ describe UsersController do
     context 'with json format' do
       it 'returns the user' do
         get :show, id: user.to_param, format: 'json'
-        response.body.should eq user.to_json
+        response.should render_template('users/show')
       end
     end
     context 'with html format' do
