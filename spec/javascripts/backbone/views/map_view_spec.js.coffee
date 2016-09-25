@@ -58,3 +58,12 @@ describe 'Views.MapView', ->
   it 'renders itself when the location list is updated', ->
     viewModel.get('locations').trigger('sync')
     sinon.assert.called(renderSpy)
+
+  describe 'geolocation', ->
+    describe 'when geolocation fails', ->
+      it 'sets the map center from the user model', ->
+
+
+    describe 'when geolocation succeeds', ->
+      it 'sets the map center from the result', ->
+

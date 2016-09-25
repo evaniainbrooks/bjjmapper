@@ -113,7 +113,7 @@ namespace :deploy do
   task :warmup do
     on roles(:app), in: :sequence do
       execute "sleep 1m"
-      execute "cd '#{release_path}'; ./script/warmup_100.sh"
+      execute "cd '#{release_path}'; ./script/operations/warmup_100.sh"
     end
   end
 
