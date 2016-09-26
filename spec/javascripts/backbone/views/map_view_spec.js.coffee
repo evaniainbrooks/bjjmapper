@@ -2,6 +2,7 @@
 #= require backbone/rollfindr
 #= require backbone/models/map
 #= require backbone/views/map/map_view
+#= require toastr
 
 describe 'Views.MapView', ->
   viewModel = new RollFindr.Models.Map({"zoom":12,"center":[80.0,80.0],"geolocate":1,"locations":[]})
@@ -44,7 +45,8 @@ describe 'Views.MapView', ->
   afterEach ->
     this.server.restore()
     RollFindr.Views.MapView.prototype.search.restore()
-    RollFindr.Views.MapView.prototype.setCenterGeolocate.restore()
+    if RollFindr.Views.MapView.prototype.setCenterGeolocate.restore?
+      RollFindr.Views.MapView.prototype.setCenterGeolocate.restore()
     RollFindr.Views.MapView.prototype.render.restore()
 
   it 'listens to global search event', ->
@@ -61,10 +63,52 @@ describe 'Views.MapView', ->
     sinon.assert.called(renderSpy)
 
   describe 'geolocation', ->
+    mapMock = null
+    GEOLOCATE_RESULT = {
+      coords:
+        latitude: 81.0
+        longitude: 81.0
+    }
+
+    beforeEach ->
+      stubCurrentUser()
+
+      RollFindr.Views.MapView.prototype.setCenterGeolocate.restore()
+      mapMock = sinon.mock(view.map)
+      mapMock.expects('setCenter').once()
+      mapMock.expects('getCenter').returns(
+        new google.maps.LatLng(
+          RollFindr.CurrentUser.get('lat'),
+          RollFindr.CurrentUser.get('lng')
+        )
+      )
+
+    afterEach ->
+      mapMock.restore()
+
+    describe 'when there is no geolocation support', ->
+      it 'sets the map center from the user model', ->
+        navigator.geolocation = null
+        RollFindr.GlobalEvents.trigger('geolocate', {})
+
+        mapMock.verify() # TODO: Verify arguments
+
     describe 'when geolocation fails', ->
       it 'sets the map center from the user model', ->
+        navigator.geolocation = {
+          getCurrentPosition: sinon.stub().callsArg(1)
+        }
+
+        RollFindr.GlobalEvents.trigger('geolocate', {})
+        mapMock.verify() # TODO: Verify arguments
 
 
     describe 'when geolocation succeeds', ->
       it 'sets the map center from the result', ->
+        navigator.geolocation = {
+          getCurrentPosition: sinon.stub().callsArgWith(0, GEOLOCATE_RESULT)
+        }
+
+        RollFindr.GlobalEvents.trigger('geolocate', {})
+        mapMock.verify() # TODO: Verify arguments
 
