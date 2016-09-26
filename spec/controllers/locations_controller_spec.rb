@@ -74,6 +74,8 @@ describe LocationsController do
         context 'without reject parameter' do
           it 'returns the nearby locations' do
             get :nearby, format: 'json', lat: 80.0, lng: 80.0
+
+            assigns[:nearby_locations].first.distance.should_not be_nil
             response.body.should include(location.title)
             response.body.should include(other_location.title)
           end
