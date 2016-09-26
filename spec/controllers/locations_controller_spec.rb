@@ -5,7 +5,7 @@ describe LocationsController do
   include_context 'skip tracking'
   describe 'POST unlock' do
     subject { build(:location, team: nil) }
-    before { Location.stub(:find).and_return(subject) }
+    before { Location.stub_chain(:academies, :find).and_return(subject) }
     context 'when signed in' do
       before { controller.stub(:current_user).and_return(build(:user, role: 'user')) }
       context 'when permissions allow editing' do
@@ -104,9 +104,16 @@ describe LocationsController do
       end
     end
     context 'when the location does not exist' do
-      before { Location.stub(:find).and_return(nil) }
+      before { Location.stub_chain(:academies, :find).and_return(nil) }
       it 'returns 404 not found' do
         get :show, id: 'bogus'
+        response.status.should eq 404
+      end
+    end
+    context 'when the location is an event venue' do
+      let(:location) { create(:location, loctype: Location::LOCATION_TYPE_EVENT_VENUE) }
+      it 'returns 404 not found' do
+        get :show, id: location
         response.status.should eq 404
       end
     end

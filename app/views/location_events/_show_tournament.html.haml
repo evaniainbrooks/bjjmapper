@@ -73,7 +73,10 @@
       .col-md-3.display-field
         %h3 Venue
         %a{:name => 'location'}
-        = link_to location do  
+        - if location.loctype == Location::LOCATION_TYPE_ACADEMY
+          = link_to location do
+            %h4.name= location.title
+        - else
           %h4.name= location.title
         = link_to map_path(lat: location.lat, lng: location.lng, ref: 'event_dp') do
           %span.address

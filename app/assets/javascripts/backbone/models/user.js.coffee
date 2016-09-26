@@ -1,7 +1,7 @@
 class RollFindr.Models.User extends Backbone.Model
   defaults:
     name: null
-    role: 'anonymous'
+    is_anonymous: true
 
   initialize: ->
     id = this.get('id')
@@ -14,7 +14,7 @@ class RollFindr.Models.User extends Backbone.Model
     this.set('reviews', reviews)
 
   isAnonymous: ->
-    @get('role') == 'anonymous'
+    @get('is_anonymous')
 
 class RollFindr.Models.Instructor extends RollFindr.Models.User
   url: ->

@@ -119,7 +119,7 @@ private
     @location = Location.includes(:events).find(id_param)
     head :bad_request and return false unless @location.present?
   end
-  
+
   def set_map
     @map = Map.new(
       :zoom => Map::ZOOM_LOCATION,
@@ -128,6 +128,8 @@ private
       :lng => @location.lng,
       :geolocate => 0,
       :locations => [],
+      :location_type => Location::LOCATION_TYPE_ALL,
+      :event_type => Event::EVENT_TYPE_ALL,
       :refresh => 0
     )
   end
