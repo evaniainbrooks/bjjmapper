@@ -44,6 +44,7 @@ var stubGoogleMapsApi = function() {
         return {
           controls: [{ push: noop }],
           getBounds: noop,
+          getCenter: noop,
           setCenter: noop,
           setTilt: noop,
           mapTypes: {
@@ -80,11 +81,15 @@ window.stubCurrentUser = function() {
   RollFindr.CurrentUser = new RollFindr.Models.User();
   RollFindr.CurrentUser.set('id', '12345');
   RollFindr.CurrentUser.set('is_anonymous', false);
+  RollFindr.CurrentUser.set('lat', 80.0);
+  RollFindr.CurrentUser.set('lng', 80.0);
 };
 
 window.stubAnonymousUser = function() {
   RollFindr.CurrentUser = new RollFindr.Models.User();
   RollFindr.CurrentUser.set('is_anonymous', true);
+  RollFindr.CurrentUser.set('lat', 80.0);
+  RollFindr.CurrentUser.set('lng', 80.0);
 };
 
 stubGoogleMapsApi();
