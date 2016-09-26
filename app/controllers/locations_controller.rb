@@ -86,7 +86,7 @@ class LocationsController < ApplicationController
 
     head :no_content and return false unless @nearby_locations.present?
 
-    @nearby_locations = decorated_locations_with_distance_to_center(@nearby_locations, [lat, lng])
+    @nearby_locations = decorated_locations_with_distance_to_center(@nearby_locations, lat, lng)
 
     respond_to do |format|
       format.json { render status: :ok, json: @nearby_locations }
@@ -176,8 +176,8 @@ class LocationsController < ApplicationController
       id: @location.to_param,
       user_id: current_user.to_param
     )
-    
-    unless delete 
+
+    unless delete
       current_user.favorite_locations << @location
     else
       current_user.favorite_locations.delete(@location)
@@ -190,8 +190,8 @@ class LocationsController < ApplicationController
 
   private
 
-  def decorated_locations_with_distance_to_center(locations, center)
-    LocationDecorator.decorate_collection(locations, context: { center: center })
+  def decorated_locations_with_distance_to_center(locations, lat, lng)
+    LocationDecorator.decorate_collection(locations, context: { lat: lat, lng: lng })
   end
 
   private
@@ -203,7 +203,7 @@ class LocationsController < ApplicationController
   def closed?
     location.flag_closed? && location.moved_to_location.blank?
   end
-  
+
   def verified?
     params.fetch(:verified, 0).to_i.eql?(1)
   end
