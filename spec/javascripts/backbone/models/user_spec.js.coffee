@@ -11,6 +11,6 @@ describe "Models.User", ->
     subject.get('reviews').should.be.an.instanceof(RollFindr.Collections.ReviewsCollection)
 
   it 'has a default anonymous role', ->
-    subject.get('role').should.equal('anonymous')
+    subject.get('is_anonymous').should.equal(true)
     subject.isAnonymous().should.equal(true)
 
