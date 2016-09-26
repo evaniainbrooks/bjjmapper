@@ -127,8 +127,11 @@ class RollFindr.Views.MapView extends Backbone.View
       toastr.error('Could not pinpoint your location', 'Error')
       doneCallback() if doneCallback?
 
-    options = { enableHighAccuracy: true }
-    navigator.geolocation.getCurrentPosition(geolocateSuccessCallback, geolocateFailedCallback, options) if navigator? && navigator.geolocation?
+    if navigator? && navigator.geolocation?
+      options = { enableHighAccuracy: true }
+      navigator.geolocation.getCurrentPosition(geolocateSuccessCallback, geolocateFailedCallback, options)
+    else
+      geolocateFailedCallback()
 
   initializeMap: ->
     shouldGeolocate = @model.get('geolocate')
