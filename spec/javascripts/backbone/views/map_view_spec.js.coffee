@@ -52,6 +52,7 @@ describe 'Views.MapView', ->
     sinon.assert.called(searchSpy)
 
   it 'listens to global geolocate event', ->
+    stubCurrentUser()
     RollFindr.GlobalEvents.trigger('geolocate', {})
     sinon.assert.called(geolocateSpy)
 
