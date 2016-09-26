@@ -268,7 +268,7 @@ class LocationsController < ApplicationController
 
   def set_location
     id_param = params.fetch(:id, '')
-    @location = Location.find(id_param)
+    @location = Location.academies.find(id_param)
 
     head :not_found and return false unless @location.present?
   end

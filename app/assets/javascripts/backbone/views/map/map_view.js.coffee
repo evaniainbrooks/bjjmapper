@@ -121,7 +121,7 @@ class RollFindr.Views.MapView extends Backbone.View
       doneCallback() if doneCallback?
 
     geolocateFailedCallback = =>
-      userModelLocation = new google.maps.latLng(RollFindr.CurrentUser.get('lat'), RollFindr.CurrentUser.get('lng'))
+      userModelLocation = new google.maps.LatLng(RollFindr.CurrentUser.get('lat'), RollFindr.CurrentUser.get('lng'))
       @map.setCenter(userModelLocation)
 
       toastr.error('Could not pinpoint your location', 'Error')

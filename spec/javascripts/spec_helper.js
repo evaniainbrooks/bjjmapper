@@ -79,12 +79,12 @@ var stubGoogleMapsApi = function() {
 window.stubCurrentUser = function() {
   RollFindr.CurrentUser = new RollFindr.Models.User();
   RollFindr.CurrentUser.set('id', '12345');
-  RollFindr.CurrentUser.set('role', 'super_user');
+  RollFindr.CurrentUser.set('is_anonymous', false);
 };
 
 window.stubAnonymousUser = function() {
   RollFindr.CurrentUser = new RollFindr.Models.User();
-  RollFindr.CurrentUser.set('role', 'anonymous');
+  RollFindr.CurrentUser.set('is_anonymous', true);
 };
 
 stubGoogleMapsApi();

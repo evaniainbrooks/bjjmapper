@@ -202,6 +202,7 @@ class User
       :team_ids => self.team_ids.map(&:to_s),
       :lineal_parent_id => self.lineal_parent_id.to_s,
       :rank_sort_key => User.rank_sort_key(self.belt_rank, self.stripe_rank),
+      :is_anonymous => self.anonymous?,
       :full_lineage => self.full_lineage.take(2).reverse.map do |u|
         { :id => u.to_param, :name => u.name }
       end

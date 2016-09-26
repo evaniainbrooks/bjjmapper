@@ -12,6 +12,7 @@ json.favorite_locations(user.favorite_locations) do |location|
   json.id location.to_param
   json.loctype location.loctype
 end
+json.is_anonymous user.anonymous?
 json.lineal_parent_id user.lineal_parent_id.to_s
 json.rank_sort_key User.rank_sort_key(user.belt_rank, user.stripe_rank)
 json.full_lineage(user.full_lineage.take(2).reverse) do |user|
