@@ -1,8 +1,11 @@
 require 'spec_helper'
 require 'shared/tracker_context'
+require 'shared/timezonesvc_context'
 
 describe MapsController do
   include_context 'skip tracking'
+  include_context 'timezone service'
+
   describe 'GET show' do
     it 'renders the map' do
       get :show
@@ -71,20 +74,88 @@ describe MapsController do
           assigns[:locations].collect(&:to_param).should_not include(other_location.to_param)
         end
       end
+      describe 'event_start and event_end' do
+        let(:location) { create(:location) }
+        let(:event_type) { Event::EVENT_TYPE_TOURNAMENT }
+        let(:starting) { Time.now - 1.month }
+        let(:ending) { Time.now + 1.month }
+        let(:common_params) { { event_type: [event_type], location_type: [location.loctype], lat: location.lat, lng: location.lng, format: 'json' } }
+        context 'when event_start is not passed' do
+          let(:before_event) { build(:event, title: 'before', event_type: event_type, starting: 17.days.ago, ending: 16.days.ago) }
+          let(:between_event) { build(:event, title: 'between', event_type: event_type, starting: 14.days.ago, ending: 13.days.ago) }
+          before do
+            Time.use_zone(stubbed_timezone) do
+              location.events << before_event
+              location.events << between_event
+              location.save
+            end
+          end
+          it 'defaults to 15 days ago' do
+            get :search, common_params.merge(event_end: ending)
+
+            assigns[:events][location.id].collect(&:to_param).tap do |event_params|
+              event_params.should include(between_event.to_param)
+              event_params.should_not include(before_event.to_param)
+            end
+          end
+        end
+        context 'when event_end is not passed' do
+          let(:between_event) { build(:event, title: 'between', event_type: event_type, starting: Time.now + 1.day, ending: Time.now + 2.days) }
+          let(:after_event) { build(:event, title: 'after', event_type: event_type, starting: Time.now + 1.year + 1.day, ending: Time.now + 1.year + 2.days) }
+          before do
+            Time.use_zone(stubbed_timezone) do
+              location.events << between_event
+              location.events << after_event
+              location.save
+            end
+          end
+          it 'defaults to 1 year from now' do
+            get :search, common_params.merge(event_start: starting)
+
+            assigns[:events][location.id].collect(&:to_param).tap do |event_params|
+              event_params.should include(between_event.to_param)
+              event_params.should_not include(after_event.to_param)
+            end
+          end
+        end
+        context 'when they are both passed' do
+          let(:before_event) { build(:event, title: 'before', event_type: event_type, starting: starting - 2.days, ending: starting - 1.days) }
+          let(:between_event) { build(:event, title: 'between', event_type: event_type, starting: starting + 1.day, ending: starting + 2.days) }
+          let(:after_event) { build(:event, title: 'after', event_type: event_type, starting: ending + 1.day, ending: ending + 2.days) }
+          before do
+            Time.use_zone(stubbed_timezone) do
+              location.events << before_event
+              location.events << between_event
+              location.events << after_event
+              location.save
+            end
+          end
+          it 'only returns events that lie within the range' do
+            get :search, common_params.merge(event_start: starting, event_end: ending)
+
+            assigns[:events][location.id].collect(&:to_param).tap do |event_params|
+              event_params.should include(between_event.to_param)
+              event_params.should_not include(before_event.to_param)
+              event_params.should_not include(after_event.to_param)
+            end
+          end
+        end
+      end
       describe 'event_type' do
         let(:location_type) { Location::LOCATION_TYPE_ACADEMY }
         let(:event_type) { Event::EVENT_TYPE_SEMINAR }
         let(:location) { create(:location, loctype: location_type) }
         let(:event) { create(:event, event_type: event_type, location: location) }
+        let(:common_params) { { lat: location.lat, lng: location.lng, format: 'json' } }
         context 'when not passed' do
           it 'defaults to no events' do
-            get :search, location_type: [location_type], lat: location.lat, lng: location.lng, format: 'json'
+            get :search, common_params.merge(location_type: [location_type])
             assigns[:events][location.id].should be_blank
           end
         end
         context 'when an event type is passed' do
           it 'returns the matching event' do
-            get :search, event_type: [event.event_type], lat: location.lat, lng: location.lng, format: 'json'
+            get :search, common_params.merge(event_type: [event.event_type])
 
             assigns[:events][location.id].to_param.should eq event.to_param
           end
@@ -116,7 +187,7 @@ describe MapsController do
             end
 
             it 'returns only academies with events' do
-              get :search, event_type: [event_type], lat: location.lat, lng: location.lng, format: 'json'
+              get :search, common_params.merge(event_type: [event_type])
 
               assigns[:locations].collect(&:to_param).should include(location.to_param)
               assigns[:locations].collect(&:to_param).should_not include(academy_location_no_events.to_param)
@@ -127,7 +198,7 @@ describe MapsController do
           let(:tournament_event) { create(:event, event_type: Event::EVENT_TYPE_TOURNAMENT, location: location) }
           let(:multiple_event_types) { [event.event_type, tournament_event.event_type] }
           it 'returns the matching events' do
-            get :search, event_type: multiple_event_types, lat: location.lat, lng: location.lng, format: 'json'
+            get :search, common_params.merge(event_type: multiple_event_types)
 
             assigns[:events][location.id].collect(&:to_param).tap do |events|
               events.should include(event.to_param)
@@ -139,3 +210,4 @@ describe MapsController do
     end
   end
 end
+
