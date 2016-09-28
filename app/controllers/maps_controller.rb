@@ -58,8 +58,10 @@ class MapsController < ApplicationController
     @locations = @locations.select do |location|
       has_events = @events[location.id].present?
       is_event_venue = has_events && Location::LOCATION_TYPE_ACADEMY == location.loctype
+      is_empty_event_venue = !has_events && Location::LOCATION_TYPE_EVENT_VENUE == location.loctype
 
-      location_filter.include?(location.loctype) || is_event_venue
+
+      (location_filter.include?(location.loctype) || is_event_venue) && !is_empty_event_venue
     end
 
     tracker.track('searchMap',

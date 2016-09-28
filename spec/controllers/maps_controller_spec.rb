@@ -51,26 +51,12 @@ describe MapsController do
       context 'with location_type (loctype)' do
         let(:other_location) { create(:location, loctype: Location::LOCATION_TYPE_EVENT_VENUE, title: 'Other location') }
         let(:matched_location) { create(:location, loctype: Location::LOCATION_TYPE_ACADEMY, title: 'Matched location') }
-        xit 'defaults to LOCATION_TYPE_ACADEMY' do
-          get :search, lat: matched_location.lat, lng: matched_location.lng, format: 'json'
-
-          response.status.should eq 200
-          assigns[:locations].collect(&:to_param).should include(matched_location.to_param)
-          assigns[:locations].collect(&:to_param).should_not include(other_location.to_param)
-        end
         it 'returns only the locations of the specified type' do
           get :search, location_type: [matched_location.loctype], lat: matched_location.lat, lng: matched_location.lng, format: 'json'
 
           response.status.should eq 200
           assigns[:locations].collect(&:to_param).should include(matched_location.to_param)
           assigns[:locations].collect(&:to_param).should_not include(other_location.to_param)
-        end
-        it 'accepts an array of loctype values and returns all matching locations' do
-          get :search, location_type: [matched_location.loctype, other_location.loctype], lat: matched_location.lat, lng: matched_location.lng, format: 'json'
-
-          response.status.should eq 200
-          assigns[:locations].collect(&:to_param).should include(matched_location.to_param)
-          assigns[:locations].collect(&:to_param).should include(other_location.to_param)
         end
       end
       context 'with term filter (query)' do
@@ -104,10 +90,21 @@ describe MapsController do
           end
           context 'with event venue location' do
             let(:event_venue_location) { create(:location, coordinates: location.coordinates, loctype: Location::LOCATION_TYPE_EVENT_VENUE) }
-            it 'finds the location' do
-              get :search, location_type: [location_type], event_type: [event.event_type], lat: event_venue_location.lat, lng: event_venue_location.lng, format: 'json'
+            let(:common_params) { { location_type: [location_type], event_type: [event.event_type], lat: event_venue_location.lat, lng: event_venue_location.lng, format: 'json' } }
+            context 'with no events' do
+              it 'does not return the location' do
+                get :search, common_params
 
-              assigns[:locations].collect(&:to_param).should include(event_venue_location.to_param)
+                assigns[:locations].collect(&:to_param).should_not include(event_venue_location.to_param)
+              end
+            end
+            context 'with events' do
+              before { event_venue_location.events << create(:event, event_type: event.event_type) }
+              it 'returns the location' do
+                get :search, common_params
+
+                assigns[:locations].collect(&:to_param).should include(event_venue_location.to_param)
+              end
             end
           end
           context 'when the location type does not include academies' do
