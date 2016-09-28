@@ -110,6 +110,14 @@ class User
     end
   end
 
+  def can_destroy? object
+    if object.respond_to?(:destroyable_by?)
+      object.destroyable_by? self
+    else
+      object.editable_by? self
+    end
+  end
+
   def can_edit? object
     object.editable_by? self
   end

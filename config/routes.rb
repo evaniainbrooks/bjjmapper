@@ -42,7 +42,7 @@ Rails.application.routes.draw do
     get :verify, on: :member
   end
 
-  resources :teams, :only => [:show, :index, :update, :create, :new] do
+  resources :teams, :only => [:show, :index, :update, :create, :new, :destroy] do
     post :remove_image, on: :member
     resources :users, controller: :instructors, as: :instructors, path: '/instructors', only: [:create, :destroy, :index]
   end

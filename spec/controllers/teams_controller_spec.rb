@@ -121,5 +121,35 @@ describe TeamsController do
       end
     end
   end
+  describe 'DELETE destroy' do
+    before { @team = create(:team) }
+    context 'when not signed in' do
+      it 'returns not_authorized'  do
+        expect do
+          delete :destroy, id: @team, format: 'json'
+          response.status.should eq 401
+        end.to change { Team.count }.by(0)
+      end
+    end
+    context 'when signed in' do
+      let(:session_params) { { user_id: create(:user).id } }
+      context 'with html format' do
+        it 'deletes the record and redirects to directory index'  do
+          expect do
+            delete :destroy, {id: @team, format: 'html'}, session_params
+            response.should redirect_to(directory_index_path)
+          end.to change { Team.count }.by(-1)
+        end
+      end
+      context 'with json format' do
+        it 'deletes the record' do
+          expect do
+            delete :destroy, {id: @team, format: 'json'}, session_params
+            response.status.should be 200
+          end.to change { Team.count }.by(-1)
+        end
+      end
+    end
+  end
 end
 
