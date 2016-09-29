@@ -31,6 +31,10 @@ class Team
 
   validates :name, presence: true
 
+  def destroyable_by? user
+    return self.locations.size == 0 && self.editable_by?(user)
+  end
+
   def editable_by? user
     return !self.locked? || user.super_user?
   end

@@ -108,11 +108,15 @@ $colors: $color0, $color1, $color2, $color3, $color4, $color5, $color6, $color7,
 }
 
 .show-event {
-  h1 { 
-    font-size: 175%; 
+  h1 {
+    font-size: 175%;
     margin-top: 5px !important;
   }
-  
+
+  .logo {
+    max-width: 100%;
+  }
+
   @media screen and (max-width: 767px) {
     h1 {
       font-size: 150%;

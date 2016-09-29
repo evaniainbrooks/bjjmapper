@@ -1,10 +1,10 @@
 class TeamsController < ApplicationController
-  before_action :set_team, only: [:show, :update, :remove_image]
-  before_action :redirect_legacy_bsonid, only: [:show, :update, :remove_image]
+  before_action :set_team, only: [:show, :update, :remove_image, :destroy]
+  before_action :redirect_legacy_bsonid, only: [:show, :update, :remove_image, :destroy]
   before_action :set_teams, only: :index
-  before_action :ensure_signed_in, only: [:update, :create, :new, :remove_image]
+  before_action :ensure_signed_in, only: [:update, :create, :new, :remove_image, :destroy]
 
-  before_action :check_permissions, only: [:update]
+  before_action :check_permissions, only: [:update, :destroy]
 
   decorates_assigned :team, :teams
 
@@ -26,6 +26,20 @@ class TeamsController < ApplicationController
     respond_to do |format|
       format.json { render json: team }
       format.html { redirect_to team_path(team, edit: 1, create: 1) }
+    end
+  end
+
+  def destroy
+    tracker.track('deleteTeam',
+      id: @team.to_param,
+      location: @team.as_json({})
+    )
+
+    @team.destroy
+
+    respond_to do |format|
+      format.html { redirect_to directory_index_path }
+      format.json { render status: :ok, json: @team }
     end
   end
 
@@ -82,7 +96,11 @@ class TeamsController < ApplicationController
   private
 
   def check_permissions
-    head :forbidden and return false unless current_user.can_edit?(@team)
+    if request.delete?
+      head :forbidden and return false unless current_user.can_edit?(@team)
+    else
+      head :forbidden and return false unless current_user.can_destroy?(@team)
+    end
   end
 
   def created?

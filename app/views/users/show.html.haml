@@ -82,4 +82,4 @@
     $(document).ready ->
       model = new RollFindr.Models.User(#{user.to_json})
       studentsView = new RollFindr.Views.UserStudentsView({ model: model })
-      reviewsView = new RollFindr.Views.ReviewsView({ template_name: 'location-review', model: model })
+      reviewsView = new RollFindr.Views.ReviewsView({ template_name: 'locations/location-review', model: model })

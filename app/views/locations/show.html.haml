@@ -28,6 +28,8 @@
           %img{:src => location.image, :class => 'logo center-block edit-image'}/
         = render partial: 'rating', :locals => { location: location }
         = render partial: 'favorite_button', :locals => { location: location }
+        %br/
+        %div.small.text-muted.text-center= "last updated #{location.updated_at}"
       .col-md-6.col-xs-9
         = render partial: 'show_header', :locals => { location: location, f: f }
       .col-md-12.hidden-lg.hidden-md.clear
@@ -70,12 +72,13 @@
         %br/
         -#= render :partial => 'locations/instructors', :locals => { :location => location }
       .col-md-8
-        %h3
+        %h3.pull-left
           %span Schedule
           %span.small
             = surround '(', ')' do
               = link_to 'view full schedule', schedule_location_path(location, ref: 'loc_sched_full')
-        %a{:name => 'schedule'}
+        %div.pull-right.small.text-muted= "last updated #{location.schedule_updated_at}"
+        %a.clear-fix.clear{:name => 'schedule'}
         .scheduler-container.clear
           .scheduler
     %hr/

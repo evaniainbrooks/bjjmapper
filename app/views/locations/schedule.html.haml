@@ -8,6 +8,7 @@
     .row
       .col-md-12
         %small.pull-left.text-muted= "All times shown using the #{location.timezone} timezone."
+        %div.pull-right.small.text-muted= "last updated #{location.schedule_updated_at}"
         %small.pull-right.text-info.edit-field To add an event to the schedule, click the time/day that the event falls on.
         %a{:name => 'schedule'}
         .scheduler-container.clear

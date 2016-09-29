@@ -23,7 +23,8 @@
   };
 
   RollFindr.Views.MapMarkerView = Backbone.View.extend({
-    template: JST['templates/locations/show'],
+    academyTemplate: JST['templates/map/academy-info-window'],
+    eventTemplate: JST['templates/map/event-info-window'],
     initialize: function(options) {
       _.bindAll(this, 'render', 'activeMarkerChanged', 'markerDragEnd');
 
@@ -72,11 +73,9 @@
         marker: marker
       };
 
-      if (null !== self.template) {
-        google.maps.event.addListener(self.markers[id].marker, 'click', function() {
-          RollFindr.GlobalEvents.trigger('markerActive', {id: id});
-        });
-      }
+      google.maps.event.addListener(self.markers[id].marker, 'click', function() {
+        RollFindr.GlobalEvents.trigger('markerActive', {id: id});
+      });
     },
     getMarkerContent: function(loc) {
       var markerContent = $('<div></div>');
@@ -105,7 +104,14 @@
     },
     openInfoWindow: function(loc) {
       var self = this;
-      self.infoWindow.setContent(self.template({location: loc.toJSON()}));
+      var template = null;
+      if (loc.get('loctype') == RollFindr.Models.Location.LOCATION_TYPE_ACADEMY) {
+        template = self.academyTemplate;
+      } else {
+        template = self.eventTemplate;
+      }
+
+      self.infoWindow.setContent(template({location: loc.toJSON()}));
       self.infoWindow.open(self.map, self.markers[loc.get('id')].marker);
     },
     deleteMarker: function(id) {

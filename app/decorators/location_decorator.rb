@@ -111,6 +111,10 @@ class LocationDecorator < Draper::Decorator
     object.updated_at.to_i
   end
 
+  def schedule_updated_at
+    object.schedule_updated_at.present? ? "#{h.time_ago_in_words(object.schedule_updated_at)} ago" : 'never'
+  end
+
   def updated_at
     object.updated_at.present? ? "#{h.time_ago_in_words(object.updated_at)} ago" : nil
   end

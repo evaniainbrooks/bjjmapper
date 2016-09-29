@@ -7,7 +7,10 @@
     <div>
       <h4 class="list-group-item-heading"><%= location.events[0].title %></h4>
       <p class="team-title strong list-group-item-text small"><%= location.events[0].organization.name %></p>
-      <p class="address list-group-item-text small">Starts on <%= moment(location.events[0].starting).format('MMMM Do') %></p>
+      <p class="date list-group-item-text small">
+        <span class="fa fa-calendar"></span>
+        Starts on <%= moment(location.events[0].starting).format('MMMM Do') %>
+      </p>
     </div>
     <span class="text-info distance small"><%= location.distance %></span>
   </div>
@@ -20,7 +23,14 @@
       <div>
         <h4 class="list-group-item-heading"><%= location.events[0].title %></h4>
         <p class="strong list-group-item-text small team-title"><%= location.events[0].organization.name %></p>
-        <p class="list-group-item-text small address">Starts on <%= moment(location.events[0].starting).format('MMMM Do') %></p>
+        <p class="list-group-item-text small date">
+          <span class="fa fa-calendar"></span>
+          Starts on <%= moment(location.events[0].starting).format('MMMM Do') %>
+        </p>
+        <br />
+        <p class="list-group-item-text small address">
+          <%= location.address %>
+        </p>
       </div>
       <br/>
     </a>

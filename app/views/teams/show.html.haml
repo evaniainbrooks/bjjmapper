@@ -78,6 +78,7 @@
           %button.delete-field.btn.btn-danger.btn-md{:type => 'button',
             :data => { :method => :delete,
                        :url => team_path(team),
+                       :returnto => directory_index_path(ref: 'delete_team'),
                        :title => 'Are you sure you want to delete this team?',
                        :body => "You are performing this action as <b>#{current_user.try(:name)}</b>. Press 'Confirm' to permanently delete this team. Note that this action cannot be un-done." } }
             %i.fa.fa-trash

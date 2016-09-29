@@ -12,7 +12,7 @@ module Canonicalized
           case options[:as] || field
           when :website then value.gsub!(/^https?:\/\//, '')
           when :facebook then value.gsub!(/(^https?:\/\/(www\.)?)|facebook\.com\/|fb\.com\//, '')
-          when :phone then value.gsub!(/[^\d]/, '')
+          when :phone then value.gsub!(/[^\d+]/, '')
           end
 
           record.send("#{field}=", value)

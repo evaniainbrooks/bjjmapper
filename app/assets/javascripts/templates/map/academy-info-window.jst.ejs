@@ -9,9 +9,7 @@
         <h4 class="list-group-item-heading"><%= location.title %></h4>
         <p class="list-group-item-text team-title"><%= location.team_name %></p>
         <span class="address">
-          <%= location.address.split(',')[0] %>
-          <br />
-          <%= location.address.split(',').slice(1).join(',') %>
+          <%= location.street %>
         </span>
       </div>
     </div>

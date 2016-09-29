@@ -11,4 +11,10 @@ feature "Locations Pages" do
     visit location_path(Location.last)
     expect(page).to have_text('Test Location')
   end
+
+  scenario "user visits a location schedule detail page" do
+    Location.create(title: 'Test Location', description: 'Test Description', country: 'USA', city: 'Seattle')
+    visit schedule_location_path(Location.last)
+    expect(page).to have_text('Test Location')
+  end
 end
