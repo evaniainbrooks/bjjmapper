@@ -148,6 +148,10 @@ class Location
     self.owner.present?
   end
 
+  def schedule_updated_at
+    self.events.last.try(:updated_at)
+  end
+
   def to_param
     slug
   end
