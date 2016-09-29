@@ -1,7 +1,7 @@
 class RollFindr.Views.MapListView extends Backbone.View
   el: $('.location-list')
   tagName: 'div'
-  locationTemplate: JST['templates/map/location-list-item']
+  academyTemplate: JST['templates/map/academy-list-item']
   eventTemplate: JST['templates/map/event-list-item']
   activeMarkerId: null
   model: null
@@ -23,7 +23,7 @@ class RollFindr.Views.MapListView extends Backbone.View
 
     @$('.items').empty()
     _.each @model.get('locations').models, (loc)=>
-      templateType = if loc.get('events')? && loc.get('events').length > 0 then @eventTemplate else @locationTemplate
+      templateType = if loc.get('events')? && loc.get('events').length > 0 then @eventTemplate else @academyTemplate
       id = loc.get('id')
       locElement = templateType({location: loc.toJSON(), active: @activeMarkerId == id})
       @$('.items').append(locElement)

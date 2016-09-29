@@ -1,5 +1,5 @@
 = content_for(:title) do
-  = "Tournament information for #{event.title} on #{event.starting.to_s}"
+  = "Tournament information for #{event.title} on #{event.starting.strftime('%v')}"
 
 .page.container.show-event
   = form_for([location, event], html: { class: 'form ' + edit_mode_classes }) do |f|
@@ -29,7 +29,8 @@
         = render partial: 'locations/edit_success_message' if edit_success?
     .row
       .col-md-2.text-center.center-block
-        %img{:src => event.image, :alt => event.title}/
+        %img.logo{:src => event.image, :alt => event.title}/
+        %span.text-small.small.text-muted= "last updated #{distance_of_time_in_words_to_now(event.updated_at)} ago"
       .col-md-7.display-field
         %h1
           = event.title
