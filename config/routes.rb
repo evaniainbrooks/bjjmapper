@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   namespace :admin do
     resources :directory_segments, only: [:new, :create]
+    resources :organizations, only: [:new, :create]
     resources :locations, only: [:index, :show]
     resources :users do
       get :edit_merge, on: :member
