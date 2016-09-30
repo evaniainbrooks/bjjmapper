@@ -94,7 +94,7 @@
       var id = model.get('id');
       var address = model.get('address');
       RollFindr.ConfirmDialog({
-        url: Routes.move_location_path(id, { lat: e.latLng.lat(), lng: e.latLng.lng() }),
+        url: Routes.move_location_path(id, { lat: e.position.lat(), lng: e.position.lng() }),
         returnto: Routes.location_path(id, { success: 1 }),
         method: 'POST',
         type: 'warning',
