@@ -18,6 +18,6 @@
     %h1
       Schedule for
       = link_to location.title, location_path(location, ref: 'loc_sched_title')
-    = link_to map_path({center: location.coordinates, ref: 'schedule_adr'}) do
+    = link_to map_path({lat: location.lat, lng: location.lng, ref: 'schedule_adr'}) do
       = location.address
       (view on map)

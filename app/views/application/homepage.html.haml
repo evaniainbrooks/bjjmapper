@@ -6,7 +6,7 @@
   .row
     .col-md-5
       %h3.pull-left Near You
-      %a.pull-right.btn.btn-default.btn-sm.title-btn{:href => map_path(center: @map[:center], :ref => 'homepage'), :title => 'Academy Map'}
+      %a.pull-right.btn.btn-default.btn-sm.title-btn{:href => map_path(lat: @map[:lat], lng: @map[:lng], :ref => 'homepage'), :title => 'Academy Map'}
         %span.fa.fa-search-plus
         See larger map
 
@@ -14,7 +14,7 @@
       .map-list-view
         .location-list
           = render partial: 'locations/map_list', locals: { show_create: false }
-      %a{:href => map_path(center: @map[:center], :ref => 'homepage'), :title => 'Academy Map'}
+      %a{:href => map_path(lat: @map[:lat], lng: @map[:lng], :ref => 'homepage'), :title => 'Academy Map'}
         %h4.text-center
           %span.fa.fa-search-plus
           See larger map
