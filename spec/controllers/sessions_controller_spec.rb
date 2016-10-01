@@ -42,8 +42,10 @@ describe SessionsController do
       end
     end
     context 'when the user does exist' do
+      let(:referrer) { 'http://referrer.com/123' }
       before do
         @user = create(:user, uid: omniauth_uid, provider: omniauth_provider)
+        request.env['HTTP_REFERER'] = referrer
       end
       it 'does not create a user' do
         expect do
@@ -55,9 +57,9 @@ describe SessionsController do
         post :create, { provider: omniauth_provider }, session_params
         session[:user_id].should eq @user.to_param
       end
-      it 'redirects the user to the root url' do
+      it 'redirects the user to the referrer url' do
         post :create, { provider: omniauth_provider }, session_params
-        response.should redirect_to root_url
+        response.should redirect_to("#{referrer}?signed_in=1")
       end
     end
   end
@@ -70,14 +72,18 @@ describe SessionsController do
     end
   end
   describe 'DELETE destroy' do
-    before { session[:user_id] = 'loggedin12345' }
+    let(:referrer) { 'http://referrer.com/123' }
+    before do 
+      session[:user_id] = 'loggedin12345'
+      request.env['HTTP_REFERER'] = referrer
+    end
     it 'clears the session' do
       delete :destroy
       session[:user_id].should be_nil
     end
     it 'redirects to the home page' do
       delete :destroy
-      response.should redirect_to root_url
+      response.should redirect_to("#{referrer}?signed_out=1")
     end
   end
 end
