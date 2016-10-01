@@ -101,6 +101,18 @@ describe Event do
     it 'is invalid if end time is before start time' do
       build(:event, starting: 1.hour.ago, ending: 2.hours.ago).should_not be_valid
     end
+
+    context 'when tournament' do
+      it 'is invalid without an organization' do
+        build(:tournament, organization: nil).should_not be_valid
+      end
+    end
+
+    context 'when seminar' do
+      it 'is invalid without an instructor' do
+        build(:seminar, instructor: nil).should_not be_valid
+      end
+    end
   end
   describe 'before_save callback' do
     describe '.set_event_type' do

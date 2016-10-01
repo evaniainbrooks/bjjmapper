@@ -7,5 +7,14 @@ FactoryGirl.define do
     location
     association :modifier, factory: :user
     association :instructor, factory: :user
+    association :organization, factory: :organization
+  
+    factory :tournament do
+      event_type Event::EVENT_TYPE_TOURNAMENT
+    end
+
+    factory :seminar do
+      event_type Event::EVENT_TYPE_SEMINAR
+    end
   end
 end

@@ -36,7 +36,7 @@ class Event
   field :facebook, type: String
   field :event_type, type: Integer, default: EVENT_TYPE_CLASS 
 
-  default_scope -> { where(:event_type.ne => EVENT_TYPE_SUBEVENT) }
+  default_scope -> { where(:event_type.ne => EVENT_TYPE_SUBEVENT).asc(:starting) }
 
   scope :before_time, ->(time) { where(:ending.gte => time) }
   scope :after_time, ->(time) { where(:starting.lte => time) }
@@ -64,6 +64,7 @@ class Event
   validates :starting, :presence => true
   validates :ending, :presence => true
   validate :ending_is_after_starting
+  validate :organizer_or_instructor_present
 
   field :schedule
 
@@ -124,6 +125,16 @@ class Event
   def ending_is_after_starting
     if self.ending.present? && self.starting.present? && self.ending <= self.starting
       errors.add(:ending, "Ending must come after starting")
+    end
+  end
+
+  def organizer_or_instructor_present
+    if self.event_type == Event::EVENT_TYPE_TOURNAMENT && self.organization.blank?
+      errors.add(:organizer, "Tournaments require an organization")
+    end
+
+    if self.event_type == Event::EVENT_TYPE_SEMINAR && self.instructor.blank?
+      errors.add(:instructor, "Seminars require an instructor")
     end
   end
 

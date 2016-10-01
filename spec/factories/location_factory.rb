@@ -10,6 +10,24 @@ FactoryGirl.define do
     loctype Location::LOCATION_TYPE_ACADEMY
     team
 
+    factory :event_venue do
+      loctype Location::LOCATION_TYPE_EVENT_VENUE
+    end
+
+    factory :event_venue_with_tournament do
+      loctype Location::LOCATION_TYPE_EVENT_VENUE
+      after(:create) do |instance|
+        instance.events << create(:tournament)
+      end
+    end
+    
+    factory :event_venue_with_seminar do
+      loctype Location::LOCATION_TYPE_EVENT_VENUE
+      after(:create) do |instance|
+        instance.events << create(:seminar)
+      end
+    end
+
     factory :location_with_instructors do
       after(:create) do |instance|
         3.times do
