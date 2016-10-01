@@ -30,7 +30,7 @@ class LocationsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to location_path(@location) }
-      format.json { render json: location }
+      format.json { render partial: 'location' }
     end
   end
 
@@ -44,7 +44,7 @@ class LocationsController < ApplicationController
     @locations = Location.academies.desc('created_at').limit(count)
 
     respond_to do |format|
-      format.json { render json: locations }
+      format.json 
     end
   end
 
@@ -65,7 +65,7 @@ class LocationsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: @location }
+      format.json { render partial: 'location' }
     end
   end
 
@@ -89,7 +89,7 @@ class LocationsController < ApplicationController
     @nearby_locations = decorated_locations_with_distance_to_center(@nearby_locations, lat, lng)
 
     respond_to do |format|
-      format.json { render status: :ok, json: @nearby_locations }
+      format.json { render status: :ok, partial: 'location', collection: @nearby_locations }
     end
   end
 
@@ -103,7 +103,7 @@ class LocationsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to root_path }
-      format.json { render status: :ok, json: @location }
+      format.json { render status: :ok, partial: 'location' }
     end
   end
 
@@ -122,7 +122,7 @@ class LocationsController < ApplicationController
     )
 
     respond_to do |format|
-      format.json { render json: location }
+      format.json { render partial: 'location' }
       format.html { redirect_to location_path(location, edit: 1, create: 1) }
     end
   end
@@ -148,7 +148,7 @@ class LocationsController < ApplicationController
     })
 
     respond_to do |format|
-      format.json { render json: @location }
+      format.json { render partial: 'location' }
       format.html { render json: location_path(@location, success: 1) }
     end
   end
@@ -163,7 +163,7 @@ class LocationsController < ApplicationController
     @location.update!(create_params)
 
     respond_to do |format|
-      format.json { render json: @location }
+      format.json { render partial: 'location' }
       format.html { redirect_to location_path(location, success: 1, edit: 0) }
     end
   end
@@ -184,7 +184,7 @@ class LocationsController < ApplicationController
     end
 
     respond_to do |format|
-      format.json { render json: @location }
+      format.json { render partial: 'location' }
     end
   end
 

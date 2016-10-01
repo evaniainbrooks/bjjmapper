@@ -103,6 +103,10 @@ class LocationDecorator < Draper::Decorator
     team.try(:image_tiny)
   end
 
+  def image_large
+    team.try(:image_large)
+  end
+
   def opengraph_image
     object.team.try(:image_large)
   end

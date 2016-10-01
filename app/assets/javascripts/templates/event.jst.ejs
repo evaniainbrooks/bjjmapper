@@ -1,6 +1,12 @@
-<h4><%= event.title %></h4>
-<% if (event.instructor_name) { %>
-<span class="text-info h5">with <%= event.instructor_name %></span><br/>
+<% if (event.instructor) { %>
+<img class='pull-left' src="<%= event.instructor.image_tiny %>" />
 <% } %>
-<span class="text-muted h5"> <%= event.duration %></span>
+<h4><%= event.title %></h4>
+<% if (event.instructor) { %>
+<span class="text-info"><%= event.instructor.name %></span><br/>
+<% } %>
+<span class="h5 duration text-warning">
+  <span class="fa fa-clock-o"></span>
+  <%= event.duration %>
+</span>
 <p class="small"><%= event.description %></p>

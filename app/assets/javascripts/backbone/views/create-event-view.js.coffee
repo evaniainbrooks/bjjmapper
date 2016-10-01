@@ -23,16 +23,26 @@ class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
   formSubmit: (e)->
     e.preventDefault()
 
-    data = $(e.target).serialize()
+    data = $(e.target).serializeArray()
+    data.push({
+      name: 'interval_start',
+      value: @intervalStart
+    })
+
+    data.push({
+      name: 'interval_end',
+      value: @intervalEnd
+    })
+
     method = $(e.target).attr('method')
     action = $(e.target).attr('action')
     $.ajax({
       type: method,
       url: action,
-      data: data,
+      data: $.param(data),
       success: (eventData)=>
         @$el.modal('hide')
-        $('.scheduler').fullCalendar('addEventSource', [eventData])
+        $('.scheduler').fullCalendar('addEventSource', eventData)
         toastr.success("Successfully added event to the calendar")
     })
 
@@ -45,12 +55,15 @@ class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
     RollFindr.Views.EventViewBase.prototype.setUiDefaults.call(this)
     @$el.modal('show')
 
-  render: (start, end)->
-    @start = start
-    @end = end
+  render: (start, end, intervalStart, intervalEnd)->
+    @eventStart = start
+    @eventEnd = end
 
-    @startPicker.data('DateTimePicker').setDate(@start)
-    @endPicker.data('DateTimePicker').setDate(@end)
+    @intervalStart = intervalStart
+    @intervalEnd = intervalEnd
+
+    @startPicker.data('DateTimePicker').setDate(@eventStart)
+    @endPicker.data('DateTimePicker').setDate(@eventEnd)
 
     @showModalDialog()
 

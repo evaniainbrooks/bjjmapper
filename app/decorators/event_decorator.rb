@@ -13,16 +13,15 @@ class EventDecorator < Draper::Decorator
     "#{s}-#{e}"
   end
 
-  def as_json(args)
-    object.as_json(args).merge(
-      location_name: location.title,
-      location_image: location.image,
-      duration: duration,
-      color_ordinal: color_ordinal,
-      instructor_name: instructor.try(:name)
-    )
+  def event_type_name
+    case event_type
+    when Event::EVENT_TYPE_CLASS then return 'class'
+    when Event::EVENT_TYPE_TOURNAMENT then return 'tournament'
+    when Event::EVENT_TYPE_SEMINAR then return 'seminar'
+    when Event::EVENT_TYPE_CAMP then return 'camp'
+    end
   end
-
+  
   def image
     organization.try(:image) || instructor.try(:image) || location.try(:image)
   end
@@ -38,8 +37,6 @@ class EventDecorator < Draper::Decorator
       h.content_tag(:i, class: 'text-muted') { DEFAULT_DESCRIPTION }
     end
   end
-
-  private
 
   def color_ordinal
     location.instructor_color_ordinal(instructor)

@@ -24,26 +24,26 @@
   line-height: 1.0em;
 }
 
-$color0: hsl(360, 90%, 40%);
-$color1: hsl(315, 90%, 40%);
-$color2: hsl(280, 90%, 40%);
-$color3: hsl(245, 90%, 40%);
-$color4: hsl(210, 90%, 40%);
-$color5: hsl(175, 90%, 40%);
-$color6: hsl(140, 90%, 40%);
-$color7: hsl(105, 90%, 40%);
-$color8: hsl(70, 90%, 40%);
-$color9: hsl(35, 90%, 40%);
-$color10: hsl(15, 90%, 40%);
-$color11: hsl(0, 90%, 40%);
-$colors: $color0, $color1, $color2, $color3, $color4, $color5, $color6, $color7, $color8, $color9, $color10, $color11;
+$color0: hsl(360, 90%, 60%);
+$color1: hsl(315, 90%, 60%);
+$color2: hsl(280, 90%, 60%);
+$color3: hsl(245, 90%, 60%);
+$color4: hsl(210, 90%, 60%);
+$color5: hsl(175, 90%, 60%);
+$color6: hsl(140, 90%, 60%);
+$color7: hsl(105, 90%, 60%);
+$color8: hsl(70, 90%, 60%);
+$color9: hsl(35, 90%, 60%);
+$color10: hsl(15, 90%, 60%);
+$color11: hsl(0, 90%, 60%);
+$colors: $color0, $color3, $color6, $color9, $color1, $color4, $color7, $color10, $color2, $color5, $color8, $color11;
 
 .event-color-base {
   img {
     float: left;
-    width: 50px;
-    height: 50px;
-    margin: 4px;
+    width: 30px;
+    height: 30px;
+    margin: 2px;
     opacity: 0.7;
   }
 
@@ -53,10 +53,18 @@ $colors: $color0, $color1, $color2, $color3, $color4, $color5, $color6, $color7,
   white-space: nowrap;
   overflow: hidden;
   h4 {
+    font-size: 100%;
     color: black;
     text-transform: uppercase;
     margin-top: 5px !important;
     margin-bottom: 1px !important;
+  }
+
+  .h5 {
+    font-size: 90%;
+    display: block;
+    margin-top: 0px !important;
+    margin-bottom: 5px !important;
   }
 
   &:hover {
@@ -67,8 +75,9 @@ $colors: $color0, $color1, $color2, $color3, $color4, $color5, $color6, $color7,
 @for $i from 1 through length($colors) {
   .event-color-#{$i - 1} {
     @extend .event-color-base;
-    background-color: lighten(nth($colors, $i), 50%) !important;
+    background-color: lighten(nth($colors, $i), 30%) !important;
     border-color: nth($colors, $i) !important;
+    border-left-width: 4px !important;
   }
   
   .event-color-#{$i - 1}.event-omnicalendar {

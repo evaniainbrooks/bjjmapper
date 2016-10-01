@@ -23,11 +23,32 @@ describe LocationEventsController do
         context 'when logged in' do
           let(:user) { create(:user) }
           let(:session_params) { { user_id: user.to_param } }
-          it 'creates a new event' do
-            expect do
-              post :create, valid_params, session_params
-              response.should be_ok
-            end.to change { Event.count }.by(1)
+          context 'with a non-recurring event' do
+            it 'creates a new event' do
+              expect do
+                post :create, valid_params, session_params
+                response.should be_ok
+              end.to change { Event.count }.by(1)
+            end
+          end
+          context 'with a recurring event' do
+            let(:recurring_event_params) do
+              valid_params.deep_merge({
+                interval_start: Time.now.beginning_of_day.iso8601,
+                interval_end: 1.week.from_now.iso8601,
+                event: {
+                  event_recurrence: Event::RECURRENCE_DAILY
+                }
+              })
+            end
+
+            it 'creates a new event and returns all occurrences between the passed interval' do
+              expect do
+                post :create, recurring_event_params, session_params
+                response.should be_ok
+                assigns[:events].count.should eq 8
+              end.to change { Event.count }.by(1)
+            end
           end
         end
         context 'when not logged in' do
@@ -73,9 +94,8 @@ describe LocationEventsController do
         end
         it 'returns events that are within the date range' do
           get :index, { location_id: location.id, format: 'json', start: start_time, end: end_date }
-          assigns(:events).count.should eq 1
-          response.body.should match('included event 123')
-          response.body.should_not match('excluded event 456')
+          assigns[:events].count.should eq 1
+          assigns[:events].first.title.should eq 'included event 123'
         end
       end
       context 'with no matching events in date range' do

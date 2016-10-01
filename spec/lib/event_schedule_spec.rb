@@ -5,7 +5,7 @@ describe RollFindr::EventSchedule do
   let(:empty_query) do
     double.tap do |q|
       q.stub(:between_time).and_return([])
-      q.stub(:each).and_return([])
+      q.stub(:reduce).and_return([])
     end
   end
   describe '.events_between_time' do

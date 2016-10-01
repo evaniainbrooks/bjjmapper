@@ -1,40 +1,58 @@
 class LocationEventsController < ApplicationController
   before_action :set_location
-  
+
   before_action :set_event, only: [:show, :destroy, :update, :move]
   before_action :validate_time_range, only: [:index]
-  
+
   before_action :set_map, only: [:show]
-  
+
   before_action :ensure_signed_in, only: [:destroy, :create, :update]
   decorates_assigned :location, :event, :events
 
   around_filter :set_location_tz
 
   def create
-    @event = Event.new(create_params)
-    @location.events << @event
-
-    status = @event.valid? ? :ok : :bad_request
+    event = Event.new(create_params)
+    @location.events << event
 
     respond_to do |format|
-      format.json { render status: status, json: event }
+      format.json do
+        if !event.valid?
+          render status: :bad_request
+        else
+          @events = if event.recurring? && params.key?(:interval_start) && params.key?(:interval_end)
+            interval_start = DateTime.parse(params[:interval_start]).to_time
+            interval_end = DateTime.parse(params[:interval_end]).to_time
+
+            RollFindr::EventSchedule.new(nil, [event]).events_between_time(interval_start, interval_end)
+          else
+            [event]
+          end
+
+          render
+        end
+      end
     end
   end
 
   def index
     @events = @location.schedule.events_between_time(@start_param, @end_param)
 
-    status = @events.count == 0 ? :no_content : :ok
     respond_to do |format|
-      format.json { render status: status, json: events }
+      format.json do
+        if @events.count == 0
+          render status: :no_content
+        else
+          render
+        end
+      end
     end
   end
 
   def show
     respond_to do |format|
       format.html
-      format.json { render status: :ok, json: @event }
+      format.json
     end
   end
 
@@ -62,10 +80,11 @@ class LocationEventsController < ApplicationController
       event: @event.to_param
     )
 
-    @event.update_attributes({
-      starting: @event.starting + delta_seconds.seconds,
-      ending: @event.ending + delta_seconds.seconds
-    })
+    @event.starting = @event.starting + delta_seconds.seconds
+    @event.ending = @event.ending + delta_seconds.seconds
+
+    @event.schedule.start_time = @event.schedule.start_time + delta_seconds.seconds
+    @event.save
 
     respond_to do |format|
       format.json { render status: :ok, json: @event }

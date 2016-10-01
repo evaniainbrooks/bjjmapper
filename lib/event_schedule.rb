@@ -6,32 +6,26 @@ module RollFindr
     end
     def events_between_time(start_time, end_time)
       events = []
-      events.concat(single_events_between_time(start_time, end_time).to_a)
-      events.concat(recurring_events_between_time(start_time, end_time).to_a)
+      events.concat(single_events_between_time(start_time, end_time).to_a) if @single_events
+      events.concat(recurring_events_between_time(start_time, end_time).to_a) if @recurring_events
     end
 
     protected
 
     def recurring_events_between_time(start_time, end_time)
-      events = []
-      @recurring_events.each do |event|
-        event.schedule.occurrences(end_time).each do |occurrence|
-          events << create_event_occurrence(occurrence, event) if occurrence >= start_time
+      @recurring_events.reduce([]) do |result, event|
+        occurrences = event.schedule.occurrences_between(start_time, end_time).map do |occurrence|
+          create_event_occurrence(occurrence, event)
         end
-      end
 
-      events
+        result.concat(occurrences)
+      end
     end
 
     def create_event_occurrence(occurrence, event)
-      Event.new.tap do |e|
-        e.id = event.id
-        e.title = event.title
-        e.description = event.description
-        e.location = event.location
+      event.dup.tap do |e|
         e.starting = occurrence_start(occurrence, event).in_time_zone(e.location.timezone)
         e.ending = occurrence_end(occurrence, event).in_time_zone(e.location.timezone)
-        e.instructor = event.instructor
       end
     end
 

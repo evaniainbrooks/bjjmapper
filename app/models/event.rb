@@ -80,7 +80,7 @@ class Event
   index :starting => 1
 
   def to_param
-    slug || id
+    slug || id.try(:to_s)
   end
 
   def schedule=(s)
@@ -97,29 +97,30 @@ class Event
       end
     end
   end
+  
+  def recurrence_type
+    case self.schedule.try(:rrules).try(:first)
+    when IceCube::WeeklyRule
+      self.schedule.rrules.first.to_hash[:interval] == 1 ? RECURRENCE_WEEKLY : RECURRENCE_2WEEKLY
+    when IceCube::DailyRule
+      self.schedule.rrules.first.to_hash[:interval] == 1 ? RECURRENCE_DAILY : RECURRENCE_2DAILY
+    else
+      RECURRENCE_NONE
+    end
+  end
 
-  def as_json(args)
-    {
-      :id => self.id.try(:to_s),
-      :title => self.title,
-      :description => self.description,
-      :start => self.starting,
-      :end => self.ending,
-      :event_type => self.event_type,
-      :instructor => self.instructor.as_json,
-      :location => self.location.try(:to_param),
-      :allDay => self.is_all_day ? true : false,
-      :recurring => !nil.eql?(read_attribute(:schedule)),
-      :recurrence_type => schedule_rule_to_recurrence_type,
-      :recurrence_days => schedule_rule_to_recurrence_days,
-      :url => nil #Rails.application.routes.url_helpers.location_event_path(self.location, self),
-    }
+  def recurring?
+    self.recurrence_type != RECURRENCE_NONE
+  end
+
+  def recurrence_days
+    self.schedule.try(:rrules).try(:first).try(:to_hash).try(:[], :validations).try(:[], :day)
   end
 
   private
 
   def serialize_schedule
-    write_attribute(:schedule, @schedule.to_yaml) if @schedule.present?
+    write_attribute(:schedule, @schedule.to_yaml) if @schedule.present? && @schedule.rrules.present?
   end
 
   def ending_is_after_starting
@@ -138,21 +139,6 @@ class Event
     end
   end
 
-  def schedule_rule_to_recurrence_type
-    case self.schedule.try(:rrules).try(:first)
-    when IceCube::WeeklyRule
-      self.schedule.rrules.first.to_hash[:interval] == 1 ? RECURRENCE_WEEKLY : RECURRENCE_2WEEKLY
-    when IceCube::DailyRule
-      self.schedule.rrules.first.to_hash[:interval] == 1 ? RECURRENCE_DAILY : RECURRENCE_2DAILY
-    else
-      RECURRENCE_NONE
-    end
-  end
-
-  def schedule_rule_to_recurrence_days
-    self.schedule.try(:rrules).try(:first).try(:to_hash).try(:[], :validations).try(:[], :day)
-  end
-
   def remove_existing_recurrence_rules
     self.schedule.rrules.each do |rule|
       self.schedule.remove_recurrence_rule rule
@@ -160,6 +146,8 @@ class Event
   end
 
   def create_schedule
+    return unless self.event_recurrence.present?
+
     remove_existing_recurrence_rules
 
     case self.event_recurrence.try(:to_i)
