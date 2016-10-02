@@ -81,15 +81,15 @@ class LocationsController < ApplicationController
 
     head :bad_request and return false unless lat.present? && lng.present?
 
-    @nearby_locations = Location.near([lat, lng], distance).limit(fetch_count).to_a
-    @nearby_locations.reject!{|loc| loc.to_param.eql?(reject)} if reject.present?
+    @locations = Location.near([lat, lng], distance).limit(fetch_count).to_a
+    @locations.reject!{|loc| loc.to_param.eql?(reject)} if reject.present?
 
-    head :no_content and return false unless @nearby_locations.present?
+    head :no_content and return false unless @locations.present?
 
-    @nearby_locations = decorated_locations_with_distance_to_center(@nearby_locations, lat, lng)
+    @locations = decorated_locations_with_distance_to_center(@locations, lat, lng)
 
     respond_to do |format|
-      format.json { render status: :ok, partial: 'location', collection: @nearby_locations }
+      format.json { render status: :ok, partial: 'location', collection: @locations }
     end
   end
 
@@ -115,10 +115,10 @@ class LocationsController < ApplicationController
   end
 
   def create
-    location = Location.create(create_params)
+    @location = Location.create(create_params)
 
     tracker.track('createLocation',
-      location: location.as_json({})
+      location: @location.as_json({})
     )
 
     respond_to do |format|

@@ -184,10 +184,4 @@ describe Event do
       end
     end
   end
-  describe '.as_json' do
-    it 'returns the object as json' do
-      json = build(:event).as_json({})
-      [:id, :title, :description, :start, :end, :event_type, :instructor, :location, :allDay, :recurring, :recurrence_type, :recurrence_days].each {|x| json.should have_key(x) }
-    end
-  end
 end

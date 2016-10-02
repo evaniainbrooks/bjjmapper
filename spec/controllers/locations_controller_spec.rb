@@ -67,17 +67,21 @@ describe LocationsController do
         context 'with reject parameter' do
           it 'returns the nearby locations without the rejected location' do
             get :nearby, format: 'json', reject: location.to_param, lat: 80.0, lng: 80.0
-            response.body.should_not include(location.title)
-            response.body.should include(other_location.title)
+            assigns[:locations].collect(&:title).tap do |locations|
+              locations.should_not include(location.title)
+              locations.should include(other_location.title)
+            end
           end
         end
         context 'without reject parameter' do
           it 'returns the nearby locations' do
             get :nearby, format: 'json', lat: 80.0, lng: 80.0
 
-            assigns[:nearby_locations].first.distance.should_not be_nil
-            response.body.should include(location.title)
-            response.body.should include(other_location.title)
+            assigns[:locations].first.distance.should_not be_nil
+            assigns[:locations].collect(&:title).tap do |locations|
+              locations.should include(location.title)
+              locations.should include(other_location.title)
+            end
           end
         end
       end
@@ -95,7 +99,7 @@ describe LocationsController do
       let(:location) { create(:location) }
       it 'returns the location' do
         get :show, format: 'json', id: location
-        response.body.should eq location.to_json
+        assigns[:location].title.should eq location.title
       end
     end
     context 'with html format' do
@@ -188,7 +192,7 @@ describe LocationsController do
       context 'with json format' do
         it 'creates and returns a new location' do
           post :create, create_params.merge({:format => 'json'}), session_params
-          response.body.should match(create_params[:location][:description])
+          assigns[:location].title.should eq create_params[:location][:title]
         end
       end
     end
@@ -233,7 +237,7 @@ describe LocationsController do
       context 'with json format' do
         it 'updates and returns the location' do
           post :update, { id: location.to_param, :format => 'json' }.merge(update_params), session_params
-          response.body.should match update_params[:location][:description]
+          assigns[:location].description.should eq update_params[:location][:description]
         end
       end
       context 'with html format' do
