@@ -9,7 +9,7 @@
   %h1
     %i.fa.fa-calendar-o
     Create a Tournament/Seminar
-  = form_for(location, html: { class: 'form wizard' } ) do |f|
+  = form_for(location, html: { class: "form wizard #{event_type_name(Event::EVENT_TYPE_CLASS)}" } ) do |f|
     %ul.steps
       %li.active{'data-step' => 1}
         %span.badge 1
