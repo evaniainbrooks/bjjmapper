@@ -8,6 +8,7 @@ feature 'Event Pages' do
 
   before do
     create(:location)
+    create(:user, role: 'user')
   end
 
   scenario 'user visits a regular class event' do

@@ -1,0 +1,20 @@
+.move-event-modal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "moveEventLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+      .modal-body
+        .container-fluid
+          %p This is a recurring event. What would you like to modify?
+          .form-group.row
+            %label.form-label.col-md-3
+              %input{:type => 'radio', :name => 'recurrence_action', :value => MoveEvent::MOVE_ALL}
+                &nbsp;All Occurrences
+            %label.form-label.col-md-3
+              %input{:type => 'radio', :name => 'recurrence_action', :value => MoveEvent::MOVE_FUTURE}
+                &nbsp;This and future occurrences
+            %label.form-label.col-md-3
+              %input{:type => 'radio', :name => 'recurrence_action', :value => MoveEvent::MOVE_SINGLE}
+                &nbsp;Only this occurrence
+      .modal-footer
+        %button.btn.btn-default{:type => 'button', 'data-dismiss' => 'modal'} Cancel
+

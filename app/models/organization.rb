@@ -14,6 +14,7 @@ class Organization
   field :name, type: String
   field :abbreviation, type: String
   field :description, type: String
+  field :image_tiny, type: String
   field :image, type: String
   field :image_large, type: String
   field :website, type: String

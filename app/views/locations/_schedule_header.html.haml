@@ -1,6 +1,9 @@
 .row
   .col-md-10
-    = render partial: 'locations/breadcrumb', locals: { location: location, sub: 'Schedule' }
+    - if location.loctype == Location::LOCATION_TYPE_ACADEMY
+      = render partial: 'locations/breadcrumb', locals: { location: location, sub: 'Schedule' }
+    - else
+      = render partial: 'location_events/breadcrumb', locals: { location: location }
   .col-md-2.text-right
     %a.pull-right.btn.btn-default.btn-sm.display-field{'data-begin-edit' => true, :href => schedule_location_path(location, edit: 1), :style => 'margin-left: 5px', :type => "button"} Edit
     %a.pull-right.btn.btn-default.edit-field.btn-sm{'data-cancel-edit' => true, :href => schedule_location_path(location, edit: 0), :style => 'margin-left: 5px'} Cancel
@@ -17,7 +20,10 @@
   .col-md-10
     %h1
       Schedule for
-      = link_to location.title, location_path(location, ref: 'loc_sched_title')
+      - if location.loctype == Location::LOCATION_TYPE_ACADEMY
+        = link_to location.title, location_path(location, ref: 'loc_sched_title')
+      - else
+        = location.title
     = link_to map_path({lat: location.lat, lng: location.lng, ref: 'schedule_adr'}) do
       %span.fa.fa-map-marker
       = location.address

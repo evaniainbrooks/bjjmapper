@@ -1,16 +1,16 @@
 <div class="show-location-overlay container-fluid">
-  <a href="<%= Routes.location_event_path(location, location.events[0], { ref: 'map_item' }) %>" data-no-turbolink>
+  <a href="<%= location.link %>" data-no-turbolink>
     <div class="row">
       <div class="col-md-3">
         <br />
         <img class="center-block" src="<%= location.image %>" />
       </div>
       <div class="col-md-9">
-        <h4 class="list-group-item-heading"><%= location.events[0].title %></h4>
-        <p class="list-group-item-text team-title"><%= location.events[0].organization.name %></p>
+        <h4 class="list-group-item-heading"><%= location.title %></h4>
+        <p class="list-group-item-text team-title"><%= location.entities %></p>
         <p class="date list-group-item-text small">
           <span class="fa fa-calendar"></span>
-          Starts on <%= moment(location.events[0].starting).format('MMMM Do') %>
+          <%= location.dates %>
         </p>
         <br />
         <span class="address">

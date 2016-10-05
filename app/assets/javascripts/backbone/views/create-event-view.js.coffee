@@ -2,13 +2,14 @@
 #= require backbone/views/event-view-base
 
 class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
-  el: $('.add-event-dialog')
+  el: $('.create-event-dialog')
   startPicker: null
   endPicker: null
   events: {
     'submit form': 'formSubmit'
     'keyup [name="event[title]"]': 'enableSubmit'
     'change [name="event[event_recurrence]"]': 'recurrenceChanged'
+    'change [name="event[event_type]"]': 'eventTypeChanged'
   }
   enableSubmit: ->
     btn = @$('button[type="submit"]')
@@ -47,7 +48,7 @@ class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
     })
 
   initialize: ->
-    _.bindAll(this, 'enableSubmit', 'formSubmit')
+    _.bindAll(this, 'enableSubmit', 'formSubmit', 'eventTypeChanged')
     RollFindr.Views.EventViewBase.prototype.setUiDefaults.call(this)
     RollFindr.Views.EventViewBase.prototype.initializePickers.call(this)
 
@@ -67,4 +68,11 @@ class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
 
     @showModalDialog()
 
+  eventTypeChanged: (e)->
+    eventTypeName = $(e.currentTarget).data('event-type-name')
+    form = @$(e.currentTarget).parents('form')
+    form.prop('class', "form-horizontal #{eventTypeName}")
+
+    form.find(':input').filter('[type!="hidden"]:hidden').prop('disabled', true)
+    form.find(':input').filter(':visible').prop('disabled', false)
 

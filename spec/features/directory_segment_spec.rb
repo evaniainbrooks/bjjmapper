@@ -7,13 +7,14 @@ feature "Directory Segments" do
   end
 
   scenario "user visits the directory index" do
-    DirectorySegment.create(name: 'United States')
+    create(:directory_segment, name: 'United States')
+    create(:team)
     visit directory_index_path
     expect(page).to have_text('United States')
   end
 
   scenario "user visits a known directory segment" do
-    DirectorySegment.create(name: 'United States')
+    create(:directory_segment, name: 'United States')
     visit directory_segment_path(country: 'United States')
     expect(page).to have_text('United States')
   end

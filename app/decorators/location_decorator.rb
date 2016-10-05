@@ -143,24 +143,6 @@ class LocationDecorator < Draper::Decorator
     !object.facebook.try(:index, 'groups').nil?
   end
 
-  def as_json(args = {})
-    # Select which decorator methods override the defaults from object
-    object.as_json(args).symbolize_keys.merge(
-      image: image,
-      image_tiny: image_tiny,
-      #address: address,
-      phone: phone,
-      team_name: team_name,
-      created_at: created_at,
-      updated_at: updated_at,
-      distance: distance,
-      bearing: bearing,
-      bearing_direction: bearing_direction,
-      opengraph_updated_at: opengraph_updated_at,
-      opengraph_image: opengraph_image
-    )
-  end
-
   private
 
   def generated_description

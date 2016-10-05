@@ -1,8 +1,10 @@
 #= require backbone/views/create-event-view
+#= require backbone/views/move-event-view
 
 class RollFindr.Views.LocationCalendarView extends Backbone.View
   el: $('.scheduler-container')
   createEventView: null
+  moveEventView: null
   eventTemplate: JST['templates/event']
   initialize: (options)->
     _.bindAll this,
@@ -17,6 +19,7 @@ class RollFindr.Views.LocationCalendarView extends Backbone.View
     RollFindr.GlobalEvents.on('editing', @initializeCalendarView)
 
     @createEventView = new RollFindr.Views.CreateEventView()
+    @moveEventView = new RollFindr.Views.MoveEventView()
 
     @editable = options.editable
 
@@ -67,16 +70,34 @@ class RollFindr.Views.LocationCalendarView extends Backbone.View
 
   calendarEventDrop: (event, delta, revertFunc)->
     locationId = @model.get('id')
-    $.ajax({
-      url: Routes.move_location_event_path(locationId, event.id)
-      data: { deltams: delta.valueOf() }
-      method: 'POST'
-      error: (xhr, status, errorThrown)->
-        toastr.error('Please try again later. If you think this is a bug, email us at info@bjjmapper.com', 'Failed to update event')
-        revertFunc()
-      success: =>
-        toastr.success('Event has been updated')
-    })
+    moveEventFunction = (recurrenceAction)=>
+      alert('moveEvent')
+
+      locationId = @model.get('id')
+      $.ajax({
+        url: Routes.move_location_event_path(locationId, event.id)
+        data: {
+          deltams: delta.valueOf()
+          recurrence_action: recurrenceAction
+          event: {
+            id: event.id
+            starting: event.starting
+            ending: event.ending
+          }
+        }
+        method: 'POST'
+        error: (xhr, status, errorThrown)->
+          toastr.error('Please try again later. If you think this is a bug, email us at info@bjjmapper.com', 'Failed to update event')
+          revertFunc()
+        success: ->
+          toastr.success('Event has been updated')
+      })
+
+    #if event.recurring
+    #  @moveEventView.render(moveEventFunction)
+    #  return
+    #else
+    moveEventFunction()
 
   calendarEventRender: (event, element, view)->
     element.addClass("event-#{event.event_type_name}")

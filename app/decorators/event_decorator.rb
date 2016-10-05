@@ -14,12 +14,7 @@ class EventDecorator < Draper::Decorator
   end
 
   def event_type_name
-    case event_type
-    when Event::EVENT_TYPE_CLASS then return 'class'
-    when Event::EVENT_TYPE_TOURNAMENT then return 'tournament'
-    when Event::EVENT_TYPE_SEMINAR then return 'seminar'
-    when Event::EVENT_TYPE_CAMP then return 'camp'
-    end
+    return h.event_type_name(object.event_type)
   end
   
   def image

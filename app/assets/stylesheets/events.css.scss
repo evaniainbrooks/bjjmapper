@@ -24,6 +24,25 @@
   line-height: 1.0em;
 }
 
+.create-event-dialog {
+  form {
+    &.class {
+      .organization { display: none; }
+      .instructor-all { display: none; }
+    }
+    &.tournament {
+      .instructor { display: none; }
+      .instructor-all { display: none; }
+      .recurrence-controls { display: none; }
+    }
+    &.seminar {
+      .instructor { display: none; }
+      .organization { display: none; }
+      .recurrence-controls { display: none; }
+    }
+  }
+}
+
 $color0: hsl(360, 90%, 60%);
 $color1: hsl(315, 90%, 60%);
 $color2: hsl(280, 90%, 60%);
@@ -43,7 +62,8 @@ $colors: $color0, $color3, $color6, $color9, $color1, $color4, $color7, $color10
     float: left;
     width: 30px;
     height: 30px;
-    margin: 2px;
+    margin: 0px;
+    margin-right: 4px;
     opacity: 0.7;
   }
 
@@ -52,8 +72,10 @@ $colors: $color0, $color3, $color6, $color9, $color1, $color4, $color7, $color10
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  border-left-width: 4px !important;
   h4 {
     font-size: 100%;
+    font-weight: bold;
     color: black;
     text-transform: uppercase;
     margin-top: 5px !important;
@@ -77,7 +99,6 @@ $colors: $color0, $color3, $color6, $color9, $color1, $color4, $color7, $color10
     @extend .event-color-base;
     background-color: lighten(nth($colors, $i), 30%) !important;
     border-color: nth($colors, $i) !important;
-    border-left-width: 4px !important;
   }
   
   .event-color-#{$i - 1}.event-omnicalendar {
@@ -104,16 +125,40 @@ $colors: $color0, $color3, $color6, $color9, $color1, $color4, $color7, $color10
   }
 }
 
-.event-color-888 {
-  @extend .event-color-base;
-  background-color: white !important;
-  border-color: red !important;
-}
-
 .event-color-999 {
   @extend .event-color-base;
   background-color: #ddd !important;
   border-color: #aaa !important;
+}
+
+.event-seminar {
+  @extend .event-color-base;
+  border-color: lighten(rgb(0, 255, 0), 20%) !important;
+  background: repeating-linear-gradient(
+    45deg,
+    lighten(rgb(0, 255, 0), 45%),
+    lighten(rgb(0, 255, 0), 45%) 5px,
+    lighten(rgb(0, 255, 0), 40%) 5px,
+    lighten(rgb(0, 255, 0), 40%) 10px
+  );
+
+}
+
+.event-tournament {
+  @extend .event-color-base;
+  border-color: lighten(rgb(0, 0, 255), 20%) !important;
+  background: repeating-linear-gradient(
+    135deg,
+    lighten(rgb(0, 0, 255), 45%),
+    lighten(rgb(0, 0, 255), 45%) 5px,
+    lighten(rgb(0, 0, 255), 40%) 5px,
+    lighten(rgb(0, 0, 255), 40%) 10px
+  );
+}
+
+.event-camp {
+  @extend .event-color-base;
+
 }
 
 .show-event {

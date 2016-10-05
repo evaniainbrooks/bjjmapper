@@ -137,31 +137,42 @@ describe Event do
           subject.schedule.rrules.should be_empty
         end
       end
-      context 'when .event_recurrence is DAILY' do
-        subject { build(:event, event_recurrence: Event::RECURRENCE_DAILY) }
-        before { subject.save }
-        it 'adds a daily recurrence rule to the schedule' do
-          subject.schedule.recurrence_rules.first.should be_a(IceCube::DailyRule)
+      context 'when event type is not EVENT_TYPE_CLASS' do
+        [Event::EVENT_TYPE_TOURNAMENT, Event::EVENT_TYPE_SEMINAR, Event::EVENT_TYPE_CAMP].each do |type|
+          subject { build(:event, event_recurrence: Event::RECURRENCE_DAILY, event_type: type) }
+          before { subject.save }
+          it 'does not create a schedule' do
+            subject.schedule.rrules.should be_empty
+          end
         end
       end
-      context 'when .event_recurrence is WEEKLY' do
-        let(:recurrence_days) { ["0", "1"] }
-        subject { build(:event, event_recurrence: Event::RECURRENCE_WEEKLY, weekly_recurrence_days: recurrence_days) }
-        before { subject.save }
-        it 'adds a weekly recurrnce rule to the schedule' do
-          subject.schedule.recurrence_rules.first.should be_a(IceCube::WeeklyRule)
-          subject.schedule.recurrence_rules.first.should eq IceCube::Rule.weekly(1).day(*recurrence_days.map(&:to_i))
+      context 'when event type is EVENT_TYPE_CLASS' do
+        context 'when .event_recurrence is DAILY' do
+          subject { build(:event, event_recurrence: Event::RECURRENCE_DAILY, event_type: Event::EVENT_TYPE_CLASS) }
+          before { subject.save }
+          it 'adds a daily recurrence rule to the schedule' do
+            subject.schedule.recurrence_rules.first.should be_a(IceCube::DailyRule)
+          end
         end
-      end
-      context 'when there is an existing schedule' do
-        subject { create(:event, event_recurrence: Event::RECURRENCE_WEEKLY, weekly_recurrence_days: ["0", "1"]) }
-        before do
-          subject.event_recurrence = Event::RECURRENCE_DAILY
-          subject.save
+        context 'when .event_recurrence is WEEKLY' do
+          let(:recurrence_days) { ["0", "1"] }
+          subject { build(:event, event_recurrence: Event::RECURRENCE_WEEKLY, weekly_recurrence_days: recurrence_days, event_type: Event::EVENT_TYPE_CLASS) }
+          before { subject.save }
+          it 'adds a weekly recurrnce rule to the schedule' do
+            subject.schedule.recurrence_rules.first.should be_a(IceCube::WeeklyRule)
+            subject.schedule.recurrence_rules.first.should eq IceCube::Rule.weekly(1).day(*recurrence_days.map(&:to_i))
+          end
         end
-        it 'only persists the newest recurrence rule' do
-          subject.schedule.rrules.count.should eq 1
-          subject.schedule.rrules.first.class.should eq IceCube::DailyRule
+        context 'when there is an existing schedule' do
+          subject { create(:event, event_recurrence: Event::RECURRENCE_WEEKLY, weekly_recurrence_days: ["0", "1"], event_type: Event::EVENT_TYPE_CLASS) }
+          before do
+            subject.event_recurrence = Event::RECURRENCE_DAILY
+            subject.save
+          end
+          it 'only persists the newest recurrence rule' do
+            subject.schedule.rrules.count.should eq 1
+            subject.schedule.rrules.first.class.should eq IceCube::DailyRule
+          end
         end
       end
     end

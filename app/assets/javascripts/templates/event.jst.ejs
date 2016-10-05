@@ -1,9 +1,13 @@
 <% if (event.instructor) { %>
 <img class='pull-left' src="<%= event.instructor.image_tiny %>" />
+<% } else if (event.organization) { %>
+<img class='pull-left' src="<%= event.organization.image_tiny %>" />
 <% } %>
 <h4><%= event.title %></h4>
 <% if (event.instructor) { %>
 <span class="text-info"><%= event.instructor.name %></span><br/>
+<% } else if (event.organization) { %>
+<span class="text-info"><%= event.organization.abbreviation %></span><br/>
 <% } %>
 <span class="h5 duration text-warning">
   <span class="fa fa-clock-o"></span>

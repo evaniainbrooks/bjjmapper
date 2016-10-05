@@ -14,8 +14,9 @@
         .scheduler-container.clear
           .scheduler
 
-= render :partial => 'location_events/add_event_modal', locals: { location: location }
+= render :partial => 'location_events/create_event_modal', locals: { location: location }
+= render :partial => 'location_events/move_event_modal', locals: { location: location }
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->
-      mapView = new RollFindr.Views.LocationShowView({ editable: #{edit_mode?}, model: #{location.to_json}, mapModel: #{@map.to_json}, el: $('.show-location')})
+      mapView = new RollFindr.Views.LocationShowView({ editable: #{edit_mode?}, model: #{render partial: 'locations/location', object: location, formats: [:json]}, mapModel: #{@map.to_json}, el: $('.show-location')})

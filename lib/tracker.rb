@@ -15,7 +15,7 @@ module RollFindr
     end
 
     def alias(new_id, old_id)
-      tracker.alias(new_id, old_id)
+      tracker.alias(new_id, old_id) rescue nil
       @user_id = new_id
     end
 

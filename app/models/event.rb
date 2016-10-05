@@ -83,10 +83,6 @@ class Event
     slug || id.try(:to_s)
   end
 
-  def schedule=(s)
-    @schedule = s
-  end
-
   def schedule
     @schedule ||= begin
       yaml = read_attribute(:schedule)
@@ -147,6 +143,7 @@ class Event
 
   def create_schedule
     return unless self.event_recurrence.present?
+    return unless self.event_type == Event::EVENT_TYPE_CLASS
 
     remove_existing_recurrence_rules
 

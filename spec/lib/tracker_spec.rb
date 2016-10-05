@@ -42,13 +42,21 @@ describe RollFindr::Tracker do
     end
     describe '.alias' do
       subject { RollFindr::Tracker.new(uid) }
-      before do
-        Mixpanel::Tracker.any_instance.should_receive(:alias).with('newuid', uid)
-        Mixpanel::Tracker.any_instance.should_receive(:track).with('newuid', event, params)
+      context 'when alias does not raise' do
+        before do
+          Mixpanel::Tracker.any_instance.should_receive(:alias).with('newuid', uid)
+          Mixpanel::Tracker.any_instance.should_receive(:track).with('newuid', event, params)
+        end
+        it 'calls alias and sets the new user id' do
+          subject.alias('newuid', uid)
+          subject.track(event, params)
+        end
       end
-      it 'calls alias and sets the new user id' do
-        subject.alias('newuid', uid)
-        subject.track(event, params)
+      context 'when alias raises an exception' do
+        before { Mixpanel::Tracker.any_instance.stub(:alias).and_raise(StandardError) }
+        it 'does nothing' do
+          subject.alias('newuid', uid)
+        end
       end
     end
   end

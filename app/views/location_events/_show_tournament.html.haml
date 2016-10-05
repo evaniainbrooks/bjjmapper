@@ -5,17 +5,7 @@
   = form_for([location, event], html: { class: 'form ' + edit_mode_classes }) do |f|
     .row
       .col-md-10
-        - country_name = country_name_for(event.location.country)
-        %ol.breadcrumb
-          %li
-            %a{href: root_path} Home
-          %li
-            %a{href: directory_index_path(ref: 'event_bc', focus: 'event')} BJJ Event Directory
-          %li
-            %a{href: directory_index_path(country_name, ref: 'event_bc', focus: 'event')}= country_name
-          %li
-            %a{href: directory_index_path(country_name, location.city, ref: 'event_bc', focus: 'event')}= location.city
-          %li.active= event.title
+        = render partial: 'breadcrumb', locals: { location: location, event: event }  
       .col-md-2
         .display-field
           %button.btn.btn-default.btn-sm{:type => "button", 'data-begin-edit' => true} Edit

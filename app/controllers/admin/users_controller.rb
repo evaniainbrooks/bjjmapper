@@ -19,8 +19,6 @@ class Admin::UsersController < Admin::AdminController
       :favorite_location_ids => current_user.favorite_location_ids.concat(@user.favorite_location_ids)
     }.merge(create_params)
 
-    puts merge_params.inspect
-
     current_user.update!(merge_params)
     @user.update!({
       :redirect_to_user => current_user,

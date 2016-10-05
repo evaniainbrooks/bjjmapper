@@ -18,6 +18,7 @@ feature "Top Level Pages" do
   end
   scenario "user visits the directory" do
     create(:directory_segment)
+    create(:team)
     visit directory_index_path
     expect(page).to have_selector('.directory')
     expect(page).not_to have_selector('[data-show-map]')

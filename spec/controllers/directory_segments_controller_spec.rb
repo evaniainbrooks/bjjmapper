@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe DirectorySegmentsController do
   describe 'GET index' do
+    before do
+      create(:directory_segment, name: 'Greece')
+      create(:directory_segment, name: 'Cyprus')
+    end
     it 'fetches all parent segments' do
       get :index, format: 'html'
       response.status.should eq 200

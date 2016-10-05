@@ -19,6 +19,7 @@ class Admin::OrganizationsController < Admin::AdminController
     params.require(:organization).permit(
       :name,
       :abbreviation,
+      :image_tiny,
       :image,
       :image_large,
       :description,

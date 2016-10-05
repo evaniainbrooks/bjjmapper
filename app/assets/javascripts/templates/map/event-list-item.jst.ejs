@@ -3,29 +3,29 @@
     <div class="list-index">
       <span><%= location.marker_id %></span>
     </div>
-    <img src="<%= location.image %>" alt="<% location.events[0].title %> logo" class="logo pull-left" />
+    <img src="<%= location.image %>" alt="<% location.title %> logo" class="logo pull-left" />
     <div>
-      <h4 class="list-group-item-heading"><%= location.events[0].title %></h4>
+      <h4 class="list-group-item-heading"><%= location.title %></h4>
       <p class="team-title strong list-group-item-text small"><%= location.events[0].organization.name %></p>
       <p class="date list-group-item-text small">
         <span class="fa fa-calendar"></span>
-        Starts on <%= moment(location.events[0].starting).format('MMMM Do') %>
+        <%= location.dates %>
       </p>
     </div>
     <span class="text-info distance small"><%= location.distance %></span>
   </div>
   <div class="active-content">
-    <a class="location-link" href="<%= Routes.location_event_path(location.id, location.events[0].id) %>" alt="See more about <%= location.events[0].name %>">
+    <a class="location-link" href="<%= location.link %>" alt="See more about <%= location.title %>">
       <div class="list-index">
         <span><%= location.marker_id %></span>
       </div>
-      <img src="<%= location.image %>" alt="<% location.events[0].title %> logo" class="logo pull-left" />
+      <img src="<%= location.image %>" alt="<% location.title %> logo" class="logo pull-left" />
       <div>
-        <h4 class="list-group-item-heading"><%= location.events[0].title %></h4>
-        <p class="strong list-group-item-text small team-title"><%= location.events[0].organization.name %></p>
+        <h4 class="list-group-item-heading"><%= location.title %></h4>
+        <p class="strong list-group-item-text small team-title"><%= location.entities %></p>
         <p class="list-group-item-text small date">
           <span class="fa fa-calendar"></span>
-          Starts on <%= moment(location.events[0].starting).format('MMMM Do') %>
+          <%= location.dates %>
         </p>
         <br />
         <p class="list-group-item-text small address">

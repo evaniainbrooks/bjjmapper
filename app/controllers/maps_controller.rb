@@ -49,15 +49,13 @@ class MapsController < ApplicationController
       @event_end)
     .where(
       :location_id.in => @locations.collect(&:id),
-      :event_type.in => event_filter).to_a
-
-    @events = EventDecorator.decorate_collection(@events).group_by(&:location_id)
+      :event_type.in => event_filter)
+    .group_by(&:location_id)
 
     @locations = @locations.select do |location|
       has_events = @events[location.id].present?
       is_event_venue = has_events && Location::LOCATION_TYPE_ACADEMY == location.loctype
       is_empty_event_venue = !has_events && Location::LOCATION_TYPE_EVENT_VENUE == location.loctype
-
 
       (location_filter.include?(location.loctype) || is_event_venue) && !is_empty_event_venue
     end
@@ -77,7 +75,7 @@ class MapsController < ApplicationController
 
     head :no_content and return unless @locations.present?
 
-    @locations = decorated_locations_with_distance_to_center(@locations, @lat, @lng)
+    @locations = decorated_locations(@locations, events: @events, lat: @lat, lng: @lng, event_type: event_filter, location_type: location_filter)
 
     respond_to do |format|
       format.json
@@ -107,8 +105,8 @@ class MapsController < ApplicationController
     Time.use_zone(tz, &block)
   end
 
-  def decorated_locations_with_distance_to_center(locations, lat, lng)
-    LocationDecorator.decorate_collection(locations, context: { lat: lat, lng: lng })
+  def decorated_locations(locations, context)
+    MapLocationDecorator.decorate_collection(locations, context: context)
   end
 
   def set_map

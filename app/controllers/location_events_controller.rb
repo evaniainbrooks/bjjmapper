@@ -87,7 +87,7 @@ class LocationEventsController < ApplicationController
     @event.save
 
     respond_to do |format|
-      format.json { render status: :ok, json: @event }
+      format.json { partial: 'events/event' }
     end
   end
 
@@ -121,7 +121,17 @@ private
   end
 
   def create_params
-    p = params.require(:event).permit(:starting, :ending, :event_recurrence, :title, :description, :instructor, :location, :weekly_recurrence_days => [])
+    p = params.require(:event).permit(
+      :event_type,
+      :organization,
+      :starting,
+      :ending,
+      :event_recurrence,
+      :title,
+      :description,
+      :instructor,
+      :location,
+      :weekly_recurrence_days => [])
     p[:modifier] = current_user if signed_in?
     p[:starting] = Time.zone.parse(p[:starting]) if p.key?(:starting)
     p[:ending] = Time.zone.parse(p[:ending]) if p.key?(:ending)

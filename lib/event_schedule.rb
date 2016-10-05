@@ -26,6 +26,7 @@ module RollFindr
       event.dup.tap do |e|
         e.starting = occurrence_start(occurrence, event).in_time_zone(e.location.timezone)
         e.ending = occurrence_end(occurrence, event).in_time_zone(e.location.timezone)
+        e.schedule = e.schedule.dup
       end
     end
 

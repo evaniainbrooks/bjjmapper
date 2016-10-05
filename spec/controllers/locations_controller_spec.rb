@@ -51,6 +51,13 @@ describe LocationsController do
         response.should be_ok
       end
     end
+    context 'when the location is an event venue' do
+      let(:event_venue) { create(:event_venue) }
+      it 'returns the location schedule page' do
+        get :schedule, format: 'html', id: event_venue
+        response.should be_ok
+      end
+    end
   end
   describe 'GET nearby' do
     let(:location) { create(:location, title: 'self location') }

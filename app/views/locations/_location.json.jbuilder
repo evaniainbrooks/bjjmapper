@@ -20,8 +20,11 @@ json.postal_code location.postal_code
 json.street location.street || ''
 json.address location.address
 json.timezone location.timezone
+json.dates location.try(:dates)
 json.lat location.lat
 json.lng location.lng
+json.link location.try(:link)
+json.entities location.try(:entities)
 json.image location.image
 json.image_large location.image_large
 json.image_tiny location.image_tiny
