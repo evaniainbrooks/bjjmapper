@@ -87,7 +87,7 @@ class LocationEventsController < ApplicationController
     @event.save
 
     respond_to do |format|
-      format.json { partial: 'events/event' }
+      format.json { render partial: 'events/event' }
     end
   end
 
