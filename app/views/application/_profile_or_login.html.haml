@@ -11,9 +11,13 @@
             %i.fa.fa-user
             View profile
         %li
-          = link_to(wizard_locations_path(ref: 'nav')) do
+          = link_to(wizard_locations_path(ref: 'nav', type: Location::LOCATION_TYPE_ACADEMY)) do
             %i.fa.fa-map-marker
             Create Academy
+        %li
+          = link_to(wizard_locations_path(ref: 'nav', type: Location::LOCATION_TYPE_EVENT_VENUE)) do
+            %i.fa.fa-calendar-o
+            Create Event
         %li
           = link_to(signout_path, 'data-no-turbolink' => true) do
             %i.fa.fa-sign-out

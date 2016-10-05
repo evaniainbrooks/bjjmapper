@@ -102,6 +102,10 @@
               %span.pull-left= sub_event.title
               %span.pull-right.text-muted
                 = sub_event.starting.strftime('%v')
+          %li.clear.clear-fix
+            %span.pull-left Tournament begins
+            %span.pull-right.text-muted
+              = event.schedule.try(:to_s)
     .row.edit-field
       .form-group.col-md-4.col-md-offset-2.small
         = render partial: 'location_events/start_picker'

@@ -18,12 +18,12 @@
   .col-md-2
     %img{:src => location.image, :class => 'center-block'}/
   .col-md-10
-    %h1
-      Schedule for
-      - if location.loctype == Location::LOCATION_TYPE_ACADEMY
+    - if location.loctype == Location::LOCATION_TYPE_ACADEMY
+      %h1
+        Schedule for 
         = link_to location.title, location_path(location, ref: 'loc_sched_title')
-      - else
-        = location.title
+    - else
+      %h3.text-muted= location.title
     = link_to map_path({lat: location.lat, lng: location.lng, ref: 'schedule_adr'}) do
       %span.fa.fa-map-marker
       = location.address

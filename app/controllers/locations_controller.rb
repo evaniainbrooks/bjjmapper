@@ -1,4 +1,6 @@
 class LocationsController < ApplicationController
+  include EventsHelper
+
   before_action :set_location, only: [:favorite, :schedule, :destroy, :show, :update, :move, :unlock]
   before_action :redirect_legacy_bsonid, only: [:favorite, :schedule, :destroy, :show, :update, :move, :unlock]
   before_action :set_map, only: :show
@@ -72,6 +74,7 @@ class LocationsController < ApplicationController
   def nearby
     distance = params.fetch(:distance, NEARBY_DISTANCE_DEFAULT).to_i
     count = params.fetch(:count, NEARBY_COUNT_DEFAULT).to_i
+    location_filter = params.fetch(:location_type, [Location::LOCATION_TYPE_ACADEMY]).collect(&:to_i)
 
     lat = params.fetch(:lat, nil).try(:to_f)
     lng = params.fetch(:lng, nil).try(:to_f)
@@ -81,7 +84,7 @@ class LocationsController < ApplicationController
 
     head :bad_request and return false unless lat.present? && lng.present?
 
-    @locations = Location.near([lat, lng], distance).limit(fetch_count).to_a
+    @locations = Location.near([lat, lng], distance).where(:loctype.in => location_filter).limit(fetch_count).to_a
     @locations.reject!{|loc| loc.to_param.eql?(reject)} if reject.present?
 
     head :no_content and return false unless @locations.present?
@@ -89,7 +92,7 @@ class LocationsController < ApplicationController
     @locations = decorated_locations_with_distance_to_center(@locations, lat, lng)
 
     respond_to do |format|
-      format.json { render status: :ok, partial: 'location', collection: @locations }
+      format.json
     end
   end
 
@@ -108,22 +111,34 @@ class LocationsController < ApplicationController
   end
 
   def wizard
+    type = params.fetch(:type, Location::LOCATION_TYPE_ACADEMY).to_i
+    actions = { Location::LOCATION_TYPE_ACADEMY => :academy_wizard, Location::LOCATION_TYPE_EVENT_VENUE => :event_venue_wizard }
     tracker.track('showLocationWizard')
     respond_to do |format|
-      format.html
+      format.html { render actions[type] }
     end
   end
 
   def create
     @location = Location.create(create_params)
+    @location.events << Event.create(event_create_params) if params.key?(:event)
+
+    @redirect_path = if @location.event_venue? && @location.events.size > 0
+      location_event_path(@location, @location.events.first, create: 1)
+    elsif @location.event_venue?
+      schedule_location_path(@location, edit: 1, create: 1)
+    else
+      location_path(@location, edit: 1, create: 1)
+    end
 
     tracker.track('createLocation',
-      location: @location.as_json({})
+      location: @location.as_json({}),
+      redirect_path: @redirect_path
     )
 
     respond_to do |format|
-      format.json { render partial: 'location' }
-      format.html { redirect_to location_path(location, edit: 1, create: 1) }
+      format.json
+      format.html { redirect_to @redirect_path }
     end
   end
 
@@ -238,25 +253,7 @@ class LocationsController < ApplicationController
   end
 
   def create_params
-    p = params.require(:location).permit(
-      :ig_hashtag,
-      :city,
-      :street,
-      :postal_code,
-      :state,
-      :country,
-      :title,
-      :description,
-      :coordinates,
-      :team_id,
-      :directions,
-      :phone,
-      :email,
-      :website,
-      :facebook,
-      :twitter,
-      :instagram)
-
+    p = params.require(:location).permit(*Location::CREATE_PARAMS_WHITELIST)
     p[:coordinates] = JSON.parse(p[:coordinates]) if p[:coordinates].present?
     p[:modifier] = current_user if signed_in?
     p

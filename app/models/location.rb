@@ -20,6 +20,26 @@ class Location
 
   LOCATION_TYPE_ALL = [LOCATION_TYPE_ACADEMY, LOCATION_TYPE_EVENT_VENUE]
 
+  CREATE_PARAMS_WHITELIST = [
+    :loctype,
+    :ig_hashtag,
+    :city,
+    :street,
+    :postal_code,
+    :state,
+    :country,
+    :title,
+    :description,
+    :coordinates,
+    :team_id,
+    :directions,
+    :phone,
+    :email,
+    :website,
+    :facebook,
+    :twitter,
+    :instagram].freeze
+
   track_history   :on => :all,
                   :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier
                   :modifier_field_inverse_of => nil, # adds an ":inverse_of" option to the "belongs_to :modifier" relation, default is not set
@@ -94,6 +114,7 @@ class Location
   has_and_belongs_to_many :favorited_by, class_name: 'User', index: true, inverse_of: :locations
 
   has_many :events
+  accepts_nested_attributes_for :events
   has_many :reviews, :order => :created_at.desc
 
   index :loctype => 1
@@ -133,8 +154,16 @@ class Location
 
   default_scope -> { includes(:team).includes(:owner) }
   scope :academies, -> { where(:loctype => LOCATION_TYPE_ACADEMY) }
-  scope :event_venue, -> { where(:loctype => LOCATION_TYPE_EVENT_VENUE) }
+  scope :event_venues, -> { where(:loctype => LOCATION_TYPE_EVENT_VENUE) }
   scope :with_black_belt, -> { where(:flag_has_black_belt => true) }
+
+  def academy?
+    self.loctype == Location::LOCATION_TYPE_ACADEMY
+  end
+
+  def event_venue?
+    self.loctype == Location::LOCATION_TYPE_EVENT_VENUE
+  end
 
   def editable_by? user
     return true if user.super_user?

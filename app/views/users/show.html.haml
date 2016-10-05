@@ -45,7 +45,11 @@
           .items.clear
           .empty-message
             %i.text-muted This person has not written any reviews
-      - if user.favorite_locations.present?
+      .col-md-4
+        %h3
+          %span.fa.fa-calendar
+            Schedule
+      -# if user.favorite_locations.present?
         .col-md-4
           %h3 Favorite Academies
           %ul.list-unstyled

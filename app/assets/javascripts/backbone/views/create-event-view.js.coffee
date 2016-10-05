@@ -45,6 +45,7 @@ class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
         @$el.modal('hide')
         $('.scheduler').fullCalendar('addEventSource', eventData)
         toastr.success("Successfully added event to the calendar")
+        window.location = eventData.redirect_to if eventData.redirect_to?
     })
 
   initialize: ->
@@ -69,10 +70,12 @@ class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
     @showModalDialog()
 
   eventTypeChanged: (e)->
-    eventTypeName = $(e.currentTarget).data('event-type-name')
-    form = @$(e.currentTarget).parents('form')
-    form.prop('class', "form-horizontal #{eventTypeName}")
+    eventTypeName = @$(e.currentTarget).data('event-type-name')
+    allEventTypeNames = _.map @$('[name="event[event_type]"]'), (o)->
+      $(o).data('event-type-name')
 
-    form.find(':input').filter('[type!="hidden"]:hidden').prop('disabled', true)
-    form.find(':input').filter(':visible').prop('disabled', false)
+    form = @$(e.currentTarget).parents('form')
+    _.map allEventTypeNames, (className)->
+      form.removeClass(className)
+    form.addClass(eventTypeName)
 

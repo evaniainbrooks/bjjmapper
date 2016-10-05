@@ -9,7 +9,11 @@ class RollFindr.Views.LocationNearbyView extends Backbone.View
     @collection = new RollFindr.Collections.NearbyLocationsCollection({
       lat: @model.get('coordinates')[0],
       lng: @model.get('coordinates')[1],
-      reject: @model.get('id')
+      reject: @model.get('id'),
+      location_type: [
+        RollFindr.Models.Location.LOCATION_TYPE_EVENT_VENUE,
+        RollFindr.Models.Location.LOCATION_TYPE_ACADEMY
+      ]
     })
 
     @collection.fetch().done(@render)

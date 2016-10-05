@@ -16,7 +16,19 @@ class Event
   EVENT_TYPE_CAMP = 8
   EVENT_TYPE_SUBEVENT = 16
 
-  EVENT_TYPE_ALL = [EVENT_TYPE_CLASS, EVENT_TYPE_SEMINAR, EVENT_TYPE_TOURNAMENT, EVENT_TYPE_CAMP]
+  EVENT_TYPE_ALL = [EVENT_TYPE_CLASS, EVENT_TYPE_SEMINAR, EVENT_TYPE_TOURNAMENT, EVENT_TYPE_CAMP].freeze
+
+  CREATE_PARAMS_WHITELIST = [
+    :event_type,
+    :organization,
+    :starting,
+    :ending,
+    :event_recurrence,
+    :title,
+    :description,
+    :instructor,
+    :location,
+    :weekly_recurrence_days => []].freeze
 
   include Mongoid::Document
   include Mongoid::Slug

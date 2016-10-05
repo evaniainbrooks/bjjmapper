@@ -166,6 +166,10 @@ class User
     self.role.try(:to_s).try(:eql?, 'super_user')
   end
 
+  def schedule
+    @_schedule ||= UserSchedule.new(self.id)
+  end
+
   def full_lineage
     # TODO: Is this expensive? Is caching enough?
     lineage = []

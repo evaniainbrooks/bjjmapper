@@ -1,8 +1,10 @@
 require 'spec_helper'
 require 'shared/tracker_context'
+require 'shared/timezonesvc_context'
 
 describe LocationEventsController do
   include_context 'skip tracking'
+  include_context 'timezone service'
   describe 'POST create' do
     context 'with json format' do
       context 'with valid params' do
@@ -46,7 +48,7 @@ describe LocationEventsController do
               expect do
                 post :create, recurring_event_params, session_params
                 response.should be_ok
-                assigns[:events].count.should eq 8
+                assigns[:events].count.should eq 7
               end.to change { Event.count }.by(1)
             end
           end

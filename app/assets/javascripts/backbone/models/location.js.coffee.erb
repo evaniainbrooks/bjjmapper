@@ -69,12 +69,14 @@ class RollFindr.Collections.NearbyLocationsCollection extends Backbone.Collectio
     @lat = options.lat
     @lng = options.lng
     @reject = options.reject
+    @location_type = options.location_type
 
   url: =>
     Routes.nearby_locations_path
       lat: @lat
       lng: @lng
       reject: @reject
+      location_type: @location_type
 
 class RollFindr.Collections.RecentLocationsCollection extends Backbone.Collection
   initialize: (options)->

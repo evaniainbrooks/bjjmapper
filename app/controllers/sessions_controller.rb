@@ -24,7 +24,7 @@ class SessionsController < ApplicationController
       user.update_attribute(:last_seen_at, Time.now)
       tracker.alias(user.to_param, session[:user_id])
       session[:user_id] = user.to_param
-     
+
       redirect_to return_url(request.referrer, signed_in: 1)
     end
   end
@@ -44,7 +44,7 @@ class SessionsController < ApplicationController
     tracker.track('deleteSession')
     session[:return_to] = request.referrer
     redirect_url = return_url(request.referrer, signed_out: 1)
-    
+
     reset_session
     redirect_to redirect_url
   end
@@ -55,12 +55,12 @@ class SessionsController < ApplicationController
     if return_to
       callback = Addressable::URI.parse(return_to)
       callback.query_values = (callback.query_values || {}).merge(params)
-      
+
       session.delete(:return_to)
       callback.to_s
     else
       root_url(signed_in: 1)
-    end
+    end rescue return_to
   end
 
   def send_welcome_email(user)

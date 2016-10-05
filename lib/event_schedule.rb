@@ -5,9 +5,11 @@ module RollFindr
       @recurring_events = recurring_events
     end
     def events_between_time(start_time, end_time)
-      events = []
-      events.concat(single_events_between_time(start_time, end_time).to_a) if @single_events
-      events.concat(recurring_events_between_time(start_time, end_time).to_a) if @recurring_events
+      [].tap do |events|
+        events.concat(single_events_between_time(start_time, end_time).to_a) if @single_events
+        events.concat(recurring_events_between_time(start_time, end_time).to_a) if @recurring_events
+        events.sort_by(&:starting)
+      end
     end
 
     protected

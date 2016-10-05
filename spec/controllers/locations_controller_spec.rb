@@ -70,7 +70,7 @@ describe LocationsController do
       end
       context 'when there are locations nearby' do
         let(:other_location) { build(:location, title: 'near you location') }
-        before { Location.stub_chain(:near, :limit, :to_a).and_return([location, other_location]) }
+        before { Location.stub_chain(:near, :where, :limit, :to_a).and_return([location, other_location]) }
         context 'with reject parameter' do
           it 'returns the nearby locations without the rejected location' do
             get :nearby, format: 'json', reject: location.to_param, lat: 80.0, lng: 80.0
@@ -93,7 +93,7 @@ describe LocationsController do
         end
       end
       context 'when there are no locations nearby' do
-        before { Location.stub_chain(:near, :limit, :to_a).and_return([]) }
+        before { Location.stub_chain(:near, :where, :limit, :to_a).and_return([]) }
         it 'returns 204 no content' do
           get :nearby, format: 'json', lat: 80.0, lng: 80.0
           response.status.should eq 204

@@ -1,0 +1,96 @@
+= content_for(:head) do
+  = stylesheet_link_tag "//www.fuelcdn.com/fuelux/3.4.0/css/fuelux.min.css"
+
+= content_for(:scripts) do
+  = javascript_include_tag "//www.fuelcdn.com/fuelux/3.4.0/js/fuelux.min.js"
+
+- location = Location.new
+.container.page.create-event-dialog.fuelux
+  %h1
+    %i.fa.fa-calendar-o
+    Create a Tournament/Seminar
+  = form_for(location, html: { class: 'form wizard' } ) do |f|
+    %ul.steps
+      %li.active{'data-step' => 1}
+        %span.badge 1
+        Venue
+        %span.chevron
+      %li{'data-step' => 2}
+        %span.badge 2
+        Event Info
+        %span.chevron
+    .actions
+      %button.btn.btn-default.btn-prev{:disabled => true}
+        %span.fa.fa-arrow-left
+        Prev
+      %button.btn.btn-default.btn-next{:'data-last' => 'Finish'}
+        Next
+        %span.fa.fa-arrow-right
+    .step-content      
+      .step-pane.active.alert.editable{'data-step' => 1}
+        .row
+          .col-md-offset-2.col-md-8
+            %p.text-info.small All fields are required.
+            %label.control-label{:for => "location[title]"} 
+              Name
+            = f.text_field :title, placeholder: 'The name of the venue', autofocus: true, class: 'form-control input-lg'
+            = f.hidden_field :loctype, value: Location::LOCATION_TYPE_EVENT_VENUE, class: 'form-control input-sm'
+        .row.display-field
+          .col-md-offset-2.col-md-8
+            .form-group
+              %label.control-label Address
+              .input-group
+                = text_field_tag('full_address', '', placeholder: 'eg. 123 Fourth St, Edmonton', class: 'street form-control input-lg')
+                %a.btn.btn-default.input-group-addon{'data-address-search' => true}
+                  %span.fa-2x.fa.fa-search
+
+        .row.edit-field
+          .col-md-offset-2.col-md-8
+            .form-group
+              %label.control-label Address
+              .input-group
+                = select_tag('address_options', '', class: 'form-control input-lg')
+                %a.btn.btn-default.input-group-addon{'data-cancel-edit' => true}
+                  %span.fa-2x.fa.fa-close
+        .row.edit-field
+          .col-md-12
+            %hr/
+            %h4 Refine Address
+        .row.edit-field
+          .col-md-6
+            = f.label :street, 'Street *', class: 'small'
+            = f.text_field :street, class: 'form-control input-sm'
+            = f.label :city, class: 'small'
+            = f.text_field :city, class: 'form-control input-sm'
+            = f.label :postal_code, 'Postal code *', class: 'small'
+            = f.text_field :postal_code, class: 'form-control input-sm'
+          .col-md-6
+            = f.label :state, class: 'small'
+            = f.text_field :state, class: 'form-control input-sm'
+            = f.label :country, class: 'small'
+            = f.text_field :country, class: 'form-control input-sm'
+            %br/
+            %span.pull-left.small.clear *Denotes required field
+        .row.edit-field
+          .col-md-6
+            %hr/
+            %h4 Map
+            %div.map-canvas{:style => 'height: 300px'}
+          .col-md-6
+            %hr/
+            %h4 Nearby Locations
+            %div.nearby-locations
+              .empty-message
+                %i.text-muted There are no nearby locations.
+              .content
+                %ul.list-unstyled.items
+      .step-pane.alert{'data-step' => 2}
+        .row.edit-field
+          = fields_for :event, location.events.new do |ff|
+            = render partial: 'location_events/create_event', locals: { f: ff }
+
+= content_for(:scripts) do
+  :coffeescript
+    $(document).ready ->
+      wizardView = new RollFindr.Views.EventVenueWizardView()
+

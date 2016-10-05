@@ -49,6 +49,7 @@ class MapLocationDecorator < LocationDecorator
   end
 
   def entities
+    return nil unless has_events?
     events.collect do |event|
       event.organizer || event.instructor
     end.uniq.sort.to_sentence

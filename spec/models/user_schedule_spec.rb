@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe LocationSchedule do
-  subject { LocationSchedule.new('location-id') }
+describe UserSchedule do
+  subject { UserSchedule.new('user-id') }
   let(:start_time) { Time.now }
   let(:end_time) { start_time + 2.hours }
   before { Event.stub_chain(:where, :where, :asc).and_return([]) }

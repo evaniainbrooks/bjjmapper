@@ -1,4 +1,8 @@
+require 'event_schedule'
+
 class LocationEventsController < ApplicationController
+  include EventsHelper
+
   before_action :set_location
 
   before_action :set_event, only: [:show, :destroy, :update, :move]
@@ -12,7 +16,7 @@ class LocationEventsController < ApplicationController
   around_filter :set_location_tz
 
   def create
-    event = Event.new(create_params)
+    event = Event.new(event_create_params)
     @location.events << event
 
     respond_to do |format|
@@ -94,10 +98,10 @@ class LocationEventsController < ApplicationController
   def update
     tracker.track('updateEvent',
       event: @event.to_param,
-      params: create_params
+      params: event_create_params
     )
 
-    @event.update(create_params)
+    @event.update(event_create_params)
     respond_to do |format|
       format.json { render status: :ok, json: {} }
       format.html { redirect_to location_event_path(location, @event, success: 1, edit: 0) }
@@ -118,24 +122,6 @@ private
   def set_location_tz(&block)
     tz = @location.timezone
     Time.use_zone(tz, &block)
-  end
-
-  def create_params
-    p = params.require(:event).permit(
-      :event_type,
-      :organization,
-      :starting,
-      :ending,
-      :event_recurrence,
-      :title,
-      :description,
-      :instructor,
-      :location,
-      :weekly_recurrence_days => [])
-    p[:modifier] = current_user if signed_in?
-    p[:starting] = Time.zone.parse(p[:starting]) if p.key?(:starting)
-    p[:ending] = Time.zone.parse(p[:ending]) if p.key?(:ending)
-    p
   end
 
   def set_event
