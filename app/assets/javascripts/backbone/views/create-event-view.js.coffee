@@ -24,6 +24,8 @@ class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
   formSubmit: (e)->
     e.preventDefault()
 
+    @$('select:hidden').prop('disabled', true)
+
     data = $(e.target).serializeArray()
     data.push({
       name: 'interval_start',
@@ -55,6 +57,8 @@ class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
 
   showModalDialog: ->
     RollFindr.Views.EventViewBase.prototype.setUiDefaults.call(this)
+    @$('[name="event[title]"]').val('')
+    @$('select:hidden').removeProp('disabled')
     @$el.modal('show')
 
   render: (start, end, intervalStart, intervalEnd)->
@@ -70,12 +74,12 @@ class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
     @showModalDialog()
 
   eventTypeChanged: (e)->
-    eventTypeName = @$(e.currentTarget).data('event-type-name')
+    @eventTypeName = @$(e.currentTarget).data('event-type-name')
     allEventTypeNames = _.map @$('[name="event[event_type]"]'), (o)->
       $(o).data('event-type-name')
 
     form = @$(e.currentTarget).parents('form')
     _.map allEventTypeNames, (className)->
       form.removeClass(className)
-    form.addClass(eventTypeName)
+    form.addClass(@eventTypeName)
 

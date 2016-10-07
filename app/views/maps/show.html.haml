@@ -57,7 +57,7 @@
 - content_for :scripts do
   :javascript
     $(document).ready(function() {
-      var mapModel = new RollFindr.Models.Map(#{@map.to_json});
+      var mapModel = new RollFindr.Models.Map(#{render_json(@map)});
       var mapView = new RollFindr.Views.MapView({model: mapModel});
     });
 

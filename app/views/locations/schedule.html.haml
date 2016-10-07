@@ -19,4 +19,4 @@
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->
-      mapView = new RollFindr.Views.LocationShowView({ editable: #{edit_mode?}, model: #{render partial: 'locations/location', object: location, formats: [:json]}, mapModel: #{@map.to_json}, el: $('.show-location')})
+      mapView = new RollFindr.Views.LocationShowView({ editable: #{edit_mode?}, model: #{render_json(location)}, el: $('.show-location')})

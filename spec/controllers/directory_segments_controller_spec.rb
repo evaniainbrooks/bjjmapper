@@ -10,7 +10,7 @@ describe DirectorySegmentsController do
       get :index, format: 'html'
       response.status.should eq 200
 
-      assigns[:segments].should eq DirectorySegment.parent_segments
+      assigns[:directory_segments].should eq DirectorySegment.parent_segments
     end
   end
   describe 'GET show' do
@@ -20,8 +20,8 @@ describe DirectorySegmentsController do
         get :show, criteria
         response.status.should eq 200
 
-        assigns[:segment].name.should eq criteria[:city]
-        assigns[:segment].parent_segment.name.should eq criteria[:country]
+        assigns[:directory_segment].name.should eq criteria[:city]
+        assigns[:directory_segment].parent_segment.name.should eq criteria[:country]
       end
     end
     context 'with country criteria' do
@@ -30,8 +30,8 @@ describe DirectorySegmentsController do
         get :show, criteria
         response.status.should eq 200
 
-        assigns[:segment].name.should eq criteria[:country]
-        assigns[:segment].parent_segment.should be_nil
+        assigns[:directory_segment].name.should eq criteria[:country]
+        assigns[:directory_segment].parent_segment.should be_nil
       end
     end
   end

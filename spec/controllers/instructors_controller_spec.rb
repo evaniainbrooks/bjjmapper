@@ -64,7 +64,6 @@ describe InstructorsController do
         it 'returns the instructors' do
           get :index, format: 'json', location_id: '123'
           assigns[:instructors].count.should eq instructors.count
-          response.body.should include(instructors[0].name)
         end
       end
       context 'when there are no instructors' do

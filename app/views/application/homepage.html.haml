@@ -53,6 +53,6 @@
     $(document).ready ->
       recentView = new RollFindr.Views.RecentLocationsView()
 
-      mapModel = new RollFindr.Models.Map(#{@map.to_json})
+      mapModel = new RollFindr.Models.Map(#{render_json(@map)})
       mapView = new RollFindr.Views.MapView({el: $('.homepage'), model: mapModel})
 

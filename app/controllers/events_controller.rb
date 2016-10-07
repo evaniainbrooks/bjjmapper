@@ -8,9 +8,6 @@ class EventsController < ApplicationController
 
   DEFAULT_SEARCH_DISTANCE = 5.0
 
-  def wizard
-  end
-
   def index
     @events = []
 
@@ -31,7 +28,7 @@ class EventsController < ApplicationController
 
 private
   def set_locations
-    @locations = Location.includes(:events).find(params[:ids])
+    @locations = Location.find(params[:ids])
     head :bad_request and return false unless @locations.present?
   end
 

@@ -143,8 +143,8 @@
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->
-      eventModel = new RollFindr.Models.Event(#{event.to_json})
+      eventModel = new RollFindr.Models.Event(#{render_json(event)})
       showView = new RollFindr.Views.EventShowView({ model: eventModel })
-      mapModel = new RollFindr.Models.Map(#{@map.to_json})
+      mapModel = new RollFindr.Models.Map(#{render_json(@map)})
       mapView = new RollFindr.Views.MapView({editable: false, model: mapModel, el: $('.show-event')})
     $('.directions').readmore(collapsedHeight: 175)

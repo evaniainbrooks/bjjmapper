@@ -9,7 +9,8 @@
 .fc-basicWeek-view .fc-event img {
   width: 30px !important;
   height: 30px !important;
-  margin-bottom: 20px;
+  margin-top: 3px !important;
+  margin-bottom: 2px !important;
 }
 
 .color-legend div {
@@ -131,7 +132,7 @@ $colors: $color0, $color3, $color6, $color9, $color1, $color4, $color7, $color10
   border-color: #aaa !important;
 }
 
-.event-seminar {
+.event-seminar, .event-color-888 {
   @extend .event-color-base;
   border-color: lighten(rgb(0, 255, 0), 20%) !important;
   background: repeating-linear-gradient(

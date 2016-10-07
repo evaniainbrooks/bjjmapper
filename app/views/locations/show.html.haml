@@ -73,7 +73,8 @@
         -#= render :partial => 'locations/instructors', :locals => { :location => location }
       .col-md-8
         %h3.pull-left
-          %span Schedule
+          %span.fa.fa-calendar
+          Schedule
           %span.small
             = surround '(', ')' do
               = link_to 'view full schedule', schedule_location_path(location, ref: 'loc_sched_full')
@@ -119,7 +120,7 @@
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->
-      mapView = new RollFindr.Views.LocationShowView({ editable: #{edit_mode?}, model: #{location.to_json}, mapModel: #{@map.to_json}, el: $('.show-location')})
+      mapView = new RollFindr.Views.LocationShowView({ editable: #{edit_mode?}, model: #{render_json(location)}, mapModel: #{render_json(@map)}, el: $('.show-location')})
 
 = content_for(:scripts) do
   = render partial: 'facebook_sdk'

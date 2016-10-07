@@ -10,9 +10,9 @@ json.email location.email || ''
 json.facebook location.facebook || ''
 json.instagram location.instagram || ''
 json.twitter location.twitter || ''
-json.distance location.distance || ''
-json.bearing location.bearing
-json.bearing_direction location.bearing_direction
+json.distance location.try(:distance) || ''
+json.bearing location.try(:bearing)
+json.bearing_direction location.try(:bearing_direction)
 json.city location.city
 json.country location.country
 json.state location.state || ''

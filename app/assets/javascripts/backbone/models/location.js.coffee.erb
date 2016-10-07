@@ -13,9 +13,9 @@ class RollFindr.Models.Location extends Backbone.Model
     this.set('reviews', reviews)
     
     events = @get('events')
-    events = new RollFindr.Collections.EventsCollection(events, {location_id: id})
+    events = new RollFindr.Collections.LocationEventsCollection(events, {location_id: id})
     this.set('events', events)
-  
+
   getColor: ->
     if (@get('loctype') == RollFindr.Models.Location.LOCATION_TYPE_EVENT_VENUE)
       if @get('events').length > 0

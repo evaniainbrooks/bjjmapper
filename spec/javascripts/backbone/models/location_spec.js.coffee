@@ -13,6 +13,10 @@ describe "Models.Location", ->
     subject.get('reviews').should.be.an.instanceof(RollFindr.Collections.ReviewsCollection)
     subject.get('reviews').location_id.should.equal(locationId)
 
+  it 'has many events', ->
+    subject.get('events').should.be.an.instanceof(RollFindr.Collections.LocationEventsCollection)
+    subject.get('events').location_id.should.equal(locationId)
+
 
 describe "Models.NearbyLocationsCollection", ->
   testLat = 80.0

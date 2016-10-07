@@ -91,5 +91,5 @@
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->
-      eventModel = new RollFindr.Models.Event(#{event.to_json})
+      eventModel = new RollFindr.Models.Event(#{render_json(event)})
       showView = new RollFindr.Views.EventShowView({ model: eventModel }) 

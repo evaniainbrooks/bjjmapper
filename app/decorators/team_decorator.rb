@@ -58,14 +58,6 @@ class TeamDecorator < Draper::Decorator
     end
   end
 
-  def as_json(args)
-    object.as_json(args).symbolize_keys.merge(
-      image: image,
-      created_at: created_at,
-      updated_at: updated_at
-    )
-  end
-
   private
 
   def avatar_service_url(name, size)

@@ -35,20 +35,22 @@ describe LocationEventsController do
           end
           context 'with a recurring event' do
             let(:recurring_event_params) do
-              valid_params.deep_merge({
-                interval_start: Time.now.beginning_of_day.iso8601,
-                interval_end: 1.week.from_now.iso8601,
-                event: {
-                  event_recurrence: Event::RECURRENCE_DAILY
-                }
-              })
+              use_timezone do
+                valid_params.deep_merge({
+                  interval_start: Time.now.beginning_of_day.iso8601,
+                  interval_end: 1.week.from_now.iso8601,
+                  event: {
+                    event_recurrence: Event::RECURRENCE_DAILY
+                  }
+                })
+              end
             end
 
             it 'creates a new event and returns all occurrences between the passed interval' do
               expect do
                 post :create, recurring_event_params, session_params
                 response.should be_ok
-                assigns[:events].count.should eq 7
+                assigns[:events].count.should eq 8
               end.to change { Event.count }.by(1)
             end
           end

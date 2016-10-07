@@ -1,4 +1,4 @@
-- title = "Brazilian Jiu-Jitsu Academies in #{segment.full_name}"
+- title = "Brazilian Jiu-Jitsu Academies in #{directory_segment.full_name}"
 = content_for :title do
   = title
 .container.page.directory
@@ -15,28 +15,28 @@
     .col-md-6.map-view
       .map-canvas{:style => 'height: 400px;'}
 
-  - if segment.locations.present?
+  - if directory_segment.locations.present?
     %hr/
     .row
       .col-md-12
         %h3
-          %span= "Showing #{pluralize(segment.locations.count, 'academy')}"
+          %span= "Showing #{pluralize(directory_segment.locations.count, 'academy')}"
           %span
             = surround '(', ')' do
-              = link_to 'See on map', map_path(zoom: segment.zoom, lat: segment.lat, lng: segment.lng), title: "See map of Brazilian Jiu-Jitsu gyms in #{segment.full_name}"
+              = link_to 'See on map', map_path(zoom: directory_segment.zoom, lat: directory_segment.lat, lng: directory_segment.lng), title: "See map of Brazilian Jiu-Jitsu gyms in #{directory_segment.full_name}"
     .row
       .col-md-12
-        = render partial: 'table', locals: { locations: segment.locations, show_legend: segment.child? }
+        = render partial: 'table', locals: { locations: directory_segment.locations, show_legend: directory_segment.child? }
     %hr/
     .row
       .col-md-12
-        %h3 Schedule for #{segment.full_name}
+        %h3 Schedule for #{directory_segment.full_name}
         .scheduler.clear
 
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->
-      segmentModel = new RollFindr.Models.DirectorySegment(#{segment.to_json})
+      segmentModel = new RollFindr.Models.DirectorySegment(#{render_json(directory_segment)})
       mapModel = new RollFindr.Models.Map(#{render partial: 'maps/map', formats: [:json], locals: { map: map }})
       cityView = new RollFindr.Views.DirectorySegmentCityView({ model: segmentModel, mapModel: mapModel, el: $('.directory') })
 

@@ -39,14 +39,6 @@ class Team
     return !self.locked? || user.super_user?
   end
 
-  def as_json(args)
-    super(args.merge(except: [:_id, :parent_team_id, :modifier_id])).merge({
-      :id => self.id.to_s,
-      :modifier_id => self.modifier_id.to_s,
-      :parent_team_id => self.parent_team_id.try(:to_s)
-    })
-  end
-
   def to_param
     slug
   end

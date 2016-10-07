@@ -52,7 +52,7 @@ class UsersController < ApplicationController
         if @user.redirect_to_user.present?
           @user = @user.redirect_to_user
         end
-        render
+        render partial: 'users/user'
       end
       format.html do
         if @user.redirect_to_user.present?

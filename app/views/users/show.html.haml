@@ -29,7 +29,7 @@
           = render partial: 'actions'
     %hr.clear/
     .row
-      - if user.locations.present?
+      -# if user.locations.present?
         .col-md-4
           %h3 Teaching at
           %ul.list-unstyled
@@ -45,10 +45,11 @@
           .items.clear
           .empty-message
             %i.text-muted This person has not written any reviews
-      .col-md-4
+      .col-md-8
         %h3
           %span.fa.fa-calendar
-            Schedule
+          Schedule
+        = render partial: 'users/schedule'
       -# if user.favorite_locations.present?
         .col-md-4
           %h3 Favorite Academies
@@ -80,10 +81,10 @@
           %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes
 
   = render :partial => 'users/add_student_dialog', locals: { instructor: user }
-
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->
-      model = new RollFindr.Models.User(#{user.to_json})
+      model = new RollFindr.Models.User(#{render_json(user)})
       studentsView = new RollFindr.Views.UserStudentsView({ model: model })
       reviewsView = new RollFindr.Views.ReviewsView({ template_name: 'locations/location-review', model: model })
+      scheduleView = new RollFindr.Views.ScheduleView({ model: model })

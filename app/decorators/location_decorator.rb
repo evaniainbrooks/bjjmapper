@@ -155,7 +155,7 @@ class LocationDecorator < Draper::Decorator
 
     if self.instructors.present?
       instructors = self.instructors.collect do |instructor|
-        "#{instructor.name} (#{instructor.rank_in_words})"
+        h.link_to("#{instructor.name} (#{instructor.rank_in_words})", instructor)
       end
 
       instructor_desc = if instructors.length > 1

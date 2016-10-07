@@ -1,5 +1,5 @@
 //= require backbone/views/add-instructor-view
-//= require backbone/views/location-calendar-view
+//= require backbone/views/schedule-view
 //= require backbone/views/location-nearby-view
 //= require backbone/views/reviews-view
 //= require backbone/views/map/map_view
@@ -10,7 +10,7 @@
   RollFindr.Views.LocationShowView = Backbone.View.extend({
     mapView: null,
     addInstructorView: null,
-    calendarView: null,
+    scheduleView: null,
     reviewsView: null,
     events: {
       'click .add-review': 'addReview',
@@ -27,7 +27,7 @@
 
       this.model = new RollFindr.Models.Location(options.model);
       this.addInstructorView = new RollFindr.Views.AddInstructorView();
-      this.calendarView = new RollFindr.Views.LocationCalendarView({editable: options.editable, model: this.model});
+      this.scheduleView = new RollFindr.Views.ScheduleView({editable: options.editable, model: this.model});
       this.nearbyView = new RollFindr.Views.LocationNearbyView({model: this.model});
       this.instructorsView = new RollFindr.Views.LocationInstructorsView({model: this.model});
       this.reviewsView = new RollFindr.Views.ReviewsView({template_name: 'review', model: this.model});

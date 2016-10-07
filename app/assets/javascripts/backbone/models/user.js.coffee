@@ -13,6 +13,13 @@ class RollFindr.Models.User extends Backbone.Model
     reviews = new RollFindr.Collections.ReviewsCollection(reviews, {user_id: id})
     this.set('reviews', reviews)
 
+    events = @get('events')
+    events = new RollFindr.Collections.UserEventsCollection(events, {user_id: id})
+    this.set('events', events)
+
+  getEventsPath: ->
+    return Routes.user_events_path(this.get('id'))
+
   isAnonymous: ->
     @get('is_anonymous')
 

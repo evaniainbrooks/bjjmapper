@@ -79,7 +79,7 @@
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->
-      sourceUser = new RollFindr.Models.User(#{user.to_json})
-      destUser = new RollFindr.Models.User(#{current_user.to_json})
+      sourceUser = new RollFindr.Models.User(#{render_json(user)})
+      destUser = new RollFindr.Models.User(#{render_json(current_user)})
       mergeView = new RollFindr.Views.UserMergeView({ src: sourceUser, dest: destUser })
 

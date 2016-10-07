@@ -3,4 +3,8 @@ shared_context 'timezone service' do
   before do
     RollFindr::TimezoneService.stub(:timezone_for).and_return(stubbed_timezone)
   end
+
+  def use_timezone(&block)
+    Time.use_zone(stubbed_timezone, &block)
+  end
 end

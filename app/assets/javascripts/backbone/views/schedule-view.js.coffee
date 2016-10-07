@@ -1,7 +1,7 @@
 #= require backbone/views/create-event-view
 #= require backbone/views/move-event-view
 
-class RollFindr.Views.LocationCalendarView extends Backbone.View
+class RollFindr.Views.ScheduleView extends Backbone.View
   el: $('.scheduler-container')
   createEventView: null
   moveEventView: null
@@ -35,13 +35,15 @@ class RollFindr.Views.LocationCalendarView extends Backbone.View
     viewOptions = if editable
       "agendaWeek,agendaDay"
     else
-      "basicWeek,basicDay"
+      "basicWeek,basicDay,month"
 
     @$el.html('<div class="scheduler"></div>')
 
     locationId = @model.get('id')
+    #TODO: Fix EventsCollection to determine this
+    eventsPath = @model.get('events').url()
     @$('.scheduler').fullCalendar({
-      events: Routes.location_events_path(locationId),
+      events: eventsPath,
       eventDurationEditable: false,
       editable: editable,
       height: 'auto',

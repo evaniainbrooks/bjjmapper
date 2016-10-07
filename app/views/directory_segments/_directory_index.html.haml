@@ -1,6 +1,6 @@
 .row
-  - per_column = (@segments.size / 3.0).ceil
-  - @segments.each_slice(per_column).each do |segments|
+  - per_column = (@directory_segments.size / 3.0).ceil
+  - @directory_segments.each_slice(per_column).each do |segments|
     .col-md-3
       - segments.each do |country|
         %h3= link_to country.name, directory_segment_path(country.name), title: "List of Brazilian Jiu-Jitsu gyms in #{country.name}"

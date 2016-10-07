@@ -93,6 +93,6 @@
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->
-      model = new RollFindr.Models.Team(#{team.to_json})
+      model = new RollFindr.Models.Team(#{render_json(team)})
       instructorView = new RollFindr.Views.LocationInstructorsView({ model: model })
 

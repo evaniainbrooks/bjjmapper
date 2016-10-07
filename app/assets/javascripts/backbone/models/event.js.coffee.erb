@@ -41,3 +41,27 @@ class RollFindr.Collections.EventsCollection extends Backbone.Collection
     (fieldName)->
       this.sort_key = fieldName
       this.sort()
+
+class RollFindr.Collections.LocationEventsCollection extends RollFindr.Collections.EventsCollection
+  location_id: null
+  
+  initialize: (model, options)->
+    RollFindr.Collections.EventsCollection.prototype.initialize.apply(this, arguments)
+    @starting = options['start']
+    @ending = options['end']
+    @location_id = options.location_id
+
+  url: =>
+    Routes.location_events_path(@location_id, { start: @starting, end: @ending })
+
+class RollFindr.Collections.UserEventsCollection extends RollFindr.Collections.EventsCollection
+  user_id: null
+  
+  initialize: (model, options)->
+    RollFindr.Collections.EventsCollection.prototype.initialize.apply(this, arguments)
+    @starting = options['start']
+    @ending = options['end']
+    @user_id = options.user_id
+
+  url: =>
+    Routes.user_events_path(@user_id, { start: @starting, end: @ending })

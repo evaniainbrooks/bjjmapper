@@ -1,14 +1,14 @@
-- parent_name = segment.try(:parent_segment).try(:name) || segment.try(:name)
-- child_name = segment.try(:name)
+- parent_name = directory_segment.try(:parent_segment).try(:name) || directory_segment.try(:name)
+- child_name = directory_segment.try(:name)
 %ol.breadcrumb
   %li
     %a{href: root_path} Home
   %li
     %a{href: directory_index_path, title: 'Brazilian Jiu-Jitsu gym listings'} BJJ Academy Directory
-  - if segment.present?
+  - if directory_segment.present?
     %li
       %a{href: directory_segment_path(country: parent_name), title: "Brazilian Jiu-Jitsu gyms in #{parent_name}"}= parent_name
-    - if segment.child?
+    - if directory_segment.child?
       %li
         %a{href: directory_segment_path(country: parent_name, city: child_name), title: "Brazilian Jiu-Jitsu gyms in #{parent_name}"}= child_name
 

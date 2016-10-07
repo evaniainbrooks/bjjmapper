@@ -32,4 +32,8 @@ class Map
   def [](index)
     instance_variable_get("@#{index}")
   end
+
+  def model_name
+    'map'
+  end
 end
