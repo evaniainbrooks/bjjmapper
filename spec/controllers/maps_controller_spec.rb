@@ -13,6 +13,17 @@ describe MapsController do
       response.status.should eq 200
       response.should render_template('maps/show')
     end
+    context 'with lat and lng' do
+      it 'does not geolocate' do
+        get :show, lat: 80.0, lng: 80.0
+
+        assigns[:map].tap do |m|
+          m.lat.should eq 80.0
+          m.lng.should eq 80.0
+          m.geolocate.should be_false
+        end
+      end
+    end
   end
   describe 'GET search' do
     context 'with invalid params' do

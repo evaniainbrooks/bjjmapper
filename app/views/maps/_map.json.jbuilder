@@ -8,4 +8,5 @@ json.event_type map.event_type
 json.location_type map.location_type
 json.minZoom map.minZoom
 json.geolocate map.geolocate
+json.legend map.legend
 json.locations map.locations, partial: 'locations/location', as: :location

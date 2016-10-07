@@ -4,8 +4,9 @@ class MapsController < ApplicationController
   DEFAULT_EVENT_START_OFFSET = 15.days
   DEFAULT_EVENT_END_OFFSET = 1.year
 
+  before_filter :set_coordinates, only: [:show, :search]
   before_filter :set_map, only: [:show]
-  before_filter :set_coordinates, only: [:search]
+  before_filter :validate_coordinates, only: [:search]
   before_filter :validate_event_time_range, only: [:search]
   around_filter :set_timezone, only: [:search]
 
@@ -87,6 +88,9 @@ class MapsController < ApplicationController
   def set_coordinates
     @lat = params.fetch(:lat, nil).try(:to_f)
     @lng = params.fetch(:lng, nil).try(:to_f)
+  end
+  
+  def validate_coordinates
     head :bad_request and return false unless @lat.present? && @lng.present?
   end
 
