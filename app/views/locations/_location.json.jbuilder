@@ -26,8 +26,8 @@ json.lng location.lng
 json.link location.try(:link)
 json.entities location.try(:entities)
 json.image location.image
-json.image_large location.image_large
-json.image_tiny location.image_tiny
+json.image_large location.try(:image_large)
+json.image_tiny location.try(:image_tiny)
 json.flag_has_black_belt location.flag_has_black_belt || false
 json.flag_closed location.flag_closed || false
 json.created_at location.created_at

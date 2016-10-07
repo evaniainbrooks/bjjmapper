@@ -13,10 +13,17 @@ feature "Directory Segments" do
     expect(page).to have_text('United States')
   end
 
-  scenario "user visits a known directory segment" do
+  scenario "user visits a known country" do
     create(:directory_segment, name: 'United States')
     visit directory_segment_path(country: 'United States')
     expect(page).to have_text('United States')
+  end
+
+  scenario "user visits a known city" do
+    create(:directory_segment, name: 'United States')
+    create(:directory_segment, name: 'Seattle', parent_segment: DirectorySegment.last)
+    visit directory_segment_path(country: 'United States', city: 'Seattle')
+    expect(page).to have_text('Seattle')
   end
 
   scenario "user visits a synthetic directory segment" do

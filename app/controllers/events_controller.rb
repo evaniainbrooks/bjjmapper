@@ -8,6 +8,7 @@ class EventsController < ApplicationController
 
   DEFAULT_SEARCH_DISTANCE = 5.0
 
+  #omnicalendar
   def index
     @events = []
 

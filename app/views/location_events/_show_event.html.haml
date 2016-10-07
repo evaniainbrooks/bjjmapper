@@ -69,11 +69,6 @@
           = f.text_area :description, class: 'input-md form-control'
     .row.edit-field
       .col-md-12
-        %h3 Metadata
-      .col-md-12
-        %pre.small= JSON.pretty_generate(event.as_json({}))
-        %br/
-      .col-md-12
         .pull-right
           %a.delete-field.btn.btn-danger.btn-md{:type => 'button',
             :data => { :method => :delete,
