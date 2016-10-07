@@ -22,7 +22,8 @@ describe "Models.NearbyLocationsCollection", ->
   testLat = 80.0
   testLng = 88.0
   testReject = "12345"
-  subject = new RollFindr.Collections.NearbyLocationsCollection({lat: testLat, lng: testLng, reject: testReject})
+  locationType = 1
+  subject = new RollFindr.Collections.NearbyLocationsCollection({lat: testLat, lng: testLng, reject: testReject, location_type: [locationType]})
 
   it 'has latitude, longitude and reject parameters', ->
     subject.lat.should.equal(testLat)
