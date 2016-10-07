@@ -73,8 +73,6 @@ class RollFindr.Views.ScheduleView extends Backbone.View
   calendarEventDrop: (event, delta, revertFunc)->
     locationId = @model.get('id')
     moveEventFunction = (recurrenceAction)=>
-      alert('moveEvent')
-
       locationId = @model.get('id')
       $.ajax({
         url: Routes.move_location_event_path(locationId, event.id)

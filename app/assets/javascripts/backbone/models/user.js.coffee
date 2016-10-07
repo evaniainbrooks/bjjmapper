@@ -17,9 +17,6 @@ class RollFindr.Models.User extends Backbone.Model
     events = new RollFindr.Collections.UserEventsCollection(events, {user_id: id})
     this.set('events', events)
 
-  getEventsPath: ->
-    return Routes.user_events_path(this.get('id'))
-
   isAnonymous: ->
     @get('is_anonymous')
 
