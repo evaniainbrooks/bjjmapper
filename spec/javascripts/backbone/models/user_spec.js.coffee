@@ -7,7 +7,7 @@ describe "Models.User", ->
 
   it 'has many lineal_children', ->
     subject.get('lineal_children').should.be.an.instanceof(RollFindr.Collections.StudentsCollection)
-    subject.get('lineal_children').user_id.should.equal(userId)
+    subject.get('lineal_children').instructor_id.should.equal(userId)
 
   it 'has many reviews', ->
     subject.get('reviews').should.be.an.instanceof(RollFindr.Collections.ReviewsCollection)

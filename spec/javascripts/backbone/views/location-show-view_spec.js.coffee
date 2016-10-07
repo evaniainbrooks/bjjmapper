@@ -34,7 +34,7 @@ describe 'Views.LocationShowView', ->
 
   describe "subviews", ->
     it 'has a calendar subview', ->
-      view.calendarView.should.be.instanceof(RollFindr.Views.LocationCalendarView)
+      view.scheduleView.should.be.instanceof(RollFindr.Views.ScheduleView)
     it 'has a map subview', ->
       view.mapView.should.be.instanceof(RollFindr.Views.MapView)
 
