@@ -34,7 +34,7 @@ class MapLocationDecorator < LocationDecorator
       return h.location_path(location, ref: 'map_item')
     elsif has_events?
       if events.count == 1
-        h.location_event_path(location, event, ref: 'map_item')
+        h.location_event_path(location, events.first, ref: 'map_item')
       else
         h.schedule_location_path(location, ref: 'map_item')
       end
