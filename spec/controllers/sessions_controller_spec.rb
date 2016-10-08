@@ -68,7 +68,7 @@ describe SessionsController do
     let(:error_msg) { :invalid_credentials }
     it 'redirects to root with authentication failure message' do
       get :failure, { :message => 'failuremsg123' }
-      response.should redirect_to root_url
+      response.should redirect_to root_path
     end
   end
   describe 'DELETE destroy' do
