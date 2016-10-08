@@ -20,7 +20,7 @@ describe MapsController do
         assigns[:map].tap do |m|
           m.lat.should eq 80.0
           m.lng.should eq 80.0
-          m.geolocate.should be_falsey
+          m.geolocate.should eq 0
         end
       end
     end
