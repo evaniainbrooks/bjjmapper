@@ -31,6 +31,12 @@
 
 .location-list {
   padding: 0px !important;
+  .list-count {
+    text-transform: uppercase;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 0px !important;
+  }
   .map-list-item {
     h4 {
       color: #428bca;

@@ -30,6 +30,7 @@ class RollFindr.Views.MapListView extends Backbone.View
 
   activeMarkerChanged: (e)->
     @activeMarkerId = e.id
+    @updateActiveMarker(e.id)
     if null != @activeMarkerId
       listElem = $("[data-id='#{@activeMarkerId}']")
 
@@ -37,13 +38,14 @@ class RollFindr.Views.MapListView extends Backbone.View
         $('html, body').animate({
           scrollTop: listElem.offset().top - $('.navbar').height()
         }, 1000)
-      @render()
 
   listItemClicked: (e)->
     id = $(e.currentTarget).data('id')
     type = $(e.currentTarget).data('type')
-
-    $(e.currentTarget).siblings().removeClass('marker-active')
-    $(e.currentTarget).addClass('marker-active')
+    @updateActiveMarker(id)
     RollFindr.GlobalEvents.trigger('markerActive', {id: id})
+
+  updateActiveMarker: (id) ->
+    @$('.map-list-item').removeClass('marker-active')
+    @$("[data-id='#{@activeMarkerId}']").addClass('marker-active')
 
