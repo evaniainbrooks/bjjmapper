@@ -28,6 +28,7 @@ class Event
     :description,
     :instructor,
     :location,
+    :parent_event,
     :weekly_recurrence_days => []].freeze
 
   include Mongoid::Document
@@ -80,9 +81,9 @@ class Event
 
   field :schedule
 
+  before_save :set_event_type
   before_save :create_schedule
   before_save :serialize_schedule
-  before_save :set_event_type
 
   canonicalize :website, as: :website
   canonicalize :facebook, as: :facebook
@@ -175,6 +176,7 @@ class Event
     if self.parent_event.present?
       self.location = self.parent_event.location
       self.event_type = EVENT_TYPE_SUBEVENT
+      self.schedule = nil
     end
   end
 end

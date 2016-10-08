@@ -32,6 +32,23 @@ describe MapLocationDecorator do
       end
     end
   end
+  describe '.entities' do
+    context 'with events' do
+      let(:events) {
+        [build(:tournament, organization: build(:organization)), build(:seminar, instructor: build(:user), organization: nil)]
+      }
+
+      subject { MapLocationDecorator.decorate(build(:location), params({events: events})) }
+      it 'returns a sentence with the instructor and organization names' do
+        subject.entities.should match events[0].organization.name
+        subject.entities.should match events[1].instructor.name
+      end
+    end
+    context 'without events' do
+      subject { MapLocationDecorator.decorate(build(:location)).entities }
+      it { should be_nil }
+    end
+  end
   describe 'loctype' do
     context 'when the academy has events and the filter does not contain academies' do
       let(:location) { build(:location, loctype: Location::LOCATION_TYPE_ACADEMY) }

@@ -23,8 +23,8 @@ class MapLocationDecorator < LocationDecorator
       if events.count == 1
         return events.first.title
       else
-        event_types = events.collect(&:event_type).uniq.sort.to_sentence
-        return "#{events.count} upcoming #{event_types}"
+        event_type_names = events.collect{|e|e.event_type_name.capitalize.pluralize}.uniq.sort.to_sentence
+        return "#{events.count} Upcoming #{event_type_names}"
       end
     end
   end
@@ -51,8 +51,8 @@ class MapLocationDecorator < LocationDecorator
   def entities
     return nil unless has_events?
     events.collect do |event|
-      event.organizer || event.instructor
-    end.uniq.sort.to_sentence
+      event.organization.try(:name) || event.instructor.try(:name)
+    end.compact.uniq.sort.to_sentence
   end
 
   def loctype

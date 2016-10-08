@@ -8,7 +8,7 @@ FactoryGirl.define do
     association :modifier, factory: :user
     association :instructor, factory: :user
     association :organization, factory: :organization
-  
+
     factory :tournament do
       event_type Event::EVENT_TYPE_TOURNAMENT
     end

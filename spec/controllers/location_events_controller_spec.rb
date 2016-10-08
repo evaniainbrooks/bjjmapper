@@ -24,7 +24,16 @@ describe LocationEventsController do
         end
         context 'when logged in' do
           let(:user) { create(:user) }
+          let(:parent_event) { create(:event) }
           let(:session_params) { { user_id: user.to_param } }
+          context 'with a parent event' do
+            xit 'creates a sub event' do
+              expect do
+                post :create, valid_params.deep_merge(event: {parent_event_id: parent_event.to_param}), session_params
+                response.should be_ok
+              end.to change { Event.find(parent_event.id).sub_events.unscoped.count }.by(1)
+            end
+          end
           context 'with a non-recurring event' do
             it 'creates a new event' do
               expect do
