@@ -121,7 +121,9 @@ class LocationsController < ApplicationController
 
   def create
     @location = Location.create(create_params)
-    @location.events << Event.create(event_create_params) if params.key?(:event)
+    Time.use_zone(@location.timezone) do
+      @location.events << Event.create(event_create_params)
+    end if params.key?(:event)
 
     @redirect_path = if @location.event_venue? && @location.events.size > 0
       location_event_path(@location, @location.events.first, create: 1)

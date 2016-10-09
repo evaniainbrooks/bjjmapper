@@ -122,8 +122,8 @@ class MapsController < ApplicationController
     zoom = params.fetch(:zoom, default_zoom).to_i
 
     location_type = params.fetch(:location_type, [Location::LOCATION_TYPE_ACADEMY])
-    event_type = params.fetch(:event_type, []).collect(&:to_i)
-
+    event_type = params.fetch(:event_type, [Event::EVENT_TYPE_TOURNAMENT]).collect(&:to_i)
+   
     @map = Map.new(
       zoom: zoom,
       lat: @lat,
