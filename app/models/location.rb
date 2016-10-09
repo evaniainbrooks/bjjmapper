@@ -18,7 +18,7 @@ class Location
   LOCATION_TYPE_ACADEMY = 1
   LOCATION_TYPE_EVENT_VENUE = 2
 
-  LOCATION_TYPE_ALL = [LOCATION_TYPE_ACADEMY, LOCATION_TYPE_EVENT_VENUE]
+  LOCATION_TYPE_ALL = [LOCATION_TYPE_ACADEMY, LOCATION_TYPE_EVENT_VENUE].freeze
 
   CREATE_PARAMS_WHITELIST = [
     :loctype,
@@ -49,6 +49,7 @@ class Location
                   :track_destroy  =>  true     # track document destruction, default is false
 
   geocoded_by :address
+  before_validation :generate_event_venue_title
   before_validation :geocode, if: ->(obj) { obj.address.present? and obj.changed? }
   before_validation :reverse_geocode
 
@@ -244,6 +245,12 @@ class Location
   end
 
   private
+
+  def generate_event_venue_title
+    if self.event_venue? && self.title.blank?
+      self.title = self.address_components.join('-')
+    end
+  end
 
   def set_closed_flag
     self.flag_closed = true if self.moved_to_location.present?

@@ -122,9 +122,16 @@ describe Location do
     end
   end
 
-  describe 'validations' do
-    it 'is invalid without a title' do
-      build(:location, title: nil).should_not be_valid
+  describe '.title' do
+    context 'when event venue' do
+      it 'returns a generated title when it is missing' do
+        build(:event_venue, title: nil).save.title.should_not be_blank
+      end
+    end
+    context 'when academy' do
+      it 'is invalid when blank' do
+        build(:location, title: nil).should_not be_valid
+      end
     end
   end
 
