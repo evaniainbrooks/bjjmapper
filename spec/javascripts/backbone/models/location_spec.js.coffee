@@ -23,7 +23,8 @@ describe "Models.NearbyLocationsCollection", ->
   testLng = 88.0
   testReject = "12345"
   locationType = 1
-  subject = new RollFindr.Collections.NearbyLocationsCollection({lat: testLat, lng: testLng, reject: testReject, location_type: [locationType]})
+  count = 3
+  subject = new RollFindr.Collections.NearbyLocationsCollection({lat: testLat, lng: testLng, reject: testReject, location_type: [locationType], count: count})
 
   it 'has latitude, longitude and reject parameters', ->
     subject.lat.should.equal(testLat)
@@ -31,7 +32,7 @@ describe "Models.NearbyLocationsCollection", ->
     subject.reject.should.equal(testReject)
 
   it 'has a url', ->
-    subject.url().should.equal(Routes.nearby_locations_path({lat: testLat, lng: testLng, reject: testReject, location_type: [locationType]}))
+    subject.url().should.equal(Routes.nearby_locations_path({lat: testLat, lng: testLng, reject: testReject, location_type: [locationType], count: count})
 
 describe "Models.RecentLocationsCollection", ->
   testCount = 50

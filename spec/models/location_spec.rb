@@ -124,8 +124,10 @@ describe Location do
 
   describe '.title' do
     context 'when event venue' do
+      subject { build(:event_venue, title: nil) }
       it 'returns a generated title when it is missing' do
-        build(:event_venue, title: nil).save.title.should_not be_blank
+        subject.save
+        subject.title.should_not be_blank
       end
     end
     context 'when academy' do

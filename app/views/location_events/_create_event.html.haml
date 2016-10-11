@@ -1,37 +1,36 @@
-.container-fluid
-  .row
-    .col-md-12
-      %fieldset.small
-        / Text input
-        .form-group.row
-          %label.form-label.col-md-3
-            %input{:type => 'radio', :name => 'event[event_type]', :value => Event::EVENT_TYPE_CLASS, :checked => true, :data => {:'event-type-name' => event_type_name(Event::EVENT_TYPE_CLASS)} }
-              &nbsp;Class
-          %label.form-label.col-md-3
-            %input{:type => 'radio', :name => 'event[event_type]', :value => Event::EVENT_TYPE_TOURNAMENT, :data => {:'event-type-name' => event_type_name(Event::EVENT_TYPE_TOURNAMENT)} }
-              &nbsp;Tournament
-          %label.form-label.col-md-3
-            %input{:type => 'radio', :name => 'event[event_type]', :value => Event::EVENT_TYPE_SEMINAR, :data => {:'event-type-name' => event_type_name(Event::EVENT_TYPE_SEMINAR)} }
-              &nbsp;Seminar
-        .form-group
-          %label.control-label{:for => "event[title]"} Title
-          = f.text_field :title, placeholder: 'eg. BJJ Beginners, Competition Class', class: 'form-control input-lg'
+%fieldset.small
+  / Text input
+  .form-group.text-center.center-block
+    %div.btn-group{'data-toggle' => 'buttons'}
+      - if location.present?
+        %label.btn.btn-primary.active
+          %input{:type => 'radio', :name => 'event[event_type]', :value => Event::EVENT_TYPE_CLASS, :checked => true, :data => {:'event-type-name' => event_type_name(Event::EVENT_TYPE_CLASS)} }
+            &nbsp;Class
+      %label.btn.btn-primary{:class => location.blank? ? 'active' : ''}
+        %input{:type => 'radio', :name => 'event[event_type]', :value => Event::EVENT_TYPE_TOURNAMENT, :checked => location.blank?, :data => {:'event-type-name' => event_type_name(Event::EVENT_TYPE_TOURNAMENT)} }
+          &nbsp;Tournament
+      %label.btn.btn-primary
+        %input{:type => 'radio', :name => 'event[event_type]', :value => Event::EVENT_TYPE_SEMINAR, :data => {:'event-type-name' => event_type_name(Event::EVENT_TYPE_SEMINAR)} }
+          &nbsp;Seminar
+  .form-group
+    %label.control-label{:for => "event[title]"} Title
+    = f.text_field :title, placeholder: 'eg. BJJ Beginners, Competition Class', class: 'form-control input-lg'
 
-        - if location.present?
-          .form-group.instructor
-            %label.control-label{:for => "event[instructor]"} Instructor
-            = f.select :instructor, location.instructors.map{|o| [o.name, o.id]}, {include_blank: true}, class: 'form-control input-md'
-        .form-group.instructor-all
-          %label.control-label{:for => "event[instructor]"} Instructor
-          = f.select :instructor, User.where(:belt_rank => 'black').asc(:name).map{|o| [o.name, o.id]}, {include_blank: true}, class: 'form-control input-md'
-        .form-group.organization
-          %label.control-label{:for => "event[organization]"} Organization
-          = f.select :organization, Organization.asc(:name).map{|o| [o.name, o.id]}, {include_blank: true}, class: 'form-control input-md'
-        .form-group
-          .row
-            .col-md-4
-              = render partial: 'location_events/start_picker'
-            .col-md-4
-              = render partial: 'location_events/end_picker'
-            .col-md-4.recurrence-controls
-              = render partial: 'location_events/recurrence_controls', locals: { f: f }
+  - if location.present?
+    .form-group.instructor
+      %label.control-label{:for => "event[instructor]"} Instructor
+      = f.select :instructor, location.instructors.map{|o| [o.name, o.id]}, {include_blank: true}, class: 'form-control input-md'
+  .form-group.instructor-all
+    %label.control-label{:for => "event[instructor]"} Instructor
+    = f.select :instructor, User.where(:belt_rank => 'black').asc(:name).map{|o| [o.name, o.id]}, {include_blank: true}, class: 'form-control input-md'
+  .form-group.organization
+    %label.control-label{:for => "event[organization]"} Organization
+    = f.select :organization, Organization.asc(:name).map{|o| [o.name, o.id]}, {include_blank: true}, class: 'form-control input-md'
+  .form-group
+    .row
+      .col-md-4
+        = render partial: 'location_events/start_picker'
+      .col-md-4
+        = render partial: 'location_events/end_picker'
+      .col-md-4.recurrence-controls
+        = render partial: 'location_events/recurrence_controls', locals: { f: f }

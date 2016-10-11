@@ -10,13 +10,28 @@ class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
     'keyup [name="event[title]"]': 'enableSubmit'
     'change [name="event[event_recurrence]"]': 'recurrenceChanged'
     'change [name="event[event_type]"]': 'eventTypeChanged'
+    'change [name="event[organization]"]': 'enableSubmit'
+    'change [name="event[instructor]"]':  'enableSubmit'
   }
+
   enableSubmit: ->
     btn = @$('button[type="submit"]')
-    if @hasTitle()
+    if @hasTitle() && @hasInstructorOrOrganization()
       btn.removeAttr('disabled')
+      return true
     else
       btn.attr('disabled', true)
+      return false
+
+  hasInstructorOrOrganization: ->
+    if @eventType == RollFindr.Models.Event.EVENT_TYPE_TOURNAMENT && @$('[name="event[organization]"]').val().length > 0
+      return true
+    else if @eventType == RollFindr.Models.Event.EVENT_TYPE_SEMINAR && @$('[name="event[instructor]"]').val().length > 0
+      return true
+    else if @eventType == RollFindr.Models.Event.EVENT_TYPE_CLASS
+      return true
+    else
+      return false
 
   hasTitle: ->
     @$('[name="event[title]"]').val().length > 0
@@ -45,15 +60,19 @@ class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
       data: $.param(data),
       success: (eventData)=>
         @$el.modal('hide')
-        $('.scheduler').fullCalendar('addEventSource', eventData)
-        toastr.success("Successfully added event to the calendar")
-        window.location = eventData.redirect_to if eventData.redirect_to?
+        if eventData.redirect_to?
+          window.location = eventData.redirect_to
+        else
+          $('.scheduler').fullCalendar('addEventSource', eventData)
+          toastr.success("Successfully added event to the calendar")
     })
 
   initialize: ->
     _.bindAll(this, 'enableSubmit', 'formSubmit', 'eventTypeChanged')
     RollFindr.Views.EventViewBase.prototype.setUiDefaults.call(this)
     RollFindr.Views.EventViewBase.prototype.initializePickers.call(this)
+
+    @eventType = parseInt(@$('[name="event[event_type]"]').val(), 10)
 
   showModalDialog: ->
     RollFindr.Views.EventViewBase.prototype.setUiDefaults.call(this)
@@ -75,6 +94,7 @@ class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
 
   eventTypeChanged: (e)->
     @eventTypeName = @$(e.currentTarget).data('event-type-name')
+    @eventType = parseInt(@$(e.currentTarget).val(), 10)
     allEventTypeNames = _.map @$('[name="event[event_type]"]'), (o)->
       $(o).data('event-type-name')
 
@@ -83,3 +103,4 @@ class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
       form.removeClass(className)
     form.addClass(@eventTypeName)
 
+    @enableSubmit()

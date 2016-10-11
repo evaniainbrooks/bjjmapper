@@ -1,8 +1,73 @@
 require 'spec_helper'
 require 'shared/tracker_context'
+require 'shared/timezonesvc_context'
 
 describe EventsController do
   include_context 'skip tracking'
+  include_context 'timezone service'
+  describe 'POST create' do
+    context 'when signed in' do
+      let(:user) { create(:user) }
+      let(:session_params) { { user_id: user.to_param } }
+      let(:event_params) do
+        {
+          format: 'json',
+          event: {
+            event_type: Event::EVENT_TYPE_CLASS,
+            starting: 10.hours.ago.utc.to_s,
+            ending: 9.hours.ago.utc.to_s,
+            title: 'test title',
+            description: 'test description'
+          }
+        }
+      end
+      context 'with location_id' do
+        let(:location) { create(:location) }
+        it 'creates an event at the existing location' do
+          expect do
+            post :create, event_params.merge(:location_id => location.to_param), session_params
+          end.to change { Location.find(location.to_param).events.count }.by(1)
+        end
+        it 'does not create a new location' do
+          location
+          expect do
+            post :create, event_params.merge(:location_id => location.to_param), session_params
+          end.to change { Location.count }.by(0)
+        end
+      end
+      context 'without location_id' do
+        let(:location_params) do
+          {
+            :location => {
+              :loctype => 1,
+              :city => 'New York',
+              :country => 'USA',
+              :title => 'New title',
+              :description => 'New description'
+            }
+          }
+        end
+        it 'creates an event at a new location' do
+          expect do
+            post :create, event_params.merge(location_params), session_params
+          end.to change { Event.count }.by(1)
+        end
+        it 'creates a new location' do
+          expect do
+            post :create, event_params.merge(location_params), session_params
+          end.to change { Location.count }.by(1)
+        end
+      end
+    end
+    context 'when not signed in' do
+      it 'returns not_authorized' do
+        expect do
+          post :create, { format: 'json' }, {}
+          response.status.should eq 401
+        end.to change { Event.count }.by(0)
+      end
+    end
+  end
   describe 'GET index' do
     let(:start_time) { 5.hours.ago.iso8601 }
     let(:end_date) { Time.now.iso8601 }

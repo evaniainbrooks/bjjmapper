@@ -2,31 +2,24 @@
 #= require backbone/models/map
 
 class RollFindr.Views.EventVenueWizardView extends Backbone.View
-  el: $('.wizard')
+  el: $('.page')
   createLocationView: null
   nearbyLocationsView: null
   map: null
   initialize: (options)->
-    @$el.wizard()
-
     _.bindAll(this,
       'addressChanged',
       'addressValueChanged',
       'fetchNearbyLocations',
       'fullAddressKeyUp',
       'initializeMapView',
-      'nextClicked',
-      'prevClicked',
       'searchAddress',
-      'titleChanged')
-
-    @$('.btn-next')
-      .attr('type', 'button')
-      .attr('disabled', true)
-
-    @$('.btn-prev').attr('type', 'button')
+      'useVenue',
+      'useAddress'
+    )
 
     @createEventView = new RollFindr.Views.CreateEventView(el: $('.create-event-dialog'))
+    @enableSubmit()
 
   events: {
     'change #address_options': 'addressChanged'
@@ -34,60 +27,29 @@ class RollFindr.Views.EventVenueWizardView extends Backbone.View
     'keyup [name="location[street]"]': 'addressValueChanged'
     'change [name="location[postal_code]"]': 'addressValueChanged'
     'keyup [name="location[postal_code]"]': 'addressValueChanged'
-    'change [name="location[title]"]' : 'titleChanged'
-    'keyup [name="location[title]"]' : 'titleChanged'
     'keyup #full_address': 'fullAddressKeyUp'
     'click [data-address-search]': 'searchAddress'
-    'click .btn-next': 'nextClicked'
-    'click .btn-prev': 'prevClicked'
+    'click .use-address': 'useAddress'
+    'click .use-venue': 'useVenue'
   }
 
-  addressValueChanged: ->
-    @setNextDisabled( !@hasAddress() )
-
-  prevClicked: ->
-    @$('.btn-next')
-      .removeAttr('type')
-      .attr('type', 'button')
-      .removeClass('btn-success')
-    @resetActionButtons()
-
-  resetActionButtons: ->
-    switch @currentStep()
-      when 1
-        @titleChanged() && @addressValueChanged()
-      when 2
-        setTimeout =>
-          @$('.btn-next')
-            .attr('type', 'submit')
-            .addClass('btn-success')
-        , 50
-
-  nextClicked: ->
-    if 'submit' != @$('.btn-next').attr('type')
-      @resetActionButtons()
-
-  setNextDisabled: (state)->
-    if state
-      @$('.btn-next').attr('disabled', true)
+  enableSubmit: ->
+    btn = @$('button[type="submit"]')
+    if @hasAddress() && @createEventView.enableSubmit()
+      btn.removeAttr('disabled')
     else
-      @$('.btn-next').removeAttr('disabled')
+      btn.attr('disabled', true)
 
-  titleChanged: ->
-    @setNextDisabled( !@isTitleEntered() )
+  addressValueChanged: ->
+    @enableSubmit()
 
   hasAddress: ->
     hasPostalCode = @hasValue('input[name="location[postal_code]"]')
     hasStreet = @hasValue('input[name="location[street]"]')
 
-    return (hasPostalCode && hasStreet)
+    hasLocationId = @hasValue('input[name="location_id"]')
 
-  currentStep: ->
-    selectedItem = @$el.wizard('selectedItem')
-    return selectedItem.step if selectedItem?
-
-  isTitleEntered: ->
-    @hasValue('input[name="location[title]"]', 2)
+    return (hasPostalCode && hasStreet) || hasLocationId
 
   hasValue: (selector, cmplength)->
     cmplength = 0 if undefined == cmplength
@@ -105,7 +67,7 @@ class RollFindr.Views.EventVenueWizardView extends Backbone.View
     title = $('option:selected', e.currentTarget).data('value')
     @initializeMapView(title, lat, lng)
     @fetchNearbyLocations(lat, lng)
-    @setNextDisabled( !@hasAddress() )
+    @enableSubmit()
 
   fullAddressKeyUp: (e)->
     if e.keyCode == 13
@@ -119,13 +81,13 @@ class RollFindr.Views.EventVenueWizardView extends Backbone.View
       }
       beforeSend: =>
         @$('.fa-search')
-          .attr('disabled', true)
-          .attr('class', 'fa fa-2x fa-refresh fa-spin')
+          .prop('disabled', true)
+          .prop('class', 'fa fa-2x fa-refresh fa-spin')
 
       complete: =>
         @$('.fa-refresh')
-          .attr('class', 'fa fa-2x fa-search')
-          .removeAttr('disabled')
+          .removeProp('disabled')
+          .prop('class', 'fa fa-2x fa-search')
 
       method: 'GET'
       success: (results)=>
@@ -148,10 +110,23 @@ class RollFindr.Views.EventVenueWizardView extends Backbone.View
           @$("[name='location[#{i}]']").val(results[0][i])
 
         @fetchNearbyLocations(results[0]['lat'], results[0]['lng'])
-        @initializeMapView(results[0]['address'], results[0]['lat'], results[0]['lng'])
-        @setNextDisabled( !@hasAddress() )
 
+        $('html, body').animate({
+          scrollTop: $('[name="addr-more"]').offset().top - $('.navbar').height()
+        }, 1000)
     })
+
+  useVenue: (e)->
+    venueId = $(e.currentTarget).data('id')
+    @$('[name="location_id"]').removeProp('disabled')
+    @$('[name="location_id"]').val(venueId)
+    @$('.editable').removeClass('edit-mode')
+    @enableSubmit()
+
+  useAddress: ->
+    @$('[name="location_id"]').prop('disabled', true)
+    @$('.editable').removeClass('edit-mode')
+    @enableSubmit()
 
   initializeMapView: (title, lat, lng)->
     center = new google.maps.LatLng(lat, lng)
@@ -175,4 +150,4 @@ class RollFindr.Views.EventVenueWizardView extends Backbone.View
       id: null
       coordinates: [lat, lng]
     })
-    @nearbyLocationsView = new RollFindr.Views.LocationNearbyView({ model: model })
+    @nearbyLocationsView = new RollFindr.Views.LocationNearbyView({ model: model, count: 3, template: 'templates/locations/nearby-event-venue' })

@@ -3,10 +3,13 @@
 class RollFindr.Views.LocationNearbyView extends Backbone.View
   el: $('.nearby-locations')
   template: JST['templates/locations/nearby']
-  initialize: ->
+  initialize: (options)->
     _.bindAll(this, 'render')
 
+    @template = JST[options.template] if options.template?
+    @count = options.count
     @collection = new RollFindr.Collections.NearbyLocationsCollection({
+      count: @count,
       lat: @model.get('coordinates')[0],
       lng: @model.get('coordinates')[1],
       reject: @model.get('id'),

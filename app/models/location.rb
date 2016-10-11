@@ -115,7 +115,6 @@ class Location
   has_and_belongs_to_many :favorited_by, class_name: 'User', index: true, inverse_of: :locations
 
   has_many :events
-  accepts_nested_attributes_for :events
   has_many :reviews, :order => :created_at.desc
 
   index :loctype => 1
@@ -242,6 +241,10 @@ class Location
 
   def ig_hashtag
     super || self.team.try(:ig_hashtag) || default_ig_hashtag
+  end
+
+  def has_generated_title?
+    return self.title == self.address_components.join('-')
   end
 
   private

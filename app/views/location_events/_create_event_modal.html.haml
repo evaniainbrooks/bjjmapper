@@ -10,7 +10,10 @@
             %i.fa.fa-calendar
             Create Event
         .modal-body
-          = render partial: 'location_events/create_event', locals: { f: f }
+          .container-fluid
+            .row
+              .col-md-12
+                = render partial: 'location_events/create_event', locals: { f: f }
         .modal-footer
           %button.btn.btn-default{:type => 'button', 'data-dismiss' => 'modal'} Cancel
           %button.btn.btn-success{:disabled => true, :type => 'submit'} Create Event

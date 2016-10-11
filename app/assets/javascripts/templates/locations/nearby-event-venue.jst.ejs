@@ -1,0 +1,28 @@
+<li class="card nearby-card">
+  <a class="thumbnail use-venue" href="#" data-id="<%= location.id %>">
+      <div class="pull-left">
+        <img class="img-tiny" src="<%= location.image %>" alt="<%= location.title %> logo" />
+      </div>
+      <div class="pull-left list-group-item-heading">
+        <h5 class="text-primary">
+          Meow <%= location.title %>
+        </h5>
+        <p class="small">
+          <%= location.team_name %>
+        </p>
+        <p>
+          <span class="small text-muted">
+            <%= location.street %>
+          </span>
+        </p>
+      </div>
+      <div class="pull-right direction">
+        <i class="center-block fa-3x fa fa-arrow-up direction-<%= location.bearing_direction %>"></i>
+        <p class="text-center small text-info distance">
+          <%= location.bearing_name %> (<%= location.distance %>)
+        </p>
+      </div>
+    <div class="clear"></div>
+  </a>
+</li>
+

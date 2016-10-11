@@ -65,12 +65,11 @@
     %hr/
     .row
       .col-md-3.display-field
-        %h3 Venue
         %a{:name => 'location'}
         - if location.loctype == Location::LOCATION_TYPE_ACADEMY
           = link_to location do
             %h4.name= location.title
-        - else
+        - elsif !location.has_generated_title?
           %h4.name= location.title
         = link_to map_path(lat: location.lat, lng: location.lng, ref: 'event_dp') do
           %span.fa.fa-map-marker

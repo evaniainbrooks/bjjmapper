@@ -4,123 +4,87 @@
 = content_for(:scripts) do
   = javascript_include_tag "//www.fuelcdn.com/fuelux/3.4.0/js/fuelux.min.js"
 
-.container.page.create-location-dialog.fuelux
-  %h1
-    %i.fa.fa-map-marker
-    Create an Event
-  = form_for(Event.new, html: { class: 'form wizard' } ) do |f|
-    %ul.steps
-      %li.active{'data-step' => 1}
-        %span.badge 1
-        Name
-        %span.chevron
-      %li{'data-step' => 2}
-        %span.badge 2
-        Location
-        %span.chevron
-      %li{'data-step' => 3}
-        %span.badge 3
-        Contact Info
-        %span.chevron
-    .actions
-      %button.btn.btn-default.btn-prev{:disabled => true}
-        %span.fa.fa-arrow-left
-        Prev
-      %button.btn.btn-default.btn-next{:'data-last' => 'Finish'}
-        Next
-        %span.fa.fa-arrow-right
-    .step-content
-      .step-pane.active.alert{'data-step' => 1}
-        .row
-          .col-md-8.col-md-offset-2
-            %img.logo.img-border.center-block.edit-image{:width => 100, :height => 100, 'data-default-src' => '//storage.googleapis.com/bjjmapper/academy-default-100.png', :alt => 'logo', :src => '//storage.googleapis.com/bjjmapper/academy-default-100.png'}/
-            %fieldset
-              .form-group
-                %label.control-label{:for => "location[title]"} Name
-                = f.text_field :title, placeholder: 'The name of the academy', autofocus: true, class: 'form-control input-lg'
-              .form-group
-      .step-pane.alert.editable{'data-step' => 2}
-        .row.display-field
-          .col-md-offset-2.col-md-8
-            %p.text-info.small Please enter at least the street and postal/zip code.
-            .form-group
-              %label.control-label Address
-              .input-group
-                = text_field_tag('full_address', '', placeholder: 'eg. 123 Fourth St, Edmonton', class: 'street form-control input-lg')
-                %a.btn.btn-default.input-group-addon{'data-address-search' => true}
-                  %span.fa-2x.fa.fa-search
 
-        .row.edit-field
-          .col-md-offset-2.col-md-8
-            %p.text-info.small Please enter at least the street and postal/zip code.
-            .form-group
-              %label.control-label Address
-              .input-group
-                = select_tag('address_options', '', class: 'form-control input-lg')
-                %a.btn.btn-default.input-group-addon{'data-cancel-edit' => true}
-                  %span.fa-2x.fa.fa-close
-        .row.edit-field
-          .col-md-12
-            %hr/
-            %h4 Refine Address
-        .row.edit-field
-          .col-md-6
-            = f.label :street, 'Street *', class: 'small'
-            = f.text_field :street, class: 'form-control input-sm'
-            = f.label :city, class: 'small'
-            = f.text_field :city, class: 'form-control input-sm'
-            = f.label :postal_code, 'Postal code *', class: 'small'
-            = f.text_field :postal_code, class: 'form-control input-sm'
-          .col-md-6
-            = f.label :state, class: 'small'
-            = f.text_field :state, class: 'form-control input-sm'
-            = f.label :country, class: 'small'
-            = f.text_field :country, class: 'form-control input-sm'
-            %br/
-            %span.pull-left.small.clear *Denotes required field
-        .row.edit-field
-          .col-md-6
-            %hr/
-            %h4 Map
-            %div.map-canvas{:style => 'height: 300px'}
-          .col-md-6
-            %hr/
-            %h4 Nearby Academies
-            %div.nearby-locations
-              .empty-message
-                %i.text-muted There are no nearby academies.
-              .content
-                %ul.list-unstyled.items
-      .step-pane.alert{'data-step' => 3}
-        .row.edit-field
-          .col-md-8.col-md-offset-2
-            %p.text-info.small Please enter at least once piece of contact information.
-            .form-group
-              = f.label :phone, class: 'control-label'
-              .input-group
-                %span.input-group-addon
-                  %span.fa.fa-2x.fa-phone
-                = f.text_field :phone, class: 'input-lg form-control'
-            .form-group
-              = f.label :email, class: 'control-label'
-              .input-group
-                %span.input-group-addon
-                  %span.fa.fa-2x.fa-envelope
-                = f.text_field :email, class: 'input-lg form-control'
-            .form-group
-              = f.label :website, class: 'control-label'
-              .input-group
-                %span.input-group-addon
-                  %span.fa.fa-external-link.fa-2x
-                = f.text_field :website, class: 'input-lg form-control'
-            .form-group
-              = f.label :facebook, class: 'control-label'
-              .input-group
-                %span.input-group-addon
-                  %span.fa.fa-facebook.fa-2x
-                = f.text_field :facebook, class: 'input-lg form-control'
+- location = Location.new
+- event = location.events.new
+.container.page.create-event-dialog.fuelux
+  .row.text-center.center-block
+    %h1
+      %i.fa.fa-calendar
+      Create a Tournament/Seminar
+  = form_for(event, html: { class: "editable form #{event_type_name(Event::EVENT_TYPE_TOURNAMENT)}" } ) do |f|
+    .row
+      .col-md-offset-2.col-md-8
+        %input{type: 'hidden', name: 'location_id'}/
+        = fields_for :event, event do |ff|
+          = render partial: 'location_events/create_event', locals: { f: ff }
+        = fields_for :location, location do |ff|
+          = ff.hidden_field :loctype, value: Location::LOCATION_TYPE_EVENT_VENUE, class: 'form-control input-sm'
+    .row.display-field
+      .col-md-offset-2.col-md-8
+        .form-group
+          %label.control-label Address
+          .input-group
+            = text_field_tag('full_address', '', placeholder: 'eg. 123 Fourth St, Edmonton', class: 'street form-control input-lg')
+            %a.btn.btn-default.input-group-addon{'data-address-search' => true}
+              %span.fa-2x.fa.fa-search
+    .row.edit-field
+      .col-md-offset-2.col-md-8
+        .form-group
+          %label.control-label Address
+          .input-group
+            = select_tag('address_options', '', class: 'form-control input-lg')
+            %a.btn.btn-default.input-group-addon{'data-cancel-edit' => true}
+              %span.fa-2x.fa.fa-close
+    .row.edit-field
+      .col-md-offset-1.col-md-10
+        %hr/
+        %a{:name => 'addr-more'}
+          %h4 Refine Address
+    .row.edit-field
+      .col-md-offset-1.col-md-3
+        = fields_for :location, location do |ff|
+          = ff.label :street, 'Street *', class: 'small'
+          = ff.text_field :street, class: 'form-control input-sm'
+          = ff.label :city, class: 'small'
+          = ff.text_field :city, class: 'form-control input-sm'
+          = ff.label :postal_code, 'Postal code *', class: 'small'
+          = ff.text_field :postal_code, class: 'form-control input-sm'
+      .col-md-3
+        = fields_for :location, location do |ff|
+          = ff.label :state, class: 'small'
+          = ff.text_field :state, class: 'form-control input-sm'
+          = ff.label :country, class: 'small'
+          = ff.text_field :country, class: 'form-control input-sm'
+        %br/
+        %span.pull-left.small.clear *Denotes required field
+        %br/
+        %br/
+        %a.pull-right.btn.btn-lg.btn-info.use-address{:href => '#'}
+          %span.fa.fa-check
+          Use Address
+        %a.pull-right.btn.btn-lg.btn-default{'data-cancel-edit' => true}
+          Cancel
+      .col-md-4
+        %h5 Use Existing Venue
+        %div.nearby-locations
+          .empty-message
+            %i.text-muted There are no existing venues nearby.
+          .content
+            %ul.list-unstyled.items
+    .row.edit-field
+      .col-md-offset-1.col-md-10
+        %hr/
+        %h4 Map
+        %div.map-canvas{:style => 'height: 250px'}
+    .row.display-field
+      .col-md-offset-2.col-md-8
+        %button.btn.btn-success.pull-right{:type => :submit}
+          %span.fa.fa-calendar
+          Create Event
 
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->
-      wizardView = new RollFindr.Views.LocationWizardView()
+      wizardView = new RollFindr.Views.EventVenueWizardView()
+

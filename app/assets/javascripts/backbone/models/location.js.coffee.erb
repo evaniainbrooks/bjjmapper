@@ -70,6 +70,7 @@ class RollFindr.Collections.NearbyLocationsCollection extends Backbone.Collectio
     @lng = options.lng
     @reject = options.reject
     @location_type = options.location_type || []
+    @count = options.count
 
   url: =>
     Routes.nearby_locations_path
@@ -77,6 +78,7 @@ class RollFindr.Collections.NearbyLocationsCollection extends Backbone.Collectio
       lng: @lng
       reject: @reject
       location_type: @location_type
+      count: @count
 
 class RollFindr.Collections.RecentLocationsCollection extends Backbone.Collection
   initialize: (options)->

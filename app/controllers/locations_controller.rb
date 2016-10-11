@@ -1,5 +1,5 @@
 class LocationsController < ApplicationController
-  include EventsHelper
+  include LocationsHelper
 
   before_action :set_location, only: [:favorite, :schedule, :destroy, :show, :update, :move, :unlock]
   before_action :redirect_legacy_bsonid, only: [:favorite, :schedule, :destroy, :show, :update, :move, :unlock]
@@ -111,36 +111,22 @@ class LocationsController < ApplicationController
   end
 
   def wizard
-    type = params.fetch(:type, Location::LOCATION_TYPE_ACADEMY).to_i
-    actions = { Location::LOCATION_TYPE_ACADEMY => :academy_wizard, Location::LOCATION_TYPE_EVENT_VENUE => :event_venue_wizard }
     tracker.track('showLocationWizard')
     respond_to do |format|
-      format.html { render actions[type] }
+      format.html 
     end
   end
 
   def create
     @location = Location.create(create_params)
-    Time.use_zone(@location.timezone) do
-      @location.events << Event.create(event_create_params)
-    end if params.key?(:event)
-
-    @redirect_path = if @location.event_venue? && @location.events.size > 0
-      location_event_path(@location, @location.events.first, create: 1)
-    elsif @location.event_venue?
-      schedule_location_path(@location, edit: 1, create: 1)
-    else
-      location_path(@location, edit: 1, create: 1)
-    end
 
     tracker.track('createLocation',
-      location: @location.as_json({}),
-      redirect_path: @redirect_path
+      location: @location.as_json({})
     )
 
     respond_to do |format|
       format.json
-      format.html { redirect_to @redirect_path }
+      format.html { redirect_to location_path(@location, create: 1, edit: 1) }
     end
   end
 
@@ -255,10 +241,7 @@ class LocationsController < ApplicationController
   end
 
   def create_params
-    p = params.require(:location).permit(*Location::CREATE_PARAMS_WHITELIST)
-    p[:coordinates] = JSON.parse(p[:coordinates]) if p[:coordinates].present?
-    p[:modifier] = current_user if signed_in?
-    p
+    location_create_params
   end
 
   def redirect_legacy_bsonid

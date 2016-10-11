@@ -18,6 +18,12 @@ class LocationEventsController < ApplicationController
   def create
     event = Event.new(event_create_params)
     @location.events << event
+    
+    tracker.track('createEvent',
+      location: @location.to_param,
+      event: @event.to_json({}),
+      source: 'location_events'
+    )
 
     respond_to do |format|
       format.json do
