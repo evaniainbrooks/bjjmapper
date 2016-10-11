@@ -32,7 +32,7 @@ describe "Models.NearbyLocationsCollection", ->
     subject.reject.should.equal(testReject)
 
   it 'has a url', ->
-    subject.url().should.equal(Routes.nearby_locations_path({lat: testLat, lng: testLng, reject: testReject, location_type: [locationType], count: count})
+    subject.url().should.equal(Routes.nearby_locations_path({lat: testLat, lng: testLng, reject: testReject, location_type: [locationType], count: count}))
 
 describe "Models.RecentLocationsCollection", ->
   testCount = 50
