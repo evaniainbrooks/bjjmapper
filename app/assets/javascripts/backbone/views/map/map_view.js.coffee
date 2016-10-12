@@ -169,34 +169,6 @@ class RollFindr.Views.MapView extends Backbone.View
         @map.setCenter(newCenter)
     })
 
-  fetchGlobal: ->
-    @model.get('locations').fetch({
-      data:
-        event_type: @model.get('event_type')
-        location_type: @model.get('location_type')
-        query: @model.get('query')
-        location: @model.get('location')
-      complete: =>
-        firstLocation = @model.get('locations').models[0]
-        if firstLocation?
-          coords = firstLocation.get('coordinates')
-          newCenter = new google.maps.LatLng(coords[0], coords[1])
-
-          @model.set('center', coords)
-          @map.setCenter(newCenter)
-
-          @$('.refresh-button .fa').removeClass('fa-spin')
-        else if @model.get('location')?
-          @setCenterGeocode =>
-            @fetchViewport()
-        else if !@map.getCenter()?
-          toastr.warning('Your search query did not return any results', 'Oops')
-          @setCenterFromModelAndRefresh()
-
-      error: =>
-        toastr.error('Failed to refresh map', 'Error')
-    })
-
   clearSearch: ->
     @model.set('query', null)
     @model.set('location', null)
@@ -219,18 +191,47 @@ class RollFindr.Views.MapView extends Backbone.View
     @model.set('lng', lng)
     @$('.refresh-button .fa').addClass('fa-spin')
 
-    @model.get('locations').fetch({
-      data:
-        location_type: @model.get('location_type')
+    @fetchLocations({
+      location_type: @model.get('location_type')
+      event_type: @model.get('event_type')
+      lat: lat
+      lng: lng
+      distance: distance
+      query: @model.get('query')
+      location: @model.get('location')
+    })
+
+  fetchGlobal: ->
+      data = {
         event_type: @model.get('event_type')
-        lat: lat
-        lng: lng
-        distance: distance
+        location_type: @model.get('location_type')
         query: @model.get('query')
         location: @model.get('location')
+      }
+      @fetchLocations data, =>
+        firstLocation = @model.get('locations').models[0]
+        if firstLocation?
+          coords = firstLocation.get('coordinates')
+          newCenter = new google.maps.LatLng(coords[0], coords[1])
+
+          @model.set('center', coords)
+          @map.setCenter(newCenter)
+
+          @$('.refresh-button .fa').removeClass('fa-spin')
+        else if @model.get('location')?
+          @setCenterGeocode =>
+            @fetchViewport()
+        else if !@map.getCenter()?
+          toastr.warning('Your search query did not return any results', 'Oops')
+          @setCenterFromModelAndRefresh()
+
+  fetchLocations: (args, completeCallback)->
+    @model.get('locations').fetch({
+      data: args
       complete: =>
         @$('.refresh-button .fa').removeClass('fa-spin')
+        toastr.success("Found #{@model.get('locations').size()} locations", 'Map refreshed')
+        completeCallback() if completeCallback?
       error: =>
         toastr.error('Failed to refresh map', 'Error')
     })
-
