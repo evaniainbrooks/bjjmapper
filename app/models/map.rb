@@ -4,7 +4,7 @@ class Map
   ZOOM_CITY = 9
   ZOOM_HOMEPAGE = 7
 
-  DEFAULT_MIN_ZOOM = 6
+  DEFAULT_MIN_ZOOM = 5
   GLOBAL_MIN_ZOOM = 4
 
   attr_accessor :lat, :lng

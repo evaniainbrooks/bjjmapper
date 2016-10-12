@@ -228,9 +228,10 @@ class RollFindr.Views.MapView extends Backbone.View
   fetchLocations: (args, completeCallback)->
     @model.get('locations').fetch({
       data: args
+      success: =>
+        toastr.success("Found #{@model.get('locations').size()} locations", 'Map refreshed')
       complete: =>
         @$('.refresh-button .fa').removeClass('fa-spin')
-        toastr.success("Found #{@model.get('locations').size()} locations", 'Map refreshed')
         completeCallback() if completeCallback?
       error: =>
         toastr.error('Failed to refresh map', 'Error')
