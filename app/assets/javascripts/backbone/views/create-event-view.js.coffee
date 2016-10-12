@@ -34,7 +34,8 @@ class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
       return false
 
   hasTitle: ->
-    @$('[name="event[title]"]').val().length > 0
+    title = @$('[name="event[title]"]')
+    return title && title.val().length > 0
 
   formSubmit: (e)->
     e.preventDefault()
