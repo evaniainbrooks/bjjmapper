@@ -16,7 +16,7 @@ class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
 
   enableSubmit: ->
     btn = @$('button[type="submit"]')
-    if @hasTitle() && @hasInstructorOrOrganization()
+    if @hasTitle() && @hasInstructorOrOrganization() && @hasStartingEnding()
       btn.removeAttr('disabled')
       return true
     else
@@ -73,6 +73,7 @@ class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
     RollFindr.Views.EventViewBase.prototype.initializePickers.call(this)
 
     @eventType = parseInt(@$('[name="event[event_type]"]').val(), 10)
+    @enableSubmit()
 
   showModalDialog: ->
     RollFindr.Views.EventViewBase.prototype.setUiDefaults.call(this)

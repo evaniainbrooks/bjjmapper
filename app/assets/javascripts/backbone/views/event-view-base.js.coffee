@@ -44,6 +44,9 @@ class RollFindr.Views.EventViewBase extends Backbone.View
     @endPicker.on "dp.change", (e)=>
       @startPicker.data("DateTimePicker").setMaxDate(e.date)
 
+  hasStartingEnding: ->
+    $('[name="event[starting]"]').val() && $('[name="event[ending]"]').val() && $('[name="event[starting]"]').val().length > 0 && $('[name="event[ending]"]').val().length > 0
+
   recurrenceChanged: (e)->
     recurrence = $(e.currentTarget).val()
     if parseInt(recurrence, 10) > 2
