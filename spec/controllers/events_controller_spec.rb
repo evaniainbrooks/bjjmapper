@@ -69,10 +69,11 @@ describe EventsController do
     end
   end
   describe 'GET upcoming' do
-    let(:before_event) { create(:event, event_type: Event::EVENT_TYPE_TOURNAMENT, starting: 1.year.ago, ending: 1.year.ago + 1.day) }
-    let(:upcoming_event) { create(:event, event_type: Event::EVENT_TYPE_TOURNAMENT, starting: Time.now + 5.days, ending: Time.now + 6.days) }
-    let(:upcoming_class) { create(:event, event_type: Event::EVENT_TYPE_CLASS, starting: Time.now + 5.days, ending: Time.now + 6.days) }
-    before { before_event, upcoming_event, upcoming_class }
+    before do
+      create(:event, event_type: Event::EVENT_TYPE_TOURNAMENT, starting: 1.year.ago, ending: 1.year.ago + 1.day)
+      create(:event, event_type: Event::EVENT_TYPE_TOURNAMENT, starting: Time.now + 5.days, ending: Time.now + 6.days)
+      create(:event, event_type: Event::EVENT_TYPE_CLASS, starting: Time.now + 5.days, ending: Time.now + 6.days)
+    end
     it 'returns all upcoming events that are not a class' do
       get :upcoming, { format: 'json' }, {}
 

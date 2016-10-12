@@ -54,8 +54,11 @@
           = link_to directory_segment_path(country: country.name), class: 'small block', title: "List of BJJ gyms in #{country.name}" do
             Brazilian Jiu-Jitsu academies in
             %strong= country.name
+  %hr/
   .row
-    .col-md-8.col-md-offset-2.hidden-sm.hidden-xs
+    .col-md-4
+      .fb-page{"data-colorscheme" => "light", "data-header" => "false", "data-href" => "https://www.facebook.com/BJJMapper", "data-show-border" => "true", "data-show-faces" => "false", "data-show-posts" => "false"}
+    .col-md-8.hidden-sm.hidden-xs
       %br/
       = render partial: 'application/google_adsense_banner'
 
