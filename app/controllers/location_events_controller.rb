@@ -15,6 +15,8 @@ class LocationEventsController < ApplicationController
 
   around_filter :set_location_tz
 
+  helper_method :created?
+
   def create
     event = Event.new(event_create_params)
     @location.events << event
@@ -153,5 +155,9 @@ private
       :event_type => Event::EVENT_TYPE_ALL,
       :refresh => 0
     )
+  end
+
+  def created?
+    return params.fetch(:create, 0).to_i.eql?(1)
   end
 end

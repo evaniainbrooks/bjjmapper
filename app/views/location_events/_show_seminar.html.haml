@@ -1,88 +1,87 @@
 = content_for(:title) do
   = "Seminar information for #{event.title} at #{event.location.title}"
 
-.page.container.show-event
-  = form_for([location, event], html: { class: 'form ' + edit_mode_classes }) do |f|
-    .row
-      .col-md-10
-        - country_name = country_name_for(event.location.country)
-        %ol.breadcrumb
-          %li
-            %a{href: root_path} Home
-          %li
-            %a{href: directory_index_path(ref: 'event_bc', focus: 'event')} BJJ Event Directory
-          %li
-            %a{href: directory_index_path(country_name, ref: 'event_bc', focus: 'event')}= country_name
-          %li
-            %a{href: directory_index_path(country_name, location.city, ref: 'event_bc', focus: 'event')}= location.city
-          %li.active= event.title
-      .col-md-2
-        .display-field
-          -#%button.btn.btn-default.btn-sm{:type => "button", 'data-begin-edit' => true} Edit
-          %button.btn.btn-default.btn-sm{'data-report-item' => true}
-            %span.report Report
-        .edit-field
-          %button.btn.btn-default.btn-sm{:'data-cancel-edit' => true } Cancel
-          %button.btn.btn-primary.btn-sm{:type => 'submit'} Save
-    .row
-      .col-md-12
-        = render partial: 'locations/edit_success_message' if edit_success?
-    .row
-      .col-md-2.text-center.center-block
-        %img{:src => event.image, :alt => event.title}/
-      .col-md-6.display-field
-        %h1
-          = event.title
-          %br/
-          %small
-            hosted at
-            = link_to event.location.title, location_path(event.location)
-        %p.text-info= event.schedule.try(:to_s)
-        %p.display-field= event.description
-      .col-md-4.display-field.instructors
-        %h3.pull-left Instructor
-        %a{:name => 'instructor'}
-        .clear.items
-          %i.text-muted We don't know who is holding this seminar
-      .col-md-8.edit-field
-        .edit-field
-          = f.label :title, class: 'small'
-          = f.text_field :title, class: 'form-control input-lg'
-          = f.label :instructor, class: 'small'
-          = f.select :instructor, options_for_select(location.instructors.map{|o| [o.name, o.id]}, event.instructor.try(:to_param)), {include_blank: true}, class: 'form-control input-md'
-    .row.edit-field
-      .form-group.col-md-4.col-md-offset-2.small
-        = render partial: 'location_events/start_picker'
-      .form-group.col-md-4.small
-        = render partial: 'location_events/end_picker'
-    .row.edit-field
-      .form-group.col-md-8.col-md-offset-2.small
-        = render partial: 'location_events/recurrence_controls', locals: { f: f }
-    .row.edit-field
-      .col-md-8.col-md-offset-2
-        %p
-          = f.label :description, class: 'small'
-          = f.text_area :description, class: 'input-md form-control'
-    .row.edit-field
-      .col-md-12
-        %h3 Metadata
-      .col-md-12
-        %pre.small= JSON.pretty_generate(event.as_json({}))
+= form_for([location, event], html: { class: 'form ' + edit_mode_classes }) do |f|
+  .row
+    .col-md-10
+      - country_name = country_name_for(event.location.country)
+      %ol.breadcrumb
+        %li
+          %a{href: root_path} Home
+        %li
+          %a{href: directory_index_path(ref: 'event_bc', focus: 'event')} BJJ Event Directory
+        %li
+          %a{href: directory_index_path(country_name, ref: 'event_bc', focus: 'event')}= country_name
+        %li
+          %a{href: directory_index_path(country_name, location.city, ref: 'event_bc', focus: 'event')}= location.city
+        %li.active= event.title
+    .col-md-2
+      .display-field
+        -#%button.btn.btn-default.btn-sm{:type => "button", 'data-begin-edit' => true} Edit
+        %button.btn.btn-default.btn-sm{'data-report-item' => true}
+          %span.report Report
+      .edit-field
+        %button.btn.btn-default.btn-sm{:'data-cancel-edit' => true } Cancel
+        %button.btn.btn-primary.btn-sm{:type => 'submit'} Save
+  .row
+    .col-md-12
+      = render partial: 'locations/edit_success_message' if edit_success?
+  .row
+    .col-md-2.text-center.center-block
+      %img{:src => event.image, :alt => event.title}/
+    .col-md-6.display-field
+      %h1
+        = event.title
         %br/
-      .col-md-12
-        .pull-right
-          %a.delete-field.btn.btn-danger.btn-md{:type => 'button',
-            :data => { :method => :delete,
-                       :url => location_event_path(location, event),
-                       :returnto => schedule_location_path(location, deleted: 1, edit: 1),
-                       :title => 'Are you sure you want to delete this event?',
-                       :body => "You are performing this action as <b>#{current_user.try(:name)}</b>. press 'confirm' to permanently delete all occurrences of this event. note that this action cannot be un-done." } }
-            %i.fa.fa-trash
-            Delete Event
+        %small
+          hosted at
+          = link_to event.location.title, location_path(event.location)
+      %p.text-info= event.schedule.try(:to_s)
+      %p.display-field= event.description
+    .col-md-4.display-field.instructors
+      %h3.pull-left Instructor
+      %a{:name => 'instructor'}
+      .clear.items
+        %i.text-muted We don't know who is holding this seminar
+    .col-md-8.edit-field
+      .edit-field
+        = f.label :title, class: 'small'
+        = f.text_field :title, class: 'form-control input-lg'
+        = f.label :instructor, class: 'small'
+        = f.select :instructor, options_for_select(location.instructors.map{|o| [o.name, o.id]}, event.instructor.try(:to_param)), {include_blank: true}, class: 'form-control input-md'
+  .row.edit-field
+    .form-group.col-md-4.col-md-offset-2.small
+      = render partial: 'location_events/start_picker'
+    .form-group.col-md-4.small
+      = render partial: 'location_events/end_picker'
+  .row.edit-field
+    .form-group.col-md-8.col-md-offset-2.small
+      = render partial: 'location_events/recurrence_controls', locals: { f: f }
+  .row.edit-field
+    .col-md-8.col-md-offset-2
+      %p
+        = f.label :description, class: 'small'
+        = f.text_area :description, class: 'input-md form-control'
+  .row.edit-field
+    .col-md-12
+      %h3 Metadata
+    .col-md-12
+      %pre.small= JSON.pretty_generate(event.as_json({}))
+      %br/
+    .col-md-12
+      .pull-right
+        %a.delete-field.btn.btn-danger.btn-md{:type => 'button',
+          :data => { :method => :delete,
+                     :url => location_event_path(location, event),
+                     :returnto => schedule_location_path(location, deleted: 1, edit: 1),
+                     :title => 'Are you sure you want to delete this event?',
+                     :body => "You are performing this action as <b>#{current_user.try(:name)}</b>. press 'confirm' to permanently delete all occurrences of this event. note that this action cannot be un-done." } }
+          %i.fa.fa-trash
+          Delete Event
 
-          &nbsp;&nbsp;
-          %button.btn.btn-default.btn-md{:type => 'button', 'data-cancel-edit' => true} Cancel Editing
-          %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes
+        &nbsp;&nbsp;
+        %button.btn.btn-default.btn-md{:type => 'button', 'data-cancel-edit' => true} Cancel Editing
+        %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes
   
 = content_for(:scripts) do
   :coffeescript

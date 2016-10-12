@@ -1,7 +1,13 @@
-- case @event.event_type
-- when Event::EVENT_TYPE_CLASS
-  = render partial: 'show_event'
-- when Event::EVENT_TYPE_SEMINAR
-  = render partial: 'show_seminar'
-- when Event::EVENT_TYPE_TOURNAMENT
-  = render partial: 'show_tournament'
+.container.page.show-event
+  .row
+    .col-md-12
+      = render partial: 'create_message' if created?
+      = render partial: 'locations/edit_success_message' if edit_success?
+
+  - case event.event_type
+  - when Event::EVENT_TYPE_CLASS
+    = render partial: 'show_event'
+  - when Event::EVENT_TYPE_SEMINAR
+    = render partial: 'show_seminar'
+  - when Event::EVENT_TYPE_TOURNAMENT
+    = render partial: 'show_tournament'
