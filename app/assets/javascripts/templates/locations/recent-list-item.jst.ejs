@@ -1,14 +1,14 @@
 <div data-id="<%= location.id %>" class="location-list-item list-group-item">
-  <p class="timestamp small text-right pull-right text-muted"><%= location.created_at %></p>
-  <img width="66" height="66" src="<%= location.image %>" alt="<% location.title %> logo" class="logo pull-left" />
+  <a class="pull-left text-primary" title="<%= location.title %>" href="<%= Routes.location_path(location, {ref: 'recent_l'}) %>"><h4 class="list-group-item-heading"><%= location.title %></h4></a>
+  <div class="clear clear-fix"></div>
+  <img width="50" height="50" src="<%= location.image %>" alt="<% location.title %> logo" class="logo pull-left" />
   <div class="content">
-    <a class="text-primary" title="<%= location.title %>" href="<%= Routes.location_path(location, {ref: 'recent_l'}) %>"><h4 class="list-group-item-heading"><%= location.title %></h4></a>
-    <span class="team-title strong small"><%= location.team_name %></span>
+    <span class="pull-left team-title strong small"><%= location.team_name %></span>
+    <p class="timestamp small text-right pull-right text-muted"><%= location.created_at %></p>
     <br />
     <a href="<%= Routes.map_path({lat: location.lat, lng: location.lng, ref: 'recent_l'}) %>" title="See <%= location.title %> on the map">
       <span class="fa fa-map-marker"></span>
       <span class="small address"><%= location.address %></span>
-      <span class="small">(view on map)</span>
     </a>
   </div>
   <div class="clear"></div>

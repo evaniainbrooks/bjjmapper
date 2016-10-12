@@ -16,6 +16,14 @@ class MapLocationDecorator < LocationDecorator
     MapLocationsDecorator
   end
 
+  def image
+    if loctype == Location::LOCATION_TYPE_ACADEMY
+      super
+    elsif has_events?
+      return events.first.image
+    end
+  end
+
   def title
     if loctype == Location::LOCATION_TYPE_ACADEMY
       return object.title

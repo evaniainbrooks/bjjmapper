@@ -51,6 +51,7 @@ Rails.application.routes.draw do
 
   resources :events, :only => [:index, :create] do
     get :wizard, on: :collection
+    get :upcoming, on: :collection
   end
 
   root 'application#homepage'

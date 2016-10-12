@@ -229,6 +229,12 @@ body > .container {
 }
 
 .homepage {
+  h3 {
+    text-transform: uppercase;
+    font-size: 125%;
+    font-weight: bold;
+  }
+
   .title-btn {
     margin-top: 15px; 
   }

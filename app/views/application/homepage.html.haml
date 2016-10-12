@@ -10,10 +10,11 @@
         %span.fa.fa-search-plus
         See larger map
 
-      .map-canvas.clear{:style => 'height: 350px'}
-      .map-list-view
-        .location-list
-          = render partial: 'locations/map_list', locals: { show_create: false }
+      .map
+        .map-canvas.clear{:style => 'height: 350px'}
+        .map-list-view
+          .location-list
+            = render partial: 'locations/map_list', locals: { show_create: false }
       %a{:href => map_path(lat: @map[:lat], lng: @map[:lng], :ref => 'homepage'), :title => 'Academy Map'}
         %h4.text-center
           %span.fa.fa-search-plus
@@ -37,11 +38,11 @@
 
       .recent-locations.location-list.clear
     .col-md-3
-      %h3 &nbsp;
-      .fb-page{"data-colorscheme" => "light", "data-header" => "false", "data-href" => "https://www.facebook.com/BJJMapper", "data-show-border" => "true", "data-show-faces" => "true", "data-show-posts" => "true"}
-      %br/
-      %br/
-      = render partial: 'google_adsense'
+      %h3.pull-left Upcoming Events
+      .upcoming-events.location-list.clear
+        .items
+        .empty-message
+          %i.text-muted There are no upcoming events
   .row
     .col-md-12
       %h3 Around The World
@@ -62,7 +63,8 @@
   :coffeescript
     $(document).ready ->
       recentView = new RollFindr.Views.RecentLocationsView()
+      upcomingView = new RollFindr.Views.UpcomingEventsView()
 
       mapModel = new RollFindr.Models.Map(#{render_json(@map)})
-      mapView = new RollFindr.Views.MapView({el: $('.homepage'), model: mapModel})
+      mapView = new RollFindr.Views.MapView({el: $('.map'), model: mapModel})
 

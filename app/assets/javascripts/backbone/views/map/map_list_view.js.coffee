@@ -1,5 +1,5 @@
 class RollFindr.Views.MapListView extends Backbone.View
-  el: $('.location-list')
+  el: $('.map-list-view')
   tagName: 'div'
   academyTemplate: JST['templates/map/academy-list-item']
   eventTemplate: JST['templates/map/event-list-item']
@@ -14,9 +14,9 @@ class RollFindr.Views.MapListView extends Backbone.View
 
   render: (filteredCount)->
     if @model.get('locations').length == 0
-      @$el.addClass('empty')
+      @$('.location-list').addClass('empty')
     else
-      @$el.removeClass('empty')
+      @$('.location-list').removeClass('empty')
 
     if (undefined != filteredCount)
       @$('.list-count').text("Displaying #{@model.get('locations').length} locations (#{filteredCount} filtered)")

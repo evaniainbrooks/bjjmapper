@@ -6,6 +6,27 @@ describe MapLocationDecorator do
     return default_params.deep_merge(context: p)
   end
 
+  describe '.image' do
+    context 'when academy' do
+      let(:img) { 'someimg' }
+      let(:location) { build(:location, image: img) }
+      subject { MapLocationDecorator.decorate(location, default_params) }
+      it 'is the image of the academy' do 
+        subject.image.should eq img
+      end
+    end
+    context 'with events' do
+      let(:img) { 'someimg' }
+      let(:event_venue) { build(:event_venue) }
+      let(:organization) { build(:organization, image: img) }
+      let(:event) { build(:event, location: event_venue, title: title, organization: organization) }
+      subject { MapLocationDecorator.decorate(event_venue, params({ events: [event] })) }
+      it 'is the image of the first event' do
+        subject.image.should eq img
+      end
+    end
+  end
+
   describe '.title' do
     context 'when there is 1 event' do
       let(:title) { 'some title' }

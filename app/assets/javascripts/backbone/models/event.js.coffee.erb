@@ -32,7 +32,7 @@ class RollFindr.Models.Event extends Backbone.Model
 
 class RollFindr.Collections.EventsCollection extends Backbone.Collection
   model: RollFindr.Models.Event
-  url: Routes.search_map_path()
+  url: Routes.upcoming_events_path()
   sort_key: 'name'
   comparator:
     (item)->

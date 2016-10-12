@@ -1,4 +1,4 @@
-- title = "Brazilian Jiu-Jitsu Academies in #{directory_segment.full_name}"
+- title = "Brazilian Jiu-Jitsu Academies and Events in #{directory_segment.full_name}"
 = content_for :title do
   = title
 .container.page.directory
@@ -23,7 +23,9 @@
           %span= "Showing #{pluralize(directory_segment.locations.count, 'academy')}"
           %span
             = surround '(', ')' do
-              = link_to 'See on map', map_path(zoom: directory_segment.zoom, lat: directory_segment.lat, lng: directory_segment.lng), title: "See map of Brazilian Jiu-Jitsu gyms in #{directory_segment.full_name}"
+              = link_to map_path(zoom: directory_segment.zoom, lat: directory_segment.lat, lng: directory_segment.lng), title: "See map of Brazilian Jiu-Jitsu gyms in #{directory_segment.full_name}" do
+                %span.fa.fa-search-plus
+                See on map
     .row
       .col-md-12
         = render partial: 'table', locals: { locations: directory_segment.locations, show_legend: directory_segment.child? }

@@ -3,7 +3,7 @@ class EventsController < ApplicationController
   include LocationsHelper
 
   before_action :set_locations, only: [:index]
-  before_action :validate_time_range, only: [:index, :upcoming]
+  before_action :validate_time_range, only: [:index]
   before_action :ensure_signed_in, only: [:create]
 
   around_filter :set_location_tz, only: [:index]
@@ -11,16 +11,17 @@ class EventsController < ApplicationController
   decorates_assigned :events, :event, :location
 
   DEFAULT_SEARCH_DISTANCE = 5.0
+  DEFAULT_UPCOMING_EVENTS_COUNT = 7
 
   def create
     @location = find_or_create_location
     head :bad_request and return false unless @location.valid?
-    
+
     Time.use_zone(@location.timezone) do
       @event = Event.create(event_create_params)
       @location.events << @event
       @redirect_path = location_event_path(@location, @event, create: 1)
-    
+
       tracker.track('createEvent',
         location: @location.to_param,
         event: @event.to_json({}),
@@ -32,14 +33,14 @@ class EventsController < ApplicationController
       end
     end
   end
-  
+
   def wizard
     tracker.track('showEventVenueWizard')
     respond_to do |format|
       format.html
     end
   end
-  
+
   #omnicalendar
   def index
     @events = []
@@ -60,13 +61,13 @@ class EventsController < ApplicationController
   end
 
   def upcoming
-    limit = params.fetch(:limit, 10).to_i
+    count = params.fetch(:count, DEFAULT_UPCOMING_EVENTS_COUNT).to_i
 
     @events = Event
       .where(:event_type.ne => Event::EVENT_TYPE_CLASS)
-      .between_time(@start_param, @end_param)
-      .limit(@limit)
-      .desc(:starting)
+      .between_time(Time.now.beginning_of_day, Time.now + 1.year)
+      .limit(count)
+      .asc(:starting)
 
     tracker.track('showUpcomingEvents',
       event_count: @events.count

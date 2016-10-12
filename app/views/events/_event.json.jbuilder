@@ -1,5 +1,8 @@
 json.id event.to_param
+json.location_id event.location_id.to_s
 json.title event.title
+json.image event.image
+json.image_large event.image_large
 json.description event.description
 json.is_all_day event.is_all_day || false
 json.price event.price
@@ -7,6 +10,7 @@ json.starting event.starting
 json.ending event.ending
 json.event_type event.event_type
 json.event_type_name event.event_type_name
+json.schedule_in_words event.schedule.try(:to_s)
 json.website event.website
 json.facebook event.facebook
 json.recurring event.recurring?

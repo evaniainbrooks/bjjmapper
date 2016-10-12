@@ -184,3 +184,28 @@ $colors: $color0, $color3, $color6, $color9, $color1, $color4, $color7, $color10
     }
   }
 }
+
+.upcoming-events {
+  .location-list-item {
+    h4 {
+      font-size: 100%;
+      margin: 0px;
+    }
+    p {
+      margin: 0px;
+    }
+    img {
+      width: 50px;
+      height: 50px;
+      margin-right: 7px;
+    }
+    .address {
+      display: block;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+}
+
+
