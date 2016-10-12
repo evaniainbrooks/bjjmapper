@@ -110,6 +110,7 @@ class RollFindr.Views.EventVenueWizardView extends Backbone.View
           @$("[name='location[#{i}]']").val(results[0][i])
 
         @fetchNearbyLocations(results[0]['lat'], results[0]['lng'])
+        @initializeMapView(results[0]['address'], results[0]['lat'], results[0]['lng'])
 
         $('html, body').animate({
           scrollTop: $('[name="addr-more"]').offset().top - $('.navbar').height()
