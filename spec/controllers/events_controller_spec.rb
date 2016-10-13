@@ -80,6 +80,19 @@ describe EventsController do
       assigns[:events].count.should eq 1
       assigns[:events][0].event_type.should eq Event::EVENT_TYPE_TOURNAMENT
     end
+    context 'with event_type param' do
+      before do
+        create(:event, event_type: Event::EVENT_TYPE_TOURNAMENT, starting: Time.now + 5.days, ending: Time.now + 6.days)
+        create(:event, event_type: Event::EVENT_TYPE_SEMINAR, starting: Time.now + 5.days, ending: Time.now + 6.days)
+        create(:event, event_type: Event::EVENT_TYPE_CLASS, starting: Time.now + 5.days, ending: Time.now + 6.days)
+      end
+      xit 'returns all upcoming events that match event_type' do
+        get :upcoming, { format: 'json', event_type: [Event::EVENT_TYPE_TOURNAMENT] }, {}
+
+        assigns[:events].count.should eq 1
+        assigns[:events][0].event_type.should eq Event::EVENT_TYPE_TOURNAMENT
+      end
+    end
   end
   describe 'GET index' do
     let(:start_time) { 5.hours.ago.iso8601 }

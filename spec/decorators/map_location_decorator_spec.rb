@@ -62,7 +62,7 @@ describe MapLocationDecorator do
 
       subject { MapLocationDecorator.decorate(build(:location), params({events: events})) }
       it 'returns a sentence with the instructor and organization names' do
-        subject.entities.should match events[0].organization.name
+        subject.entities.should match events[0].organization.abbreviation
         subject.entities.should match events[1].instructor.name
       end
     end
