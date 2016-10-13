@@ -6,24 +6,22 @@
     .col-md-12
       %h1
         = title
-        %span.small= "#{Location.count} academies worldwide"
+        %span.small= "#{Location.academies.count} academies and #{Event.count} events"
   .row
     .col-md-12
       = render partial: 'breadcrumb'
-  -#.row
-    .col-md-12
-      = render partial: 'directory_welcome_message'
-  .row
-    .col-md-12
-      = render partial: 'directory_index'
-  %hr/
   .row
     .col-md-3
-      %h4 Contribute
+      %h3.h4
+        %span.fa.fa-plus-square
+        Contribute
     .col-md-3
       = render partial: 'create_location_button'
     .col-md-3
       = render partial: 'create_event_button'
     .col-md-3
       = render partial: 'teams/create_button'
-
+  %hr/
+  .row
+    .col-md-12
+      = render partial: 'directory_index'

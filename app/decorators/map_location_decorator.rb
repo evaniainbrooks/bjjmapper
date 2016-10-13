@@ -32,7 +32,7 @@ class MapLocationDecorator < LocationDecorator
         return events.first.title
       else
         event_type_names = events.collect{|e|e.event_type_name.capitalize.pluralize}.uniq.sort.to_sentence
-        return "#{events.count} Upcoming #{event_type_names}"
+        return "#{events.count} #{event_type_names}"
       end
     end
   end
@@ -52,14 +52,14 @@ class MapLocationDecorator < LocationDecorator
   def dates
     return nil unless has_events?
     events.collect do |event|
-      event.starting.strftime('%B %d, %Y')
-    end.uniq.sort.to_sentence
+      event.starting
+    end.uniq.sort
   end
 
   def entities
     return nil unless has_events?
     events.collect do |event|
-      event.organization.try(:name) || event.instructor.try(:name)
+      event.organization.try(:abbreviation) || event.instructor.try(:name)
     end.compact.uniq.sort.to_sentence
   end
 

@@ -66,6 +66,11 @@
       background-color: lighten($markerRed, 30%);
       border: 1px solid $markerRed;
     }
+    &.academybb .list-index span {
+      background-color: lighten($markerRed, 30%);
+      border: 1px solid $markerRed;
+      border-top: 3px solid black;
+    }
     &.tournament .list-index span {
       background-color: lighten($markerBlue, 30%);
       border: 1px solid $markerBlue;
@@ -138,6 +143,12 @@
     &.academy .list-index span {
       background-color: $markerRed;
       border: 1px solid $markerRed;
+    }
+    
+    &.academybb .list-index span {
+      background-color: $markerRed;
+      border: 1px solid $markerRed;
+      border-top: 3px solid black;
     }
     
     &.tournament .list-index span {

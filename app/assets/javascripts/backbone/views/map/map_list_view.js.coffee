@@ -25,7 +25,9 @@ class RollFindr.Views.MapListView extends Backbone.View
     _.each @model.get('locations').models, (loc)=>
       templateType = if loc.get('events')? && loc.get('events').length > 0 then @eventTemplate else @academyTemplate
       id = loc.get('id')
-      locElement = templateType({location: loc.toJSON(), active: @activeMarkerId == id})
+      color = loc.getColor()
+      locElement = $(templateType({location: loc.toJSON(), active: @activeMarkerId == id})).addClass(color)
+
       @$('.items').append(locElement)
 
   activeMarkerChanged: (e)->

@@ -29,7 +29,7 @@ json.event_count location.events.try(:count) || 0
 json.image location.image
 json.image_large location.try(:image_large)
 json.image_tiny location.try(:image_tiny)
-json.flag_has_black_belt location.flag_has_black_belt || false
+json.has_black_belt location.flag_has_black_belt || false
 json.flag_closed location.flag_closed || false
 json.created_at location.created_at
 json.updated_at location.updated_at

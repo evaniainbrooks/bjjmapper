@@ -2,18 +2,23 @@
   <a href="<%= location.link %>" data-no-turbolink>
     <div class="row">
       <div class="col-md-3">
-        <br />
-        <img class="center-block" src="<%= location.image %>" />
+        <div class="image-container">
+          <img src="<%= location.image %>" alt="<%= location.title %> logo" />
+          <span class="timestamp small">
+            <span class="month"><%= moment(location.dates[0]).format("MMM") %></span>
+            <br />
+            <span class="day"><%= moment(location.dates[0]).date() %></span>
+          </span>
+        </div>
       </div>
       <div class="col-md-9">
         <h4 class="list-group-item-heading"><%= location.title %></h4>
         <p class="list-group-item-text team-title"><%= location.entities %></p>
         <p class="date list-group-item-text small">
           <span class="fa fa-calendar"></span>
-          <%= location.dates %>
+          <%= moment(location.dates[0]).format("MMMM Do") %>
         </p>
-        <br />
-        <span class="address">
+        <span class="address small">
           <%= location.street %>
         </span>
       </div>

@@ -21,7 +21,8 @@ class RollFindr.Models.Location extends Backbone.Model
       if @get('events').length > 0
         return @get('events').first().getColor()
 
-    return 'academy'
+    return 'academybb' if @get('has_black_belt')
+    'academy'
 
   toJSON: ->
     locationJson = Backbone.Model.prototype.toJSON.call(this)

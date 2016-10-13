@@ -1,13 +1,16 @@
-<div data-id="<%= event.id %>" class="location-list-item list-group-item">
+<div data-id="<%= event.id %>" class="upcoming-event location-list-item list-group-item">
   <a href="<%= Routes.location_event_path(event.location_id, event, {ref: 'upcoming_l'}) %>">
-    <img class="pull-left" src="<%= event.image %>" alt="<%= event.title %> logo" />
+    <div class="image-container">
+      <img src="<%= event.image %>" alt="<%= event.title %> logo" />
+      <span class="timestamp small">
+        <span class="month"><%= moment(event.starting).format("MMM") %></span>
+        <br />
+        <span class="day"><%= moment(event.starting).date() %></span>
+      </span>
+    </div>
   </a>
   <a class="text-primary" title="<%= event.title %>" href="<%= Routes.location_event_path(event.location_id, event, {ref: 'upcoming_l'}) %>"><h4 class="list-group-item-heading"><%= event.title %></h4></a>
   <p class="pull-left small strong"><%= event.organization ? event.organization.abbreviation : event.instructor.name %></p>
-  <p class="pull-right timestamp small text-muted">
-    <span class="fa fa-calendar"></span>
-    <%= event.schedule_in_words %>
-  </p>
   <br />
   <a class="small address" href="<%= Routes.map_path({lat: event.location.lat, lng: event.location.lng, ref: 'upcoming_l'}) %>" title="See <%= event.title %> on the map">
     <span class="fa fa-map-marker"></span>

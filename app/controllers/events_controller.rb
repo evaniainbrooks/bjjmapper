@@ -62,9 +62,11 @@ class EventsController < ApplicationController
 
   def upcoming
     count = params.fetch(:count, DEFAULT_UPCOMING_EVENTS_COUNT).to_i
+    event_types = params.fetch(:event_type, Event::EVENT_TYPE_ALL).collect(&:to_i)
+    event_types.delete(Event::EVENT_TYPE_CLASS)
 
     @events = Event
-      .where(:event_type.ne => Event::EVENT_TYPE_CLASS)
+      .where(:event_type.in => event_types)
       .between_time(Time.now.beginning_of_day, Time.now + 1.year)
       .limit(count)
       .asc(:starting)

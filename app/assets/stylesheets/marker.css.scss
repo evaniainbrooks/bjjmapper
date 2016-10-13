@@ -32,6 +32,14 @@ $markerGreen: #00ff00;
   }
 }
 
+.map-label-content.academybb {
+  background-color: $markerRed;
+  border-top: solid 3px black;
+  &:after {
+    border-top: solid 5px $markerRed;
+  }
+}
+
 .map-label-content.tournament {
   background-color: $markerBlue;
   &:after {
