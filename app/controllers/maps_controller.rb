@@ -16,6 +16,9 @@ class MapsController < ApplicationController
   helper_method :map
 
   def show
+    @location_type = params.fetch(:location_type, [Location::LOCATION_TYPE_ACADEMY]).collect(&:to_i)
+    @event_type = params.fetch(:event_type, [Event::EVENT_TYPE_TOURNAMENT]).collect(&:to_i)
+    
     tracker.track('showMap',
       zoom: map.zoom,
       lat: map.lat,
@@ -33,16 +36,18 @@ class MapsController < ApplicationController
   end
 
   def search
-    event_filter = params.fetch(:event_type, []).collect(&:to_i)
-    location_filter = params.fetch(:location_type, []).collect(&:to_i)
-    location_filter << Location::LOCATION_TYPE_EVENT_VENUE if event_filter.present?
+    @event_type = params.fetch(:event_type, []).collect(&:to_i)
+    @location_type = params.fetch(:location_type, []).collect(&:to_i)
+    
+    location_filter = @location_type.dup 
+    location_filter << Location::LOCATION_TYPE_EVENT_VENUE if @event_type.present?
 
     @events = Event.between_time(
       @event_start,
       @event_end)
     .where(
       :location_id.in => @locations.collect(&:id),
-      :event_type.in => event_filter)
+      :event_type.in => @event_type)
     .group_by(&:location_id)
 
     @locations = @locations.select do |location|
@@ -60,15 +65,13 @@ class MapsController < ApplicationController
       distance: @distance,
       query: @text_filter,
       location_type: location_filter,
-      event_type: event_filter,
+      event_type: @event_type,
       event_start: @event_start,
       event_end: @event_end,
       results: @locations.count
     )
 
-    head :no_content and return unless @locations.present?
-
-    @locations = decorated_locations(@locations, events: @events, lat: @lat, lng: @lng, event_type: event_filter, location_type: location_filter)
+    @locations = decorated_locations(@locations, events: @events, lat: @lat, lng: @lng, event_type: @event_type, location_type: location_filter)
 
     respond_to do |format|
       format.json
@@ -147,9 +150,6 @@ class MapsController < ApplicationController
     default_zoom = @lat.present? && @lng.present? ? Map::ZOOM_LOCATION : Map::ZOOM_DEFAULT
     zoom = params.fetch(:zoom, default_zoom).to_i
 
-    location_type = params.fetch(:location_type, [Location::LOCATION_TYPE_ACADEMY]).collect(&:to_i)
-    event_type = params.fetch(:event_type, [Event::EVENT_TYPE_TOURNAMENT]).collect(&:to_i)
-
     @_map ||= Map.new(
       zoom: zoom,
       team: @team,
@@ -162,8 +162,8 @@ class MapsController < ApplicationController
       locations: action?(:search) ? @locations : [],
       refresh: 1,
       legend: 1,
-      location_type: location_type,
-      event_type: event_type
+      location_type: @location_type,
+      event_type: @event_type
     )
   end
 end

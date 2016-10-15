@@ -14,13 +14,13 @@ class RollFindr.Views.StaticMapView extends Backbone.View
 
     @setupGoogleMap()
 
+    @initializeMarkerView(options.editable)
     @listView = new RollFindr.Views.MapListView({
       el: @$('.location-list')
       model: @model
+      markerIdFunction: @markerView.getMarkerId
       filteredCount: 0
     })
-
-    @initializeMarkerView(options.editable)
 
     if @map?
       @setupEventListeners()
@@ -63,8 +63,8 @@ class RollFindr.Views.StaticMapView extends Backbone.View
       @map.setCenter(newCenter)
 
   render: ->
-    @listView.render(0)
     @markerView.render()
+    @listView.render(0)
 
   setCenterAndRefresh: ->
     lat = @model.get('lat')

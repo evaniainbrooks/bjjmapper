@@ -104,7 +104,7 @@ describe MapLocationDecorator do
       let(:events) { [build(:event), build(:event)] }
       subject { MapLocationDecorator.decorate(location, params({events: events})) }
       it 'is the academy path' do
-        subject.link.should match(schedule_location_path(location, ref: 'map_item'))
+        subject.link.should match(schedule_location_path(location, ref: 'map_item', starting: events.first.starting))
       end
     end
   end

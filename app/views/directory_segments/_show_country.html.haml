@@ -16,7 +16,7 @@
     .col-md-9.map-view
       .map-canvas{:style => 'height: 400px;'}
       .map-list-view
-        .location-list.loading
+        .location-list
           .loading-overlay
             %span.fa.fa-refresh.fa-3x.fa-spin
           = render partial: 'locations/map_list', locals: { show_create: true }
