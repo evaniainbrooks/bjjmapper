@@ -29,6 +29,7 @@ describe 'Views.LocationInstructorsView', ->
         belt_rank: "black"
         name: "Roberto Correa"
         id: testInstructorId
+        param: testInstructorId
         full_lineage: []
         stripe_rank: 4
         belt_rank: 'black'

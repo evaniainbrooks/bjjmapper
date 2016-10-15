@@ -58,8 +58,8 @@ describe 'Views.MapView', ->
     RollFindr.GlobalEvents.trigger('geolocate', {})
     sinon.assert.called(geolocateSpy)
 
-  it 'renders itself when the location list is updated', ->
-    viewModel.get('locations').trigger('sync')
+  it 'renders itself when the model is updated', ->
+    viewModel.trigger('sync')
     sinon.assert.called(renderSpy)
 
   describe 'geolocation', ->

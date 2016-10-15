@@ -237,7 +237,7 @@ class LocationsController < ApplicationController
       :lng => @location.lng,
       :location_type => Location::LOCATION_TYPE_ALL, 
       :geolocate => 0,
-      :locations => [@location],
+      :locations => [location],
       :refresh => 0
     )
   end
