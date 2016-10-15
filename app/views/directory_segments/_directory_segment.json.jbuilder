@@ -1,3 +1,4 @@
+json.id directory_segment.id.try(:to_s)
 json.name directory_segment.name
 json.full_name directory_segment.full_name
 json.parent_segment directory_segment.parent_segment_id

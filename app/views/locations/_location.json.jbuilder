@@ -1,4 +1,5 @@
-json.id location.to_param
+json.id location.id.try(:to_s)
+json.param location.to_param
 json.loctype location.loctype
 json.title location.title
 json.description location.description

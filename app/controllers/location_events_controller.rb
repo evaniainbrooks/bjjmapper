@@ -11,11 +11,12 @@ class LocationEventsController < ApplicationController
   before_action :set_map, only: [:show]
 
   before_action :ensure_signed_in, only: [:destroy, :create, :update]
-  decorates_assigned :location, :event, :events
+  decorates_assigned :event, :events
 
   around_filter :set_location_tz
 
   helper_method :created?
+  helper_method :location
 
   def create
     event = Event.new(event_create_params)
@@ -147,10 +148,10 @@ private
     @map = Map.new(
       :zoom => Map::ZOOM_LOCATION,
       :minZoom => Map::ZOOM_CITY,
-      :lat => @location.lat,
-      :lng => @location.lng,
+      :lat => location.lat,
+      :lng => location.lng,
       :geolocate => 0,
-      :locations => [],
+      :locations => [location],
       :location_type => Location::LOCATION_TYPE_ALL,
       :event_type => Event::EVENT_TYPE_ALL,
       :refresh => 0
@@ -159,5 +160,11 @@ private
 
   def created?
     return params.fetch(:create, 0).to_i.eql?(1)
+  end
+
+  def location
+    @_location ||= begin
+      MapLocationDecorator.decorate(@location, context: { events: [@event] })
+    end
   end
 end

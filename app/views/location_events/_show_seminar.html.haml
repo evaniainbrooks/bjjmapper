@@ -4,51 +4,93 @@
 = form_for([location, event], html: { class: 'form ' + edit_mode_classes }) do |f|
   .row
     .col-md-10
-      - country_name = country_name_for(event.location.country)
-      %ol.breadcrumb
-        %li
-          %a{href: root_path} Home
-        %li
-          %a{href: directory_index_path(ref: 'event_bc', focus: 'event')} BJJ Event Directory
-        %li
-          %a{href: directory_index_path(country_name, ref: 'event_bc', focus: 'event')}= country_name
-        %li
-          %a{href: directory_index_path(country_name, location.city, ref: 'event_bc', focus: 'event')}= location.city
-        %li.active= event.title
+      = render partial: 'breadcrumb', locals: { location: location, event: event }  
     .col-md-2
       .display-field
-        -#%button.btn.btn-default.btn-sm{:type => "button", 'data-begin-edit' => true} Edit
+        %button.btn.btn-default.btn-sm{:type => "button", 'data-begin-edit' => true} Edit
         %button.btn.btn-default.btn-sm{'data-report-item' => true}
           %span.report Report
       .edit-field
         %button.btn.btn-default.btn-sm{:'data-cancel-edit' => true } Cancel
         %button.btn.btn-primary.btn-sm{:type => 'submit'} Save
   .row
-    .col-md-12
-      = render partial: 'locations/edit_success_message' if edit_success?
-  .row
     .col-md-2.text-center.center-block
-      %img{:src => event.image, :alt => event.title}/
+      %img.logo{:src => event.image, :alt => event.title}/
+      %br/
+      %p.text-small.small.text-muted= "last updated #{distance_of_time_in_words_to_now(event.updated_at)} ago"
     .col-md-6.display-field
       %h1
         = event.title
-        %br/
-        %small
-          hosted at
-          = link_to event.location.title, location_path(event.location)
-      %p.text-info= event.schedule.try(:to_s)
-      %p.display-field= event.description
+        .small= link_to event.instructor.name, event.instructor
+      %p.text-info
+        %span.fa.fa-calendar
+        = event.schedule.try(:to_s)
+      %p.display-field.description= event.description
     .col-md-4.display-field.instructors
       %h3.pull-left Instructor
       %a{:name => 'instructor'}
       .clear.items
-        %i.text-muted We don't know who is holding this seminar
-    .col-md-8.edit-field
-      .edit-field
-        = f.label :title, class: 'small'
-        = f.text_field :title, class: 'form-control input-lg'
-        = f.label :instructor, class: 'small'
-        = f.select :instructor, options_for_select(location.instructors.map{|o| [o.name, o.id]}, event.instructor.try(:to_param)), {include_blank: true}, class: 'form-control input-md'
+      .empty-message
+        %i.text-muted We don't know who the instructor is
+      %br/
+    
+    .col-md-3.display-field
+      %h3.hidden-md.hidden-lg.hidden-xl Contact
+      %span.display-field
+        %b.small.text-muted.upcase Websites
+        %br/
+        - if event.website.present?
+          = link_to 'http://' + event.website, class: 'website' do
+            = event.website
+            %i.fa.fa-external-link
+          %br/
+        - if event.organization.try(:website).present?
+          = link_to 'http://' + event.organization.website, class: 'website' do
+            = event.organization.website
+            %i.fa.fa-external-link
+          %br/
+        - if event.facebook.present?
+          = link_to 'http://facebook.com/' + event.facebook, class: 'facebook website' do
+            = event.facebook
+            %i.fa.fa-facebook
+          %br/
+      - if event.instructor.try(:email).present?
+        %span.display-field
+          %b.small.text-muted.upcase Email
+          %br/
+          = link_to 'mailto:' + event.instructor.email, class: 'email' do
+            = event.instructor.email
+            %i.fa.fa-envelope
+          %br/
+
+  %hr/
+  .row
+    .col-md-3
+      %h3
+        %span.fa.fa-calendar
+        Schedule
+      %ul.list-unstyled
+        - event.sub_events.unscoped.each do |sub_event|
+          %li.clear.clear-fix
+            %span.pull-left= sub_event.title
+            %span.pull-right.text-muted
+              = sub_event.starting.strftime('%v')
+        %li.clear.clear-fix
+          %span.pull-left Seminar begins
+          %span.pull-right.text-muted
+            = event.schedule.try(:to_s)
+    .col-md-6
+      .map
+        %div.map-canvas{:style => 'height: 300px'}
+          -# This is filled in by google maps
+    .col-md-3
+      %h3= "More Seminars"
+      .upcoming-events.location-list.loading.clear
+        .loading-overlay
+          %span.fa.fa-refresh.fa-3x.fa-spin
+        .items
+        .empty-message
+          %i.text-muted There are no upcoming events
   .row.edit-field
     .form-group.col-md-4.col-md-offset-2.small
       = render partial: 'location_events/start_picker'
@@ -82,10 +124,16 @@
         &nbsp;&nbsp;
         %button.btn.btn-default.btn-md{:type => 'button', 'data-cancel-edit' => true} Cancel Editing
         %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes
-  
+
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->
       eventModel = new RollFindr.Models.Event(#{render_json(event)})
-      showView = new RollFindr.Views.EventShowView({ model: eventModel }) 
+      showView = new RollFindr.Views.EventShowView({ model: eventModel })
+  
+      upcomingEventsView = new RollFindr.Views.UpcomingEventsView({instructor_id: "#{event.instructor_id}"})
+
+      mapModel = new RollFindr.Models.Map(#{render_json(@map)})
+      mapView = new RollFindr.Views.StaticMapView({editable: false, model: mapModel, el: $('.map')})
+    $('.directions').readmore(collapsedHeight: 175)
 

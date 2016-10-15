@@ -2,10 +2,11 @@
 #= require backbone/views/move-event-view
 
 class RollFindr.Views.ScheduleView extends Backbone.View
-  el: $('.scheduler-container')
   createEventView: null
-  moveEventView: null
+  defaultDate: new Date()
+  el: $('.scheduler-container')
   eventTemplate: JST['templates/event']
+  moveEventView: null
   initialize: (options)->
     _.bindAll this,
       'initializeCalendarView',
@@ -22,6 +23,7 @@ class RollFindr.Views.ScheduleView extends Backbone.View
     @moveEventView = new RollFindr.Views.MoveEventView()
 
     @editable = options.editable
+    @defaultDate = options.starting if options.starting? && options.starting.length > 0
 
     @initializeCalendarView(@editable)
 
@@ -43,6 +45,7 @@ class RollFindr.Views.ScheduleView extends Backbone.View
     #TODO: Fix EventsCollection to determine this
     eventsPath = @model.get('events').url()
     @$('.scheduler').fullCalendar({
+      defaultDate: @defaultDate
       events: eventsPath,
       eventDurationEditable: false,
       editable: editable,

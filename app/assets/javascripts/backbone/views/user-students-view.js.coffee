@@ -8,7 +8,7 @@ class RollFindr.Views.UserStudentsView extends Backbone.View
   }
   initialize: ->
     _.bindAll(this, 'render', 'addStudent', 'removeStudent')
-    @listenTo(@model.get('lineal_children'), 'add remove sync', @render);
+    @listenTo(@model.get('lineal_children'), 'add remove sync', @render)
     @model.get('lineal_children').fetch()
 
   render: ->
@@ -27,8 +27,8 @@ class RollFindr.Views.UserStudentsView extends Backbone.View
   removeStudent: (e)->
     alert('remove student')
 
-    instructor_id = @model.get('id');
-    student_id = $(e.currentTarget).data('id');
+    instructor_id = @model.get('id')
+    student_id = $(e.currentTarget).data('id')
 
     students = @model.get('lineal_children')
     student = students.findWhere({id: student_id})

@@ -44,7 +44,7 @@ class MapLocationDecorator < LocationDecorator
       if events.count == 1
         h.location_event_path(location, events.first, ref: 'map_item')
       else
-        h.schedule_location_path(location, ref: 'map_item')
+        h.schedule_location_path(location, starting: location.events.first.starting, ref: 'map_item')
       end
     end
   end
@@ -64,7 +64,7 @@ class MapLocationDecorator < LocationDecorator
   end
 
   def loctype
-    return Location::LOCATION_TYPE_EVENT_VENUE if has_events? && !@location_type.include?(Location::LOCATION_TYPE_ACADEMY)
+    return Location::LOCATION_TYPE_EVENT_VENUE if has_events? && @location_type && !@location_type.include?(Location::LOCATION_TYPE_ACADEMY)
     object.loctype
   end
 

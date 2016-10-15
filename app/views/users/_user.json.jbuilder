@@ -1,4 +1,5 @@
-json.id user.to_param.to_s
+json.id user.id.try(:to_s)
+json.param user.to_param.to_s
 json.name user.name
 json.description user.description
 json.locations(user.locations) do |location|

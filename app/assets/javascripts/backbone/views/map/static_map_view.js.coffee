@@ -25,12 +25,18 @@ class RollFindr.Views.StaticMapView extends Backbone.View
     if @map?
       @setupEventListeners()
       @setCenterAndRefresh()
+      if (@model.get('locations').size() == 1)
+        id = @model.get('locations').first().get('id')
+        RollFindr.GlobalEvents.trigger('markerActive', {id: id})
 
   initializeMarkerView: (editable)->
     shouldRender = @markerView?
     @markerView.destroy() if @markerView?
 
-    @markerView = new RollFindr.Views.MapMarkerView({editable: editable, map: @map, collection: @model.get('locations')})
+    templateFn = (loc)->
+      return JST['templates/map/address-info-window']
+
+    @markerView = new RollFindr.Views.MapMarkerView({template: templateFn, editable: editable, map: @map, model: @model})
     @markerView.render() if shouldRender
 
   setupGoogleMap: ->
@@ -65,7 +71,6 @@ class RollFindr.Views.StaticMapView extends Backbone.View
     lng = @model.get('lng')
 
     defaultLocation = new google.maps.LatLng(lat, lng)
-    google.maps.event.addListenerOnce(@map, 'idle', @fetchViewport)
     @map.setCenter(defaultLocation)
 
     @model.get('locations').trigger('reset')

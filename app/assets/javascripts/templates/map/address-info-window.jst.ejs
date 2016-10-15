@@ -1,0 +1,19 @@
+<div class="show-location-overlay container-fluid">
+  <a href="<%= Routes.location_path(location.param, { ref: 'map_item' }) %>" data-no-turbolink>
+    <h4 class="list-group-item-heading"><%= location.title %></h4>
+    <span class="address">
+      <span class="fa fa-map-marker"></span>
+      <%= location.street %>
+      <br />
+      <%= location.city %>, <%= location.state %>
+      <br />
+      <%= location.postal_code %> <%= location.country %>
+    </span>
+  </a>
+  <br />
+  <ul class="text-center nav">
+    <li>
+      <a data-id="<%= location.id %>" class="directions" href="#">Get Directions&hellip;</a>
+    </li>
+  </ul>
+</div>

@@ -27,6 +27,7 @@ Rails.application.routes.draw do
     get :wizard, on: :collection
     get :recent, on: :collection
     get :nearby, on: :collection
+    get :search, on: :collection, controller: :search_locations, action: 'show'
     get :schedule, on: :member
     post :move, on: :member
     post :unlock, on: :member

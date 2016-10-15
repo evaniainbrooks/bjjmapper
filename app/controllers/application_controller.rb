@@ -99,7 +99,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    # return User.where(:role.ne => 'anonymous').first # For dev
+    #return User.where(:role.ne => 'anonymous').first # For dev
     begin
       @current_user ||= User.find(session[:user_id]) if session[:user_id]
       @current_user ||= anonymous_user

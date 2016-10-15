@@ -12,7 +12,7 @@ class Map
   attr_accessor :location, :query
   attr_accessor :minZoom, :geolocate
   attr_accessor :locations, :refresh, :legend
-  attr_accessor :event_type, :location_type
+  attr_accessor :event_type, :location_type, :team
 
   def initialize(options = {})
     @zoom = options.fetch(:zoom, ZOOM_DEFAULT)
@@ -25,6 +25,7 @@ class Map
     @lng = options.fetch(:lng, nil)
     @location = options.fetch(:location, nil)
     @query = options.fetch(:query, nil)
+    @team = options.fetch(:team, [])
     @location_type = options.fetch(:location_type, [])
     @event_type = options.fetch(:event_type, [])
   end

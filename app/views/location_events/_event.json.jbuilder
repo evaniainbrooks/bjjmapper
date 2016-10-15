@@ -1,5 +1,6 @@
-json.id event.to_param
-json.title event.title 
+json.id event.id.try(:to_s)
+json.param event.to_param
+json.title event.title
 json.allDay event.is_all_day || false
 json.start event.starting
 json.end event.ending

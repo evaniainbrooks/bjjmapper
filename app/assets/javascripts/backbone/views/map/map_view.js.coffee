@@ -17,24 +17,23 @@ class RollFindr.Views.MapView extends Backbone.View
       'activeMarkerChanged',
       'clearSearchAndFetchViewport',
       'search',
-      'setCenterFromModelAndRefresh',
+      'setCenterFromModel'
       'initializeMarkerView',
       'initializeMap',
       'setCenterGeolocate',
-      'setCenterGeocode',
       'fetchViewport',
       'geolocate',
       'render')
 
     @setupGoogleMap()
 
+    @initializeMarkerView(options.editable)
     @listView = new RollFindr.Views.MapListView({
-      el: @$('.location-list')
+      el: @$('.map-list-view')
       model: @model
+      markerIdFunction: @markerView.getMarkerId
       filteredCount: 0
     })
-
-    @initializeMarkerView(options.editable)
 
     if @map?
       @setupEventListeners()
@@ -45,7 +44,7 @@ class RollFindr.Views.MapView extends Backbone.View
     shouldRender = @markerView?
     @markerView.destroy() if @markerView?
 
-    @markerView = new RollFindr.Views.MapMarkerView({editable: editable, map: @map, collection: @model.get('locations')})
+    @markerView = new RollFindr.Views.MapMarkerView({editable: editable, map: @map, model: @model})
     @markerView.render() if shouldRender
 
   setupGoogleMap: ->
@@ -68,7 +67,7 @@ class RollFindr.Views.MapView extends Backbone.View
       @legendView = new RollFindr.Views.MapLegendView({map: @map, model: @model})
 
   setupEventListeners: ->
-    @listenTo(@model.get('locations'), 'sort sync reset', @render)
+    @listenTo(@model, 'sync reset', @render)
 
     filtersChanged = _.debounce(@fetchViewport, 500)
     @model.on('change:event_type', filtersChanged)
@@ -100,15 +99,14 @@ class RollFindr.Views.MapView extends Backbone.View
 
   render: ->
     #filteredCount = @model.get('locations').models.length - @filteredLocations.models.length
-    @listView.render(0)
     @markerView.render()
+    @listView.render(0)
 
   search: (e)->
     @model.set('query', e.query)
     @model.set('location', e.location)
 
-    @setCenterGeocode =>
-      @fetchViewport()
+    @fetchViewport()
 
   geolocate: ->
     @setCenterGeolocate =>
@@ -134,40 +132,22 @@ class RollFindr.Views.MapView extends Backbone.View
       geolocateFailedCallback()
 
   initializeMap: ->
-    shouldGeolocate = @model.get('geolocate')
-    hasQuery = @model.get('query')? && @model.get('query').length > 0
     hasCenter = @model.get('lat')? && @model.get('lng')?
+    shouldGeolocate = @model.get('geolocate') || !hasCenter
 
     if (shouldGeolocate && navigator.geolocation)
       @setCenterGeolocate =>
         @fetchViewport()
-    else if !hasQuery && hasCenter
-      @setCenterFromModelAndRefresh()
     else
-      @setCenterGeocode =>
+      @setCenterFromModel =>
         @fetchViewport()
 
-  setCenterFromModelAndRefresh: ->
+  setCenterFromModel: (callback)->
     defaultLat = @model.get('lat')
     defaultLng = @model.get('lng')
     defaultLocation = new google.maps.LatLng(defaultLat, defaultLng)
-    google.maps.event.addListenerOnce(@map, 'idle', @fetchViewport)
+    google.maps.event.addListenerOnce(@map, 'idle', callback)
     @map.setCenter(defaultLocation)
-
-  setCenterGeocode: (doneCallback)->
-    $.ajax({
-      url: Routes.geocoder_path(),
-      data: {
-        query: @model.get('location'),
-      },
-      type: 'GET',
-      dataType: 'json',
-      success: (results) =>
-        google.maps.event.addListenerOnce(@map, 'idle', doneCallback)
-        newCenter = new google.maps.LatLng(results[0].lat, results[0].lng)
-        @map.setZoom(7)
-        @map.setCenter(newCenter)
-    })
 
   clearSearch: ->
     @model.set('query', null)
@@ -187,11 +167,9 @@ class RollFindr.Views.MapView extends Backbone.View
 
     distance = Math.circleDistance(@map.getCenter(), @map.getBounds().getNorthEast())
 
-    @model.set('lat', lat)
-    @model.set('lng', lng)
     @$('.refresh-button .fa').addClass('fa-spin')
 
-    @fetchLocations({
+    @fetchMap({
       location_type: @model.get('location_type')
       event_type: @model.get('event_type')
       lat: lat
@@ -201,32 +179,8 @@ class RollFindr.Views.MapView extends Backbone.View
       location: @model.get('location')
     })
 
-  fetchGlobal: ->
-      data = {
-        event_type: @model.get('event_type')
-        location_type: @model.get('location_type')
-        query: @model.get('query')
-        location: @model.get('location')
-      }
-      @fetchLocations data, =>
-        firstLocation = @model.get('locations').models[0]
-        if firstLocation?
-          coords = firstLocation.get('coordinates')
-          newCenter = new google.maps.LatLng(coords[0], coords[1])
-
-          @model.set('center', coords)
-          @map.setCenter(newCenter)
-
-          @$('.refresh-button .fa').removeClass('fa-spin')
-        else if @model.get('location')?
-          @setCenterGeocode =>
-            @fetchViewport()
-        else if !@map.getCenter()?
-          toastr.warning('Your search query did not return any results', 'Oops')
-          @setCenterFromModelAndRefresh()
-
-  fetchLocations: (args, completeCallback)->
-    @model.get('locations').fetch({
+  fetchMap: (args, completeCallback)->
+    @model.fetch({
       data: args
       success: =>
         toastr.success("Found #{@model.get('locations').size()} locations", 'Map refreshed')

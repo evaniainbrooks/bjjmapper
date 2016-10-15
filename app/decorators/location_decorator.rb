@@ -14,6 +14,7 @@ class LocationDecorator < Draper::Decorator
   decorates_finders
   decorates_association :instructors
   decorates_association :team
+  decorates_association :events
 
   decorates :location
 

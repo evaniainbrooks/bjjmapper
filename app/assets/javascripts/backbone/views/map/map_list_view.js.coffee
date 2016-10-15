@@ -1,18 +1,24 @@
 class RollFindr.Views.MapListView extends Backbone.View
   el: $('.map-list-view')
   tagName: 'div'
-  academyTemplate: JST['templates/map/academy-list-item']
-  eventTemplate: JST['templates/map/event-list-item']
+  template: (loc)->
+    if loc.get('events')? && loc.get('events').length > 0
+      return JST['templates/map/event-list-item']
+    else
+      return JST['templates/map/academy-list-item']
+
   activeMarkerId: null
   model: null
   events: {
     'click .map-list-item': 'listItemClicked'
   }
-  initialize: ->
+  initialize: (options)->
     _.bindAll(this, 'listItemClicked', 'activeMarkerChanged', 'render')
     RollFindr.GlobalEvents.on('markerActive', @activeMarkerChanged)
+    @markerIdFunction = options.markerIdFunction
 
   render: (filteredCount)->
+    @$('.location-list').removeClass('loading')
     if @model.get('locations').length == 0
       @$('.location-list').addClass('empty')
     else
@@ -23,10 +29,11 @@ class RollFindr.Views.MapListView extends Backbone.View
 
     @$('.items').empty()
     _.each @model.get('locations').models, (loc)=>
-      templateType = if loc.get('events')? && loc.get('events').length > 0 then @eventTemplate else @academyTemplate
+      template = @template(loc)
       id = loc.get('id')
       color = loc.getColor()
-      locElement = $(templateType({location: loc.toJSON(), active: @activeMarkerId == id})).addClass(color)
+      loc.set('marker_id', @markerIdFunction(id))
+      locElement = $(template({location: loc.toJSON(), active: @activeMarkerId == id})).addClass(color)
 
       @$('.items').append(locElement)
 

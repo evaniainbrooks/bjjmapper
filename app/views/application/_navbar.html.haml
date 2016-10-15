@@ -25,7 +25,7 @@
         %li{:class => action?(:meta) ? 'active' : nil}
           %a{:href => meta_path(ref: 'navbar'), title: 'Learn about BJJMapper'} About
         %form.navbar-form.navbar-left{:role => "search"}
-          .form-group.has-feedback
+          .form-group
             %input.form-control{:name => 'query', :size => '8', :placeholder => "Search", :type => "text", :value => params[:query]}/
           .form-group
             .input-group

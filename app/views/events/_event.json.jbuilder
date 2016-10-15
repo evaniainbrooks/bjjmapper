@@ -1,5 +1,7 @@
-json.id event.to_param
+json.id event.id.try(:to_s)
+json.param event.to_param.try(:to_s)
 json.location_id event.location_id.to_s
+json.link location_event_path(event.location, event)
 json.title event.title
 json.image event.image
 json.image_large event.image_large

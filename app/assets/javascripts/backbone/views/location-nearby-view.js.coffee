@@ -7,19 +7,25 @@ class RollFindr.Views.LocationNearbyView extends Backbone.View
     _.bindAll(this, 'render')
 
     @template = JST[options.template] if options.template?
-    @count = options.count
-    @collection = new RollFindr.Collections.NearbyLocationsCollection({
-      count: @count,
-      lat: @model.get('coordinates')[0],
-      lng: @model.get('coordinates')[1],
-      reject: @model.get('id'),
+    collection_params = {
+      lat: @model.get('lat'),
+      lng: @model.get('lng'),
+      reject: @model.get('param'),
       location_type: [
         RollFindr.Models.Location.LOCATION_TYPE_EVENT_VENUE,
         RollFindr.Models.Location.LOCATION_TYPE_ACADEMY
       ]
-    })
+    }
+    collection_params.count = options.count if options.count?
 
-    @collection.fetch().done(@render)
+    @collection = new RollFindr.Collections.NearbyLocationsCollection(collection_params)
+
+    @collection.fetch({
+      beforeSend: =>
+        @$el.addClass('loading')
+      complete: =>
+        @$el.removeClass('loading')
+    }).done(@render)
 
   render: ->
     @$('.items').empty()

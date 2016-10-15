@@ -7,10 +7,19 @@ class RollFindr.Views.RecentLocationsView extends Backbone.View
     _.bindAll(this, 'render')
 
     @collection = new RollFindr.Collections.RecentLocationsCollection({count: 5})
-    @collection.fetch().done(@render)
+    @collection.fetch({
+      beforeSend: =>
+        @$el.addClass('loading')
+      complete: =>
+        @$el.removeClass('loading')
+    }).done(@render)
 
   render: ->
-    @$el.empty()
-    _.each @collection.models, (loc)=>
-      locElement = @template({location: loc.toJSON(), active: false})
-      @$el.append(locElement)
+    @$('.items').empty()
+    if @collection.size() > 0
+      @$('.items').removeClass('empty')
+      _.each @collection.models, (loc)=>
+        locElement = @template({location: loc.toJSON(), active: false})
+        @$('.items').append(locElement)
+    else
+      @$('.items').addClass('empty')

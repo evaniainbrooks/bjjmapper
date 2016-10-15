@@ -23,21 +23,36 @@
   };
 
   RollFindr.Views.MapMarkerView = Backbone.View.extend({
-    academyTemplate: JST['templates/map/academy-info-window'],
-    eventTemplate: JST['templates/map/event-info-window'],
+    template: function(loc) {
+      if (loc.get('loctype') == RollFindr.Models.Location.LOCATION_TYPE_ACADEMY) {
+        return JST['templates/map/academy-info-window'];
+      } else {
+        return JST['templates/map/event-info-window'];
+      }
+    },
     initialize: function(options) {
-      _.bindAll(this, 'render', 'activeMarkerChanged', 'markerDragEnd');
+      _.bindAll(this, 'render', 'getMarkerId', 'activeMarkerChanged', 'markerDragEnd');
 
-      this.listenTo(this.collection, 'reset', this.render);
+      this.listenTo(this.model, 'reset', this.render);
 
       this.draggable = options.editable;
       this.map = options.map;
       this.markers = {};
       this.idFactory = new IdFactory();
+      if (options.template) {
+        this.template = options.template;
+      }
 
       RollFindr.GlobalEvents.on('markerActive', this.activeMarkerChanged);
     },
     infoWindow: new google.maps.InfoWindow(),
+    getMarkerId: function(loc_id) {
+      if (this.markers[loc_id]) {
+        return this.markers[loc_id].marker_id;
+      } else {
+        return null;
+      }
+    },
     addMarker: function(loc, index) {
       var self = this;
       var id = loc.get('id');
@@ -90,7 +105,7 @@
       return markerContent.html();
     },
     markerDragEnd: function(e) {
-      var model = this.collection.models[0];
+      var model = this.model.get('locations').models[0];
       var id = model.get('id');
       var address = model.get('address');
       RollFindr.ConfirmDialog({
@@ -104,12 +119,7 @@
     },
     openInfoWindow: function(loc) {
       var self = this;
-      var template = null;
-      if (loc.get('loctype') == RollFindr.Models.Location.LOCATION_TYPE_ACADEMY) {
-        template = self.academyTemplate;
-      } else {
-        template = self.eventTemplate;
-      }
+      var template = self.template(loc);
 
       self.infoWindow.setContent(template({location: loc.toJSON()}));
       self.infoWindow.open(self.map, self.markers[loc.get('id')].marker);
@@ -131,7 +141,7 @@
     },
     activeMarkerChanged: function(e) {
       if (null !== e.id) {
-        var loc = this.collection.findWhere({id: e.id});
+        var loc = this.model.get('locations').findWhere({id: e.id});
         this.openInfoWindow(loc);
       } else {
         this.infoWindow.close();
@@ -140,7 +150,7 @@
     render: function() {
       var self = this;
       var newMarkers = {};
-      this.collection.each(function(loc) {
+      this.model.get('locations').each(function(loc) {
         self.addMarker(loc);
         newMarkers[loc.get('id')] = 1;
       });

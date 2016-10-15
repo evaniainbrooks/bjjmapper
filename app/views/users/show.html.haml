@@ -87,4 +87,4 @@
       model = new RollFindr.Models.User(#{render_json(user)})
       studentsView = new RollFindr.Views.UserStudentsView({ model: model })
       reviewsView = new RollFindr.Views.ReviewsView({ template_name: 'locations/location-review', model: model })
-      scheduleView = new RollFindr.Views.ScheduleView({ model: model })
+      scheduleView = new RollFindr.Views.ScheduleView({ model: model, el: $('.scheduler-container'), editable: false })

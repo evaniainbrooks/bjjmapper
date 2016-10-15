@@ -3,11 +3,18 @@
 
 class RollFindr.Models.Map extends Backbone.Model
   paramRoot: 'map'
+  urlRoot: Routes.search_map_path()
 
   initialize: (options)->
     locations = options.locations if options?
     locationsCollection = new RollFindr.Collections.LocationsCollection(locations)
     this.set('locations', locationsCollection)
+    this.listenTo(this, 'change:locations', this.onChangeLocations)
+
+  onChangeLocations: =>
+    locations = @get('locations')
+    if Object.prototype.toString.call(locations) == '[object Array]'
+      @set('locations', new RollFindr.Collections.LocationsCollection(locations), {silent: true})
 
   defaults:
     zoom: 15

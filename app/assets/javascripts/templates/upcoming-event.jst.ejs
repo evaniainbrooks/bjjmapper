@@ -1,5 +1,5 @@
 <div data-id="<%= event.id %>" class="upcoming-event location-list-item list-group-item">
-  <a href="<%= Routes.location_event_path(event.location_id, event, {ref: 'upcoming_l'}) %>">
+  <a href="<%= event.link %>">
     <div class="image-container">
       <img src="<%= event.image %>" alt="<%= event.title %> logo" />
       <span class="timestamp small">
@@ -9,7 +9,7 @@
       </span>
     </div>
   </a>
-  <a class="text-primary" title="<%= event.title %>" href="<%= Routes.location_event_path(event.location_id, event, {ref: 'upcoming_l'}) %>"><h4 class="list-group-item-heading"><%= event.title %></h4></a>
+  <a class="text-primary" title="<%= event.title %>" href="<%= event.link %>"><h4 class="list-group-item-heading"><%= event.title %></h4></a>
   <p class="pull-left small strong"><%= event.organization ? event.organization.abbreviation : event.instructor.name %></p>
   <br />
   <a class="small address" href="<%= Routes.map_path({lat: event.location.lat, lng: event.location.lng, ref: 'upcoming_l'}) %>" title="See <%= event.title %> on the map">

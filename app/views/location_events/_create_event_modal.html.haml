@@ -1,5 +1,5 @@
 .create-event-dialog.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "addEventLabel", :role => "dialog", :tabindex => "-1"}
-  = form_for([location, location.events.new], html: { class: "form-horizontal #{event_type_name(Event::EVENT_TYPE_CLASS)}" } ) do |f|
+  = form_for([location, Event.new], html: { class: "form-horizontal #{event_type_name(Event::EVENT_TYPE_CLASS)}" } ) do |f|
     .modal-dialog
       .modal-content
         .modal-header

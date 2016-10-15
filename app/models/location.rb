@@ -68,6 +68,7 @@ class Location
   before_save :populate_timezone
   before_save :set_has_black_belt_flag
 
+  field :google_places_id, type: Integer
   field :coordinates, type: Array
   field :street
   field :city

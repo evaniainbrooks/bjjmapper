@@ -17,7 +17,7 @@ describe MapsController do
       it 'does not geolocate' do
         get :show, lat: 80.0, lng: 80.0
 
-        assigns[:map].tap do |m|
+        controller.send(:map).tap do |m|
           m.lat.should eq 80.0
           m.lng.should eq 80.0
           m.geolocate.should eq 0
@@ -40,6 +40,16 @@ describe MapsController do
 
           response.status.should eq 200
           assigns[:locations].collect(&:to_param).should include(location.to_param)
+        end
+      end
+      context 'with count param' do
+        let(:count) { 1 }
+        let(:locations) { create_list(:location, count + 2) }
+        it 'limits the results' do
+          get :search, count: count, location_type: [locations.first.loctype], lat: locations.first.lat, lng: locations.first.lng, format: 'json'
+
+          response.status.should eq 200
+          assigns[:locations].size.should eq count
         end
       end
       context 'with no locations' do
@@ -83,6 +93,37 @@ describe MapsController do
           response.status.should eq 200
           assigns[:locations].collect(&:to_param).should include(matched_location.to_param)
           assigns[:locations].collect(&:to_param).should_not include(other_location.to_param)
+        end
+      end
+      context 'with geocode request (location)' do
+        let(:lat) { 80.0 }
+        let(:lng) { 80.0 }
+        let(:location_query) { 'New York' }
+        before do
+          GeocodersHelper.stub(:search).and_return([OpenStruct.new({lat: lat, lng: lng})])
+        end
+        it 'sets the lat and lng from the geocoded result' do
+          get :search, location: location_query, location_type: Location::LOCATION_TYPE_ALL, lat: lat, lng: lng, format: 'json'
+
+          controller.send(:map).lat.should eq lat
+          controller.send(:map).lng.should eq lng
+        end
+      end
+      context 'with no lat, lng, location params' do
+        context 'and no search terms' do
+          it 'returns 400 bad request' do
+            get :search, format: 'json'
+            response.status.should eq 400
+          end
+        end
+        context 'and with search terms' do
+          let(:location) { build(:location) }
+          before { Location.stub_chain(:all, :limit, :where, :first).and_return(location) }
+          it 'sets the lat and lng from the first returned location' do
+            get :search, query: 'some query not important because stubbed', format: 'json'
+            controller.send(:map).lat.should eq lat
+            controller.send(:map).lng.should eq lng
+          end
         end
       end
       describe 'event_start and event_end' do

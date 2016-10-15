@@ -5,34 +5,27 @@
   .row
     .col-md-12
       %h1
-        = title
+        = directory_segment.full_name
+        %small BJJ academies and events
   .row
     .col-md-10
       = render partial: 'breadcrumb'
     .col-md-2.text-right.pull-right
       = render partial: 'create_location_button'
   .row
-    .col-md-6.map-view
+    .col-md-9.map-view
       .map-canvas{:style => 'height: 400px;'}
-    .col-md-6
+      .map-list-view
+        .location-list.loading
+          .loading-overlay
+            %span.fa.fa-refresh.fa-3x.fa-spin
+          = render partial: 'locations/map_list', locals: { show_create: true }
+    .col-md-3
       - if directory_segment.child_segments.present?
-        %h3 Popular cities in #{directory_segment.full_name}
-        %ul.list-inline
+        %h3 Other Cities in #{directory_segment.full_name}
+        %ul.list-unstyled
           - directory_segment.child_segments.sort.each do |city|
             %li= link_to city.name, directory_segment_path(country: directory_segment.name, city: city.name), title: "List of Brazilian Jiu-Jitsu gyms in #{directory_segment.full_name}" 
-
-  - if directory_segment.locations.present?
-    %hr/
-    .row
-      .col-md-12
-        %h3
-          %span= "Showing #{pluralize(directory_segment.locations.count, 'academy')}"
-          %span
-            = surround '(', ')' do
-              = link_to 'See on map', map_path(zoom: directory_segment.zoom, lat: directory_segment.lat, lng: directory_segment.lng), title: "See map of Brazilian Jiu-Jitsu gyms in #{directory_segment.full_name}"
-    .row
-      .col-md-12
-        = render partial: 'table', locals: { locations: directory_segment.locations, show_legend: directory_segment.child? }
 
 = content_for(:scripts) do
   :coffeescript

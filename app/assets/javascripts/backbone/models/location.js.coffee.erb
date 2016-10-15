@@ -71,7 +71,7 @@ class RollFindr.Collections.NearbyLocationsCollection extends Backbone.Collectio
     @lng = options.lng
     @reject = options.reject
     @location_type = options.location_type || []
-    @count = options.count
+    @count = options.count || 3
 
   url: =>
     Routes.nearby_locations_path

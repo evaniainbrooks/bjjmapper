@@ -51,6 +51,8 @@ class LocationsController < ApplicationController
   end
 
   def schedule
+    @starting = params.fetch(:starting, nil)
+    
     tracker.track('showSchedule',
       id: @location.to_param
     )
@@ -235,7 +237,7 @@ class LocationsController < ApplicationController
       :lng => @location.lng,
       :location_type => Location::LOCATION_TYPE_ALL, 
       :geolocate => 0,
-      :locations => [],
+      :locations => [@location],
       :refresh => 0
     )
   end

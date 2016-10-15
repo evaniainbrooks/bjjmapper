@@ -42,12 +42,15 @@
         %a{:name => 'location'}
         = render partial: 'show_address', locals: { location: location, f: f }
       .col-md-5
-        %div.map-canvas{:style => 'height: 300px'}
-        -# This is filled in by google maps
-        %p.edit-field.text-info.small Note: you can drag the marker to a new location to change the address of this academy.
+        .map
+          %div.map-canvas{:style => 'height: 275px'}
+          -# This is filled in by google maps
+          %p.edit-field.text-info.small Note: you can drag the marker to a new location to change the address of this academy.
       .col-md-4
-        %div.nearby-locations
+        %div.nearby-locations.loading.location-list
           -# This is filled in by locations/nearby template
+          .loading-overlay
+            %span.fa.fa-refresh.fa-3x.fa-spin
           .content
             %h3 Nearby Academies
             %ul.list-unstyled.items

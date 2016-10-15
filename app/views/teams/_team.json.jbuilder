@@ -1,4 +1,5 @@
-json.id team.to_param.to_s
+json.id team.id.try(:to_s)
+json.param team.to_param.to_s
 json.image team.image
 json.image_tiny team.image_tiny
 json.image team.image

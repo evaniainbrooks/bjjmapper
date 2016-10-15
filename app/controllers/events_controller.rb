@@ -64,12 +64,17 @@ class EventsController < ApplicationController
     count = params.fetch(:count, DEFAULT_UPCOMING_EVENTS_COUNT).to_i
     event_types = params.fetch(:event_type, Event::EVENT_TYPE_ALL).collect(&:to_i)
     event_types.delete(Event::EVENT_TYPE_CLASS)
+    organization = params.fetch(:organization_id, nil)
+    instructor = params.fetch(:instructor_id, nil)
 
     @events = Event
       .where(:event_type.in => event_types)
       .between_time(Time.now.beginning_of_day, Time.now + 1.year)
       .limit(count)
       .asc(:starting)
+
+    @events = @events.where(:organization_id => organization) if organization.present?
+    @events = @events.where(:instructor_id => instructor) if instructor.present?
 
     tracker.track('showUpcomingEvents',
       event_count: @events.count

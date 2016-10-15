@@ -11,14 +11,12 @@
         See larger map
 
       .map
-        .map-canvas.clear{:style => 'height: 350px'}
+        .map-canvas.clear{:style => 'height: 300px'}
         .map-list-view
-          .location-list
+          .location-list.loading
+            .loading-overlay
+              %span.fa.fa-refresh.fa-3x.fa-spin
             = render partial: 'locations/map_list', locals: { show_create: false }
-      %a{:href => map_path(lat: @map[:lat], lng: @map[:lng], :ref => 'homepage'), :title => 'Academy Map'}
-        %h4.text-center
-          %span.fa.fa-search-plus
-          See larger map
     .col-md-4
       %h3.pull-left
         New Additions
@@ -36,10 +34,17 @@
               %i.fa.fa-calendar-o
               Create Event
 
-      .recent-locations.location-list.clear
+      .recent-locations.location-list.loading.clear
+        .loading-overlay
+          %span.fa.fa-refresh.fa-3x.fa-spin
+        .empty-message
+          %i.text-muted There are no recent locations
+        .items
     .col-md-3
       %h3.pull-left Upcoming Events
-      .upcoming-events.location-list.clear
+      .upcoming-events.location-list.loading.clear
+        .loading-overlay
+          %span.fa.fa-refresh.fa-3x.fa-spin
         .items
         .empty-message
           %i.text-muted There are no upcoming events

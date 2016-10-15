@@ -45,6 +45,7 @@ class Event
   field :ending, type: Time
   field :is_all_day, type: Boolean
   field :price, type: String
+  field :email, type: String
   field :website, type: String
   field :facebook, type: String
   field :event_type, type: Integer, default: EVENT_TYPE_CLASS 

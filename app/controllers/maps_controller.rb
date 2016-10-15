@@ -1,25 +1,30 @@
 class MapsController < ApplicationController
   DEFAULT_SEARCH_DISTANCE = 10.0
+  DEFAULT_SEARCH_COUNT = 100
 
   DEFAULT_EVENT_START_OFFSET = 15.days
   DEFAULT_EVENT_END_OFFSET = 1.year
 
   before_filter :set_coordinates, only: [:show, :search]
-  before_filter :set_map, only: [:show]
+  before_filter :set_locations_scope, only: [:show, :search]
+  before_filter :filter_locations, only: [:show, :search]
+  before_filter :set_coordinates_from_locations, only: [:show, :search]
   before_filter :validate_coordinates, only: [:search]
   before_filter :validate_event_time_range, only: [:search]
   around_filter :set_timezone, only: [:search]
 
+  helper_method :map
+
   def show
     tracker.track('showMap',
-      zoom: @map.zoom,
-      lat: @map.lat,
-      lng: @map.lng,
-      query: @map.query,
-      location: @map.location,
-      geolocate: @map.geolocate,
-      event_type: @map.event_type,
-      location_type: @map.location_type
+      zoom: map.zoom,
+      lat: map.lat,
+      lng: map.lng,
+      query: map.query,
+      location: map.location,
+      geolocate: map.geolocate,
+      event_type: map.event_type,
+      location_type: map.location_type
     )
 
     respond_to do |format|
@@ -28,22 +33,9 @@ class MapsController < ApplicationController
   end
 
   def search
-    team = params.fetch(:team, nil)
-    distance = params.fetch(:distance, DEFAULT_SEARCH_DISTANCE).to_f
-    text_filter = params.fetch(:query, nil)
     event_filter = params.fetch(:event_type, []).collect(&:to_i)
     location_filter = params.fetch(:location_type, []).collect(&:to_i)
     location_filter << Location::LOCATION_TYPE_EVENT_VENUE if event_filter.present?
-
-    @locations = Location.near([@lat, @lng], distance)
-    @locations = @locations.where(:team_id.in => team) if team.present?
-
-    if text_filter.present?
-      filter_ids = Location.search_ids(text_filter).try(:to_set) if text_filter.present?
-      @locations = @locations.select do |location|
-        filter_ids.include?(location.id.to_s)
-      end
-    end
 
     @events = Event.between_time(
       @event_start,
@@ -64,9 +56,9 @@ class MapsController < ApplicationController
     tracker.track('searchMap',
       lat: @lat,
       lng: @lng,
-      team: team,
-      distance: distance,
-      query: text_filter,
+      team: @team,
+      distance: @distance,
+      query: @text_filter,
       location_type: location_filter,
       event_type: event_filter,
       event_start: @event_start,
@@ -88,8 +80,44 @@ class MapsController < ApplicationController
   def set_coordinates
     @lat = params.fetch(:lat, nil).try(:to_f)
     @lng = params.fetch(:lng, nil).try(:to_f)
+    @geocode_query = params.fetch(:location, nil)
+
+    if (@lat.blank? || @lng.blank?) && @geocode_query.present?
+      results = GeocodersHelper.search(@geocode_query)
+      @lat = results.first.try(:lat)
+      @lng = results.first.try(:lng)
+    end
   end
-  
+
+  def set_locations_scope
+    @count = params.fetch(:count, DEFAULT_SEARCH_COUNT).to_i
+    @text_filter = params.fetch(:query, nil)
+    @distance = params.fetch(:distance, DEFAULT_SEARCH_DISTANCE).to_f
+    @locations = if @lat.present? && @lng.present?
+      Location.near([@lat, @lng], @distance).limit(@count)
+      #Location.where(:coordinates => { "$within" => { "$center" => [[@lat, @lng], @distance ]}})
+    elsif @text_filter.present?
+      Location.all.limit(@count)
+    end
+  end
+
+  def filter_locations
+    if @text_filter.present? && @locations.present?
+      filter_ids = Location.search_ids(@text_filter)
+      @locations = @locations.where(:_id.in => filter_ids) if filter_ids.present?
+    end
+
+    @team = params.fetch(:team, [])
+    @locations = @locations.where(:team_id.in => @team) if @team.present?
+  end
+
+  def set_coordinates_from_locations
+    if (@lat.blank? || @lng.blank?) && @locations.present?
+      @lat = @locations.first.lat
+      @lng = @locations.first.lng
+    end
+  end
+
   def validate_coordinates
     head :bad_request and return false unless @lat.present? && @lng.present?
   end
@@ -113,26 +141,25 @@ class MapsController < ApplicationController
     MapLocationDecorator.decorate_collection(locations, context: context)
   end
 
-  def set_map
-    query = params.fetch(:query, "")
-    location = params.fetch(:location, "")
-    geolocate = (@lat.blank? && @lng.blank?) && query.blank? && location.blank? ? 1 : 0
+  def map
+    geolocate = @lat.blank? && @lng.blank? ? 1 : 0
 
     default_zoom = @lat.present? && @lng.present? ? Map::ZOOM_LOCATION : Map::ZOOM_DEFAULT
     zoom = params.fetch(:zoom, default_zoom).to_i
 
-    location_type = params.fetch(:location_type, [Location::LOCATION_TYPE_ACADEMY])
+    location_type = params.fetch(:location_type, [Location::LOCATION_TYPE_ACADEMY]).collect(&:to_i)
     event_type = params.fetch(:event_type, [Event::EVENT_TYPE_TOURNAMENT]).collect(&:to_i)
-   
-    @map = Map.new(
+
+    @_map ||= Map.new(
       zoom: zoom,
+      team: @team,
       lat: @lat,
       lng: @lng,
-      query: query,
-      location: location,
+      query: @text_filter,
+      location: @geocode_query,
       minZoom: Map::DEFAULT_MIN_ZOOM,
       geolocate: geolocate,
-      locations: [],
+      locations: action?(:search) ? @locations : [],
       refresh: 1,
       legend: 1,
       location_type: location_type,

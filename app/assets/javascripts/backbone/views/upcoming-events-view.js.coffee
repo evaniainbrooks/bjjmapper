@@ -5,8 +5,19 @@ class RollFindr.Views.UpcomingEventsView extends Backbone.View
   initialize: (options)->
     _.bindAll(this, 'render')
     @listenTo(@collection, 'sync reset', @render)
-    @collection.fetch()
+    data = {
+      organization_id: options.organization_id,
+      instructor_id: options.instructor_id,
+      count: options.count
+    } if options?
 
+    @collection.fetch({
+      data: data,
+      beforeSend: =>
+        @$el.addClass('loading')
+      complete: =>
+        @$el.removeClass('loading')
+    })
   render: ->
     @$('.items').empty()
     if @collection.size() > 0

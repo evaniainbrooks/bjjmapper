@@ -99,17 +99,6 @@
     bottom: 10px;
     right: 10px;
   }
-  .empty-message {
-    div { padding: 12px; }
-    display: none;
-  }
-  &.empty {
-    .empty-message { display: inherit; }
-  }
-  .empty-message {
-    margin: 10px 20px;
-    display: none;
-  }
   .list-group-item-heading, .list-group-item-text {
       display: block;
       text-overflow: ellipsis;

@@ -8,7 +8,12 @@ class RollFindr.Views.ReviewsView extends Backbone.View
   initialize: (options)->
     _.bindAll(this, 'render')
     @template = JST["templates/#{options.template_name}"]
-    @model.get('reviews').fetch().done(@render)
+    @model.get('reviews').fetch({
+      beforeSend: =>
+        @$el.addClass('loading')
+      complete: =>
+        @$el.removeClass('loading')
+    }).done(@render)
 
   render: ->
     @$('.items').empty()

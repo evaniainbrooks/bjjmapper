@@ -14,9 +14,6 @@
         %button.btn.btn-default.btn-sm{:'data-cancel-edit' => true } Cancel
         %button.btn.btn-primary.btn-sm{:type => 'submit'} Save
   .row
-    .col-md-12
-      = render partial: 'locations/edit_success_message' if edit_success?
-  .row
     .col-md-2.text-center.center-block
       %img.logo{:src => event.image, :alt => event.title}/
       %br/
@@ -32,9 +29,23 @@
         %span.fa.fa-calendar
         = event.schedule.try(:to_s)
       %p.display-field.description= event.description
+    .col-md-7.edit-field
+      = f.label :title, class: 'small text-muted upcase'
+      = f.text_field :title, class: 'input-lg form-control'
+      = f.label :organization, class: 'small text-muted upcase'
+      = f.select :organization, Organization.asc(:name).map{|o| [o.name, o.id]}, {include_blank: true}, class: 'form-control input-md'
+      = f.label :description, class: 'small text-muted upcase'
+      = f.text_area :description, class: 'input-md form-control'
     .col-md-3.display-field
       %h3.hidden-md.hidden-lg.hidden-xl Contact
-      %span.display-field
+      - if event.organization.try(:email).present?
+        %span.display-field
+          %b.small.text-muted.upcase Email
+          %br/
+          = link_to 'mailto:' + event.organization.email, class: 'email' do
+            = event.organization.email
+            %i.fa.fa-envelope
+              %br/
         %b.small.text-muted.upcase Websites
         %br/
         - if event.website.present?
@@ -52,45 +63,30 @@
             = event.facebook
             %i.fa.fa-facebook
           %br/
-      - if event.organization.try(:email).present?
-        %span.display-field
-          %b.small.text-muted.upcase Email
-          %br/
-          = link_to 'mailto:' + event.organization.email, class: 'email' do
-            = event.organization.email
-            %i.fa.fa-envelope
-          %br/
-
+    .col-md-3.edit-field
+      = f.label :email, class: 'small text-muted upcase'
+      = f.text_field :email, class: 'input-sm form-control'
+      = f.label :website, 'Websites', class: 'small text-muted upcase'
+      .input-group
+        %span.input-group-addon http://
+        = f.text_field :website, class: 'input-sm form-control'
+      .input-group
+        %span.input-group-addon http://facebook.com/
+        = f.text_field :facebook, class: 'input-sm form-control'
   %hr/
   .row
+    .col-md-3.edit-field
+      %h3.pull-left
+        %span.fa.fa-calendar
+        Schedule
+      %span.pull-right
+        %button.title-btn.btn.btn-default{type: 'button'}
+          Add Date
+      %br.clear.clear-fix/
+      .form-group.small.upcase.text-muted
+        = render partial: 'location_events/start_picker', locals: { value: event.starting }
+        = render partial: 'location_events/end_picker', locals: { value: event.ending }
     .col-md-3.display-field
-      %a{:name => 'location'}
-      - if location.loctype == Location::LOCATION_TYPE_ACADEMY
-        = link_to location do
-          %h4.name= location.title
-      - elsif !location.has_generated_title?
-        %h4.name= location.title
-      = link_to map_path(lat: location.lat, lng: location.lng, ref: 'event_dp') do
-        %span.fa.fa-map-marker
-        %span.address
-          = location.street
-          %br/
-          = "#{location.city}, #{location.state}"
-          %br/
-          = "#{location.postal_code} #{location.country}"
-          %br/
-        %span.small
-          = surround '(', ')' do
-            %span.fa.fa-search-plus
-            View on larger map
-      %br/
-      %br/
-      %p.display-field.text-muted.directions
-        = location.directions
-    .col-md-5
-      %div.map-canvas{:style => 'height: 300px'}
-        -# This is filled in by google maps
-    .col-md-4
       %h3
         %span.fa.fa-calendar
         Schedule
@@ -104,25 +100,19 @@
           %span.pull-left Tournament begins
           %span.pull-right.text-muted
             = event.schedule.try(:to_s)
+    .col-md-6
+      .map
+        %div.map-canvas{:style => 'height: 300px'}
+          -# This is filled in by google maps
+    .col-md-3
+      %h3= "Upcoming #{event.organization.abbreviation} Events"
+      .upcoming-events.location-list.loading.clear
+        .loading-overlay
+          %span.fa.fa-refresh.fa-3x.fa-spin
+        .items
+        .empty-message
+          %i.text-muted There are no upcoming events
   .row.edit-field
-    .form-group.col-md-4.col-md-offset-2.small
-      = render partial: 'location_events/start_picker'
-    .form-group.col-md-4.small
-      = render partial: 'location_events/end_picker'
-  .row.edit-field
-    .form-group.col-md-8.col-md-offset-2.small
-      = render partial: 'location_events/recurrence_controls', locals: { f: f }
-  .row.edit-field
-    .col-md-8.col-md-offset-2
-      %p
-        = f.label :description, class: 'small'
-        = f.text_area :description, class: 'input-md form-control'
-  .row.edit-field
-    .col-md-12
-      %h3 Metadata
-    .col-md-12
-      %pre.small= JSON.pretty_generate(event.as_json({}))
-      %br/
     .col-md-12
       .pull-right
         %a.delete-field.btn.btn-danger.btn-md{:type => 'button',
@@ -137,12 +127,15 @@
         &nbsp;&nbsp;
         %button.btn.btn-default.btn-md{:type => 'button', 'data-cancel-edit' => true} Cancel Editing
         %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes
-  
+
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->
       eventModel = new RollFindr.Models.Event(#{render_json(event)})
       showView = new RollFindr.Views.EventShowView({ model: eventModel })
+  
+      upcomingEventsView = new RollFindr.Views.UpcomingEventsView({organization_id: "#{event.organization.id}"})
+
       mapModel = new RollFindr.Models.Map(#{render_json(@map)})
-      mapView = new RollFindr.Views.MapView({editable: false, model: mapModel, el: $('.show-event')})
+      mapView = new RollFindr.Views.StaticMapView({editable: false, model: mapModel, el: $('.map')})
     $('.directions').readmore(collapsedHeight: 175)

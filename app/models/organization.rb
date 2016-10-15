@@ -13,6 +13,7 @@ class Organization
 
   field :name, type: String
   field :abbreviation, type: String
+  slug :abbreviation
   field :description, type: String
   field :image_tiny, type: String
   field :image, type: String

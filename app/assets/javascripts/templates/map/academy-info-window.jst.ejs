@@ -1,13 +1,12 @@
 <div class="show-location-overlay container-fluid">
-  <a href="<%= Routes.location_path(location, { ref: 'map_item' }) %>" data-no-turbolink>
+  <a href="<%= Routes.location_path(location.param, { ref: 'map_item' }) %>" data-no-turbolink>
     <div class="row">
       <div class="col-md-3">
-        <br />
         <img class="center-block" src="<%= location.image %>" />
       </div>
       <div class="col-md-9">
         <h4 class="list-group-item-heading"><%= location.title %></h4>
-        <p class="list-group-item-text team-title"><%= location.team_name %></p>
+        <p class="list-group-item-text small team-title"><%= location.team_name %></p>
         <span class="address small">
           <%= location.street %>
         </span>
