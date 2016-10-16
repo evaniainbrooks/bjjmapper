@@ -1,5 +1,5 @@
 json.address result.address
-json.street result.street_address
+json.street result.street
 json.postal_code result.postal_code
 json.city result.city
 json.state result.state

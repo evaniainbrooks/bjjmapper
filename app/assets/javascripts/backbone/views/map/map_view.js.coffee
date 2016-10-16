@@ -104,7 +104,7 @@ class RollFindr.Views.MapView extends Backbone.View
 
   search: (e)->
     @model.set('query', e.query)
-    @model.set('location', e.location)
+    @model.set('geoquery', e.geoquery)
 
     @fetchViewport()
 
@@ -146,12 +146,12 @@ class RollFindr.Views.MapView extends Backbone.View
     defaultLat = @model.get('lat')
     defaultLng = @model.get('lng')
     defaultLocation = new google.maps.LatLng(defaultLat, defaultLng)
-    google.maps.event.addListenerOnce(@map, 'idle', callback)
+    google.maps.event.addListenerOnce(@map, 'idle', callback) if callback?
     @map.setCenter(defaultLocation)
 
   clearSearch: ->
     @model.set('query', null)
-    @model.set('location', null)
+    @model.set('geoquery', null)
 
   clearSearchAndFetchViewport: ->
     @clearSearch()
@@ -176,14 +176,15 @@ class RollFindr.Views.MapView extends Backbone.View
       lng: lng
       distance: distance
       query: @model.get('query')
-      location: @model.get('location')
+      geoquery: @model.get('geoquery')
     })
 
   fetchMap: (args, completeCallback)->
     @model.fetch({
       data: args
       success: =>
-        toastr.success("Found #{@model.get('locations').size()} locations", 'Map refreshed')
+        @setCenterFromModel()
+        toastr.success("Found #{'location'.pluralize(@model.get('location_count'))} and #{'event'.pluralize(@model.get('event_count'))}", 'Map refreshed')
       complete: =>
         @$('.refresh-button .fa').removeClass('fa-spin')
         completeCallback() if completeCallback?

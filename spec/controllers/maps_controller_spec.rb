@@ -95,7 +95,7 @@ describe MapsController do
           assigns[:locations].collect(&:to_param).should_not include(other_location.to_param)
         end
       end
-      context 'with geocode request (location)' do
+      context 'with geocode request' do
         let(:lat) { 80.0 }
         let(:lng) { 80.0 }
         let(:location_query) { 'New York' }
@@ -103,7 +103,7 @@ describe MapsController do
           GeocodersHelper.stub(:search).and_return([OpenStruct.new({lat: lat, lng: lng})])
         end
         it 'sets the lat and lng from the geocoded result' do
-          get :search, location: location_query, location_type: Location::LOCATION_TYPE_ALL, lat: lat, lng: lng, format: 'json'
+          get :search, geoquery: location_query, location_type: Location::LOCATION_TYPE_ALL, format: 'json'
 
           controller.send(:map).lat.should eq lat
           controller.send(:map).lng.should eq lng

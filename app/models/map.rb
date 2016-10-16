@@ -7,9 +7,10 @@ class Map
   DEFAULT_MIN_ZOOM = 5
   GLOBAL_MIN_ZOOM = 4
 
+  attr_accessor :location_count, :event_count
   attr_accessor :lat, :lng
   attr_accessor :zoom, :query
-  attr_accessor :location, :query
+  attr_accessor :geoquery, :query
   attr_accessor :minZoom, :geolocate
   attr_accessor :locations, :refresh, :legend
   attr_accessor :event_type, :location_type, :team
@@ -23,11 +24,13 @@ class Map
     @legend = options.fetch(:legend, 0)
     @lat = options.fetch(:lat, nil)
     @lng = options.fetch(:lng, nil)
-    @location = options.fetch(:location, nil)
+    @geoquery = options.fetch(:geoquery, nil)
     @query = options.fetch(:query, nil)
     @team = options.fetch(:team, [])
     @location_type = options.fetch(:location_type, [])
     @event_type = options.fetch(:event_type, [])
+    @location_count = options.fetch(:location_count, 0)
+    @event_count = options.fetch(:event_count, 0)
   end
 
   def [](index)

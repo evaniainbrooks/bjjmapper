@@ -18,13 +18,13 @@ class MapsController < ApplicationController
   def show
     @location_type = params.fetch(:location_type, [Location::LOCATION_TYPE_ACADEMY]).collect(&:to_i)
     @event_type = params.fetch(:event_type, [Event::EVENT_TYPE_TOURNAMENT]).collect(&:to_i)
-    
+
     tracker.track('showMap',
       zoom: map.zoom,
       lat: map.lat,
       lng: map.lng,
       query: map.query,
-      location: map.location,
+      geoquery: map.geoquery,
       geolocate: map.geolocate,
       event_type: map.event_type,
       location_type: map.location_type
@@ -38,8 +38,8 @@ class MapsController < ApplicationController
   def search
     @event_type = params.fetch(:event_type, []).collect(&:to_i)
     @location_type = params.fetch(:location_type, []).collect(&:to_i)
-    
-    location_filter = @location_type.dup 
+
+    location_filter = @location_type.dup
     location_filter << Location::LOCATION_TYPE_EVENT_VENUE if @event_type.present?
 
     @events = Event.between_time(
@@ -48,7 +48,8 @@ class MapsController < ApplicationController
     .where(
       :location_id.in => @locations.collect(&:id),
       :event_type.in => @event_type)
-    .group_by(&:location_id)
+    @event_count = @events.count
+    @events = @events.group_by(&:location_id)
 
     @locations = @locations.select do |location|
       has_events = @events[location.id].present?
@@ -81,14 +82,14 @@ class MapsController < ApplicationController
   private
 
   def set_coordinates
-    @lat = params.fetch(:lat, nil).try(:to_f)
-    @lng = params.fetch(:lng, nil).try(:to_f)
-    @geocode_query = params.fetch(:location, nil)
-
-    if (@lat.blank? || @lng.blank?) && @geocode_query.present?
+    @geocode_query = params.fetch(:geoquery, nil)
+    if @geocode_query.present?
       results = GeocodersHelper.search(@geocode_query)
       @lat = results.first.try(:lat)
       @lng = results.first.try(:lng)
+    else
+      @lat = params.fetch(:lat, nil).try(:to_f)
+      @lng = params.fetch(:lng, nil).try(:to_f)
     end
   end
 
@@ -145,18 +146,20 @@ class MapsController < ApplicationController
   end
 
   def map
-    geolocate = @lat.blank? && @lng.blank? ? 1 : 0
+    geolocate = @lat.blank? || @lng.blank? ? 1 : 0
 
     default_zoom = @lat.present? && @lng.present? ? Map::ZOOM_LOCATION : Map::ZOOM_DEFAULT
     zoom = params.fetch(:zoom, default_zoom).to_i
 
     @_map ||= Map.new(
+      location_count: @locations.try(:count),
+      event_count: @event_count,
       zoom: zoom,
       team: @team,
       lat: @lat,
       lng: @lng,
       query: @text_filter,
-      location: @geocode_query,
+      geoquery: @geocode_query,
       minZoom: Map::DEFAULT_MIN_ZOOM,
       geolocate: geolocate,
       locations: action?(:search) ? @locations : [],

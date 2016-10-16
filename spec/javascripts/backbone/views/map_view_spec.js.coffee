@@ -28,12 +28,7 @@ describe 'Views.MapView', ->
     ]
     this.server.respondWith(
       'GET',
-      '/teams',
-      emptyResponse
-    )
-    this.server.respondWith(
-      'GET',
-      '/locations/search',
+      '/map/search',
       emptyResponse
     )
     stubGoogleMapsApi()
