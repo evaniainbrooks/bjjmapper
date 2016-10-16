@@ -5,6 +5,22 @@ require 'shared/timezonesvc_context'
 describe EventsController do
   include_context 'skip tracking'
   include_context 'timezone service'
+  
+  describe 'GET wizard' do
+    context 'when not signed in' do
+      it 'redirects to the login page' do
+        get :wizard
+        response.should redirect_to(signin_path)
+      end
+    end
+    context 'when signed in' do
+      let(:session_params) { { user_id: create(:user).to_param } }
+      it 'shows the wizard' do
+        get :wizard, {}, session_params
+        response.should be_ok
+      end
+    end
+  end
   describe 'POST create' do
     context 'when signed in' do
       let(:user) { create(:user) }

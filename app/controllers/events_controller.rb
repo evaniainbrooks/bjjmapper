@@ -4,7 +4,7 @@ class EventsController < ApplicationController
 
   before_action :set_locations, only: [:index]
   before_action :validate_time_range, only: [:index]
-  before_action :ensure_signed_in, only: [:create]
+  before_action :ensure_signed_in, only: [:create, :wizard]
 
   around_filter :set_location_tz, only: [:index]
 

@@ -14,13 +14,13 @@ describe Map do
     let(:center) { [122.0, 45.0] }
     let(:minZoom) { 3 }
     let(:geolocate) { 0 }
-    let(:location) { 'kuzey kibris' }
+    let(:geoquery) { 'kuzey kibris' }
     let(:query) { 'near east university' }
     subject do
       Map.new(:zoom => zoom,
               :minZoom => minZoom,
               :geolocate => geolocate,
-              :location => location,
+              :geoquery => geoquery,
               :query => query,
               :lat => center[0],
               :lng => center[1])
@@ -31,7 +31,7 @@ describe Map do
       subject.geolocate.should eq geolocate
       subject.lat.should eq center[0]
       subject.lng.should eq center[1]
-      subject.location.should eq location
+      subject.geoquery.should eq location
       subject.query.should eq query
     end
   end

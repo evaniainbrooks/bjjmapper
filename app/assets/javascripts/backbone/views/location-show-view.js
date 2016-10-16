@@ -16,12 +16,14 @@
       'click .add-review': 'addReview',
       'change [name="location[team_id]"]': 'changeTeam',
       'click .add-instructor-menu': 'addInstructor',
+      'click .add-event-menu': 'addEvent',
       'click .show-metadata': 'showMetadataDialog'
     },
     initialize: function(options) {
       _.bindAll(this,
         'addReview',
         'addInstructor',
+        'addEvent',
         'changeTeam',
         'showMetadataDialog');
 
@@ -41,6 +43,9 @@
     },
     addReview: function() {
       $('.add-review-dialog').modal('show');
+    },
+    addEvent: function() {
+      $('.create-event-dialog').modal('show');
     },
     changeTeam: function(e) {
       var teamImg = $('option:selected', e.currentTarget).data('img-src');
