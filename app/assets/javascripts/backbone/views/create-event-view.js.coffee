@@ -26,7 +26,7 @@ class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
   hasInstructorOrOrganization: ->
     if @eventType == RollFindr.Models.Event.EVENT_TYPE_TOURNAMENT && @$('[name="event[organization]"]').val().length > 0
       return true
-    else if @eventType == RollFindr.Models.Event.EVENT_TYPE_SEMINAR && @$('[name="event[instructor]"]').val().length > 0
+    else if @eventType == RollFindr.Models.Event.EVENT_TYPE_SEMINAR && @$('[name="event[instructor]"]:visible').val().length > 0
       return true
     else if @eventType == RollFindr.Models.Event.EVENT_TYPE_CLASS
       return true

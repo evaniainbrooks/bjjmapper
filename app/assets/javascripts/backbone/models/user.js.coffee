@@ -4,7 +4,7 @@ class RollFindr.Models.User extends Backbone.Model
     is_anonymous: true
 
   initialize: ->
-    id = this.get('id')
+    id = this.get('param') || this.get('id')
     students = @get('lineal_children')
     students = new RollFindr.Collections.StudentsCollection(students, {instructor_id: id})
     this.set('lineal_children', students)

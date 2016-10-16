@@ -7,7 +7,7 @@ class StudentsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.json { render status: :ok, json: students }
+      format.json
     end
   end
 

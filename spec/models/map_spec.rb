@@ -31,7 +31,7 @@ describe Map do
       subject.geolocate.should eq geolocate
       subject.lat.should eq center[0]
       subject.lng.should eq center[1]
-      subject.geoquery.should eq location
+      subject.geoquery.should eq geoquery
       subject.query.should eq query
     end
   end
