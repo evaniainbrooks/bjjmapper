@@ -64,7 +64,6 @@ describe StudentsController do
         it 'returns the students' do
           get :index, format: 'json', user_id: '123'
           assigns[:students].count.should eq students.count
-          response.body.should include(students[0].name)
         end
       end
       context 'when there are no students' do
