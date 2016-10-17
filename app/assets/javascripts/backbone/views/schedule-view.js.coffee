@@ -41,7 +41,7 @@ class RollFindr.Views.ScheduleView extends Backbone.View
 
     @$el.html('<div class="scheduler"></div>')
 
-    locationId = @model.get('id')
+    locationId = @model.get('param') || @model.get('id')
     #TODO: Fix EventsCollection to determine this
     eventsPath = @model.get('events').url()
     @$('.scheduler').fullCalendar({
@@ -67,8 +67,8 @@ class RollFindr.Views.ScheduleView extends Backbone.View
     })
 
   calendarEventClick: (event, jsEvent, view)->
-    locationId = @model.get('id')
-    eventId = event.id
+    locationId = @model.get('param') || @model.get('id')
+    eventId = event.param || event.id
 
     window.location = Routes.location_event_path(locationId, eventId)
     return true
