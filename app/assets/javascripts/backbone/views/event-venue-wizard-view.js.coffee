@@ -148,7 +148,8 @@ class RollFindr.Views.EventVenueWizardView extends Backbone.View
 
   fetchNearbyLocations: (lat, lng)->
     model = new RollFindr.Models.Location({
-      id: null
-      coordinates: [lat, lng]
+      id: null,
+      lat: lat,
+      lng: lng
     })
     @nearbyLocationsView = new RollFindr.Views.LocationNearbyView({ model: model, count: 3, template: 'templates/locations/nearby-event-venue' })
