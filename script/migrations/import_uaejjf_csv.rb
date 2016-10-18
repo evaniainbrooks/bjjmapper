@@ -36,12 +36,12 @@ csv.each do |row|
   venue_name = row[5].strip
   venue_name.slice!("Location: ")
   venue_name = venue_name.split(',', 1)[0]
-  venue_address = row[6].gsub(/Telephone Number: [^a-zA-Z]+/, '').gsub(/Homepage: [a-zA-Z.]+/, '').gsub('Federative Republic of', '').gsub('Republic of the', '').gsub('Republic of', '')
+  venue_address = row[6].gsub(/Telephone Number: [^a-zA-Z]+/, '').gsub(/Homepage: [a-zA-Z.]+/, '').gsub('Federative Republic of', '').gsub('Republic of the', '').gsub('Republic of', '').gsub('Kingdom of', '')
   link = "https://www.uaejjf.org" + row[7].strip
 
   results = GeocodersHelper.search(venue_address)
   if results.blank?
-    puts "Couldn't geocode #{venue_address}, skipping #{title}"
+    puts "*** Couldn't geocode #{venue_address}, skipping #{title}"
     next
   else
     puts "Got #{results.count} geocode results #{results.inspect}"
@@ -50,11 +50,11 @@ csv.each do |row|
   source = File.basename(__FILE__)
   venue = Location.where(:title => venue_name).first_or_create({
     loctype: Location::LOCATION_TYPE_EVENT_VENUE,
-    street: results[0].street,
-    city: results[0].city,
-    postal_code: results[0].postal_code,
-    country: results[0].country,
-    state: results[0].state,
+    #street: results[0].street,
+    #city: results[0].city,
+    #postal_code: results[0].postal_code,
+    #country: results[0].country,
+    #state: results[0].state,
     coordinates: [results[0].lng, results[0].lat],
     source: source
   })
@@ -78,6 +78,7 @@ csv.each do |row|
     event_reg_start = Event.create({
       title: "Registration opens",
       event_type: Event::EVENT_TYPE_SUBEVENT,
+      parent_event: event,
       organization: org,
       location: venue,
       modifier: su,
@@ -90,6 +91,7 @@ csv.each do |row|
     event_reg_end = Event.create({
       title: "Registration closes",
       event_type: Event::EVENT_TYPE_SUBEVENT,
+      parent_event: event,
       organization: org,
       location: venue,
       modifier: su,
@@ -104,7 +106,7 @@ csv.each do |row|
     puts "Created subevent #{event_reg_start.to_param} errors #{event_reg_start.errors.messages}"
     puts "Created subevent #{event_reg_end.to_param} errors #{event_reg_end.errors.messages}"
   end
-  
+
   puts title
 end
 
