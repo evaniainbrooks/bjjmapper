@@ -49,6 +49,7 @@ class Event
   field :website, type: String
   field :facebook, type: String
   field :event_type, type: Integer, default: EVENT_TYPE_CLASS 
+  field :source, type: String
 
   default_scope -> { where(:event_type.ne => EVENT_TYPE_SUBEVENT).asc(:starting) }
 
@@ -141,7 +142,7 @@ class Event
 
   def organizer_or_instructor_present
     if self.event_type == Event::EVENT_TYPE_TOURNAMENT && self.organization.blank?
-      errors.add(:organizer, "Tournaments require an organization")
+      errors.add(:organization, "Tournaments require an organization")
     end
 
     if self.event_type == Event::EVENT_TYPE_SEMINAR && self.instructor.blank?

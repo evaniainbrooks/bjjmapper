@@ -75,6 +75,7 @@ class Location
   field :state
   field :country
   field :postal_code
+  field :source, type: String
 
   field :title
   slug :title, history: true do |obj|
