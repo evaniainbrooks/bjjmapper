@@ -252,7 +252,7 @@ class LocationsController < ApplicationController
 
   def set_location
     id_param = params.fetch(:id, '')
-    @location = if action?(:schedule)
+    @location = if action?(:schedule) || current_user.super_user?
       Location.all
     else
       Location.academies

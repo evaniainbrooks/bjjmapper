@@ -124,10 +124,20 @@ describe LocationsController do
       end
     end
     context 'when the location is an event venue' do
-      let(:location) { create(:location, loctype: Location::LOCATION_TYPE_EVENT_VENUE) }
-      it 'returns 404 not found' do
-        get :show, id: location
-        response.status.should eq 404
+      context 'and not super_user?' do
+        let(:location) { create(:location, loctype: Location::LOCATION_TYPE_EVENT_VENUE) }
+        it 'returns 404 not found' do
+          get :show, id: location
+          response.status.should eq 404
+        end
+      end
+      context 'and super_user?' do
+        let(:location) { create(:location, loctype: Location::LOCATION_TYPE_EVENT_VENUE) }
+        let(:session_params) { { user_id: create(:user, role: 'super_user').id } }
+        it 'returns the location' do
+          get :show, {id: location}, session_params
+          response.should render_template('locations/show')
+        end
       end
     end
   end
