@@ -29,6 +29,9 @@ module RollFindr
     config.timezone_service_host = 'localhost'
     config.timezone_service_port = 9002
 
+    config.location_fetch_service_host = 'localhost'
+    config.location_fetch_service_port = 9004
+
     config.google_maps_api_key = 'AIzaSyDfVeMiIo8lIaMQ_UxahKftMpIutq7QQ4I'
     config.google_maps_endpoint = '//maps.googleapis.com/maps/api/js'
 
