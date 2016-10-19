@@ -1,6 +1,4 @@
-$markerRed: #ff0000;
-$markerBlue:  #0000ff;
-$markerGreen: #00ff00;
+@import "colors";
 
 .map-label-content {
   position: relative;
@@ -26,30 +24,30 @@ $markerGreen: #00ff00;
 }
 
 .map-label-content.academy {
-  background-color: $markerRed;
+  background-color: $academyColor;
   &:after {
-    border-top: solid 5px $markerRed;
+    border-top: solid 5px $academyColor;
   }
 }
 
 .map-label-content.academybb {
-  background-color: $markerRed;
+  background-color: $academyColor;
   border-top: solid 3px black;
   &:after {
-    border-top: solid 5px $markerRed;
+    border-top: solid 5px $academyColor;
   }
 }
 
 .map-label-content.tournament {
-  background-color: $markerBlue;
+  background-color: $tournamentColor;
   &:after {
-    border-top: solid 5px $markerBlue;
+    border-top: solid 5px $tournamentColor;
   }
 }
 
 .map-label-content.seminar {
-  background-color: $markerGreen;
+  background-color: $seminarColor;
   &:after {
-    border-top: solid 5px $markerGreen;
+    border-top: solid 5px $seminarColor;
   }
 }

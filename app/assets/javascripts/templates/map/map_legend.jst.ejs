@@ -1,21 +1,20 @@
 <div class="map-legend">
- 
  <h5 class='pull-left'>Legend</h5>
  <button class='close-btn close pull-right' type='button'><span class='fa fa-chevron-up'></span></button>
  <button class='open-btn close pull-right' type='button'><span class='fa fa-chevron-down'></span></button>
  <br class='clear clear-fix' />
  <div class='content'>
-   <label class="form-label">
+   <label class="form-label academy">
       <input <%= _.contains(location_type, RollFindr.Models.Location.LOCATION_TYPE_ACADEMY) ? 'checked' : '' %> data-id="<%= RollFindr.Models.Location.LOCATION_TYPE_ACADEMY %>" data-type="location" name="show_academies" type="checkbox">
         &nbsp;Academies
     </label>
     <br>
-    <label class="form-label">
+    <label class="form-label tournament">
       <input <%= _.contains(event_type, RollFindr.Models.Event.EVENT_TYPE_TOURNAMENT) ? 'checked' : '' %> data-id="<%= RollFindr.Models.Event.EVENT_TYPE_TOURNAMENT %>" data-type="event" name="show_tournaments" type="checkbox">
         &nbsp;Tournaments
     </label>
     <br>
-    <label class="form-label">
+    <label class="form-label seminar">
       <input <%= _.contains(event_type, RollFindr.Models.Event.EVENT_TYPE_SEMINAR) ? 'checked' : '' %> data-id="<%= RollFindr.Models.Event.EVENT_TYPE_SEMINAR %>" data-type="event" name="show_seminars" type="checkbox">
         &nbsp;Seminars
     </label>

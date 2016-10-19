@@ -23,6 +23,7 @@
         <h4 class="list-group-item-heading"><%= location.title %></h4>
         <p class="strong list-group-item-text small team-title"><%= location.team_name %></p>
         <p class="list-group-item-text small address">
+          <span class="fa fa-map-marker"></span>
           <%= location.address %>
         </p>
       </div>
@@ -52,10 +53,5 @@
       </li>
     </ul>
     <span class="text-info distance small"><%= location.distance %></span>
-    <% _.each(location.events, function(event) { %>
-      <%= event.name %>
-      <%= event.starting %>
-      <%= event.event_type %>
-    <% }) %>
   </div>
 </div>

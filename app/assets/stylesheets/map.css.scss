@@ -1,4 +1,5 @@
 @import "marker";
+@import "colors";
 
 .map-legend {
   margin-top: 10px;
@@ -27,6 +28,18 @@
   .close-btn { display: block; }
   .open-btn { display: none; }
   .content { display: block; }
+
+  label {
+    &.academy {
+      color: $academyColor;
+    }
+    &.tournament {
+      color: $tournamentColor;
+    }
+    &.seminar {
+      color: $seminarColor;
+    }
+  }
 }
 
 .location-list {
@@ -38,11 +51,9 @@
     margin-bottom: 0px !important;
   }
   .map-list-item {
+    padding-left: 4px !important;
     h4 {
       color: #428bca;
-    }
-    .team-title {
-      color: #777;
     }
     .address {
       color: black;
@@ -63,21 +74,21 @@
     }
 
     &.academy .list-index span {
-      background-color: lighten($markerRed, 30%);
-      border: 1px solid $markerRed;
+      background-color: lighten($academyColor, 30%);
+      border: 1px solid $academyColor;
     }
     &.academybb .list-index span {
-      background-color: lighten($markerRed, 30%);
-      border: 1px solid $markerRed;
+      background-color: lighten($academyColor, 30%);
+      border: 1px solid $academyColor;
       border-top: 3px solid black;
     }
     &.tournament .list-index span {
-      background-color: lighten($markerBlue, 30%);
-      border: 1px solid $markerBlue;
+      background-color: lighten($tournamentColor, 30%);
+      border: 1px solid $tournamentColor;
     }
     &.seminar .list-index span {
-      background-color: lighten($markerGreen, 30%);
-      border: 1px solid $markerGreen;
+      background-color: lighten($seminarColor, 30%);
+      border: 1px solid $seminarColor;
     }
   }
   .list-index {
@@ -85,7 +96,7 @@
     padding: 7px 0px;
     height: 100%;
     float: left;
-    width: 40px;
+    width: 43px;
     text-align: center;
     span {
       font-size: 150%;
@@ -130,25 +141,95 @@
     .inactive-content { display: none; }
 
     &.academy .list-index span {
-      background-color: $markerRed;
-      border: 1px solid $markerRed;
+      background-color: $academyColor;
+      border: 1px solid $academyColor;
     }
     
     &.academybb .list-index span {
-      background-color: $markerRed;
-      border: 1px solid $markerRed;
+      background-color: $academyColor;
+      border: 1px solid $academyColor;
       border-top: 3px solid black;
     }
     
     &.tournament .list-index span {
-      background-color: $markerBlue;
-      border: 1px solid $markerBlue;
+      background-color: $tournamentColor;
+      border: 1px solid $tournamentColor;
     }
     
     &.seminar .list-index span {
-      background-color: $markerGreen;
-      border: 1px solid $markerGreen;
+      background-color: $seminarColor;
+      border: 1px solid $seminarColor;
     }
   }
 }
 
+.show-location-overlay {
+  max-width: 250px;
+  
+  img {
+    width: 50px;
+    height: 50px;
+  }
+  h4 { color: black; }
+  .address { color: black; }
+}
+
+.map-list {
+  margin-top: 7px;
+}
+
+.map-view, .map-list-view {
+  padding: 0px !important;
+  min-height: 100% !important;
+}
+
+.map-list-view {
+  background-color: #eee;
+  .tab-content {
+    background-color: white;
+  }
+}
+
+.map-canvas {
+  height: 100%;
+}
+
+.wrapper {
+  .map-canvas {
+    position: fixed !important;
+    top: 50px;
+    right: 33.3333%;
+    @media screen and (max-width: 1000px) {
+      position: absolute !important;
+      top: 0;
+      right: 0;
+    }
+    left: 0;
+    bottom: 0;
+    border: 2px solid transparent;
+  }
+  &.map-edit-mode {
+    .map-canvas {
+      border: 2px dashed #449d44;
+    }
+  }
+}
+
+.map-edit-control {
+  padding-right: 5px;
+  padding-bottom: 5px;
+  .inner {
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-color: gray;
+    cursor: pointer;
+    text-align: center;
+    .text {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      padding-left: 4px;
+      padding-right: 4px;
+    }
+  }
+}

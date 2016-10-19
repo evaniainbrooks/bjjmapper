@@ -1,4 +1,4 @@
-<div data-id="<%= location.id %>" class="map-list-item event-list-item <%= active ? 'marker-active' : ''%> list-group-item tournament">
+<div data-id="<%= location.id %>" class="map-list-item event-list-item <%= active ? 'marker-active' : ''%> list-group-item seminar">
   <div class="inactive-content">
     <div class="list-index">
       <span><%= location.marker_id %></span>
@@ -29,15 +29,13 @@
         </p>
         <br />
         <p class="list-group-item-text small address">
+          <span class="fa fa-map-marker"></span>
           <%= location.address %>
         </p>
       </div>
       <br/>
     </a>
     <ul class="small list-unstyled">
-      <% if (null !== location.events[0].organization.website && location.events[0].organization.website.length > 0) { %>
-        <li><span class="col-md-offset-1 label">Org website</span> <a class="website" href="http://<%= location.events[0].organization.website %>"><%= location.events[0].organization.website %></a></li>
-      <% } %>
       <% if (null !== location.events[0].website && location.events[0].website.length > 0) { %>
         <li><span class="col-md-offset-1 label">Website</span> <a class="website" href="http://<%= location.events[0].website %>"><%= location.events[0].website %></a></li>
       <% } %>

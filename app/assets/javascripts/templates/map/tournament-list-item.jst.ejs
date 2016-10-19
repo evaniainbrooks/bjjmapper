@@ -1,0 +1,51 @@
+<div data-id="<%= location.id %>" class="map-list-item event-list-item <%= active ? 'marker-active' : ''%> list-group-item tournament">
+  <div class="inactive-content">
+    <div class="list-index">
+      <span><%= location.marker_id %></span>
+    </div>
+    <img src="<%= location.image %>" alt="<% location.title %> logo" class="logo pull-left" />
+    <div>
+      <h4 class="list-group-item-heading"><%= location.title %></h4>
+      <p class="team-title strong list-group-item-text small"><%= location.entities %></p>
+      <p class="date list-group-item-text small">
+        <span class="fa fa-calendar"></span>
+        <%= moment(location.dates[0]).format("MMMM Do") %>
+      </p>
+    </div>
+    <span class="text-info distance small"><%= location.distance %></span>
+  </div>
+  <div class="active-content">
+    <a class="location-link" href="<%= location.link %>" alt="See more about <%= location.title %>">
+      <div class="list-index">
+        <span><%= location.marker_id %></span>
+      </div>
+      <img src="<%= location.image %>" alt="<% location.title %> logo" class="logo pull-left" />
+      <div>
+        <h4 class="list-group-item-heading"><%= location.title %></h4>
+        <p class="strong list-group-item-text small team-title"><%= location.entities %></p>
+        <p class="list-group-item-text small date">
+          <span class="fa fa-calendar"></span>
+          <%= moment(location.dates[0]).format("MMMM Do") %>
+        </p>
+        <br />
+        <p class="list-group-item-text small address">
+          <span class="fa fa-map-marker"></span>
+          <%= location.address %>
+        </p>
+      </div>
+      <br/>
+    </a>
+    <ul class="small list-unstyled">
+      <% if (null !== location.events[0].organization.website && location.events[0].organization.website.length > 0) { %>
+        <li><span class="col-md-offset-1 label">Org website</span> <a class="website" href="http://<%= location.events[0].organization.website %>"><%= location.events[0].organization.website %></a></li>
+      <% } %>
+      <% if (null !== location.events[0].website && location.events[0].website.length > 0) { %>
+        <li><span class="col-md-offset-1 label">Website</span> <a class="website" href="http://<%= location.events[0].website %>"><%= location.events[0].website %></a></li>
+      <% } %>
+      <% if (null !== location.events[0].facebook && location.events[0].facebook.length > 0) { %>
+        <li><span class="col-md-offset-1 label">Facebook</span> <a class="website" href="http://facebook.com/<%= location.events[0].facebook %>"><%= location.events[0].facebook %></a></li>
+      <% } %>
+    </ul>
+    <span class="text-info distance small"><%= location.distance %></span>
+  </div>
+</div>

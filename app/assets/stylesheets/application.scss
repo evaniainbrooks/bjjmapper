@@ -69,57 +69,6 @@ html, body {
   }
 }
 
-.show-location-overlay {
-  img {
-    width: 50px;
-    height: 50px;
-  }
-  h4 { color: black; }
-  .team-title { color: #777; }
-  .address { color: black; }
-}
-
-.map-list {
-  margin-top: 7px;
-}
-
-.map-view, .map-list-view {
-  padding: 0px !important;
-  min-height: 100% !important;
-}
-
-.map-list-view {
-  background-color: #eee;
-  .tab-content {
-    background-color: white;
-  }
-}
-
-.map-canvas {
-  height: 100%;
-}
-
-.wrapper {
-  .map-canvas {
-    position: fixed !important;
-    top: 50px;
-    right: 33.3333%;
-    @media screen and (max-width: 1000px) {
-      position: absolute !important;
-      top: 0;
-      right: 0;
-    }
-    left: 0;
-    bottom: 0;
-    border: 2px solid transparent;
-  }
-  &.map-edit-mode {
-    .map-canvas {
-      border: 2px dashed #449d44;
-    }
-  }
-}
-
 .wrapper {
   position:absolute;
   height:auto;
@@ -165,25 +114,6 @@ html, body {
   min-width: 100px;
   padding: none;
   float: left;
-}
-
-.map-edit-control {
-  padding-right: 5px;
-  padding-bottom: 5px;
-  .inner {
-    background-color: white;
-    border-style: solid;
-    border-width: 1px;
-    border-color: gray;
-    cursor: pointer;
-    text-align: center;
-    .text {
-      font-family: Arial, sans-serif;
-      font-size: 12px;
-      padding-left: 4px;
-      padding-right: 4px;
-    }
-  }
 }
 
 .team-index {

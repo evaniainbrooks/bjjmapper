@@ -24,18 +24,6 @@ class RollFindr.Models.Location extends Backbone.Model
     return 'academybb' if @get('has_black_belt')
     'academy'
 
-  toJSON: ->
-    locationJson = Backbone.Model.prototype.toJSON.call(this)
-    typeIsArray = Array.isArray || ( value ) -> return {}.toString.call( value ) is '[object Array]'
-
-    _.each ['events', 'instructors', 'reviews'], (o)=>
-      collection = @get(o)
-      unless typeIsArray(collection)
-        collectionJson = collection.toJSON()
-        locationJson[o] = collectionJson
-
-    return locationJson
-
   isVisible: (center, radius)->
   paramRoot: 'location'
   urlRoot: Routes.locations_path

@@ -1,7 +1,12 @@
 class RollFindr.Views.UpcomingEventsView extends Backbone.View
   el: $('.upcoming-events')
   collection: new RollFindr.Collections.EventsCollection()
-  template: JST['templates/upcoming-event']
+  template: (event)->
+    if (event.get('event_type') == RollFindr.Models.Event.EVENT_TYPE_TOURNAMENT)
+      return JST['templates/upcoming-tournament']
+    else
+      return JST['templates/upcoming-seminar']
+
   initialize: (options)->
     _.bindAll(this, 'render')
     @listenTo(@collection, 'sync reset', @render)
@@ -24,7 +29,8 @@ class RollFindr.Views.UpcomingEventsView extends Backbone.View
       @$el.removeClass('empty')
       _.each @collection.models, (e)=>
         id = e.get('id')
-        element = @template({event: e.toJSON()})
+        t = @template(e)
+        element = t({event: e.toJSON()})
         @$('.items').append(element)
     else
       @$el.addClass('empty')

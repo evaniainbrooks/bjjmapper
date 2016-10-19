@@ -4,7 +4,7 @@
 = form_for([location, event], html: { class: 'form ' + edit_mode_classes }) do |f|
   .row
     .col-md-10
-      = render partial: 'breadcrumb', locals: { location: location, event: event }  
+      = render partial: 'breadcrumb', locals: { location: location, event: event }
     .col-md-2
       .display-field
         %button.btn.btn-default.btn-sm{:type => "button", 'data-begin-edit' => true} Edit
@@ -23,7 +23,6 @@
         = event.title
         - if event.organization.present?
           .small
-            hosted by
             = link_to event.organization.name, '#'
       %p.text-info
         %span.fa.fa-calendar
@@ -99,9 +98,9 @@
         %li.clear.clear-fix
           %span.pull-left Tournament begins
           %span.pull-right.text-muted
-            = event.schedule.try(:to_s)
+            = event.starting.strftime('%v')
     .col-md-6
-      .map
+      .map.clear.clear-fix
         %div.map-canvas{:style => 'height: 300px'}
           -# This is filled in by google maps
     .col-md-3
@@ -114,6 +113,7 @@
           %i.text-muted There are no upcoming events
   .row.edit-field
     .col-md-12
+      %br/
       .pull-right
         %a.delete-field.btn.btn-danger.btn-md{:type => 'button',
           :data => { :method => :delete,
@@ -133,8 +133,8 @@
     $(document).ready ->
       eventModel = new RollFindr.Models.Event(#{render_json(event)})
       showView = new RollFindr.Views.EventShowView({ model: eventModel })
-  
-      upcomingEventsView = new RollFindr.Views.UpcomingEventsView({organization_id: "#{event.organization.id}"})
+
+      upcomingEventsView = new RollFindr.Views.UpcomingEventsView({organization_id: "#{event.organization.id}", count: 5})
 
       mapModel = new RollFindr.Models.Map(#{render_json(@map)})
       mapView = new RollFindr.Views.StaticMapView({editable: false, model: mapModel, el: $('.map')})

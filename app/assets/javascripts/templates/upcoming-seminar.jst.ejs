@@ -10,7 +10,7 @@
     </div>
   </a>
   <a class="text-primary" title="<%= event.title %>" href="<%= event.link %>"><h4 class="list-group-item-heading"><%= event.title %></h4></a>
-  <p class="pull-left small strong"><%= event.organization ? event.organization.abbreviation : event.instructor.name %></p>
+  <p class="pull-left small strong team-title"><%= event.instructor.name %></p>
   <br />
   <a class="small address" href="<%= Routes.map_path({lat: event.location.lat, lng: event.location.lng, ref: 'upcoming_l'}) %>" title="See <%= event.title %> on the map">
     <span class="fa fa-map-marker"></span>

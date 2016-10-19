@@ -5,7 +5,7 @@
   %li
     %a{href: directory_index_path(ref: 'event_bc', focus: 'event')} BJJ Event Directory
   %li
-    %a{href: directory_index_path(country_name, ref: 'event_bc', focus: 'event')}= country_name
+    %a{href: directory_segment_path(country: country_name, ref: 'event_bc', focus: 'event')}= country_name
   %li
-    %a{href: directory_index_path(country_name, location.city, ref: 'event_bc', focus: 'event')}= location.city
+    %a{href: directory_segment_path(country: country_name, city: location.city, ref: 'event_bc', focus: 'event')}= location.city
   %li.active= local_assigns[:event] ? event.title : location.title

@@ -1,3 +1,5 @@
+@import "colors";
+
 .show-location {
   h1 { 
     font-size: 175%; 
@@ -145,3 +147,10 @@
   height: 60px;
 }
 
+.team-title {
+  color: #777 !important;
+}
+
+.address {
+  color: #333 !important;
+}

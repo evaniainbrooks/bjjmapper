@@ -3,7 +3,10 @@ class RollFindr.Views.MapListView extends Backbone.View
   tagName: 'div'
   template: (loc)->
     if loc.get('events')? && loc.get('events').length > 0
-      return JST['templates/map/event-list-item']
+      if loc.get('events').first().get('event_type') == RollFindr.Models.Event.EVENT_TYPE_TOURNAMENT
+        return JST['templates/map/tournament-list-item']
+      else
+        return JST['templates/map/seminar-list-item']
     else
       return JST['templates/map/academy-list-item']
 
@@ -40,13 +43,14 @@ class RollFindr.Views.MapListView extends Backbone.View
   activeMarkerChanged: (e)->
     @activeMarkerId = e.id
     @updateActiveMarker(e.id)
-    if null != @activeMarkerId
-      listElem = $("[data-id='#{@activeMarkerId}']")
+    return if null == @activeMarkerId
 
-      if 'fixed' == $('.map-canvas').css('position')
-        $('html, body').animate({
-          scrollTop: listElem.offset().top - $('.navbar').height()
-        }, 1000)
+    listElem = $(".map-list-item[data-id='#{@activeMarkerId}']")
+    scrollTopPosition = listElem.offset().top - $('.navbar').height()
+    if 'fixed' == $('.map-canvas').css('position')
+      $('html, body').animate({
+        scrollTop: scrollTopPosition
+      }, 1000)
 
   listItemClicked: (e)->
     id = $(e.currentTarget).data('id')
