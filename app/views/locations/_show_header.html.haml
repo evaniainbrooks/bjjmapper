@@ -6,6 +6,7 @@
       = link_to location.team_name, team_path(location.team, ref: 'loc_title')
     - else
       = location.team_name
+.display-field.pull-right= render partial: 'favorite_button', :locals => { location: location }
 .edit-field
   = f.label :title, class: 'small text-muted upcase'
   = f.text_field :title, class: 'form-control input-lg'

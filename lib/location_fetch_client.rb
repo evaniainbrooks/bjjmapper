@@ -22,7 +22,7 @@ module RollFindr
         response = http.request(request)
         response.code
       rescue StandardError => e
-        logger.error e.message
+        Rails.logger.error e.message
         500
       end
     end
@@ -51,7 +51,7 @@ module RollFindr
         JSON.parse(response.body).deep_symbolize_keys
         response.code
       rescue StandardError => e
-        logger.error e.message
+        Rails.logger.error e.message
         nil
       end
     end

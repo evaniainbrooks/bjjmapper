@@ -90,6 +90,11 @@
       background-color: lighten($seminarColor, 30%);
       border: 1px solid $seminarColor;
     }
+    .distance {
+      bottom: 10px;
+      right: 10px;
+      position: absolute;
+    }
   }
   .list-index {
     color: white;
@@ -104,10 +109,6 @@
       padding: 3px;
       color: white;
     }
-  }
-  .distance {
-    bottom: 10px;
-    right: 10px;
   }
   .list-group-item-heading, .list-group-item-text {
       display: block;
