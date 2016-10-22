@@ -18,30 +18,42 @@ module RollFindr
       request = Net::HTTP::Post.new(uri.request_uri)
       request.body = ""
 
-      response = http.request(request)
-      response.code
+      begin
+        response = http.request(request)
+        response.code
+      rescue StandardError => e
+        logger.error e.message
+        500
+      end
     end
 
     def reviews(location_id)
       query = {location_id: location_id, api_key: API_KEY}.to_query
       uri = URI("http://#{@host}:#{@port}/places/reviews?#{query}")
 
-      response = Net::HTTP.get_response(uri)
-
-      return nil unless response.code.to_i == 200
-
-      JSON.parse(response.body).deep_symbolize_keys
+      get_request(uri)
     end
 
     def detail(location_id)
       query = {location_id: location_id, api_key: API_KEY}.to_query
       uri = URI("http://#{@host}:#{@port}/places/detail?#{query}")
 
-      response = Net::HTTP.get_response(uri)
+      get_request(uri)
+    end
 
-      return nil unless response.code.to_i == 200
+    private
 
-      JSON.parse(response.body).deep_symbolize_keys
+    def get_request(uri)
+      begin
+        response = Net::HTTP.get_response(uri)
+        return nil unless response.code.to_i == 200
+
+        JSON.parse(response.body).deep_symbolize_keys
+        response.code
+      rescue StandardError => e
+        logger.error e.message
+        nil
+      end
     end
   end
 end

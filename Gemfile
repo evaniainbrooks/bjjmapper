@@ -61,6 +61,7 @@ group :test, :development do
   gem 'simplecov'
   gem 'rubocop'
   gem 'letter_opener'
+  gem 'webmock'  
 end
 
 

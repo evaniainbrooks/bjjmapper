@@ -1,6 +1,10 @@
 require 'rails_helper'
+require 'shared/locationfetchsvc_context'
+require 'shared/tracker_context'
 
 feature "Top Level Pages" do
+  include_context 'skip tracking'
+  include_context 'locationfetch service'
   background do
     Capybara.current_session.driver.header('Accept-Language', 'en')
     Capybara.current_session.driver.header('User-Agent', 'TestUserAgent')

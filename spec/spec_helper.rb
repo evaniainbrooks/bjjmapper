@@ -17,6 +17,8 @@ Spork.prefork do
   require 'rspec/rails'
   require 'rspec/autorun'
   require 'factory_girl'
+  require 'webmock/rspec'
+  WebMock.disable_net_connect!(allow_localhost: true)
 
   Mongoid.load!('./config/mongoid.yml')
 
