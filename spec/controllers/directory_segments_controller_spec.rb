@@ -1,6 +1,10 @@
 require 'spec_helper'
+require 'shared/tracker_context'
+require 'shared/timezonesvc_context'
 
 describe DirectorySegmentsController do
+  include_context 'skip tracking'
+  include_context 'timezone service'
   describe 'GET index' do
     before do
       create(:directory_segment, name: 'Greece')
