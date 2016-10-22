@@ -4,6 +4,8 @@ class LocationOwnerVerificationsController < ApplicationController
   before_action :set_location, only: [:create]
   before_action :set_verification_object, only: [:verify]
 
+  decorates_assigned :location
+
   def create
     tracker.track('createLocationOwnerVerification',
       email: params.fetch(:email, nil),
@@ -22,7 +24,7 @@ class LocationOwnerVerificationsController < ApplicationController
       verify_verification_url(@verification.to_param, ref: 'email')).deliver
 
     respond_to do |format|
-      format.json { render :status => :created, :json => @location }
+      format.json { render :status => :created, :partial => 'locations/location' }
       format.html { redirect_to location_path(@location, claimed: 1) }
     end
   end

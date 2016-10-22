@@ -1,9 +1,9 @@
-<div class="review col-md-3">
+<div class="review">
   <span class="small text-muted"><%= review.created_at %></span>
   <span class="rating">
     <% _.times(5, function(i) { %><span class="fa fa-<%= review.rating > i ? 'star' : 'star-o' %>"></span><% }); %>
   </span>
   <br />
   <div><%= review.body %></div>
-  <div class="small text-muted"><a href="<%= Routes.user_path(review.user_id) %>"><%= review.user_name %></a></div>
+  <div class="small text-muted"><a href="<%= review.user_link %>"><%= review.user_name %></a></div>
 </div>

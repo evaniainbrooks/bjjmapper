@@ -91,11 +91,7 @@ class DirectorySegment
   end
 
   def as_json(args = {})
-    super(args.merge(except: [:_id, :parent_segment_id, :_slugs])).merge({
-      id: self.to_param,
-      locations: self.locations,
-      parent_segment: self.parent_segment
-    })
+    raise StandardError, "Use a JBuilder template"
   end
 
   private

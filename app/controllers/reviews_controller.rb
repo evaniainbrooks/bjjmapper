@@ -2,11 +2,14 @@ class ReviewsController < ApplicationController
   before_action :set_location
   before_action :ensure_signed_in, only: [:create]
 
+  decorates_assigned :review, :reviews, :location
+
   def index
-    @reviews = @location.reviews.limit(10)
+    @reviews = @location.all_reviews.items.take(10)
+
     status = @reviews.blank? ? :no_content : :ok
     respond_to do |format|
-      format.json { render status: status, json: @reviews }
+      format.json { render status: status }
     end
   end
 
@@ -16,7 +19,7 @@ class ReviewsController < ApplicationController
     respond_to do |format|
       format.json {
         status = @review.valid? ? :ok : :bad_request
-        render status: status, json: @review
+        render status: status, partial: 'reviews/review'
       }
       format.html {
         error = @review.valid? ? 0 : 1

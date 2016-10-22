@@ -201,6 +201,10 @@ class User
     slug || id
   end
 
+  def as_json(args = {})
+    raise StandardError, "Use a JBuilder template"
+  end
+
   private
 
   def valid_image_prefix?

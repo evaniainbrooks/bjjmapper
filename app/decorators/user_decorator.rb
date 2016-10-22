@@ -60,11 +60,4 @@ class UserDecorator < Draper::Decorator
       matchdata[1] if matchdata.present?
     end
   end
-
-  def as_json(args)
-    object.as_json(args).symbolize_keys.merge(
-      image: image,
-      rank_in_words: rank_in_words
-    )
-  end
 end

@@ -29,6 +29,7 @@ describe ReviewsController do
     end
   end
   describe 'GET index' do
+    before { ::RollFindr::LocationFetchService.stub(:reviews).and_return({reviews: []}) }
     context 'with json format' do
       let(:valid_params) { { format: 'json' } }
       context 'when the location has reviews' do
@@ -37,7 +38,7 @@ describe ReviewsController do
           it 'returns the reviews' do
             get :index, valid_params.merge({:location_id => location.to_param})
             response.should be_ok
-            response.body.should eq location.reviews.to_json
+            assigns[:reviews].count.should eq location.reviews.count
           end
         end
         context 'with more than 10 reviews' do
@@ -45,7 +46,7 @@ describe ReviewsController do
           it 'returns the reviews' do
             get :index, valid_params.merge({:location_id => location.to_param})
             response.should be_ok
-            response.body.should eq location.reviews.take(10).to_json
+            assigns[:reviews].count.should eq 10
           end
         end
       end

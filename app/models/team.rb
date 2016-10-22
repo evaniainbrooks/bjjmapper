@@ -46,4 +46,8 @@ class Team
   def ig_hashtag
     super || self.name.parameterize('')
   end
+
+  def as_json(args = {})
+    raise StandardError, "Use a JBuilder template"
+  end
 end

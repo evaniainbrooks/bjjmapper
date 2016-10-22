@@ -101,7 +101,7 @@ class LocationsController < ApplicationController
   def destroy
     tracker.track('deleteLocation',
       id: @location.to_param,
-      location: @location.as_json({})
+      location: @location.attributes.as_json({})
     )
 
     @location.destroy
@@ -123,7 +123,7 @@ class LocationsController < ApplicationController
     @location = Location.create(create_params)
 
     tracker.track('createLocation',
-      location: @location.as_json({})
+      location: @location.attributes.as_json({})
     )
 
     respond_to do |format|
@@ -161,7 +161,7 @@ class LocationsController < ApplicationController
   def update
     tracker.track('updateLocation',
       id: @location.to_param,
-      location: @location.as_json({}),
+      location: @location.attributes.as_json({}),
       updates: create_params
     )
 
@@ -247,7 +247,7 @@ class LocationsController < ApplicationController
   end
 
   def redirect_legacy_bsonid
-    redirect_to(@location, status: :moved_permanently) and return false if /^[a-f0-9]{24}$/ =~ params[:id]
+    redirect_legacy_bsonid_for(@location, params[:id])
   end
 
   def set_location

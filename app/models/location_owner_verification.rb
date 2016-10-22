@@ -32,6 +32,10 @@ class LocationOwnerVerification
     self.update_attribute(:closed_at, Time.now)
   end
 
+  def as_json(args = {})
+    raise StandardError, "Use a JBuilder template"
+  end
+
   private
 
   def set_expires

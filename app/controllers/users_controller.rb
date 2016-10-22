@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:destroy, :reviews, :show, :update, :remove_image]
-  before_action :redirect_legacy_bsonid, only: [:destroy, :reviews, :show, :update, :remove_image]
+  before_action :set_user, only: [:destroy, :show, :update, :remove_image]
+  before_action :redirect_legacy_bsonid, only: [:destroy, :show, :update, :remove_image]
   before_action :ensure_signed_in, only: [:update, :create, :remove_image]
   before_action :check_permissions, only: [:destroy, :update, :remove_image]
 
@@ -26,19 +26,6 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.html
-    end
-  end
-
-  def reviews
-    count = [params.fetch(:count, REVIEW_COUNT_DEFAULT).to_i, REVIEW_COUNT_MAX].min
-
-    tracker.track('showUserReviews',
-      count: count
-    )
-
-    @reviews = @user.reviews.desc('created_at').limit(count)
-    respond_to do |format|
-      format.json { render json: ReviewDecorator.decorate_collection(@reviews) }
     end
   end
 
@@ -68,12 +55,12 @@ class UsersController < ApplicationController
     @user = User.create(create_params)
 
     tracker.track('createUser',
-      user: @user.as_json({}),
+      user: @user.attributes.as_json({}),
       valid: @user.valid?
     )
 
     respond_to do |format|
-      format.json { render json: @user }
+      format.json { render partial: 'users/user' }
       format.html { redirect_to user_path(@user, edit: 1, create: 1) }
     end
   end
@@ -81,14 +68,14 @@ class UsersController < ApplicationController
   def update
     tracker.track('updateUser',
       id: @user.to_param,
-      user: @user.as_json({}),
+      user: @user.attributes.as_json({}),
       updates: create_params
     )
 
     @user.update!(create_params)
 
     respond_to do |format|
-      format.json { render json: @user }
+      format.json { render partial: 'users/user' }
       format.html { redirect_to user_path(@user, edit: 0) }
     end
   end
@@ -96,14 +83,14 @@ class UsersController < ApplicationController
   def destroy
     tracker.track('deleteUser',
       id: @user.to_param,
-      user: @user.as_json({})
+      user: @user.attributes.as_json({})
     )
 
     @user.destroy
 
     respond_to do |format|
       format.html { redirect_to users_path }
-      format.json { render status: :ok, json: @user }
+      format.json { render partial: 'users/user' }
     end
   end
 
@@ -120,7 +107,7 @@ class UsersController < ApplicationController
     })
 
     respond_to do |format|
-      format.json { render json: @user }
+      format.json { render partial: 'users/user' }
     end
   end
 
@@ -164,9 +151,7 @@ class UsersController < ApplicationController
   end
 
   def redirect_legacy_bsonid
-    unless @user.slug.try(:blank?)
-      redirect_to(@user, status: :moved_permanently) and return false if /^[a-f0-9]{24}$/ =~ params[:id]
-    end
+    redirect_legacy_bsonid_for(@user, params[:id])
   end
 
   def set_user

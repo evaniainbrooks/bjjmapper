@@ -124,10 +124,11 @@ describe EventsController do
         end
         it 'returns events for all locations that are within the date range' do
           get :index, { ids: ids, format: 'json', start: start_time, end: end_date }
-          assigns(:events).count.should eq 2
-          response.body.should match('included123')
-          response.body.should match('included456')
-          response.body.should_not match('excluded789')
+          assigns(:events).collect(&:title).tap do |a|
+            a.count.should eq 2
+            a.should include('included123')
+            a.should include('included456')
+          end
         end
       end
       context 'with no matching events in date range' do

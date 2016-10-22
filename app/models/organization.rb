@@ -2,7 +2,7 @@ require 'mongoid_search_ext'
 
 class Organization
   include Canonicalized
-  
+
   include Mongoid::Document
   include Mongoid::Slug
   include Geocoder::Model::Mongoid
@@ -28,4 +28,8 @@ class Organization
   canonicalize :website, as: :website
 
   has_many :events, inverse_of: :organization
+
+  def as_json(args = {})
+    raise StandardError, "Use a JBuilder template"
+  end
 end

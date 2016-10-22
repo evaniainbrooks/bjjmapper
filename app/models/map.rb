@@ -37,6 +37,10 @@ class Map
     instance_variable_get("@#{index}")
   end
 
+  def as_json(args = {})
+    raise StandardError, "Use a JBuilder template"
+  end
+
   def model_name
     'map'
   end

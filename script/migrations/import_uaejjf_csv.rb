@@ -19,13 +19,17 @@ csv = CSV.parse(f, :headers => true)
 puts "Running as #{Rails.env}"
 
 org = Organization.where(:abbreviation => "UAEJJF").first
-unless org.present?
+if org.blank?
   puts "No UAEJJF org found!"
   abort
+else
+  puts "UAEJJF org is #{org.inspect}"
 end
 
+puts "Processing CSV file #{options[:filename]}"
 csv.each do |row|
   title = row[0].strip.split.map(&:capitalize).join(' ')
+  puts "Row is #{title}"
   date_start = row[1].strip
   date_start.slice!("Date: ")
   date_end = row[2].strip
@@ -110,6 +114,3 @@ csv.each do |row|
   puts title
 end
 
-p options
-
-p ARGV

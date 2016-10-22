@@ -41,8 +41,10 @@ describe TeamsController do
       end
       context 'with json format' do
         it 'creates and returns a new team' do
-          post :create, create_params.merge({:format => 'json'}), session_params
-          response.body.should match(create_params[:team][:description])
+          expect do
+            post :create, create_params.merge({:format => 'json'}), session_params
+            assigns[:team].description.should match(create_params[:team][:description])
+          end.to change { Team.count }.by(1)
         end
       end
     end
@@ -62,7 +64,7 @@ describe TeamsController do
       end
       it 'returns the teams' do
         get :index, { format: 'json' }
-        teams.each { |t| response.body.should match(t.name) }
+        assigns[:teams].count.should eq 3
       end
     end
   end
@@ -90,13 +92,13 @@ describe TeamsController do
       context 'with json format' do
         it 'updates and returns the location' do
           post :update, { id: team.to_param, :format => 'json' }.merge(update_params), session_params
-          response.body.should match update_params[:team][:description]
+          assigns[:team].description.should match update_params[:team][:description]
         end
       end
       context 'with html format' do
         it 'redirects back to the location' do
           post :update, { id: team.to_param, :format => 'html' }.merge(update_params), session_params
-          response.body.should redirect_to(team_path(assigns[:team], edit: 0))
+          assigns[:team].description.should redirect_to(team_path(assigns[:team], edit: 0))
         end
       end
     end

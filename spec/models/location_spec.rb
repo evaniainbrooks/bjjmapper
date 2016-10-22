@@ -1,6 +1,9 @@
 require 'spec_helper'
+require 'shared/locationfetchsvc_context'
 
 describe Location do
+  include_context 'locationfetch service'
+
   it 'has a factory' do
     build(:location).should be_valid
   end
@@ -79,13 +82,6 @@ describe Location do
       it 'returns the explicit value' do
         subject.ig_hashtag.should eq 'explicitvalue'
       end
-    end
-  end
-
-  describe '.as_json' do
-    it 'returns the object as json' do
-      json = build(:location).as_json({})
-      [:id, :team_id, :coordinates, :team_name, :address].each {|x| json.should have_key(x) }
     end
   end
 
@@ -180,6 +176,35 @@ describe Location do
     end
   end
 
+  describe '.stars' do
+    subject { build(:location) }
+    describe 'when there is no rating from the locationfetchsvc' do
+      before { LocationReviews.any_instance.stub(:rating).and_return(nil) }
+      it 'returns 0' do
+        subject.stars.should eq 0
+      end
+    end
+    describe 'when the locationfetchsvc has a rating' do
+      before { LocationReviews.any_instance.stub(:rating).and_return(4.7) }
+      it 'returns the count of full stars' do
+        subject.stars.should eq 4
+      end
+    end
+  end
+  describe '.half_star?' do
+    describe 'when there is no rating from the locationfetchsvc' do
+      before { LocationReviews.any_instance.stub(:rating).and_return(nil) }
+      it 'returns false' do
+        subject.should_not be_half_star
+      end
+    end
+    describe 'when the locationfetchsvc has a rating' do
+      before { LocationReviews.any_instance.stub(:rating).and_return(4.7) }
+      it 'returns true if the fractional part is >= 0.5' do
+        subject.should be_half_star
+      end
+    end
+  end
 
   describe 'before save callback' do
     subject { build(:location, phone: '(902)', website: 'http://test.com', facebook: 'http://www.facebook.com/page') }
@@ -193,6 +218,14 @@ describe Location do
 
     it 'canonicalizes the facebook page' do
       subject.facebook.should eq 'page'
+    end
+  end
+
+  describe 'after create callback' do
+    subject { build(:location) }
+    xit 'calls the location fetch service search_async method' do
+      RollFindr::LocationFetchService.should_receive(:search_async)
+      subject.save
     end
   end
 end

@@ -98,6 +98,10 @@ class Event
     slug || id.try(:to_s)
   end
 
+  def as_json(args = {})
+    raise StandardError, "Use a JBuilder template"
+  end
+
   def schedule
     @schedule ||= begin
       yaml = read_attribute(:schedule)

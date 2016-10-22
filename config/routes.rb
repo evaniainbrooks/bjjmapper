@@ -10,10 +10,10 @@ Rails.application.routes.draw do
   end
 
   resources :users, :only => [:index, :show, :create, :update, :destroy] do
-    get :reviews, on: :member
     post :remove_image, on: :member
     resources :users, controller: :students, as: :students, path: '/students', only: [:create, :destroy, :index]
     resources :events, controller: :user_events, only: [:index]
+    resources :reviews, controller: :user_reviews, only: [:index]
   end
 
   resource :map, only: [:show] do

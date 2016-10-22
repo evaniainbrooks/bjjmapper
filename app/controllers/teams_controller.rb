@@ -16,30 +16,30 @@ class TeamsController < ApplicationController
   end
 
   def create
-    team = Team.create(create_params)
+    @team = Team.create(create_params)
 
     tracker.track('createTeam',
-      team: team.as_json({}),
+      team: @team.attributes.as_json({}),
       has_avatar: create_params[:avatar].present?
     )
 
     respond_to do |format|
-      format.json { render json: team }
-      format.html { redirect_to team_path(team, edit: 1, create: 1) }
+      format.json { render partial: 'teams/team' }
+      format.html { redirect_to team_path(@team, edit: 1, create: 1) }
     end
   end
 
   def destroy
     tracker.track('deleteTeam',
       id: @team.to_param,
-      location: @team.as_json({})
+      location: @team.attributes.as_json({})
     )
 
     @team.destroy
 
     respond_to do |format|
       format.html { redirect_to directory_index_path }
-      format.json { render status: :ok, json: @team }
+      format.json { render partial: 'teams/team' }
     end
   end
 
@@ -49,14 +49,14 @@ class TeamsController < ApplicationController
     )
 
     respond_to do |format|
-      format.json { render json: @team }
+      format.json { render partial: 'teams/team' }
       format.html
     end
   end
 
   def index
     respond_to do |format|
-      format.json { render json: @teams }
+      format.json
     end
   end
 
@@ -73,14 +73,14 @@ class TeamsController < ApplicationController
     })
 
     respond_to do |format|
-      format.json { render json: @team }
+      format.json { render partial: 'teams/team' }
     end
   end
 
   def update
     tracker.track('updateTeam',
       id: @team.to_param,
-      team: @team.as_json({}),
+      team: @team.attributes.as_json({}),
       updates: create_params.except(:avatar),
       has_avatar: create_params[:avatar].present?
     )
@@ -88,7 +88,7 @@ class TeamsController < ApplicationController
     @team.update!(create_params)
 
     respond_to do |format|
-      format.json { render json: @team }
+      format.json { render partial: 'teams/team' }
       format.html { redirect_to team_path(@team, edit: 0) }
     end
   end
@@ -114,7 +114,7 @@ class TeamsController < ApplicationController
   end
 
   def redirect_legacy_bsonid
-    redirect_to(@team, status: :moved_permanently) and return false if /^[a-f0-9]{24}$/ =~ params[:id]
+    redirect_legacy_bsonid_for(@team, params[:id])
   end
 
   def set_teams

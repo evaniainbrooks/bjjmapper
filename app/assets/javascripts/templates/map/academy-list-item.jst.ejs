@@ -22,6 +22,17 @@
       <div>
         <h4 class="list-group-item-heading"><%= location.title %></h4>
         <p class="strong list-group-item-text small team-title"><%= location.team_name %></p>
+        <span class="rating">
+          <% for (var n = 1; n <= 5; ++n) { %> 
+            <% if (location.stars >= n) { %>
+              <span class="fa fa-star"></span>
+            <% } else if (location.stars == n && location.half_star) { %>
+              <span class="fa fa-star-half-o"></span>
+            <% } else { %>
+              <span class="fa fa-star-o"></span>
+            <% } %>
+          <% } %>
+        </span>
         <p class="list-group-item-text small address">
           <span class="fa fa-map-marker"></span>
           <%= location.address %>

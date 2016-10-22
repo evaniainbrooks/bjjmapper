@@ -18,10 +18,4 @@ describe Review do
       build(:review, location: nil).should_not be_valid
     end
   end
-  describe '.as_json' do
-    it 'returns the object as json' do
-      json = build(:review).as_json({})
-      [:user_id, :user_name, :body, :rating, :created_at].each {|x| json.should have_key(x) }
-    end
-  end
 end

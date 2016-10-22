@@ -1,27 +1,8 @@
-require 'spec_helper' 
+require 'spec_helper'
 require 'shared/tracker_context'
 
 describe UsersController do
   include_context 'skip tracking'
-  describe 'GET reviews' do
-    context 'with json format' do
-      let(:user) { create(:user) }
-      let(:location) { create(:location) }
-      before { create(:review, user: user, location: location) }
-      it 'returns the recent reviews' do
-        get :reviews, id: user.to_param, format: 'json', count: 1
-        response.should be_success
-        assigns[:reviews].collect(&:to_param).should include(user.reload.reviews.first.to_param)
-      end
-    end
-    context 'with legacy bsonid' do
-      let(:user) { create(:user) }
-      it 'redirects to slug' do
-        get :reviews, id: user.id, format: 'json', count: 1
-        response.should redirect_to(user)
-      end
-    end
-  end
   describe 'GET index' do
     context 'with html format' do
       let(:invisible_bb) { create(:user, flag_display_directory: false, belt_rank: 'black') }
@@ -77,7 +58,7 @@ describe UsersController do
     context 'with json format' do
       it 'creates and returns a new user' do
         post :create, create_params.merge({:format => 'json'}), session_params
-        response.body.should match(create_params[:user][:name])
+        assigns[:user].name.should match(create_params[:user][:name])
       end
     end
   end
@@ -97,14 +78,14 @@ describe UsersController do
       before { User.any_instance.stub(:editable_by?).and_return(true) }
       it 'updates and returns the user' do
         post :update, { id: user.to_param, :format => 'json' }.merge(update_params), session_params
-        response.body.should match update_params[:user][:description]
+        assigns[:user].description.should match update_params[:user][:description]
       end
     end
     context 'with html format' do
       before { User.any_instance.stub(:editable_by?).and_return(true) }
       it 'redirects back to the user' do
         post :update, { id: user.to_param, :format => 'html' }.merge(update_params), session_params
-        response.body.should redirect_to(user_path(user, edit: 0))
+        response.should redirect_to(user_path(user, edit: 0))
       end
     end
   end

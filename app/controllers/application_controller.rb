@@ -152,5 +152,11 @@ class ApplicationController < ActionController::Base
       ReportMailer.report_email(subject_url, reason, description, current_user).deliver
     end
   end
+
+  def redirect_legacy_bsonid_for(object, param, path = nil)
+    unless object.slug.try(:blank?)
+      redirect_to(path || object, status: :moved_permanently) and return false if /^[a-f0-9]{24}$/ =~ param
+    end
+  end
 end
 

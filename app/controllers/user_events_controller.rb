@@ -1,5 +1,6 @@
 class UserEventsController < ApplicationController
   before_action :set_user
+  before_action :redirect_legacy_bsonid
 
   before_action :validate_time_range, only: [:index]
 
@@ -28,6 +29,10 @@ private
     end_param = params.fetch(:end, nil)
     head :bad_request and return false unless end_param.present?
     @end_param = DateTime.parse(end_param).to_time
+  end
+
+  def redirect_legacy_bsonid
+    redirect_legacy_bsonid_for(@user, params[:user_id], user_events_path(@user))
   end
 
   def set_user

@@ -106,7 +106,6 @@
     }
   }
   .distance {
-    position: absolute;
     bottom: 10px;
     right: 10px;
   }
@@ -129,7 +128,6 @@
 
 .map-list-item {
   opacity: 0.7;
-  
   &.marker-active {
     opacity: 1.0;
 
@@ -144,18 +142,18 @@
       background-color: $academyColor;
       border: 1px solid $academyColor;
     }
-    
+
     &.academybb .list-index span {
       background-color: $academyColor;
       border: 1px solid $academyColor;
       border-top: 3px solid black;
     }
-    
+
     &.tournament .list-index span {
       background-color: $tournamentColor;
       border: 1px solid $tournamentColor;
     }
-    
+
     &.seminar .list-index span {
       background-color: $seminarColor;
       border: 1px solid $seminarColor;
@@ -164,13 +162,12 @@
 }
 
 .show-location-overlay {
-  max-width: 250px;
-  
+  max-width: 275px;
+
   img {
     width: 50px;
     height: 50px;
   }
-  h4 { color: black; }
   .address { color: black; }
 }
 

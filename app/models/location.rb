@@ -68,6 +68,8 @@ class Location
   before_save :populate_timezone
   before_save :set_has_black_belt_flag
 
+  after_create :location_fetch_service_search_async
+
   field :google_places_id, type: Integer
   field :coordinates, type: Array
   field :street
@@ -188,11 +190,12 @@ class Location
   end
 
   def stars
-    rating.floor
+    all_reviews.rating.try(:floor) || 0
   end
 
   def half_star?
-    (rating - rating.floor) >= 0.5
+    return false unless all_reviews.rating.present?
+    (all_reviews.rating - all_reviews.rating.floor) >= 0.5
   end
 
   def address_components
@@ -208,16 +211,7 @@ class Location
   end
 
   def as_json(args = {})
-    # Hack around mongo ugly ids
-    super(args.merge(except: [:coordinates, :_id, :modifier_id, :team_id, :instructor_ids, :_slugs])).merge({
-      :id => self.to_param,
-      :team_id => self.team.try(:to_param),
-      :modifier_id => self.modifier_id.to_s,
-      :coordinates => self.to_coordinates,
-      :timezone => self.timezone,
-      :team_name => team_name,
-      :address => address
-    })
+    raise StandardError, "Use a JBuilder template"
   end
 
   def schedule
@@ -249,6 +243,10 @@ class Location
     return self.title == self.address_components.join('-')
   end
 
+  def all_reviews
+    @_all_reviews ||= LocationReviews.new(self.id.to_s)
+  end
+
   private
 
   def generate_event_venue_title
@@ -277,5 +275,9 @@ class Location
   def set_has_black_belt_flag
     self.flag_has_black_belt = self.instructors.any?{|i| i.belt_rank == 'black'}
     return true
+  end
+
+  def location_fetch_service_search_async
+    #RollFindr::LocationFetchService.search_async(self.id.to_s)
   end
 end

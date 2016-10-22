@@ -24,7 +24,7 @@ class EventsController < ApplicationController
 
       tracker.track('createEvent',
         location: @location.to_param,
-        event: @event.to_json({}),
+        event: @event.attributes.to_json({}),
         source: 'events'
       )
 
@@ -56,7 +56,7 @@ class EventsController < ApplicationController
 
     status = @events.count == 0 ? :no_content : :ok
     respond_to do |format|
-      format.json { render status: status, json: events }
+      format.json { render status: status }
     end
   end
 
