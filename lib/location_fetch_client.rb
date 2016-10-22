@@ -49,7 +49,6 @@ module RollFindr
         return nil unless response.code.to_i == 200
 
         JSON.parse(response.body).deep_symbolize_keys
-        response.code
       rescue StandardError => e
         Rails.logger.error e.message
         nil
