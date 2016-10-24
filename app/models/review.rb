@@ -2,12 +2,15 @@ class Review
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  attr_accessor :author_name
+  attr_accessor :author_link
+  attr_accessor :src
+
   belongs_to :user, index: true
   belongs_to :location, index: true
 
   field :body
   field :rating
-  field :user_link
 
   validates :user, presence: true
   validates :location, presence: true

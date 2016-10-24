@@ -68,7 +68,7 @@ class Location
   before_save :populate_timezone
   before_save :set_has_black_belt_flag
 
-  after_create :location_fetch_service_search_async
+  after_create :search_metadata
 
   field :google_places_id, type: Integer
   field :coordinates, type: Array
@@ -99,7 +99,6 @@ class Location
 
   field :flag_has_black_belt, type: Boolean, default: false
   field :flag_closed, type: Boolean, default: false
-  field :rating, default: 0.0
 
   canonicalize :website, as: :website
   canonicalize :facebook, as: :facebook
@@ -187,6 +186,10 @@ class Location
 
   def to_param
     slug
+  end
+
+  def rating
+    all_reviews.rating
   end
 
   def stars
@@ -277,7 +280,18 @@ class Location
     return true
   end
 
-  def location_fetch_service_search_async
-    #RollFindr::LocationFetchService.search_async(self.id.to_s)
+  def search_metadata
+    params = { 
+      id: self.id.to_s, 
+      lat: self.lat, 
+      lng: self.lng, 
+      title: self.title, 
+      street: self.street, 
+      city: self.city, 
+      state: self.state, 
+      postal_code: self.postal_code, 
+      country: self.country 
+    }
+    RollFindr::LocationFetchService.search_async(params) if self.academy?
   end
 end

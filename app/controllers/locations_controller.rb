@@ -20,7 +20,7 @@ class LocationsController < ApplicationController
   RECENT_COUNT_DEFAULT = 5
   RECENT_COUNT_MAX = 10
 
-  NEARBY_DISTANCE_DEFAULT = 5
+  NEARBY_DISTANCE_DEFAULT = 200
   NEARBY_COUNT_DEFAULT = 4
 
   def unlock

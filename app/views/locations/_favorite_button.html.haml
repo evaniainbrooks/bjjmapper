@@ -1,5 +1,7 @@
 %div.text-center.favorite{:class => current_user.favorite_locations.include?(location) ? 'saved' : nil}
   %a.save-favorite{:title => 'Save Favorite', :href => 'javascript:void(0)', :'data-id' => location.to_param}
-    %span.fa.fa-heart-o.fa-2x
+    %span.fa.fa-heart-o
+    Save
   %a.clear-favorite{:title => 'Clear Favorite', :href => 'javascript:void(0)', :'data-id' => location.to_param}
-    %span.fa.fa-heart.fa-2x
+    %span.fa.fa-heart
+    Saved

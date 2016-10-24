@@ -6,18 +6,19 @@
     %br/
     %br/
   = link_to map_path(:lat => location.lat, :lng => location.lng, :ref => 'loc_map_full'), :data => { :'no-turbolink' => true } do
-    %span.address
-      %span.fa.fa-map-marker
-      = location.street
-      %br/
-      = "#{location.city}, #{location.state}"
-      %br/
-      = "#{location.postal_code} #{location.country}"
-      %br/
-    %span.small
-      = surround '(', ')' do
-        %span.fa.fa-search-plus
-        View on larger map
+    .text-uppercase.small
+      %span.address
+        %span.fa.fa-map-marker
+        = location.street
+        %br/
+        = "#{location.city}, #{location.state}"
+        %br/
+        = "#{location.postal_code} #{location.country}"
+        %br/
+      %span.small
+        = surround '(', ')' do
+          %span.fa.fa-search-plus
+          View on larger map
 .form-group.edit-field
   = f.label :street, class: 'small text-muted upcase'
   = f.text_field :street, class: 'form-control input-sm'

@@ -10,13 +10,14 @@ module RollFindr
       @port = port
     end
 
-    def search_async(location_id)
-      query = {location_id: location_id, api_key: API_KEY}.to_query
-      uri = URI("http://#{@host}:#{@port}/places/search/async?#{query}")
+    def search_async(location_data, scope = nil)
+      query = {api_key: API_KEY}
+      query.merge(scope: scope) if scope.present?
+      uri = URI("http://#{@host}:#{@port}/search/async?#{query.to_query}")
 
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Post.new(uri.request_uri)
-      request.body = ""
+      request.body = location_data.to_json
 
       begin
         response = http.request(request)
@@ -27,16 +28,23 @@ module RollFindr
       end
     end
 
+    def photos(location_id)
+      query = {api_key: API_KEY}.to_query
+      uri = URI("http://#{@host}:#{@port}/locations/#{location_id}/photos?#{query}")
+
+      get_request(uri)
+    end
+
     def reviews(location_id)
-      query = {location_id: location_id, api_key: API_KEY}.to_query
-      uri = URI("http://#{@host}:#{@port}/places/reviews?#{query}")
+      query = {api_key: API_KEY}.to_query
+      uri = URI("http://#{@host}:#{@port}/locations/#{location_id}/reviews?#{query}")
 
       get_request(uri)
     end
 
     def detail(location_id)
-      query = {location_id: location_id, api_key: API_KEY}.to_query
-      uri = URI("http://#{@host}:#{@port}/places/detail?#{query}")
+      query = {api_key: API_KEY}.to_query
+      uri = URI("http://#{@host}:#{@port}/locations/#{location_id}/detail?#{query}")
 
       get_request(uri)
     end

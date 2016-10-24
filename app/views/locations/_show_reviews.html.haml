@@ -1,8 +1,15 @@
-%h3.pull-left Reviews
-%a.navbar-btn.pull-right.edit-field.btn.btn-small.btn-default.add-review{:style => 'margin-top: -5px', :href => '#reviews'}
-  %i.fa.fa-star-o
-  Create Review
+%h3 
+  Reviews
+  %small
+    = surround '(', ')' do
+      %a.add-review{:style => 'margin-top: -5px', :href => '#reviews'} Write Review
+.reviews.loading
+  .items.clear
+  .empty-message
+    %i.text-muted 
+      Hey, why not
+      %a{href: '#reviews', class: 'add-review'} 
+        write the first review?
+  .loading-overlay
+    %span.fa.fa-refresh.fa-3x.fa-spin
 %a{:name => 'reviews'}
-.items.clear
-.empty-message
-  %i.text-muted There are currently no reviews for this academy

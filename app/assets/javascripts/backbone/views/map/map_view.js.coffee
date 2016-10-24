@@ -25,17 +25,15 @@ class RollFindr.Views.MapView extends Backbone.View
       'geolocate',
       'render')
 
-    @setupGoogleMap()
+    if @setupGoogleMap()
+      @initializeMarkerView(options.editable)
+      @listView = new RollFindr.Views.MapListView({
+        el: @$('.map-list-view')
+        model: @model
+        markerIdFunction: @markerView.getMarkerId
+        filteredCount: 0
+      })
 
-    @initializeMarkerView(options.editable)
-    @listView = new RollFindr.Views.MapListView({
-      el: @$('.map-list-view')
-      model: @model
-      markerIdFunction: @markerView.getMarkerId
-      filteredCount: 0
-    })
-
-    if @map?
       @setupEventListeners()
       @initializeMap()
       @directionsView = new RollFindr.Views.DirectionsOverlayView({el: @el, model: @model, map: @map})
@@ -48,6 +46,8 @@ class RollFindr.Views.MapView extends Backbone.View
     @markerView.render() if shouldRender
 
   setupGoogleMap: ->
+    return false unless google?
+
     mapOptions = {
       mapTypeControl: false
       zoom: @model.get('zoom')
@@ -65,6 +65,8 @@ class RollFindr.Views.MapView extends Backbone.View
 
     if @model.get('legend')
       @legendView = new RollFindr.Views.MapLegendView({map: @map, model: @model})
+
+    return true
 
   setupEventListeners: ->
     @listenTo(@model, 'sync reset', @render)

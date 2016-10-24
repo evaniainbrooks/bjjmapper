@@ -1,6 +1,11 @@
 @import "marker";
 @import "colors";
 
+.map-canvas {
+  border: 1px solid #ccc;
+  background-color: #eee;
+}
+
 .map-legend {
   margin-top: 10px;
   margin-right: 10px;

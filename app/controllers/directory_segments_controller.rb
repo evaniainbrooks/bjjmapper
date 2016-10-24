@@ -48,7 +48,7 @@ class DirectorySegmentsController < ApplicationController
       minZoom: Map::DEFAULT_MIN_ZOOM,
       geolocate: 0,
       locations: directory_segment.locations,
-      refresh: 0
+      refresh: 1
     )
   end
 end

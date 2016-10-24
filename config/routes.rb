@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   namespace :admin do
-    resources :directory_segments, only: [:new, :create]
+    resources :directory_segments, only: [:new, :create, :edit, :update]
     resources :organizations, only: [:new, :create]
     resources :locations, only: [:index, :show]
     resources :users do

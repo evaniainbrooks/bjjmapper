@@ -21,7 +21,7 @@ describe MapLocationDecorator do
       let(:event_venue) { build(:event_venue) }
       let(:organization) { build(:organization, image: img) }
       let(:event) { build(:event, location: event_venue, organization: organization) }
-      subject { MapLocationDecorator.decorate(event_venue, params({ events: [event] })) }
+      subject { MapLocationDecorator.decorate(event_venue, params(events: [event])) }
       it 'is the image of the first event' do
         subject.image.should eq img
       end
@@ -33,15 +33,15 @@ describe MapLocationDecorator do
       let(:title) { 'some title' }
       let(:event_venue) { build(:event_venue) }
       let(:event) { build(:event, location: event_venue, title: title) }
-      subject { MapLocationDecorator.decorate(event_venue, params({ events: [event] })) }
+      subject { MapLocationDecorator.decorate(event_venue, params(events: [event])) }
       it 'is the title of the first event' do
         subject.title.should eq title
       end
     end
     context 'when there are multiple events' do
       let(:event_venue) { build(:event_venue) }
-      let(:events) { [build(:event, location: event_venue), build(:event, location: event_venue)] } 
-      subject { MapLocationDecorator.decorate(event_venue, params({ events: events })) }
+      let(:events) { [build(:event, location: event_venue), build(:event, location: event_venue)] }
+      subject { MapLocationDecorator.decorate(event_venue, params(events: events)) }
       it 'is a string containing the event count' do
         subject.title.should match('2')
       end
@@ -56,11 +56,10 @@ describe MapLocationDecorator do
   end
   describe '.entities' do
     context 'with events' do
-      let(:events) {
+      let(:events) do
         [build(:tournament, organization: build(:organization)), build(:seminar, instructor: build(:user), organization: nil)]
-      }
-
-      subject { MapLocationDecorator.decorate(build(:location), params({events: events})) }
+      end
+      subject { MapLocationDecorator.decorate(build(:location), params(events: events)) }
       it 'returns a sentence with the instructor and organization names' do
         subject.entities.should match events[0].organization.abbreviation
         subject.entities.should match events[1].instructor.name
@@ -76,7 +75,7 @@ describe MapLocationDecorator do
       let(:location) { build(:location, loctype: Location::LOCATION_TYPE_ACADEMY) }
       let(:filter) { [Location::LOCATION_TYPE_EVENT_VENUE] }
       let(:event) { build(:event) }
-      subject { MapLocationDecorator.decorate(location, params({ location_type: filter, events: [event] })) }
+      subject { MapLocationDecorator.decorate(location, params(location_type: filter, events: [event])) }
       it 'acts as event venue' do
         subject.loctype.should eq Location::LOCATION_TYPE_EVENT_VENUE
       end
@@ -94,7 +93,7 @@ describe MapLocationDecorator do
     context 'with 1 event' do
       let(:location) { create(:location) }
       let(:event) { create(:event, location: location) }
-      subject { MapLocationDecorator.decorate(location, params({events: [event]})) }
+      subject { MapLocationDecorator.decorate(location, params(events: [event])) }
       it 'is the academy path' do
         subject.link.should match(location_event_path(location, event, ref: 'map_item'))
       end
@@ -102,7 +101,7 @@ describe MapLocationDecorator do
     context 'with many events' do
       let(:location) { create(:location) }
       let(:events) { [build(:event), build(:event)] }
-      subject { MapLocationDecorator.decorate(location, params({events: events})) }
+      subject { MapLocationDecorator.decorate(location, params(events: events)) }
       it 'is the academy path' do
         subject.link.should match(schedule_location_path(location, ref: 'map_item', starting: events.first.starting))
       end

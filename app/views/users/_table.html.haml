@@ -35,7 +35,7 @@
         %td
           %span.display-field
             = link_to map_path({location: user.birth_place, ref: 'user_dp'}) do
-              %img{:src => '//storage.googleapis.com/bjjmapper/markers/marker_blank.png'}
+              %span.fa.fa-map-marker
               = user.birth_place
               &nbsp;
     %tr
@@ -52,7 +52,7 @@
     - if user.description?
       %tr
         %td.text-muted.text-right Biography
-        %td
+        %td.biography
           = simple_format(user.description)
           - if user.description_read_more_url.present?
             = link_to user.description_read_more_url do

@@ -1,0 +1,14 @@
+<div class="text-center center-block">
+  <a class="rating" title="See all reviews for <%= location.title %>" href="#reviews">
+    <% for (var n = 1; n <= 5; ++n) { %> 
+      <% if (location.stars >= n) { %>
+        <span class="fa fa-star"></span>
+      <% } else if (location.stars == n && location.half_star) { %>
+        <span class="fa fa-star-half-o"></span>
+      <% } else { %>
+        <span class="fa fa-star-o"></span>
+      <% } %>
+    <% } %>
+  </a>
+  <span class="text-muted small"> (<%= location.review_count || 0 %>)</span>
+</div>

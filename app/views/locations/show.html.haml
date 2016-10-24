@@ -23,10 +23,11 @@
     .row
       .col-md-2.col-xs-3{:style => 'padding-right: 0px;'}
         .display-field
-          %img{:src => location.image, :class => 'logo center-block'}/
+          %img{:width => 100, :height => 100, :src => location.image, :class => 'logo center-block'}/
         .edit-field
-          %img{:src => location.image, :class => 'logo center-block edit-image'}/
-        = render partial: 'rating', :locals => { location: location }
+          %img{:width => 100, :height => 100, :src => location.image, :class => 'logo center-block edit-image'}/
+        .rating-container
+          = render partial: 'rating', :locals => { location: location }
         %div.small.text-muted.text-center= "last updated #{location.updated_at}"
       .col-md-6.col-xs-9
         = render partial: 'show_header', :locals => { location: location, f: f }
@@ -35,22 +36,22 @@
       = render partial: 'show_contact', :locals => { location: location, f: f }
     %hr/
     .row
-      .col-md-3
+      .col-md-2
         %h3 Location
         %a{:name => 'location'}
         = render partial: 'show_address', locals: { location: location, f: f }
-      .col-md-5
+      .col-md-6
         .map
           %div.map-canvas{:style => 'height: 275px'}
           -# This is filled in by google maps
           %p.edit-field.text-info.small Note: you can drag the marker to a new location to change the address of this academy.
       .col-md-4
+        %h3 Nearby Academies
         %div.nearby-locations.loading.location-list
           -# This is filled in by locations/nearby template
           .loading-overlay
             %span.fa.fa-refresh.fa-3x.fa-spin
           .content
-            %h3 Nearby Academies
             %ul.list-unstyled.items
           .alternative
             = render partial: 'application/google_adsense'
@@ -89,11 +90,11 @@
         .col-md-5
           = render :partial => 'locations/show_news_feed', :locals => { :location => location }
       %div{:class => location.facebook.present? && !location.facebook_group? ? 'col-md-7' : 'col-md-12'}
-        = render :partial => 'locations/show_media', :locals => { :f => f, :hashtag => location.ig_hashtag }
+        = render :partial => 'locations/show_reviews', :locals => { :location => location }
     %hr/
     .row.reviews
       .col-md-12
-        = render :partial => 'locations/show_reviews', :locals => { :location => location }
+        = render :partial => 'locations/show_media', :locals => { :f => f, :hashtag => location.ig_hashtag }
     %hr.edit-field/
     .row.edit-field
       .col-md-12

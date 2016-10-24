@@ -2,7 +2,6 @@ require 'i18n'
 
 class LocationDecorator < Draper::Decorator
   DEFAULT_DESCRIPTION = 'No description was provided'
-  DEFAULT_DIRECTIONS = 'No extra directions were provided'
   DEFAULT_TEAM_NAME = 'Independent'
 
   EMPTY_HASH = {}.freeze
@@ -74,14 +73,6 @@ class LocationDecorator < Draper::Decorator
       object.description
     else
       h.content_tag(:i, class: 'text-muted') { generated_description }
-    end
-  end
-
-  def directions
-    if object.directions.present?
-      object.directions
-    else
-      h.content_tag(:i, class: 'text-muted') { DEFAULT_DIRECTIONS }
     end
   end
 

@@ -15,6 +15,12 @@
   .date {
     margin-right: 5px;
   }
+
+  &.user-review {
+    .review-body {
+      margin-left: 70px;
+    }
+  }
 }
 
 .rating-container {

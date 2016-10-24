@@ -7,7 +7,9 @@ describe RollFindr::Analyzable do
   let(:test_class) do
     Class.new do
       include RollFindr::Analyzable
-      def current_user;  {:id => 123}; end
+      def current_user
+        { :id => 123 }
+      end
     end
   end
   let(:ua_parser) { Agent.new(ua_string) }

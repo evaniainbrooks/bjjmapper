@@ -34,5 +34,3 @@ json.has_black_belt location.flag_has_black_belt || false
 json.flag_closed location.flag_closed || false
 json.created_at location.created_at
 json.updated_at location.updated_at
-json.stars location.stars
-json.half_star location.half_star?

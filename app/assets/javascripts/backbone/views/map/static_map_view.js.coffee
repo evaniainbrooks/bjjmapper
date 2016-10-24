@@ -12,17 +12,16 @@ class RollFindr.Views.StaticMapView extends Backbone.View
       'initializeMarkerView',
       'render')
 
-    @setupGoogleMap()
+    if @setupGoogleMap()
 
-    @initializeMarkerView(options.editable)
-    @listView = new RollFindr.Views.MapListView({
-      el: @$('.location-list')
-      model: @model
-      markerIdFunction: @markerView.getMarkerId
-      filteredCount: 0
-    })
+      @initializeMarkerView(options.editable)
+      @listView = new RollFindr.Views.MapListView({
+        el: @$('.location-list')
+        model: @model
+        markerIdFunction: @markerView.getMarkerId
+        filteredCount: 0
+      })
 
-    if @map?
       @setupEventListeners()
       @setCenterAndRefresh()
       if (@model.get('locations').size() == 1)
@@ -40,6 +39,8 @@ class RollFindr.Views.StaticMapView extends Backbone.View
     @markerView.render() if shouldRender
 
   setupGoogleMap: ->
+    return false unless google?
+
     mapOptions = {
       mapTypeControl: false
       zoom: @model.get('zoom')
@@ -49,6 +50,7 @@ class RollFindr.Views.StaticMapView extends Backbone.View
     mapCanvas = @$('.map-canvas')[0]
 
     @map = new google.maps.Map(mapCanvas, mapOptions)
+    return true
 
   setupEventListeners: ->
     @listenTo(@model.get('locations'), 'sort sync reset', @render)

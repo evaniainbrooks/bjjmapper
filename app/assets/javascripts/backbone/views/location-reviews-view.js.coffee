@@ -1,14 +1,16 @@
 #= require templates/review
+#= require templates/rating-stars
 #= require backbone/models/review
 
-class RollFindr.Views.ReviewsView extends Backbone.View
+class RollFindr.Views.LocationReviewsView extends Backbone.View
   model: null
   el: $('.reviews')
-  template: null
+  ratingTemplate: JST["templates/rating-stars"]
+  reviewTemplate: JST["templates/review"]
   initialize: (options)->
+    @model = new RollFindr.Models.ReviewsResponse(location_id: options.location_id)
     _.bindAll(this, 'render')
-    @template = JST["templates/#{options.template_name}"]
-    @model.get('reviews').fetch({
+    @model.fetch({
       beforeSend: =>
         @$el.addClass('loading')
       complete: =>
@@ -20,8 +22,10 @@ class RollFindr.Views.ReviewsView extends Backbone.View
     if @model.get('reviews').size() > 0
       @$el.removeClass('empty')
       @model.get('reviews').each (review)=>
-        elem = @template({review: review.toJSON()})
+        elem = @reviewTemplate({review: review.toJSON()})
         @$('.items').append(elem)
     else
       @$el.addClass('empty')
+
+    $('.rating-container').html(@ratingTemplate(location: @model.toJSON()))
 

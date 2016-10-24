@@ -1,9 +1,4 @@
-%div.text-center.center-block.rating-container
-  %a.rating{:href => '#reviews'}
-    - 1.upto(5) do |n|
-      - if location.stars >= n
-        %span.fa.fa-star
-      - elsif location.stars == n - 1 && location.half_star?
-        %span.fa.fa-star-half-o
-      - else
-        %span.fa.fa-star-o
+%div.text-center.center-block{:style => 'opacity: 0.5'}
+  - 1.upto(5) do |n|
+    %span.fa.fa-star-o
+  %span.small.text-muted (?)

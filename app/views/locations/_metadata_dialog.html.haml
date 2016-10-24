@@ -7,4 +7,4 @@
           %i.fa.fa-info-circle
           = "#{location.title} Metadata"
       .modal-body
-        %pre.small= JSON.pretty_generate(location.as_json({})) 
+        %pre.small= render_json(location) 

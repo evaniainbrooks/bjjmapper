@@ -5,7 +5,7 @@ describe RollFindr::TimezoneClient do
     let(:expected_timezone) { 'America/Los Angeles' }
     subject { RollFindr::TimezoneClient.new('localhost', 9999) }
     before do
-      response_dbl = double()
+      response_dbl = double('response')
       response_dbl.stub(:body).and_return(expected_timezone)
       Net::HTTP.stub(:get_response).and_return(response_dbl)
     end
