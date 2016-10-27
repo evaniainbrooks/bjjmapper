@@ -24,12 +24,12 @@ class RollFindr.Models.ReviewsResponse extends Backbone.Model
     Routes.location_reviews_path(@location_id)
 
   initialize: (options)->
-    this.location_id = options.location_id
+    @location_id = options.location_id
 
     reviews = @get('reviews')
-    reviews = new RollFindr.Collections.ReviewsCollection(reviews, {location_id: id})
-    this.set('reviews', reviews)
-    this.listenTo(this, 'change:reviews', this.onChangeReviews)
+    reviews = new RollFindr.Collections.ReviewsCollection(reviews, {location_id: @location_id})
+    @set('reviews', reviews)
+    @listenTo(this, 'change:reviews', this.onChangeReviews)
 
   onChangeReviews: =>
     reviews = @get('reviews')
