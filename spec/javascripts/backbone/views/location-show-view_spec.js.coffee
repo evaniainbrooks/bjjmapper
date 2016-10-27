@@ -45,4 +45,4 @@ describe 'Views.LocationShowView', ->
       view.instructorsView.should.be.instanceof(RollFindr.Views.LocationInstructorsView)
 
     it 'has a reviews subview', ->
-      view.reviewsView.should.be.instanceof(RollFindr.Views.ReviewsView)
+      view.reviewsView.should.be.instanceof(RollFindr.Views.LocationReviewsView)
