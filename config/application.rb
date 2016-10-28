@@ -27,7 +27,7 @@ module RollFindr
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
     config.timezone_service_host = 'localhost'
-    config.timezone_service_port = 9002
+    config.timezone_service_port = 80
 
     config.location_fetch_service_host = 'localhost'
     config.location_fetch_service_port = 80
