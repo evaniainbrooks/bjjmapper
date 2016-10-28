@@ -30,21 +30,21 @@ module RollFindr
 
     def photos(location_id)
       query = {api_key: API_KEY}.to_query
-      uri = URI("http://#{@host}:#{@port}/locations/#{location_id}/photos?#{query}")
+      uri = URI("http://#{@host}:#{@port}/service/fetch/locations/#{location_id}/photos?#{query}")
 
       get_request(uri)
     end
 
     def reviews(location_id)
       query = {api_key: API_KEY}.to_query
-      uri = URI("http://#{@host}:#{@port}/locations/#{location_id}/reviews?#{query}")
+      uri = URI("http://#{@host}:#{@port}/service/fetch/locations/#{location_id}/reviews?#{query}")
 
       get_request(uri)
     end
 
     def detail(location_id)
       query = {api_key: API_KEY}.to_query
-      uri = URI("http://#{@host}:#{@port}/locations/#{location_id}/detail?#{query}")
+      uri = URI("http://#{@host}:#{@port}/service/fetch/locations/#{location_id}/detail?#{query}")
 
       get_request(uri)
     end
