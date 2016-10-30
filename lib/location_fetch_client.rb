@@ -4,6 +4,7 @@ require 'uri'
 module RollFindr
   class LocationFetchClient
     API_KEY = "d72d574f-a395-419e-879c-2b2d39a51ffc"
+    SERVICE_PATH = "service/fetch"
 
     def initialize(host, port)
       @host = host
@@ -13,7 +14,7 @@ module RollFindr
     def search_async(location_data, scope = nil)
       query = {api_key: API_KEY}
       query.merge(scope: scope) if scope.present?
-      uri = URI("http://#{@host}:#{@port}/search/async?#{query.to_query}")
+      uri = URI("http://#{@host}:#{@port}/#{SERVICE_PATH}/search/async?#{query.to_query}")
 
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Post.new(uri.request_uri)
@@ -30,21 +31,21 @@ module RollFindr
 
     def photos(location_id)
       query = {api_key: API_KEY}.to_query
-      uri = URI("http://#{@host}:#{@port}/service/fetch/locations/#{location_id}/photos?#{query}")
+      uri = URI("http://#{@host}:#{@port}/#{SERVICE_PATH}/locations/#{location_id}/photos?#{query}")
 
       get_request(uri)
     end
 
     def reviews(location_id)
       query = {api_key: API_KEY}.to_query
-      uri = URI("http://#{@host}:#{@port}/service/fetch/locations/#{location_id}/reviews?#{query}")
+      uri = URI("http://#{@host}:#{@port}/#{SERVICE_PATH}/locations/#{location_id}/reviews?#{query}")
 
       get_request(uri)
     end
 
     def detail(location_id)
       query = {api_key: API_KEY}.to_query
-      uri = URI("http://#{@host}:#{@port}/service/fetch/locations/#{location_id}/detail?#{query}")
+      uri = URI("http://#{@host}:#{@port}/#{SERVICE_PATH}/locations/#{location_id}/detail?#{query}")
 
       get_request(uri)
     end
