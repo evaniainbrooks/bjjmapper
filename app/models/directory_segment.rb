@@ -1,4 +1,5 @@
 require 'mongoid-history'
+require 'i18n'
 
 class DirectorySegment
   include Mongoid::Document
@@ -99,9 +100,11 @@ class DirectorySegment
   def self.synthesize(params, parent_segment = nil)
     distance = params.fetch(:distance, DEFAULT_DISTANCE_MILES).to_i
 
+    canonical_name = params[:city] || parent[:country]
     DirectorySegment.new.tap do |segment|
-      segment.name = params[:city] || params[:country]
+      segment.name = canonical_name
       segment.parent_segment = parent_segment
+      segment.abbreviations = RollFindr::DirectoryCountryAbbreviations[I18n.transliterate(canonical_name).downcase] || []
       segment.geocode
       segment.timezone
       segment.synthetic = true
