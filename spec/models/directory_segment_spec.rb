@@ -47,7 +47,7 @@ describe DirectorySegment do
         subject.parent_segment.should be_synthetic
         subject.should be_synthetic
       end
-      it 'the country has abbreviations' do
+      xit 'the country has abbreviations' do
         subject.parent_segment.abbreviations.should_not be_empty
       end
     end
