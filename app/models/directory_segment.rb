@@ -100,7 +100,7 @@ class DirectorySegment
   def self.synthesize(params, parent_segment = nil)
     distance = params.fetch(:distance, DEFAULT_DISTANCE_MILES).to_i
 
-    canonical_name = params[:city] || parent[:country]
+    canonical_name = params[:city] || params[:country]
     DirectorySegment.new.tap do |segment|
       segment.name = canonical_name
       segment.parent_segment = parent_segment
