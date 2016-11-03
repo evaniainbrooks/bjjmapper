@@ -31,6 +31,11 @@
             %a{:href => 'javascript:void(0)', :'data-claim-location' => true}
               %span.fa.fa-lock
               I am the owner
+        %li
+          - if !location.flag_closed?
+            %a{:href => 'javascript:void(0)', :'data-id' => location.id.to_s, :'data-close-location' => true}
+              %span.fa.fa-close
+              Mark as closed
     = render partial: 'report_button'
   .edit-field
     %button.btn.btn-default.btn-sm{:'data-cancel-edit' => true } Cancel

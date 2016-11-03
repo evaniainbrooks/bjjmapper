@@ -35,11 +35,19 @@ describe MapsController do
     context '(json)' do
       context 'with locations < distance from center' do
         let(:location) { create(:location, title: 'Wow super location') }
+        let(:closed_location) { create(:location, title: 'Closed', flag_closed: true) }
         it 'returns the locations' do
           get :search, location_type: [location.loctype], lat: location.lat, lng: location.lng, format: 'json'
 
           response.status.should eq 200
           assigns[:locations].collect(&:to_param).should include(location.to_param)
+        end
+
+        it 'does not return closed locations' do
+          get :search, location_type: [location.loctype], lat: closed_location.lat, lng: closed_location.lng, format: 'json'
+
+          response.status.should eq 200
+          assigns[:locations].collect(&:to_param).should_not include(closed_location.to_param)
         end
       end
       context 'with count param' do
@@ -119,7 +127,7 @@ describe MapsController do
         context 'and with search terms' do
           let(:location) { build(:location) }
           before do
-            Location.stub_chain(:all, :limit, :where).and_return([location])
+            Location.stub_chain(:not_closed, :limit, :where).and_return([location])
             Location.stub(:first).and_return(location)
           end
           xit 'sets the lat and lng from the first returned location' do

@@ -33,6 +33,36 @@ describe LocationsController do
       end
     end
   end
+  describe 'POST close' do
+    subject { build(:location, team: nil) }
+    before { Location.stub_chain(:academies, :find).and_return(subject) }
+    context 'when signed in' do
+      before { controller.stub(:current_user).and_return(build(:user, role: 'user')) }
+      context 'when permissions allow editing' do
+        before { subject.stub(:editable_by?).and_return(true) }
+        it 'sets the closed flag' do
+          subject.should_receive(:update_attribute).with(:flag_closed, true)
+          post :close, { id: '1234', format: 'json' }
+          response.status.should eq 200
+        end
+      end
+      context 'when permissions do not allow editing' do
+        before { subject.stub(:editable_by?).and_return(false) }
+        it 'returns 403 forbidden' do
+          subject.should_not_receive(:update_attribute).with(:flag_closed, true)
+          post :close, { id: '1234', format: 'json' }
+          response.status.should eq 403
+        end
+      end
+    end
+    context 'when not signed in' do
+      before { controller.stub(:current_user).and_return(build(:user, role: 'anonymous')) }
+      it 'returns 401 not authorized' do
+        post :close, { id: '1234', format: 'json' }
+        response.status.should eq 401
+      end
+    end
+  end
   describe 'GET recent' do
     context 'with json format' do
       subject { build_list(:location, 2) }

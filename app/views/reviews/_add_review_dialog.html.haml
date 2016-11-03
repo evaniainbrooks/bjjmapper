@@ -3,20 +3,13 @@
   = form_for([location, new_review], url: location_reviews_path(location), html: { class: 'form editable edit-mode'}) do |f|
     .modal-dialog
       .modal-content
-        .modal-header
-          %button.close{'data-dismiss' => 'modal', 'type' => 'button'}
-            %span{'aria-hidden' => 'true'} &times;
-            %span.sr-only Close
-          %h4.modal-title 
-            %span.fa.fa-thumb-tack
-            Create Review of #{location.title}
         .modal-body
           %div.rating
-            %a.fa.fa-star-o.fa-3x{'href' => '#', 'data-rating' => 1}
-            %a.fa.fa-star-o.fa-3x{'href' => '#', 'data-rating' => 2}
-            %a.fa.fa-star-o.fa-3x{'href' => '#', 'data-rating' => 3}
-            %a.fa.fa-star-o.fa-3x{'href' => '#', 'data-rating' => 4}
-            %a.fa.fa-star-o.fa-3x{'href' => '#', 'data-rating' => 5}
+            %a.fa.fa-star-o.fa-3x{'href' => 'javascript:void(0)', 'data-rating' => 1}
+            %a.fa.fa-star-o.fa-3x{'href' => 'javascript:void(0)', 'data-rating' => 2}
+            %a.fa.fa-star-o.fa-3x{'href' => 'javascript:void(0)', 'data-rating' => 3}
+            %a.fa.fa-star-o.fa-3x{'href' => 'javascript:void(0)', 'data-rating' => 4}
+            %a.fa.fa-star-o.fa-3x{'href' => 'javascript:void(0)', 'data-rating' => 5}
           %br/
           = f.hidden_field :rating
           = f.text_area :body, class: 'form-control input-md', disabled: true, placeholder: 'Were the facilities clean? Did class start on time? How was the instruction?'

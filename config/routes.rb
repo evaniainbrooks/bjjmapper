@@ -31,6 +31,7 @@ Rails.application.routes.draw do
     get :schedule, on: :member
     post :move, on: :member
     post :unlock, on: :member
+    post :close, on: :member
 
     resources :reviews, only: [:create, :destroy, :index]
 

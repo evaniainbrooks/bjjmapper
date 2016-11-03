@@ -1,11 +1,11 @@
 class LocationsController < ApplicationController
   include LocationsHelper
 
-  before_action :set_location, only: [:favorite, :schedule, :destroy, :show, :update, :move, :unlock]
-  before_action :redirect_legacy_bsonid, only: [:favorite, :schedule, :destroy, :show, :update, :move, :unlock]
+  before_action :set_location, only: [:favorite, :schedule, :destroy, :show, :update, :move, :unlock, :close]
+  before_action :redirect_legacy_bsonid, only: [:schedule, :show]
   before_action :set_map, only: :show
-  before_action :ensure_signed_in, only: [:wizard, :destroy, :create, :update, :move, :unlock]
-  before_action :check_permissions, only: [:destroy, :update, :move, :unlock]
+  before_action :ensure_signed_in, only: [:wizard, :destroy, :create, :update, :move, :unlock, :close]
+  before_action :check_permissions, only: [:destroy, :update, :move, :unlock, :close]
 
   decorates_assigned :location, :locations
 
@@ -22,6 +22,19 @@ class LocationsController < ApplicationController
 
   NEARBY_DISTANCE_DEFAULT = 200
   NEARBY_COUNT_DEFAULT = 4
+
+  def close
+    tracker.track('closeLocation',
+      location: @location.to_param
+    )
+
+    @location.update_attribute(:flag_closed, true)
+
+    respond_to do |format|
+      format.html { redirect_to location_path(@location) }
+      format.json { render partial: 'location' }
+    end
+  end
 
   def unlock
     tracker.track('unlockLocation',

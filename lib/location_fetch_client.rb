@@ -22,7 +22,7 @@ module RollFindr
 
       begin
         response = http.request(request)
-        response.code
+        response.code.to_i
       rescue StandardError => e
         Rails.logger.error e.message
         500

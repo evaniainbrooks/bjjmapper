@@ -46,6 +46,8 @@ class RollFindr.Views.MapListView extends Backbone.View
     return if null == @activeMarkerId
 
     listElem = $(".map-list-item[data-id='#{@activeMarkerId}']")
+    return if null == listElem
+    
     scrollTopPosition = listElem.offset().top - $('.navbar').height()
     if 'fixed' == $('.map-canvas').css('position')
       $('html, body').animate({

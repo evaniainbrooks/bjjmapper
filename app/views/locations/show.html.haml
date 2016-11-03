@@ -1,7 +1,7 @@
 = content_for(:title) do
   = "#{location.title} #{"BJJ" unless location.title.end_with?("BJJ")} academy in #{location.city}, #{location.country}"
 
-.container.show-location.page{ class: moved? || closed? ? 'moved' : (closed? ? 'closed' : '') }
+.container.show-location.page{ class: moved? ? 'moved' : (closed? ? 'closed' : '') }
   %div#fb-root
   = form_for(location, html: { class: 'form ' + edit_mode_classes }) do |f|
     .row
