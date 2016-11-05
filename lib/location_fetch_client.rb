@@ -43,8 +43,8 @@ module RollFindr
       get_request(uri)
     end
 
-    def detail(location_id)
-      query = {api_key: API_KEY}.to_query
+    def detail(location_id, combined = false)
+      query = {api_key: API_KEY, combined: combined}.to_query
       uri = URI("http://#{@host}:#{@port}/#{SERVICE_PATH}/locations/#{location_id}/detail?#{query}")
 
       get_request(uri)
@@ -56,8 +56,13 @@ module RollFindr
       begin
         response = Net::HTTP.get_response(uri)
         return nil unless response.code.to_i == 200
-
-        JSON.parse(response.body).deep_symbolize_keys
+        
+        result = JSON.parse(response.body)
+        if result.is_a?(Array)
+          result.map {|h| h.deep_symbolize_keys}
+        else
+          result.deep_symbolize_keys
+        end
       rescue StandardError => e
         Rails.logger.error e.message
         nil
