@@ -124,7 +124,6 @@ class RollFindr.Views.MapView extends Backbone.View
       userModelLocation = new google.maps.LatLng(RollFindr.CurrentUser.get('lat'), RollFindr.CurrentUser.get('lng'))
       @map.setCenter(userModelLocation)
 
-      toastr.error('Could not pinpoint your location', 'Error')
       doneCallback() if doneCallback?
 
     if navigator? && navigator.geolocation?
