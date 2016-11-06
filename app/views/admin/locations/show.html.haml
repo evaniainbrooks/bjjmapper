@@ -1,8 +1,8 @@
 .container
   %h3 Model
   %pre.small= (render_json(@location))
-  %h3 Service Data
-  = JSON.pretty_generate RollFindr::LocationFetchService.detail(@location.id.to_s)
+  %h3 Service Metadata
+  %pre= JSON.pretty_generate RollFindr::LocationFetchService.detail(@location.id.to_s)
   
   %h3= pluralize(@location.history_tracks.count, "Changes")
   %table.table.table-striped

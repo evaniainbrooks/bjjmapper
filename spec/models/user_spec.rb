@@ -1,21 +1,24 @@
 require 'spec_helper'
 require 'wikipedia'
+require 'shared/locationfetchsvc_context'
 
 describe User do
+  include_context 'locationfetch service'
+  
   it 'has a factory' do
-    build(:user).should be_valid
+    build_stubbed(:user).should be_valid
   end
   describe 'validations' do
     describe '.name' do
       it 'is invalid without a name' do
-        build(:user, name: 'hello world').should be_valid
-        build(:user, name: nil).should_not be_valid
+        build_stubbed(:user, name: 'hello world').should be_valid
+        build_stubbed(:user, name: nil).should_not be_valid
       end
     end
     describe '.image, .image_tiny, .image_large' do
       it 'must have a valid prefix' do
-        build(:user, image: 'https://commondatastorage.googleapis.com/bjjmapper/test.png').should be_valid
-        build(:user, image: 'hacks.com/test.png').should_not be_valid
+        build_stubbed(:user, image: 'https://commondatastorage.googleapis.com/bjjmapper/test.png').should be_valid
+        build_stubbed(:user, image: 'hacks.com/test.png').should_not be_valid
       end
     end
   end
@@ -80,14 +83,14 @@ describe User do
 
   describe '.birthdate' do
     context 'with invalid date' do
-      subject { build(:user).birthdate }
+      subject { build_stubbed(:user).birthdate }
       before { Date.stub(:new).and_raise('an error') }
       it 'returns nil' do
         subject.should be_nil
       end
     end
     context 'with valid date' do
-      subject { build(:user, birth_day: 24, birth_month: 9, birth_year: 1986).birthdate }
+      subject { build_stubbed(:user, birth_day: 24, birth_month: 9, birth_year: 1986).birthdate }
       it 'returns a date object' do
         subject.should be_kind_of(Date)
       end
@@ -96,20 +99,20 @@ describe User do
 
   describe '.editable_by?' do
     context 'when the editor is a super user' do
-      let(:editor) { build(:user, role: 'super_user') }
-      subject { build(:user, role: 'user') }
+      let(:editor) { build_stubbed(:user, role: 'super_user') }
+      subject { build_stubbed(:user, role: 'user') }
       it { subject.editable_by?(editor).should be true }
     end
     context 'when the editor is not a super user' do
       context 'when anonymous' do
-        subject { build(:user, role: 'user') }
-        let(:editor) { build(:user, role: 'anonymous') }
+        subject { build_stubbed(:user, role: 'user') }
+        let(:editor) { build_stubbed(:user, role: 'anonymous') }
         it { subject.editable_by?(editor).should be false }
       end
       context 'when not anonymous' do
         context 'when locked and the user and editor are not the same' do
-          subject { build(:user, role: 'user', flag_locked: true, provider: '123') }
-          let(:editor) { build(:user, role: 'user') }
+          subject { build_stubbed(:user, role: 'user', flag_locked: true, provider: '123') }
+          let(:editor) { build_stubbed(:user, role: 'user') }
           before do
             subject.stub(:id).and_return(999)
             editor.stub(:id).and_return(1)
@@ -117,12 +120,12 @@ describe User do
           it { subject.editable_by?(editor).should be false }
         end
         context 'when not locked' do
-          subject { build(:user, role: 'user', provider: nil) }
-          let(:editor) { build(:user, role: 'user') }
+          subject { build_stubbed(:user, role: 'user', provider: nil) }
+          let(:editor) { build_stubbed(:user, role: 'user') }
           it { subject.editable_by?(editor).should be true }
         end
         context 'when the user and editor are the same' do
-          let(:editor) { build(:user, role: 'user') }
+          let(:editor) { build_stubbed(:user, role: 'user') }
           it { editor.editable_by?(editor).should be true }
         end
       end
@@ -131,26 +134,26 @@ describe User do
 
   describe '.jitsuka?' do
     context 'when the user has a rank' do
-      subject { build(:user, belt_rank: 'white') }
+      subject { build_stubbed(:user, belt_rank: 'white') }
       it { subject.should be_jitsuka }
     end
     context 'when the user does not have a rank' do
-      subject { build(:user, belt_rank: nil) }
+      subject { build_stubbed(:user, belt_rank: nil) }
       it { subject.should_not be_jitsuka }
     end
   end
   describe '.anonymous?' do
     it 'returns false when not anonymous' do
-      build(:user, role: 'bogus').should_not be_anonymous
+      build_stubbed(:user, role: 'bogus').should_not be_anonymous
     end
     it 'returns true when anonymous' do
-      build(:user, role: 'anonymous').should be_anonymous
+      build_stubbed(:user, role: 'anonymous').should be_anonymous
     end
   end
   describe '.full_lineage' do
     context 'when there is no lineal_parent' do
       it 'returns empty array' do
-        build(:user, lineal_parent: nil).full_lineage.should eq []
+        build_stubbed(:user, lineal_parent: nil).full_lineage.should eq []
       end
     end
     context 'when there is a lineal_parent' do
@@ -160,15 +163,15 @@ describe User do
       end
       let(:expected_names) { ['b', 'a'] }
       it 'returns a list of the ancestors' do
-        build(:user, lineal_parent: User.last).full_lineage.map(&:name).should eq expected_names
+        build_stubbed(:user, lineal_parent: User.last).full_lineage.map(&:name).should eq expected_names
       end
     end
   end
   describe '#rank_sort_key' do
-    let(:wb0) { build(:user, stripe_rank: 0, belt_rank: 'white') }
-    let(:wb1) { build(:user, stripe_rank: 1, belt_rank: 'white') }
-    let(:pb) { build(:user, stripe_rank: 0, belt_rank: 'purple') }
-    let(:bb) { build(:user, stripe_rank: 0, belt_rank: 'black') }
+    let(:wb0) { build_stubbed(:user, stripe_rank: 0, belt_rank: 'white') }
+    let(:wb1) { build_stubbed(:user, stripe_rank: 1, belt_rank: 'white') }
+    let(:pb) { build_stubbed(:user, stripe_rank: 0, belt_rank: 'purple') }
+    let(:bb) { build_stubbed(:user, stripe_rank: 0, belt_rank: 'black') }
     it 'returns a key that will sort a list of users by descending rank' do
       User.rank_sort_key(wb0.belt_rank, wb0.stripe_rank).should > User.rank_sort_key(wb1.belt_rank, wb1.stripe_rank)
       User.rank_sort_key(wb1.belt_rank, wb1.stripe_rank).should > User.rank_sort_key(pb.belt_rank, pb.stripe_rank)

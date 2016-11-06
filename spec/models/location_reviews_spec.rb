@@ -2,10 +2,12 @@ require 'spec_helper'
 
 describe LocationReviews do
   subject { LocationReviews.new('location-id') }
-  let(:service_rating) { 5.0 }
   let(:local_review_rating) { 3.0 }
-  let(:service_response) { { reviews: [{body: 'test'}], rating: service_rating } }
   before { Review.stub(:where).and_return([build(:review, rating: local_review_rating, location: nil, user: nil)]) }
+
+  
+  let(:service_rating) { 5.0 }
+  let(:service_response) { { reviews: [{body: 'test'}], rating: service_rating } }
   before { ::RollFindr::LocationFetchService.stub(:reviews).and_return(service_response) }
   describe '.items' do
     it 'returns an array of local and remote (locationfetchsvc) reviews for the location' do

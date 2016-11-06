@@ -5,7 +5,7 @@ describe Location do
   include_context 'locationfetch service'
 
   it 'has a factory' do
-    build(:location).should be_valid
+    build_stubbed(:location).should be_valid
   end
 
   it 'has a decorator' do
@@ -14,36 +14,36 @@ describe Location do
 
   describe '.editable_by?' do
     context 'when the editor is a super user' do
-      let(:editor) { build(:user, role: 'super_user') }
-      subject { build(:location) }
+      let(:editor) { build_stubbed(:user, role: 'super_user') }
+      subject { build_stubbed(:location) }
       it { subject.editable_by?(editor).should be true }
     end
     context 'when editor not superuser' do
       context 'when closed or moved' do
-        subject { build(:location, flag_closed: true) }
-        let(:editor) { build(:user, role: 'user') }
+        subject { build_stubbed(:location, flag_closed: true) }
+        let(:editor) { build_stubbed(:user, role: 'user') }
         it { subject.editable_by?(editor).should be false }
       end
       context 'when anonymous' do
-        subject { build(:location) }
-        let(:editor) { build(:user, role: 'anonymous') }
+        subject { build_stubbed(:location) }
+        let(:editor) { build_stubbed(:user, role: 'anonymous') }
         it { subject.editable_by?(editor).should be false }
       end
       context 'when not anonymous' do
         context 'when claimed and the editor is not the owner' do
-          subject { build(:location) }
+          subject { build_stubbed(:location) }
           before { subject.stub(:owner).and_return(double(id: 1234)) }
-          let(:editor) { build(:user, role: 'user') }
+          let(:editor) { build_stubbed(:user, role: 'user') }
           it { subject.editable_by?(editor).should be false }
         end
         context 'when not claimed' do
-          subject { build(:location, owner: nil) }
-          let(:editor) { build(:user, role: 'user') }
+          subject { build_stubbed(:location, owner: nil) }
+          let(:editor) { build_stubbed(:user, role: 'user') }
           it { subject.editable_by?(editor).should be true }
         end
         context 'when claimed and the editor is the owner' do
-          subject { build(:location) }
-          let(:editor) { build(:user, role: 'user') }
+          subject { build_stubbed(:location) }
+          let(:editor) { build_stubbed(:user, role: 'user') }
           before do
             subject.stub(:owner).and_return(double(id: 1234))
             editor.stub(:id).and_return(1234)
@@ -64,21 +64,21 @@ describe Location do
   describe '.ig_hashtag' do
     context 'without an explicit value' do
       context 'without a team' do
-        subject { build(:location, title: 'Instagram Test', team: nil, ig_hashtag: nil) }
+        subject { build_stubbed(:location, title: 'Instagram Test', team: nil, ig_hashtag: nil) }
         it 'returns the default hashtag' do
           subject.ig_hashtag.should eq 'bjjmapperinstag'
         end
       end
       context 'with a team' do
         let(:team) { create(:team) }
-        subject { build(:location, title: 'Instagram Test', team: team, ig_hashtag: nil) }
+        subject { build_stubbed(:location, title: 'Instagram Test', team: team, ig_hashtag: nil) }
         it 'returns the teams hashtag' do
           subject.ig_hashtag.should eq team.ig_hashtag
         end
       end
     end
     context 'with an explicit value' do
-      subject { build(:location, title: 'Instagram Test', ig_hashtag: 'explicitvalue') }
+      subject { build_stubbed(:location, title: 'Instagram Test', ig_hashtag: 'explicitvalue') }
       it 'returns the explicit value' do
         subject.ig_hashtag.should eq 'explicitvalue'
       end
@@ -90,13 +90,13 @@ describe Location do
       let(:expected_timezone) { 'Some/Timezone' }
       before { RollFindr::TimezoneService.stub(:timezone_for).and_return(expected_timezone) }
       context 'when the field is empty and there are coordinates' do
-        subject { build(:location, coordinates: [80.0, 80.0], timezone: nil) }
+        subject { build_stubbed(:location, coordinates: [80.0, 80.0], timezone: nil) }
         it 'populates the field' do
           subject.timezone.should eq expected_timezone
         end
       end
       context 'when the field is not empty and the coordinates changed' do
-        subject { build(:location, coordinates: [80.0, 80.0], timezone: 'Change/ThisPlease') }
+        subject { build_stubbed(:location, coordinates: [80.0, 80.0], timezone: 'Change/ThisPlease') }
         before { subject.coordinates = [81.0, 81.0] }
         it 'repopulates the field with the new timezone' do
           subject.timezone.should eq expected_timezone
@@ -128,7 +128,7 @@ describe Location do
     end
     context 'when academy' do
       it 'is invalid when blank' do
-        build(:location, title: nil).should_not be_valid
+        build_stubbed(:location, title: nil).should_not be_valid
       end
     end
   end
@@ -177,7 +177,7 @@ describe Location do
   end
 
   describe '.stars' do
-    subject { build(:location) }
+    subject { build_stubbed(:location) }
     describe 'when there is no rating from the locationfetchsvc' do
       before { LocationReviews.any_instance.stub(:rating).and_return(nil) }
       it 'returns 0' do

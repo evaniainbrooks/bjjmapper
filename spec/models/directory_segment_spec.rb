@@ -1,33 +1,36 @@
 require 'spec_helper'
+require 'shared/locationfetchsvc_context'
 
 describe DirectorySegment do
+  include_context 'locationfetch service'
+  
   it 'has a factory' do
-    build(:directory_segment).should be_valid
+    build_stubbed(:directory_segment).should be_valid
   end
 
   describe '.editable_by?' do
-    subject { build(:directory_segment) }
+    subject { build_stubbed(:directory_segment) }
     context 'when the editor is a super user' do
-      let(:editor) { build(:user, role: 'super_user') }
+      let(:editor) { build_stubbed(:user, role: 'super_user') }
       it { subject.editable_by?(editor).should be true }
     end
 
     context 'when the editor is not a super user' do
-      let(:editor) { build(:user, role: 'user') }
+      let(:editor) { build_stubbed(:user, role: 'user') }
       it { subject.editable_by?(editor).should be false }
     end
   end
 
   describe '.locations' do
     context 'when it is a child' do
-      subject { build(:directory_segment, parent_segment: build(:directory_segment)) }
+      subject { build_stubbed(:directory_segment, parent_segment: build_stubbed(:directory_segment)) }
       before { Location.should_receive(:near).with(subject.coordinates, subject.distance) }
       it 'selects locations near the coordinates' do
         subject.locations
       end
     end
     context 'when it is a parent' do
-      subject { build(:directory_segment, abbreviations: ['CAN', 'CA']) }
+      subject { build_stubbed(:directory_segment, abbreviations: ['CAN', 'CA']) }
       before do
         Location.should_receive(:where) #.with(hash_including({country: subject.abbreviations}))
       end

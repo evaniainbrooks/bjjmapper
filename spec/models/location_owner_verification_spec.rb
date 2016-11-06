@@ -1,18 +1,21 @@
 require 'spec_helper'
+require 'shared/locationfetchsvc_context'
 
 describe LocationOwnerVerification do
+  include_context 'locationfetch service'
+  
   it 'has a factory' do
-    build(:location_owner_verification).should be_valid
+    build_stubbed(:location_owner_verification).should be_valid
   end
   describe 'validations' do
     it 'is invalid without an email' do
-      build(:location_owner_verification, email: nil).should_not be_valid
+      build_stubbed(:location_owner_verification, email: nil).should_not be_valid
     end
     it 'is invalid without a location' do
-      build(:location_owner_verification, location: nil).should_not be_valid
+      build_stubbed(:location_owner_verification, location: nil).should_not be_valid
     end
     it 'is invalid without a user' do
-      build(:location_owner_verification, user: nil).should_not be_valid
+      build_stubbed(:location_owner_verification, user: nil).should_not be_valid
     end
   end
   describe 'before create' do

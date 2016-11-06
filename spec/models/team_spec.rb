@@ -1,8 +1,10 @@
 require 'spec_helper'
+require 'shared/locationfetchsvc_context'
 
 describe Team do
+  include_context 'locationfetch service'
   it 'has a factory' do
-    build(:team).should be_present
+    build_stubbed(:team).should be_present
   end
 
   it 'has a decorator' do
@@ -11,18 +13,18 @@ describe Team do
 
   describe '.editable_by?' do
     context 'when the user is a super user' do
-      subject { build(:team) }
-      let(:editor) { build(:user, role: 'super_user') }
+      subject { build_stubbed(:team) }
+      let(:editor) { build_stubbed(:user, role: 'super_user') }
       it { subject.editable_by?(editor).should eq true }
     end
     context 'when the user is not a super user' do
-      let(:editor) { build(:user, role: 'user') }
+      let(:editor) { build_stubbed(:user, role: 'user') }
       context 'with the locked flag' do
-        subject { build(:team, locked: true) }
+        subject { build_stubbed(:team, locked: true) }
         it { subject.editable_by?(editor).should eq false }
       end
       context 'without the locked flag' do
-        subject { build(:team, locked: false) }
+        subject { build_stubbed(:team, locked: false) }
         it { subject.editable_by?(editor).should eq true }
       end
     end
@@ -30,8 +32,8 @@ describe Team do
 
   describe '.destroyable_by?' do
     context 'when it is editable' do
-      subject { build(:team, locked: false) }
-      let(:editor) { build(:user, role: 'super_user') }
+      subject { create(:team, locked: false) }
+      let(:editor) { build_stubbed(:user, role: 'super_user') }
       context 'with locations' do
         before { subject.locations << build(:location) }
         it { subject.destroyable_by?(editor).should eq false }
@@ -41,27 +43,27 @@ describe Team do
       end
     end
     context 'when it is not editable' do
-      subject { build(:team, locked: true) }
-      let(:editor) { build(:user, role: 'user') }
+      subject { build_stubbed(:team, locked: true) }
+      let(:editor) { build_stubbed(:user, role: 'user') }
       it { subject.destroyable_by?(editor).should eq false }
     end
   end
 
   describe 'validations' do
     it 'is invalid without a name' do
-      build(:team, name: nil).should_not be_valid
+      build_stubbed(:team, name: nil).should_not be_valid
     end
   end
 
   describe '.ig_hashtag' do
     context 'without an explicit value' do
-      subject { build(:team, name: 'Instagram Test', ig_hashtag: nil) }
+      subject { build_stubbed(:team, name: 'Instagram Test', ig_hashtag: nil) }
       it 'returns the parameterized name of the team' do
         subject.ig_hashtag.should eq subject.name.parameterize('')
       end
     end
     context 'with an explicit value' do
-      subject { build(:team, name: 'Instagram Test', ig_hashtag: 'explicitvalue') }
+      subject { build_stubbed(:team, name: 'Instagram Test', ig_hashtag: 'explicitvalue') }
       it 'returns the explicit value' do
         subject.ig_hashtag.should eq 'explicitvalue'
       end
