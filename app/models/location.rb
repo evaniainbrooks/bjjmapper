@@ -20,6 +20,10 @@ class Location
 
   LOCATION_TYPE_ALL = [LOCATION_TYPE_ACADEMY, LOCATION_TYPE_EVENT_VENUE].freeze
 
+  STATUS_PENDING = 1
+  STATUS_VERIFIED = 2
+  STATUS_REJECTED = 3
+
   CREATE_PARAMS_WHITELIST = [
     :loctype,
     :ig_hashtag,
@@ -36,6 +40,9 @@ class Location
     :phone,
     :email,
     :website,
+    :source,
+    :status,
+    :status_updated_at,
     :facebook,
     :twitter,
     :instagram].freeze
@@ -68,8 +75,10 @@ class Location
   before_save :populate_timezone
   before_save :set_has_black_belt_flag
 
-  after_create :search_metadata!
+  after_create :maybe_search_metadata!
 
+  field :status_updated_at, type: Integer
+  field :status, type: Integer, default: STATUS_VERIFIED
   field :google_places_id, type: Integer
   field :coordinates, type: Array
   field :street
@@ -156,6 +165,12 @@ class Location
   })
 
   default_scope -> { includes(:team).includes(:owner) }
+  scope :pending, -> { where(:status => STATUS_PENDING) }
+  scope :not_pending, -> { where(:status.ne => STATUS_PENDING) }
+  scope :verified, -> { where(:status => STATUS_VERIFIED) }
+  scope :rejected, -> { where(:status => STATUS_REJECTED) }
+  scope :not_rejected, -> { where(:status.ne => STATUS_REJECTED) }
+
   scope :academies, -> { where(:loctype => LOCATION_TYPE_ACADEMY) }
   scope :event_venues, -> { where(:loctype => LOCATION_TYPE_EVENT_VENUE) }
   scope :with_black_belt, -> { where(:flag_has_black_belt => true) }
@@ -273,6 +288,12 @@ class Location
   end
 
   private
+
+  def maybe_search_metadata
+    if self.status == STATUS_VERIFIED
+      self.search_metadata!
+    end
+  end
 
   def generate_event_venue_title
     if self.event_venue? && self.title.blank?

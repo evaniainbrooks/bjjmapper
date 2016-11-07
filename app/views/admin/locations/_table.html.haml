@@ -1,0 +1,22 @@
+%table.table.table-striped
+  %tr
+    %th Title
+    %th Modifier
+    %th Metadata
+    %th Actions
+
+  - @locations.each do |loc|
+    %tr
+      %td
+        = link_to(loc.title, loc)
+        = link_to('(admin)', admin_location_path(loc))
+      %td
+        = link_to(loc.modifier.try(:name), loc.modifier)
+        .small= time_ago_in_words(loc.created_at)
+      %td
+        = JSON.pretty_generate(JSON.parse(render_json(loc)))
+      %td
+        = link_to 'Verify!', verify_location_status_path(loc), :class => 'text-success', :'data-remote' => true, :'data-method' => 'PUT'
+        = link_to 'Reject!', reject_location_status_path(loc), :class => 'text-danger', :'data-remote' => true, :'data-method' => 'PUT'
+        = link_to 'Pending!', pending_location_status_path(loc), :class => 'text-warning', :'data-remote' => true, :'data-method' => 'PUT'
+        = link_to 'Edit', location_path(loc, edit: 1)

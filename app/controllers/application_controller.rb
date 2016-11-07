@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
+  protect_from_forgery with: :null_session
   helper_method :google_maps_api
   helper_method :current_user
   helper_method :signed_in?
@@ -99,7 +99,15 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    #return User.where(:role.ne => 'anonymous').first # For dev
+    return User.where(:role => 'super_user').first if Rails.env.development?
+
+    # API AUTHENTICATION
+    if params.key?(:api_key)
+      @current_user = User.where(:api_key => params[:api_key]).first
+      return @current_user
+    end
+
+    # NORMAL USER AUTHENTICATION
     begin
       @current_user ||= User.find(session[:user_id]) if session[:user_id]
       @current_user ||= anonymous_user

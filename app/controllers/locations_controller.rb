@@ -56,7 +56,7 @@ class LocationsController < ApplicationController
       count: count
     )
 
-    @locations = Location.academies.desc('created_at').limit(count)
+    @locations = Location.academies.verified.desc('created_at').limit(count)
 
     respond_to do |format|
       format.json 

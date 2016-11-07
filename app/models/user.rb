@@ -31,6 +31,7 @@ class User
     obj.anonymous? ? obj.ip_address.try(:to_url) : obj.name.to_url
   end
 
+  field :api_key, type: String
   field :email, type: String
   field :contact_email, type: String
   field :thumbnailx, type: Integer, default: DEFAULT_THUMBNAIL_X

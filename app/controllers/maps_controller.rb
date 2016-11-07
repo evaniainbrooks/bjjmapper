@@ -98,10 +98,10 @@ class MapsController < ApplicationController
     @text_filter = params.fetch(:query, nil)
     @distance = params.fetch(:distance, DEFAULT_SEARCH_DISTANCE).to_f
     @locations = if @lat.present? && @lng.present?
-      Location.near([@lat, @lng], @distance).not_closed.limit(@count)
+      Location.near([@lat, @lng], @distance).not_closed.not_pending.limit(@count)
       #Location.where(:coordinates => { "$within" => { "$center" => [[@lat, @lng], @distance ]}})
     elsif @text_filter.present?
-      Location.not_closed.limit(@count)
+      Location.not_closed.not_pending.limit(@count)
     end
   end
 

@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :directory_segments, only: [:new, :create, :edit, :update]
     resources :organizations, only: [:new, :create]
-    resources :locations, only: [:index, :show]
+    resources :locations, only: [:index, :show] do
+      get :pending, on: :collection
+    end
     resources :users do
       get :edit_merge, on: :member
       post :merge, on: :member
@@ -29,9 +31,16 @@ Rails.application.routes.draw do
     get :nearby, on: :collection
     get :search, on: :collection, controller: :search_locations, action: 'show'
     get :schedule, on: :member
+
     post :move, on: :member
     post :unlock, on: :member
     post :close, on: :member
+
+    resource :status, controller: :location_statuses, only: [] do
+      put :verify, on: :member
+      put :reject, on: :member
+      put :pending, on: :member
+    end
 
     resources :reviews, only: [:create, :destroy, :index]
 

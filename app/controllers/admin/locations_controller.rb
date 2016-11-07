@@ -5,6 +5,10 @@ class Admin::LocationsController < Admin::AdminController
   end
 
   def index
-    @locations = Location.limit(50).sort({created_at:-1})
+    @locations = Location.limit(100).sort({created_at:-1})
+  end
+
+  def pending
+    @locations = Location.limit(100).pending.sort({created_at:-1})
   end
 end
