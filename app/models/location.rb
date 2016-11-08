@@ -289,7 +289,7 @@ class Location
 
   private
 
-  def maybe_search_metadata
+  def maybe_search_metadata!
     if self.status == STATUS_VERIFIED
       self.search_metadata!
     end
