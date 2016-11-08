@@ -73,9 +73,9 @@ class DirectorySegment
 
   def locations
     if self.child?
-      @_locations ||= Location.near(self.to_coordinates, self.distance)
+      @_locations ||= Location.near(self.to_coordinates, self.distance).verified
     else
-      @_locations ||= Location.where(:country.in => self.abbreviations.push(self.name))
+      @_locations ||= Location.where(:country.in => self.abbreviations.push(self.name)).verified
     end
   end
 

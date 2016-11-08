@@ -11,4 +11,8 @@ class Admin::LocationsController < Admin::AdminController
   def pending
     @locations = Location.limit(100).pending.sort({created_at:-1})
   end
+
+  def rejected
+    @locations = Location.limit(100).rejected.sort({created_at:-1})
+  end
 end

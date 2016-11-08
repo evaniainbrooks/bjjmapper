@@ -36,6 +36,9 @@ describe MapsController do
       context 'with locations < distance from center' do
         let(:location) { create(:location, title: 'Wow super location') }
         let(:closed_location) { create(:location, title: 'Closed', flag_closed: true) }
+        let(:pending_location) { create(:location, status: Location::STATUS_PENDING, title: 'pending') }
+        let(:rejected_location) { create(:location, status: Location::STATUS_REJECTED, title: 'rejected') }
+        before { [location, closed_location, pending_location, rejected_location] }
         it 'returns the locations' do
           get :search, location_type: [location.loctype], lat: location.lat, lng: location.lng, format: 'json'
 
@@ -48,6 +51,23 @@ describe MapsController do
 
           response.status.should eq 200
           assigns[:locations].collect(&:to_param).should_not include(closed_location.to_param)
+        end
+        
+        it 'does not return pending or rejected locations' do
+          get :search, location_type: [location.loctype], lat: location.lat, lng: location.lng, format: 'json'
+
+          response.status.should eq 200
+          assigns[:locations].collect(&:to_param).should_not include(pending_location.to_param)
+          assigns[:locations].collect(&:to_param).should_not include(rejected_location.to_param)
+        end
+        context 'with pending flag' do
+          it 'returns pending and rejected locations' do
+            get :search, pending: 1, location_type: [location.loctype], lat: location.lat, lng: location.lng, format: 'json'
+            
+            response.status.should eq 200
+            assigns[:locations].collect(&:to_param).should include(pending_location.to_param)
+            assigns[:locations].collect(&:to_param).should include(rejected_location.to_param)
+          end
         end
       end
       context 'with count param' do

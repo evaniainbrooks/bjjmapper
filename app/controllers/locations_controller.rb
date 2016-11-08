@@ -99,7 +99,7 @@ class LocationsController < ApplicationController
 
     head :bad_request and return false unless lat.present? && lng.present?
 
-    @locations = Location.near([lat, lng], distance).where(:loctype.in => location_filter).limit(fetch_count).to_a
+    @locations = Location.near([lat, lng], distance).where(:loctype.in => location_filter).verified.limit(fetch_count).to_a
     @locations.reject!{|loc| loc.to_param.eql?(reject)} if reject.present?
 
     head :no_content and return false unless @locations.present?
@@ -266,9 +266,9 @@ class LocationsController < ApplicationController
   def set_location
     id_param = params.fetch(:id, '')
     @location = if action?(:schedule) || current_user.super_user?
-      Location.all
+      Location.verified
     else
-      Location.academies
+      Location.verified.academies
     end.find(id_param)
 
     head :not_found and return false unless @location.present?

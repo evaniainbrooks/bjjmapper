@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     resources :organizations, only: [:new, :create]
     resources :locations, only: [:index, :show] do
       get :pending, on: :collection
+      get :rejected, on: :collection
     end
     resources :users do
       get :edit_merge, on: :member

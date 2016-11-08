@@ -1,7 +1,9 @@
 require 'spec_helper'
 require 'event_schedule'
+require 'shared/timezonesvc_context'
 
 describe RollFindr::EventSchedule do
+  include_context 'timezone service'
   let(:empty_query) do
     double.tap do |q|
       q.stub(:between_time).and_return([])

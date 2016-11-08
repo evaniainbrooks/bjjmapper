@@ -1,11 +1,14 @@
 require 'spec_helper'
 require 'shared/tracker_context'
+require 'shared/timezonesvc_context'
 
 describe LocationsController do
   include_context 'skip tracking'
+  include_context 'timezone service'
+  
   describe 'POST unlock' do
     subject { build(:location, team: nil) }
-    before { Location.stub_chain(:academies, :find).and_return(subject) }
+    before { Location.stub_chain(:verified, :academies, :find).and_return(subject) }
     context 'when signed in' do
       before { controller.stub(:current_user).and_return(build(:user, role: 'user')) }
       context 'when permissions allow editing' do
@@ -66,7 +69,7 @@ describe LocationsController do
   describe 'GET recent' do
     context 'with json format' do
       subject { build_list(:location, 2) }
-      before { Location.stub_chain(:all, :desc, :limit).and_return(subject) }
+      before { Location.stub_chain(:verified, :desc, :limit).and_return(subject) }
       it 'returns the recent locations' do
         get :recent, format: 'json', count: 2
         response.should be_success
@@ -100,7 +103,7 @@ describe LocationsController do
       end
       context 'when there are locations nearby' do
         let(:other_location) { build(:location, title: 'near you location') }
-        before { Location.stub_chain(:near, :where, :limit, :to_a).and_return([location, other_location]) }
+        before { Location.stub_chain(:near, :where, :verified, :limit, :to_a).and_return([location, other_location]) }
         context 'with reject parameter' do
           it 'returns the nearby locations without the rejected location' do
             get :nearby, format: 'json', reject: location.to_param, lat: 80.0, lng: 80.0
@@ -123,7 +126,7 @@ describe LocationsController do
         end
       end
       context 'when there are no locations nearby' do
-        before { Location.stub_chain(:near, :where, :limit, :to_a).and_return([]) }
+        before { Location.stub_chain(:near, :where, :verified, :limit, :to_a).and_return([]) }
         it 'returns 204 no content' do
           get :nearby, format: 'json', lat: 80.0, lng: 80.0
           response.status.should eq 204
@@ -147,7 +150,7 @@ describe LocationsController do
       end
     end
     context 'when the location does not exist' do
-      before { Location.stub_chain(:academies, :find).and_return(nil) }
+      before { Location.stub_chain(:verified, :academies, :find).and_return(nil) }
       it 'returns 404 not found' do
         get :show, id: 'bogus'
         response.status.should eq 404

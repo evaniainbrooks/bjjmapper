@@ -25,7 +25,7 @@ class Location
   STATUS_REJECTED = 3
 
   CREATE_PARAMS_WHITELIST = [
-    :loctype,
+   :loctype,
     :ig_hashtag,
     :city,
     :street,
@@ -167,7 +167,7 @@ class Location
   default_scope -> { includes(:team).includes(:owner) }
   scope :pending, -> { where(:status => STATUS_PENDING) }
   scope :not_pending, -> { where(:status.ne => STATUS_PENDING) }
-  scope :verified, -> { where(:status => STATUS_VERIFIED) }
+  scope :verified, -> { where(:status.in => [nil, STATUS_VERIFIED]) }
   scope :rejected, -> { where(:status => STATUS_REJECTED) }
   scope :not_rejected, -> { where(:status.ne => STATUS_REJECTED) }
 

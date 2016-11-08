@@ -19,6 +19,7 @@ module RollFindr
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Post.new(uri.request_uri)
       request.body = location_data.to_json
+      request.content_type = 'application/json'
 
       begin
         response = http.request(request)

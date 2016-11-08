@@ -140,7 +140,7 @@ private
 
   def set_location
     id_param = params.fetch(:location_id, '')
-    @location = Location.includes(:events).find(id_param)
+    @location = Location.includes(:events).verified.find(id_param)
     head :bad_request and return false unless @location.present?
   end
 

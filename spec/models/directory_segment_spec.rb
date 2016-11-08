@@ -24,7 +24,10 @@ describe DirectorySegment do
   describe '.locations' do
     context 'when it is a child' do
       subject { build_stubbed(:directory_segment, parent_segment: build_stubbed(:directory_segment)) }
-      before { Location.should_receive(:near).with(subject.coordinates, subject.distance) }
+      before do 
+        Location.should_receive(:near).with(subject.coordinates, subject.distance) { Location }
+        Location.should_receive(:verified)
+      end
       it 'selects locations near the coordinates' do
         subject.locations
       end
@@ -32,7 +35,8 @@ describe DirectorySegment do
     context 'when it is a parent' do
       subject { build_stubbed(:directory_segment, abbreviations: ['CAN', 'CA']) }
       before do
-        Location.should_receive(:where) #.with(hash_including({country: subject.abbreviations}))
+        Location.should_receive(:where) { Location }
+        Location.should_receive(:verified)
       end
       it 'selects locations with the country abbreviation' do
         subject.locations
