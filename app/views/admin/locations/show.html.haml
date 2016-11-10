@@ -1,8 +1,23 @@
 .container
+  %h2
+    = link_to location_path(@location, edit: 0) do
+      = @location.title
+    %span.small
+      = surround '(', ')'  do
+        = link_to 'Edit', location_path(@location, edit: 1)
+
+  %h3 Actions
+  = link_to 'Verify!', verify_location_status_path(@location), :class => 'btn btn-success text-success', :'data-remote' => true, :'data-method' => 'PUT'
+  = link_to 'Reject!', reject_location_status_path(@location), :class => 'btn btn-danger text-danger', :'data-remote' => true, :'data-method' => 'PUT'
+  = link_to 'Pending!', pending_location_status_path(@location), :class => 'btn btn-warning text-warning', :'data-remote' => true, :'data-method' => 'PUT'
+
+  = link_to 'Unlock!', unlock_location_path(@location), :class => 'btn btn-default', :'data-remote' => true, :'data-method' => 'POST'
+  = link_to 'Close!', close_location_path(@location), :class => 'btn btn-default text-default', :'data-remote' => true, :'data-method' => 'POST'
+  = link_to 'Delete!', location_path(@location), :class => 'btn btn-default text-default', :'data-remote' => true, :'data-method' => 'DELETE'
   %h3 Model
-  %pre.small= (render_json(@location))
+  %pre.small= JSON.pretty_generate(JSON.parse(render_json(@location)))
   %h3 Service Metadata
-  %pre= JSON.pretty_generate RollFindr::LocationFetchService.detail(@location.id.to_s)
+  %pre= JSON.pretty_generate(RollFindr::LocationFetchService.detail(@location.id.to_s) || {})
   
   %h3= pluralize(@location.history_tracks.count, "Changes")
   %table.table.table-striped

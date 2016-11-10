@@ -13,3 +13,4 @@ json.is_anonymous user.anonymous?
 if user.flag_display_email?
   json.contact_email user.contact_email
 end
+json.preferences user.preferences

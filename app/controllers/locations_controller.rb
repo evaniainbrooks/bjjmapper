@@ -7,7 +7,7 @@ class LocationsController < ApplicationController
   before_action :ensure_signed_in, only: [:wizard, :destroy, :create, :update, :move, :unlock, :close]
   before_action :check_permissions, only: [:destroy, :update, :move, :unlock, :close]
 
-  decorates_assigned :location, :locations
+  decorates_assigned :location, :locations, :with => LocationFetchServiceDecorator
 
   helper_method :created?
   helper_method :reviewed?
@@ -266,9 +266,9 @@ class LocationsController < ApplicationController
   def set_location
     id_param = params.fetch(:id, '')
     @location = if action?(:schedule) || current_user.super_user?
-      Location.verified
+      current_user_location_scope
     else
-      Location.verified.academies
+      current_user_location_scope.academies
     end.find(id_param)
 
     head :not_found and return false unless @location.present?
@@ -276,5 +276,13 @@ class LocationsController < ApplicationController
 
   def check_permissions
     head :forbidden and return false unless current_user.can_edit?(@location)
+  end
+
+  def current_user_location_scope
+    if current_user.preference(:pending)
+      Location
+    else
+      Location.verified
+    end
   end
 end

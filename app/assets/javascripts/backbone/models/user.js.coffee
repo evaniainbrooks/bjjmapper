@@ -1,5 +1,6 @@
 class RollFindr.Models.User extends Backbone.Model
   defaults:
+    preferences: {}
     name: null
     is_anonymous: true
 
@@ -16,6 +17,9 @@ class RollFindr.Models.User extends Backbone.Model
     events = @get('events')
     events = new RollFindr.Collections.UserEventsCollection(events, {user_id: id})
     this.set('events', events)
+
+  preference: (sym)->
+    return @get('preferences')[sym]
 
   isAnonymous: ->
     @get('is_anonymous')

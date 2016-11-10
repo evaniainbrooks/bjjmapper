@@ -156,6 +156,23 @@ describe LocationsController do
         response.status.should eq 404
       end
     end
+    context 'when the location is pending' do
+      before { Location.stub_chain(:verified, :academies, :find).and_return(build_stubbed(:location, status: Location::STATUS_PENDING)) }
+      context 'when the user has the pending preference' do
+        let(:session_params) { { user_id: create(:user, preferences: { pending: 1 }).id } }
+        it 'returns the location' do
+          get :show, id: '123'
+          response.status.should eq 200
+        end
+      end
+      context 'when the user does not have the pending preference' do
+        let(:session_params) { { user_id: create(:user, preferences: {}).id } }
+        xit 'returns 404 not found' do
+          get :show, id: '123'
+          response.status.should eq 404
+        end
+      end
+    end
     context 'when the location is an event venue' do
       context 'and not super_user?' do
         let(:location) { create(:location, loctype: Location::LOCATION_TYPE_EVENT_VENUE) }

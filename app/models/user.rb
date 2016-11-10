@@ -31,6 +31,7 @@ class User
     obj.anonymous? ? obj.ip_address.try(:to_url) : obj.name.to_url
   end
 
+  field :preferences, default: {}.with_indifferent_access
   field :api_key, type: String
   field :email, type: String
   field :contact_email, type: String
@@ -99,6 +100,24 @@ class User
 
   default_scope -> { where(:redirect_to_user_id => nil) }
   scope :jitsukas, -> { where(:belt_rank.in => ['blue', 'purple', 'brown', 'black']) }
+
+  def preference(sym)
+    preferences[sym]
+  end
+
+  def preferences
+    @_preferences ||= (self.read_attribute(:preferences) || {}).with_indifferent_access
+  end
+
+  def set_preference!(sym, val)
+    preferences[sym] = val
+    self.update_attribute(:preferences, preferences)
+  end
+
+  def set_preferences!(prefs)
+    preferences.merge!(prefs)
+    self.update_attribute(:preferences, preferences)
+  end
 
   def populate_from_wikipedia!
     page = Wikipedia.find(name)

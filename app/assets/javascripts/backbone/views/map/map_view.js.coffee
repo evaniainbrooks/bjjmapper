@@ -178,6 +178,7 @@ class RollFindr.Views.MapView extends Backbone.View
       distance: distance
       query: @model.get('query')
       geoquery: @model.get('geoquery')
+      pending: RollFindr.CurrentUser.preference('pending')
     })
 
   fetchMap: (args, completeCallback)->
