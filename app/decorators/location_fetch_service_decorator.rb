@@ -21,7 +21,7 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
 
   def service_data
-    @_data ||= RollFindr::LocationFetchService.detail(self.id.to_s).inject({}) do |hash, prefs|
+    @_data ||= (RollFindr::LocationFetchService.detail(self.id.to_s) || {}).inject({}) do |hash, prefs|
       hash.merge(prefs)
     end
   end
