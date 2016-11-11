@@ -36,6 +36,11 @@
             %a{:href => 'javascript:void(0)', :'data-id' => location.id.to_s, :'data-close-location' => true}
               %span.fa.fa-close
               Mark as closed
+          - else
+            %a{:href => 'javascript:void(0)', :'data-id' => location.id.to_s, :'data-reopen-location' => true}
+              %span.fa.fa-check
+              Re-open academy
+
     = render partial: 'report_button'
   .edit-field
     %button.btn.btn-default.btn-sm{:'data-cancel-edit' => true } Cancel

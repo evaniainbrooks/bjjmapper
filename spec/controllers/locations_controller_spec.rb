@@ -48,6 +48,11 @@ describe LocationsController do
           post :close, { id: '1234', format: 'json' }
           response.status.should eq 200
         end
+        it 'clears the closed flag with reopen param' do
+          subject.should_receive(:update_attribute).with(:flag_closed, false)
+          post :close, { id: '1234', format: 'json', reopen: 1 }
+          response.status.should eq 200
+        end
       end
       context 'when permissions do not allow editing' do
         before { subject.stub(:editable_by?).and_return(false) }

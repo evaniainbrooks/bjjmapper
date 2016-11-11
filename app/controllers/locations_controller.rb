@@ -24,11 +24,14 @@ class LocationsController < ApplicationController
   NEARBY_COUNT_DEFAULT = 4
 
   def close
+    reopen = params.fetch(:reopen, 0).to_i.eql?(1)
+    
     tracker.track('closeLocation',
-      location: @location.to_param
+      location: @location.to_param,
+      reopen: reopen
     )
 
-    @location.update_attribute(:flag_closed, true)
+    @location.update_attribute(:flag_closed, !reopen)
 
     respond_to do |format|
       format.html { redirect_to location_path(@location) }
