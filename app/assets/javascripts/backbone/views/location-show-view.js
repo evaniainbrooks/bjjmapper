@@ -14,7 +14,6 @@
     scheduleView: null,
     reviewsView: null,
     events: {
-      'click .add-review': 'addReview',
       'change [name="location[team_id]"]': 'changeTeam',
       'click .add-instructor-menu': 'addInstructor',
       'click .add-event-menu': 'addEvent',
@@ -22,7 +21,6 @@
     },
     initialize: function(options) {
       _.bindAll(this,
-        'addReview',
         'addInstructor',
         'addEvent',
         'changeTeam',
@@ -41,9 +39,6 @@
     },
     addInstructor: function() {
       $('.add-instructor-dialog').modal('show');
-    },
-    addReview: function() {
-      $('.add-review-dialog').modal('show');
     },
     addEvent: function() {
       $('.create-event-dialog').modal('show');

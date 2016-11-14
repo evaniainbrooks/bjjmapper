@@ -20,7 +20,7 @@
             %span.fa.fa-calendar
             Add Event
         %li
-          %a.add-review{:href => '#reviews'}
+          %a.add-review{:'data-location-id' => location.id.to_s, :href => '#reviews'}
             %span.fa.fa-star
             Add Review
         %li.divider

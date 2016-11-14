@@ -2,13 +2,13 @@
   Reviews
   %small
     = surround '(', ')' do
-      %a.add-review{:style => 'margin-top: -5px', :href => '#reviews'} Write Review
+      %a.add-review{:'data-location-id' => location.id.to_s, :style => 'margin-top: -5px', :href => '#reviews'} Write Review
 .reviews.loading
   .items.clear
   .empty-message
     %i.text-muted 
       Hey, why not
-      %a{href: '#reviews', class: 'add-review'} 
+      %a.add-review{:'data-location-id' => location.id.to_s, :href => '#reviews'}
         write the first review?
   .loading-overlay
     %span.fa.fa-refresh.fa-3x.fa-spin

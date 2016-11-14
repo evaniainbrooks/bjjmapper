@@ -1,4 +1,4 @@
 %div.text-center.rating{:class => current_user.favorite_locations.include?(location) ? 'saved' : nil}
-  %a.add-review{:title => 'Write a new Review', :href => 'javascript:void(0)'} 
+  %a.add-review{:title => 'Write a new Review', :href => 'javascript:void(0)', :'data-location-id' => location.id.to_s} 
     %span.fa.fa-star-o
     Review

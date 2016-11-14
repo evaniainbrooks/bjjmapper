@@ -2,6 +2,10 @@ class RollFindr.Models.Location extends Backbone.Model
   @LOCATION_TYPE_ACADEMY: <%= Location::LOCATION_TYPE_ACADEMY %>
   @LOCATION_TYPE_EVENT_VENUE: <%= Location::LOCATION_TYPE_EVENT_VENUE %>
 
+  @STATUS_VERIFIED: <%= Location::STATUS_VERIFIED %>
+  @STATUS_REJECTED: <%= Location::STATUS_REJECTED %>
+  @STATUS_PENDING: <%= Location::STATUS_PENDING %>
+
   initialize: (options)->
     id = this.get('id')
     instructors = @get('instructors')
@@ -15,6 +19,13 @@ class RollFindr.Models.Location extends Backbone.Model
     events = @get('events')
     events = new RollFindr.Collections.LocationEventsCollection(events, {location_id: id})
     this.set('events', events)
+
+  getStatusClass: ->
+    if @get('status') == RollFindr.Models.Location.STATUS_PENDING
+      return 'pending'
+
+    if @get('status') == RollFindr.Models.Location.STATUS_REJECTED
+      return 'rejected'
 
   getColor: ->
     if (@get('loctype') == RollFindr.Models.Location.LOCATION_TYPE_EVENT_VENUE)
@@ -40,6 +51,8 @@ class RollFindr.Models.Location extends Backbone.Model
     team_id: null
     coordinates: []
     instructors: []
+    loctype: Location.LOCATION_TYPE_ACADEMY
+    status: Location.STATUS_VERIFIED
 
 class RollFindr.Collections.LocationsCollection extends Backbone.Collection
   model: RollFindr.Models.Location

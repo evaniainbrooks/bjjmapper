@@ -98,6 +98,7 @@
 
       markerInnerContent.addClass('map-label-content');
       markerInnerContent.addClass(loc.getColor());
+      markerInnerContent.addClass(loc.getStatusClass());
       markerInnerContent.text(loc.get('marker_id').toString());
 
       markerContent.html(markerInnerContent);

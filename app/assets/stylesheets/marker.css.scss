@@ -51,3 +51,19 @@
     border-top: solid 5px $seminarColor;
   }
 }
+
+.map-label-content.pending {
+  background-color: orange;
+  border: 1px solid black;
+  &:after {
+    border-top: solid 5px orange; 
+  }
+}
+
+.map-label-content.rejected {
+  background-color: red;
+  border: 1px solid black;
+  &:after {
+    border-top: solid 5px red;
+  }
+}

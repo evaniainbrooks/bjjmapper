@@ -28,8 +28,10 @@
   </a>
   <br />
   <ul class="text-center nav">
-    <li>
-      <a data-id="<%= location.id %>" class="directions" href="#">Get Directions&hellip;</a>
-    </li>
+    <a data-location-id="<%= location.id %>" class="btn btn-default btn-sm add-review" href="#">
+      <span class="fa fa-star rating"></span>
+      Review
+    </a>
+    <a data-id="<%= location.id %>" class="btn btn-default btn-sm directions" href="#">Get Directions&hellip;</a>
   </ul>
 </div>

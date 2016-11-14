@@ -14,7 +14,7 @@
         %i.fa.fa-calendar
         %span Edit the calendar
     %li
-      = link_to '#reviews', class: 'add-review' do
+      = link_to '#reviews', class: 'add-review', data: { location: { id: location.id.to_s } } do
         %i.fa.fa-star-o
         %span Write a review
     %li

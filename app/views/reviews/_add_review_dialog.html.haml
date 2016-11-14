@@ -1,6 +1,6 @@
-- new_review = Review.new(location: location)
+- new_review = Review.new
 .add-review-dialog.modal.fade{'aria-hidden' => 'true', 'aria-labelledby' => 'addReview', 'role' => 'dialog', 'tabindex' => -1}
-  = form_for([location, new_review], url: location_reviews_path(location), html: { class: 'form editable edit-mode'}) do |f|
+  = form_for(new_review, url: '', html: { class: 'form editable edit-mode'}) do |f|
     .modal-dialog
       .modal-content
         .modal-body

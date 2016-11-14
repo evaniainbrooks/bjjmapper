@@ -15,7 +15,7 @@ class DirectorySegmentsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: segments }
+      format.json { render @directory_segments }
     end
   end
 
@@ -28,7 +28,7 @@ class DirectorySegmentsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render partial: 'directory_segment' }
+      format.json { render partial: 'directory_segment_with_locations' }
     end
   end
 
