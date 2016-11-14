@@ -26,12 +26,6 @@ describe 'Views.LocationShowView', ->
       modalData = $('.add-instructor-dialog').data('bs.modal')
       modalData.isShown.should.equal(true)
 
-  describe "add review", ->
-    it 'click .add-review shows the review modal', ->
-      $('.add-review').click()
-      modalData = $('.add-review-dialog').data('bs.modal')
-      modalData.isShown.should.equal(true)
-
   describe "subviews", ->
     it 'has a calendar subview', ->
       view.scheduleView.should.be.instanceof(RollFindr.Views.ScheduleView)

@@ -14,14 +14,25 @@ describe 'Close Location', ->
     ajaxSpy.restore()
 
   describe 'click [data-close-location]', ->
-    locationData = null
     beforeEach ->
-      $('body').addHtml('a', 'data-id': 123, 'data-close-location': true)
-      locationData = {closed: true}
+      b = $('body')
+      b.addHtml('a', 'data-id': 123, 'data-close-location': true)
     it 'makes an ajax request to close the location', ->
       $('[data-close-location]').click()
       ajaxSpy.calledWithMatch(
         url: Routes.close_location_path(123)
         method: 'POST'
-        data: _.extend({}, commonData, locationData)
+        data: _.extend({}, commonData, {reopen: 0}) 
+      ).should.equal(true)
+  
+  describe 'click [data-reopen-location]', ->
+    locationData = null
+    beforeEach ->
+      $('body').addHtml('a', 'data-id': 123, 'data-reopen-location': true)
+    it 'makes an ajax request to close the location', ->
+      $('[data-reopen-location]').click()
+      ajaxSpy.calledWithMatch(
+        url: Routes.close_location_path(123)
+        method: 'POST'
+        data: _.extend({}, commonData, {reopen: 1})
       ).should.equal(true)
