@@ -21,7 +21,11 @@ class SessionsController < ApplicationController
 
       redirect_to user_path(user, edit: 1, welcome: 1)
     else
-      user.update_attribute(:last_seen_at, Time.now)
+      user.last_seen_at = Time.now
+      user.ip_address = request.remote_ip
+      user.coordinates = nil
+      user.save
+
       tracker.alias(user.to_param, session[:user_id])
       session[:user_id] = user.to_param
 
