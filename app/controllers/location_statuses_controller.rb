@@ -32,8 +32,11 @@ class LocationStatusesController < ApplicationController
       location: @location.to_param
     )
 
-    @location.update_attributes(status: Location::STATUS_VERIFIED, status_updated_at: Time.now, modifier: current_user)
-    @location.search_metadata!
+    if (@location.status != Location::STATUS_VERIFIED)
+      Rails.logger.debug("Searching metadata for #{@location.to_param}")
+      @location.update_attributes(status: Location::STATUS_VERIFIED, status_updated_at: Time.now, modifier: current_user)
+      @location.search_metadata!
+    end
 
     head :accepted
   end

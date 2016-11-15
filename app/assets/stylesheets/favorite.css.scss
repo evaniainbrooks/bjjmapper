@@ -2,7 +2,6 @@
   a, a:visited, a:active { color: maroon; }
   a:hover { color: red; }
 
-  margin-top: 10px;
   &.saved {
     .clear-favorite { 
       display: inline;
@@ -18,8 +17,4 @@
   .clear-favorite {
     display: none;
   }
-
-  position: absolute;
-  top: 10px;
-  right: 10px;
 }

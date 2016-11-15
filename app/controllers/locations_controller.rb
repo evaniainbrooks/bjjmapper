@@ -136,7 +136,11 @@ class LocationsController < ApplicationController
   end
 
   def create
-    @location = Location.create(create_params)
+    @location = Location.new(create_params)
+    if @location.academy? && @location.team.nil?
+      @location.team = guess_team(create_params[:title])
+    end
+    @location.save
 
     tracker.track('createLocation',
       location: @location.attributes.as_json({})
@@ -213,6 +217,10 @@ class LocationsController < ApplicationController
 
   def decorated_locations_with_distance_to_center(locations, lat, lng)
     LocationDecorator.decorate_collection(locations, context: { lat: lat, lng: lng })
+  end
+  
+  def guess_team(title)
+    Team.all.select{|t| title.downcase.index(t.name.downcase) != nil}.first
   end
 
   private

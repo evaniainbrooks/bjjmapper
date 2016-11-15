@@ -1,12 +1,13 @@
 %h1.display-field
   = location.title
-  %br/
-  %small
-    - if location.team.present?
-      = link_to location.team_name, team_path(location.team, ref: 'loc_title')
-    - else
-      = location.team_name
-.display-field.pull-right= render partial: 'favorite_button', :locals => { location: location }
+%div.display-field
+  - if location.team.present?
+    = link_to location.team_name, team_path(location.team, ref: 'loc_title')
+  - else
+    = location.team_name
+  -#%div.health-bar.pull-left
+    %div.pull-left{class: "health-#{location.health / 25}", style: "width: #{location.health}%"}<
+      %small.text-center.center-block= "#{location.health}/100"
 .edit-field
   = f.label :title, class: 'small text-muted upcase'
   = f.text_field :title, class: 'form-control input-lg'

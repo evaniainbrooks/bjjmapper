@@ -242,28 +242,48 @@ describe LocationsController do
     end
   end
   describe 'POST create' do
-    let(:create_params) { { :location => { :city => 'New York', :country => 'USA', :title => 'New title', :description => 'New description' } } }
+    let(:create_params) do
+      { :location => 
+        { :city => 'New York', 
+          :country => 'USA', 
+          :title => 'New title', 
+          :description => 'New description' 
+        } 
+      }
+    end
     context 'when not signed in' do
       it 'returns not_authorized' do
         expect do
-          post :create, create_params.merge({:format => 'json'})
+          post :create, create_params.merge(format: 'json')
           response.status.should eq 401
         end.to change { Location.count }.by(0)
       end
     end
     context 'when signed in' do
       let(:session_params) { { user_id: create(:user).to_param } }
-      context 'with html format' do
-        it 'creates and redirects to a new location in edit mode' do
-          expect do
-            post :create, create_params.merge({:format => 'html'}), session_params
-            response.should redirect_to(location_path(Location.last, edit: 1, create: 1))
-          end.to change { Location.count }.by(1)
+      it 'creates and redirects to a new location in edit mode' do
+        expect do
+          post :create, create_params, session_params
+          response.should redirect_to(location_path(Location.last, edit: 1, create: 1))
+        end.to change { Location.count }.by(1)
+      end
+      context 'when the team is nil' do
+        let(:expected_team_name) {'Atos'}
+        before do
+          Team.stub(:all).and_return([
+            build_stubbed(:team, name: expected_team_name),
+            build_stubbed(:team, name: 'Other team')
+          ])
+        end
+        let(:team_name_params) { create_params.deep_merge(location: { title: "Academy #{expected_team_name}", team_id: nil}) }
+        it 'tries to guess the team from the location title' do
+          post :create, team_name_params, session_params
+          assigns[:location].team.name.should eq expected_team_name
         end
       end
       context 'with json format' do
         it 'creates and returns a new location' do
-          post :create, create_params.merge({:format => 'json'}), session_params
+          post :create, create_params.merge(format: 'json'), session_params
           assigns[:location].title.should eq create_params[:location][:title]
         end
       end

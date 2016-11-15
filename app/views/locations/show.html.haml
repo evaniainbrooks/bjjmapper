@@ -28,6 +28,7 @@
           %img{:width => 100, :height => 100, :src => location.image, :class => 'logo center-block edit-image'}/
         .rating-container
           = render partial: 'rating', :locals => { location: location }
+        .display-field.small.text-center-center-block= render partial: 'favorite_button', :locals => { location: location }
         %div.small.text-muted.text-center= "last updated #{location.updated_at}"
       .col-md-6.col-xs-9
         = render partial: 'show_header', :locals => { location: location, f: f }

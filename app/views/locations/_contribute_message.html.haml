@@ -1,0 +1,17 @@
+.alert.alert-success.buffer-top-sm{:role => 'alert'}
+  %button.close{"data-dismiss" => "alert", :type => "button"} 
+    %span{"aria-hidden" => "true"} &times;
+    %span.sr-only Close
+  %strong.pull-left Help improve this entry!
+  %span.pull-left Current score is
+  %div.health-bar.pull-left
+    %div.pull-left{class: "health-#{location.health / 25}", style: "width: #{location.health}%"}<
+      %small.text-center.center-block= "Health #{location.health}/100"
+
+  %ul.list-inline.pull-left{:style => 'display: inline'}
+    %li
+      = link_to location.health_next_step_path do
+        = location.health_next_step_title
+
+  %div.clear.clear-fix
+
