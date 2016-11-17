@@ -1,33 +1,92 @@
 class RollFindr.Views.FiltersView extends Backbone.View
   el: $('.filter-list')
   tagName: 'div'
-  locationFilter: 0
-  eventFilter: 0
-  sortOrder: 0
+  sort_order: []
   events: {
-    'click [type="checkbox"]': 'checkBoxClicked'
+    'click .flag': 'flagClicked'
+    'click .display-opt': 'displayTypeCheckBoxClicked'
+    'click a.search': 'search'
+    'keyup [name="search"]': 'debounceSearch'
   }
   initialize: (options)->
+    @debounceSearch = _.debounce(@search, 800)
+    @flagClicked = _.debounce(@flagClicked, 500)
+
     _.bindAll(this,
-      'initializeCheckBoxes',
+      'initializeDisplayTypeCheckBoxes',
       'render',
-      'checkBoxClicked')
+      'search',
+      'debounceSearch',
+      'flagClicked',
+      'displayTypeCheckBoxClicked')
 
-    @locationFilter = options.locationFilter
-    @eventFilter = options.eventFilter
-    @sortOrder = options.sortOrder
+    @initializeDisplayTypeCheckBoxes()
+    @initializePickers()
 
-    @initializeCheckBoxes()
+  flagClicked: (e)->
+    flags = {
+      closed: 0
+      unverified: 0
+      bbonly: 0
+    }
+  
+    _.each ['closed', 'unverified', 'bbonly'], (f)=>
+      if (@$("input[name='#{f}']").is(':checked'))
+        flags[f] = 1
 
-  initializeCheckBoxes: ->
-    _.each @locationFilter, (filterVal)->
+    @model.set('flags', flags)
+
+
+  initializeDisplayTypeCheckBoxes: ->
+    _.each @model.get('location_type'), (filterVal)->
       @$("[data-type='location'][data-id='#{filterVal}']").prop('checked', true)
-    _.each @eventFilter, (filterVal)->
+    _.each @model.get('event_type'), (filterVal)->
       @$("[data-type='event'][data-id='#{filterVal}']").prop('checked', true)
 
-  checkBoxClicked: (e)->
-    @eventFilter = _.collect @$("[data-type='event']:checked"), (o)->
+  displayTypeCheckBoxClicked: (e)->
+    event_type = _.collect @$("[data-type='event']:checked"), (o)->
       $(o).data('id')
-    @locationFilter = _.collect @$("[data-type='location']:checked"), (o)->
+    location_type = _.collect @$("[data-type='location']:checked"), (o)->
       $(o).data('id')
+    @model.set({event_type: event_type, location_type: location_type})
+ 
+  search: (e)->
+    searchQuery = @$('[name="search"]').val()
+    RollFindr.GlobalEvents.trigger('search', {
+      query: searchQuery
+    })
+    e.preventDefault()
+
+  initializePickers: -> 
+    icons = {
+      time: "fa fa-clock-o",
+      date: "fa fa-calendar",
+      up: "fa fa-arrow-up",
+      down: "fa fa-arrow-down"
+    }
+
+    formatIso8601 = "YYYY-MM-DDTHH:mm:ss"
+
+    $('.pick-time').datetimepicker({
+      pickTime: false
+      sideBySide: true
+      useSeconds: false
+      useCurrent: false
+      icons: icons
+      format: formatIso8601
+    })
+
+    @startPicker = $('.pick-time.start')
+    @endPicker = $('.pick-time.end')
+
+    start = @model.get('event_start')
+    end = @model.get('event_end')
+    @startPicker.data('DateTimePicker').setDate(start) if start?
+    @endPicker.data('DateTimePicker').setDate(end) if end?
+
+    @startPicker.on "dp.change", (e)=>
+      @endPicker.data("DateTimePicker").setMinDate(e.date)
+
+    @endPicker.on "dp.change", (e)=>
+      @startPicker.data("DateTimePicker").setMaxDate(e.date)
 

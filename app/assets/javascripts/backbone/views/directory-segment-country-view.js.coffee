@@ -7,7 +7,8 @@ class RollFindr.Views.DirectorySegmentCountryView extends Backbone.View
     _.bindAll(this, 'initializeMap')
 
     @initializeMap(options.mapModel)
-    @upcomingView = new RollFindr.Views.UpcomingEventsView()
+    #@upcomingView = new RollFindr.Views.UpcomingEventsView()
 
   initializeMap: (model)->
-    mapView = new RollFindr.Views.StaticMapView(model: model, el: @$('.map-view'))
+    mapView = new RollFindr.Views.MapView(model: model, el: @$('.map'))
+    filtersView = new RollFindr.Views.FiltersView(model: model, el: @$('.filter-list'))

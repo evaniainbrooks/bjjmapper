@@ -1,5 +1,5 @@
 .list-group
-  %p.small.text-muted.text-center.list-count
+  %p.small.text-muted.text-center.list-count.float-left
   .empty-message
     %div
       %h5.text-danger
@@ -19,3 +19,10 @@
           %small{:style => 'margin-bottom: 10px; display: block'} Click here to add your academy to the map
       %br/
   .items
+  -#.page-buttons
+    %button.btn.btn-default.btn-sm.small.text-muted.float-left{'data-map-next' => true, :type => 'button'}
+      %span.fa.fa-chevron-left
+      Prev
+    %button.btn.btn-default.btn-sm.small.text-muted.float-right{'data-map-prev' => true, :type => 'button'}
+      %span.fa.fa-chevron-right
+      Next

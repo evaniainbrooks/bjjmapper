@@ -26,7 +26,6 @@ describe DirectorySegment do
       subject { build_stubbed(:directory_segment, parent_segment: build_stubbed(:directory_segment)) }
       before do 
         Location.should_receive(:near).with(subject.coordinates, subject.distance) { Location }
-        Location.should_receive(:verified)
       end
       it 'selects locations near the coordinates' do
         subject.locations
@@ -36,7 +35,6 @@ describe DirectorySegment do
       subject { build_stubbed(:directory_segment, abbreviations: ['CAN', 'CA']) }
       before do
         Location.should_receive(:where) { Location }
-        Location.should_receive(:verified)
       end
       it 'selects locations with the country abbreviation' do
         subject.locations

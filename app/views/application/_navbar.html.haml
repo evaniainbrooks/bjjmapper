@@ -26,13 +26,13 @@
           %a{:href => meta_path(ref: 'navbar'), title: 'Learn about BJJMapper'} About
         %form.navbar-form.navbar-left{:role => "search"}
           .form-group
-            %input.form-control{:name => 'query', :size => '8', :placeholder => "Search", :type => "text", :value => params[:query]}/
+            %input.form-control{:name => 'query', :size => '8', :placeholder => "Marcelo Garcia", :type => "text", :value => params[:query]}/
           .form-group
             .input-group
-              %input.form-control{:name => 'geoquery', :size => '10', :placeholder => "Anywhere", :type => "text", :value => params[:geoquery]}/
+              %input.form-control{:name => 'geoquery', :size => '10', :placeholder => "New York", :type => "text", :value => params[:geoquery]}/
               %a.input-group-addon{'data-geolocate' => 'true', :href => '#geolocate'}
                 %i.fa.fa-location-arrow
-          %button.btn.btn-default{'data-nodisable' => true, :type => "submit"} Search
+          %button.btn.btn-default{'data-nodisable' => true, :type => "submit"} Go
           -# link_to wizard_locations_path(ref: 'nav'), class: 'btn btn-success' do
             %i.fa.fa-map-marker
             Create Academy

@@ -1,0 +1,9 @@
+- height = local_assigns[:height] || 300
+- show_create = local_assigns[:show_create] || false
+.map
+  .map-canvas.clear{:style => "height: #{height}px"}
+  .map-list-view
+    .location-list.loading
+      .loading-overlay
+        %span.fa.fa-refresh.fa-3x.fa-spin
+      = render partial: 'maps/map_list', locals: { show_create: show_create }

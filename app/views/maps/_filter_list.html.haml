@@ -1,0 +1,58 @@
+.filter-list
+  %h4.small.text-muted.text-uppercase Search terms
+  .term-filter
+    .input-group
+      %input.form-control{:placeholder => 'Search', :name => 'search'}
+      %a.input-group-addon.search{:href => '#'}
+        %i.fa.fa-search
+  %h4.small.text-muted.text-uppercase 
+    %a{'href' => 'javascript:void(0)', 'data-toggle' => 'collapse', 'data-target' => '.display-type'} 
+      Display Types
+  .display-type.collapse
+    %label.form-label.academy.small
+      %input.display-opt{:type => 'checkbox', :name => 'show_academies', :data => { :type => 'location', :id => Location::LOCATION_TYPE_ACADEMY } }
+        &nbsp;Academies
+    %label.form-label.tournament.small
+      %input.display-opt{:type => 'checkbox', :name => 'show_tournaments', :data => { :type => 'event', :id => Event::EVENT_TYPE_TOURNAMENT } }
+        &nbsp;Tournaments
+    %label.form-label.seminar.small
+      %input.display-opt{:type => 'checkbox', :name => 'show_seminars', :data => { :type => 'event', :id => Event::EVENT_TYPE_SEMINAR } }
+        &nbsp;Seminars
+    %label.form-label.camp.small
+      %input.display-opt{:type => 'checkbox', :name => 'show_camps', :data => { :type => 'event', :id => Event::EVENT_TYPE_CAMP } }
+        &nbsp;Training Camps
+  %h4.small.text-muted.text-uppercase
+    %a{'href' => 'javascript:void(0)', 'data-toggle' => 'collapse', 'data-target' => '.event-range'} 
+      Date Range    
+  .event-range.collapse
+    .input-group.date.pick-time.start
+      %input.form-control{'name' => 'event[starting]', 'type' => 'text', 'value' => Time.now - Map::DEFAULT_EVENT_START_OFFSET}
+      %span.input-group-addon
+        %span.fa.fa-clock-o
+    .input-group.date.pick-time.end
+      %input.form-control{'name' => 'event[ending]', 'type' => 'text', 'value' => Time.now + Map::DEFAULT_EVENT_END_OFFSET}
+      %span.input-group-addon
+        %span.fa.fa-clock-o
+  %h4.small.text-muted.text-uppercase
+    %a{'href' => 'javascript:void(0)', 'data-toggle' => 'collapse', 'data-target' => '.more-filters'}
+      Order &amp; Filters 
+  .more-filters.collapse
+    .sort-order
+      %select.form-control{:name => 'sort_order'}
+        %option{:value => 'id'} Relevance
+        %option{:value => 'title'} A-Z
+        %option{:value => 'distance'} Distance
+        %option{:value => 'rating'} Rating
+        %option{:value => 'newest'} Last Updated
+    .team-list
+      -# This is filled in by team-list template
+    %br/
+    %label.form-label.small
+      %input.flag{:type => 'checkbox', :name => 'unverified' }
+        &nbsp;Include Unverified
+    %label.form-label.small
+      %input.flag{:type => 'checkbox', :name => 'closed' }
+        &nbsp;Include Closed
+    %label.form-label.small
+      %input.flag{:type => 'checkbox', :name => 'bbonly' }
+        &nbsp;Exclude Non-Black Belt

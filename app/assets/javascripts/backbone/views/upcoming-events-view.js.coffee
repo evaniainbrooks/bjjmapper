@@ -25,10 +25,20 @@ class RollFindr.Views.UpcomingEventsView extends Backbone.View
     })
   render: ->
     @$('.items').empty()
+    
+    today = moment().add('days', 1)
+    this_week = moment().add('days', 7)
+    this_month = moment().add('months', 1)
+    time_groups = [today, this_week, this_month]
+
+    item_groups = _.groupBy @collection.models, (e)=>
+      start = e.get('starting')
+      _.find time_groups, (t)->
+        moment(start).isBefore(t)
+
     if @collection.size() > 0
       @$el.removeClass('empty')
       _.each @collection.models, (e)=>
-        id = e.get('id')
         t = @template(e)
         element = t({event: e.toJSON()})
         @$('.items').append(element)

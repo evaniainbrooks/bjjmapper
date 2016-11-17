@@ -12,4 +12,10 @@ json.geolocate map.geolocate
 json.legend map.legend
 json.location_count map.location_count
 json.event_count map.event_count
+json.segment map.segment
+json.count map.count
+json.offset map.offset
+json.event_start map.event_start
+json.event_end map.event_end
+json.flags map.flags
 json.locations map.locations, partial: 'locations/location_with_events', as: :location

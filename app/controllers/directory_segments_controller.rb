@@ -28,7 +28,7 @@ class DirectorySegmentsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render partial: 'directory_segment_with_locations' }
+      format.json { render partial: 'directory_segment' }
     end
   end
 
@@ -42,13 +42,15 @@ class DirectorySegmentsController < ApplicationController
 
   def map
     @_map ||= Map.new(
+      location_type: Location::LOCATION_TYPE_ALL,
+      event_type: [Event::EVENT_TYPE_TOURNAMENT, Event::EVENT_TYPE_SEMINAR, Event::EVENT_TYPE_CAMP],
       lat: directory_segment.lat,
       lng: directory_segment.lng,
+      segment: directory_segment.id.to_s,
       zoom: directory_segment.zoom,
       minZoom: Map::DEFAULT_MIN_ZOOM,
       geolocate: 0,
-      locations: directory_segment.locations,
-      refresh: 1
+      refresh: 0
     )
   end
 end

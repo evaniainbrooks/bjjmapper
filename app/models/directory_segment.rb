@@ -58,6 +58,14 @@ class DirectorySegment
     super || (populate_timezone unless self.destroyed?)
   end
 
+  def lat=(val)
+    self.coordinates[1] = val
+  end
+
+  def lng=(val)
+    self.coordinates[0] = val
+  end
+
   def lat
     self.to_coordinates[0]
   end
@@ -71,11 +79,17 @@ class DirectorySegment
     super
   end
 
+  def abbreviations
+    (self.attributes['abbreviations'] || []).concat(
+      RollFindr::DirectoryCountryAbbreviations[I18n.transliterate(name).downcase] || []
+    )
+  end
+
   def locations
     if self.child?
-      @_locations ||= Location.near(self.to_coordinates, self.distance).verified
+      @_locations ||= Location.near(self.to_coordinates, self.distance)
     else
-      @_locations ||= Location.where(:country.in => self.abbreviations.push(self.name)).verified
+      @_locations ||= Location.where(:country.in => self.abbreviations.push(self.name))
     end
   end
 
@@ -104,7 +118,6 @@ class DirectorySegment
     DirectorySegment.new.tap do |segment|
       segment.name = canonical_name
       segment.parent_segment = parent_segment
-      segment.abbreviations = RollFindr::DirectoryCountryAbbreviations[I18n.transliterate(canonical_name).downcase] || []
       segment.geocode
       segment.timezone
       segment.synthetic = true

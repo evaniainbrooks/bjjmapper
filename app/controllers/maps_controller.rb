@@ -1,16 +1,20 @@
 class MapsController < ApplicationController
   DEFAULT_SEARCH_DISTANCE = 10.0
-  DEFAULT_SEARCH_COUNT = 50
+  DEFAULT_SEARCH_COUNT = Map::DEFAULT_COUNT
 
-  DEFAULT_EVENT_START_OFFSET = 15.days
-  DEFAULT_EVENT_END_OFFSET = 1.year
+  DEFAULT_SORT_ORDER = 'distance'
 
+  DEFAULT_EVENT_START_OFFSET = Map::DEFAULT_EVENT_START_OFFSET
+  DEFAULT_EVENT_END_OFFSET = Map::DEFAULT_EVENT_END_OFFSET 
+
+
+  before_filter :validate_event_time_range, only: [:show, :search]
+  before_filter :set_segment, only: [:show, :search]
   before_filter :set_coordinates, only: [:show, :search]
   before_filter :set_locations_scope, only: [:show, :search]
   before_filter :filter_locations, only: [:show, :search]
   before_filter :set_coordinates_from_locations, only: [:show, :search]
   before_filter :validate_coordinates, only: [:search]
-  before_filter :validate_event_time_range, only: [:search]
   around_filter :set_timezone, only: [:search]
 
   helper_method :map
@@ -27,7 +31,10 @@ class MapsController < ApplicationController
       geoquery: map.geoquery,
       geolocate: map.geolocate,
       event_type: map.event_type,
-      location_type: map.location_type
+      location_type: map.location_type,
+      count: map.count,
+      offset: map.offset,
+      flags: flags
     )
 
     respond_to do |format|
@@ -69,10 +76,31 @@ class MapsController < ApplicationController
       event_type: @event_type,
       event_start: @event_start,
       event_end: @event_end,
-      results: @locations.count
+      results: @locations.count,
+      count: @count,
+      offset: @offset,
+      sort: @sort,
+      flags: flags
     )
 
     @locations = decorated_locations(@locations, events: @events, lat: @lat, lng: @lng, event_type: @event_type, location_type: location_filter)
+
+    #TODO: Don't use the decorator in controller...
+    @sort = params.fetch(:sort, DEFAULT_SORT_ORDER).to_sym
+    @locations = case @sort
+      when :distance 
+        @locations.sort_by {|loc| loc.instance_variable_get('@distance') }
+      when :rating 
+        @locations.sort_by {|loc| loc.rating }
+      when :title 
+        @locations.sort_by {|loc| loc.title }
+      when :newest 
+        @locations.sort_by {|loc| loc.object.created_at }
+      when :oldest 
+        @locations.sort_by {|loc| -loc.object.created_at }
+      else 
+        @locations.sort_by {|loc| loc.title }
+      end
 
     respond_to do |format|
       format.json
@@ -81,12 +109,32 @@ class MapsController < ApplicationController
 
   private
 
+  def flags
+    {
+      closed: flag?(:closed) ? 1 : 0,
+      unverified: flag?(:unverified) ? 1 : 0,
+      bbonly: flag?(:bbonly) ? 1 : 0
+    }
+  end
+
+  def flag?(f)
+    params.fetch(f, 0).try(:to_i) == 1
+  end
+
+  def set_segment
+    @segment = params.fetch(:segment, nil)
+    @segment = DirectorySegment.find(@segment) if @segment.present?
+  end
+
   def set_coordinates
     @geocode_query = params.fetch(:geoquery, nil)
     if @geocode_query.present?
       results = GeocodersHelper.search(@geocode_query)
       @lat = results.first.try(:lat)
       @lng = results.first.try(:lng)
+    elsif @segment.present?
+      @lat = @segment.lat
+      @lng = @segment.lng
     else
       @lat = params.fetch(:lat, nil).try(:to_f)
       @lng = params.fetch(:lng, nil).try(:to_f)
@@ -95,17 +143,25 @@ class MapsController < ApplicationController
 
   def set_locations_scope
     @count = params.fetch(:count, DEFAULT_SEARCH_COUNT).to_i
+    @offset = params.fetch(:offset, 0).to_i
     @text_filter = params.fetch(:query, nil)
     @distance = params.fetch(:distance, DEFAULT_SEARCH_DISTANCE).to_f
-    @locations = if @lat.present? && @lng.present?
-      Location.near([@lat, @lng], @distance).not_closed.limit(@count)
+
+    @locations = if @segment.present?
+      @segment.locations.limit(@count).offset(@offset)
+    elsif @lat.present? && @lng.present?
+      Location.near([@lat, @lng], @distance).limit(@count).offset(@offset)
     elsif @text_filter.present?
-      Location.not_closed.limit(@count)
+      Location.limit(@count).offset(@offset)
     end
 
-   if @locations && !params[:pending]
-      @locations = @locations.verified
-    end
+    return unless @locations.present?
+
+    @locations = @locations.not_closed unless flag?(:closed)
+    @locations = @locations.not_rejected
+    @locations = @locations.verified unless flag?(:unverified) 
+    @locations = @locations.with_black_belt if flag?(:bbonly)
+    @locations
   end
 
   def filter_locations
@@ -132,11 +188,11 @@ class MapsController < ApplicationController
   def validate_event_time_range
     start_param = params.fetch(:event_start, Time.now - DEFAULT_EVENT_START_OFFSET).try(:to_s)
     head :bad_request and return false unless start_param.present?
-    @event_start = DateTime.parse(start_param).to_time
+    @event_start = DateTime.parse(start_param).beginning_of_day.to_time
 
     end_param = params.fetch(:event_end, Time.now + DEFAULT_EVENT_END_OFFSET).try(:to_s)
     head :bad_request and return false unless end_param.present?
-    @event_end = DateTime.parse(end_param).to_time
+    @event_end = DateTime.parse(end_param).beginning_of_day.to_time
   end
 
   def set_timezone(&block)
@@ -157,19 +213,26 @@ class MapsController < ApplicationController
     @_map ||= Map.new(
       location_count: @locations.try(:count),
       event_count: @event_count,
+      event_start: @event_start,
+      event_end: @event_end,
       zoom: zoom,
       team: @team,
       lat: @lat,
       lng: @lng,
       query: @text_filter,
       geoquery: @geocode_query,
-      minZoom: Map::DEFAULT_MIN_ZOOM,
+      segment: @segment.try(:id).try(:to_s), 
+      minZoom: [Map::DEFAULT_MIN_ZOOM, zoom].min,
       geolocate: geolocate,
       locations: action?(:search) ? @locations : [],
-      refresh: 1,
+      flags: flags,
+      refresh: 1, #TODO: Move these flags to decorator
       legend: 1,
       location_type: @location_type,
-      event_type: @event_type
+      event_type: @event_type,
+      count: @count,
+      offset: @offset,
+      sort: @sort
     )
   end
 end

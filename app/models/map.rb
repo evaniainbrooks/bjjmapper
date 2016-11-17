@@ -7,13 +7,21 @@ class Map
   DEFAULT_MIN_ZOOM = 5
   GLOBAL_MIN_ZOOM = 4
 
-  attr_accessor :location_count, :event_count
-  attr_accessor :lat, :lng
+  DEFAULT_COUNT = 50
+  DEFAULT_EVENT_START_OFFSET = 15.days
+  DEFAULT_EVENT_END_OFFSET = 1.year
+
+  attr_accessor :event_start, :event_end
+  attr_accessor :count, :offset # for pagination
+  attr_accessor :location_count, :event_count # results count
+  attr_accessor :lat, :lng, :segment
   attr_accessor :zoom, :query
   attr_accessor :geoquery, :query
-  attr_accessor :minZoom, :geolocate
+  attr_accessor :minZoom, :geolocate, :sort
   attr_accessor :locations, :refresh, :legend
   attr_accessor :event_type, :location_type, :team
+
+  attr_accessor :flags
 
   def initialize(options = {})
     @zoom = options.fetch(:zoom, ZOOM_DEFAULT)
@@ -31,6 +39,13 @@ class Map
     @event_type = options.fetch(:event_type, [])
     @location_count = options.fetch(:location_count, 0)
     @event_count = options.fetch(:event_count, 0)
+    @count = options.fetch(:count, DEFAULT_COUNT)
+    @offset = options.fetch(:offset, 0)
+    @segment = options.fetch(:segment, nil)
+    @event_start = options.fetch(:event_start, nil)
+    @event_end = options.fetch(:event_end, nil)
+    @sort = options.fetch(:sort, nil)
+    @flags = options.fetch(:flags, { closed: 0, unverified: 0, bbonly: 0 })
   end
 
   def [](index)

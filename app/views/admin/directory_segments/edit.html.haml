@@ -1,9 +1,12 @@
 .container
   .row
     .col-md-12
+      = render partial: 'maps/map', locals: { height: 300 }
+
+    .col-md-12
       %h1 Edit Directory Segment
       .form
-        = form_for(:directory_segment, url: admin_directory_segment_path(@directory_segment)) do |f|
+        = form_for(@directory_segment, url: admin_directory_segment_path(@directory_segment.id.to_s)) do |f|
           .form-group
             = f.label :name
             = f.text_field :name, class: 'form-control'
@@ -20,8 +23,18 @@
             = f.label :distance
             = f.text_area :distance, class: 'form-control'
           .form-group
+            = f.label :lat
+            = f.text_area :lat, class: 'form-control'
+          .form-group
+            = f.label :lng
+            = f.text_area :lng, class: 'form-control'
+          .form-group
             = f.label :abbreviations
-            = f.text_area :abbreviations, class: 'form-control'
+            = f.text_area :abbreviations, class: 'form-control', value: @directory_segment.abbreviations.join(', ')
           .form-group
             = f.submit
 
+= content_for(:scripts) do
+  :coffeescript
+    mapModel = new RollFindr.Models.Map(#{render_json(map)})
+    mapView = new RollFindr.Views.MapView(model: mapModel, el: $('.map'))

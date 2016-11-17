@@ -74,6 +74,9 @@ class RollFindr.Views.MapView extends Backbone.View
     filtersChanged = _.debounce(@fetchViewport, 500)
     @model.on('change:event_type', filtersChanged)
     @model.on('change:location_type', filtersChanged)
+    @model.on('change:count', filtersChanged)
+    @model.on('change:offset', filtersChanged)
+    @model.on('change:flags', filtersChanged)
 
     RollFindr.GlobalEvents.on('geolocate', @geolocate)
     RollFindr.GlobalEvents.on('search', @search)
@@ -170,16 +173,16 @@ class RollFindr.Views.MapView extends Backbone.View
 
     @$('.refresh-button .fa').addClass('fa-spin')
 
-    @fetchMap({
+    @fetchMap(_.extend({
       location_type: @model.get('location_type')
       event_type: @model.get('event_type')
       lat: lat
       lng: lng
+      segment: @model.get('segment')
       distance: distance
       query: @model.get('query')
       geoquery: @model.get('geoquery')
-      pending: RollFindr.CurrentUser.preference('pending')
-    })
+    }, @model.get('flags')))
 
   fetchMap: (args, completeCallback)->
     @model.fetch({

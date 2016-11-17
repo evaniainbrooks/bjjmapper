@@ -24,6 +24,7 @@ class SessionsController < ApplicationController
       user.last_seen_at = Time.now
       user.ip_address = request.remote_ip
       user.coordinates = nil
+      user.geocode
       user.save
 
       tracker.alias(user.to_param, session[:user_id])

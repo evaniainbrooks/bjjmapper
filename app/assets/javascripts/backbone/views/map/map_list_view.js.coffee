@@ -14,11 +14,19 @@ class RollFindr.Views.MapListView extends Backbone.View
   model: null
   events: {
     'click .map-list-item': 'listItemClicked'
+    'click [data-map-next]': 'nextPage'
+    'click [data-map-prev]': 'prevPage'
   }
   initialize: (options)->
-    _.bindAll(this, 'listItemClicked', 'activeMarkerChanged', 'render')
+    _.bindAll(this, 'listItemClicked', 'activeMarkerChanged', 'render', 'nextPage', 'prevPage')
     RollFindr.GlobalEvents.on('markerActive', @activeMarkerChanged)
     @markerIdFunction = options.markerIdFunction
+
+  nextPage: ->
+    @model.set('offset', @model.get('offset') + @model.get('count'))
+
+  prevPage: ->
+    @model.set('offset', @model.get('offset') - @model.get('count'))
 
   render: (filteredCount)->
     @$('.location-list').removeClass('loading')

@@ -132,6 +132,7 @@ class Location
   index :loctype => 1
   index :flag_closed => 1
   index :flag_has_black_belt => 1
+  index :status => 1
   index({
     :street => 'text',
     :city => 'text',

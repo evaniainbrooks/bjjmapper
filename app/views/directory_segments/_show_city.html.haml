@@ -1,4 +1,4 @@
-- title = "Brazilian Jiu-Jitsu Academies and Events in #{directory_segment.full_name}"
+- title = "#{directory_segment.full_name} Brazilian Jiu-Jitsu"
 = content_for :title do
   = title
 .container.page.directory
@@ -13,29 +13,22 @@
     .col-md-2.text-right.pull-right.hidden-xs
       = render partial: 'create_location_button'
   .row
-    .col-md-9.map-view
-      .map-canvas{:style => 'height: 400px;'}
-      .location-list
-        .loading-overlay
-          %span.fa.fa-refresh.fa-3x.fa-spin
-        = render partial: 'locations/map_list', locals: { show_create: true }
+    .col-md-10
+      = render partial: 'maps/map', locals: { height: 250, show_create: false }
+    .col-md-2
+      = render partial: 'maps/filter_list'
+  .row
     .col-md-3
-      %h3= "More Cities in #{directory_segment.parent_segment.name}"
-      %ul.list-unstyled
-        - directory_segment.parent_segment.child_segments.each do |seg|
-          %li
-            = link_to directory_segment_path(city: seg.name, country: seg.parent_segment.name) do
-              = seg.name
-    %hr/
-    .row
-      .col-md-12
-        %h3 Schedule for #{directory_segment.full_name}
-        .scheduler.clear
+      - if directory_segment.child_segments.present?
+        %h3 Other Cities in #{directory_segment.full_name}
+        %ul.list-unstyled.list-inline
+          - directory_segment.child_segments.sort.each do |city|
+            %li= link_to city.name, directory_segment_path(country: directory_segment.name, city: city.name), title: "List of Brazilian Jiu-Jitsu gyms in #{directory_segment.full_name}" 
 
 = content_for(:scripts) do
   :coffeescript
     $(document).ready ->
       segmentModel = new RollFindr.Models.DirectorySegment(#{render_json(directory_segment)})
-      mapModel = new RollFindr.Models.Map(#{render partial: 'maps/map', formats: [:json], locals: { map: map }})
-      cityView = new RollFindr.Views.DirectorySegmentCityView({ model: segmentModel, mapModel: mapModel, el: $('.directory') })
+      mapModel = new RollFindr.Models.Map(#{render_json(map)})
+      cityView = new RollFindr.Views.DirectorySegmentCountryView({ model: segmentModel, mapModel: mapModel, el: $('.directory') })
 

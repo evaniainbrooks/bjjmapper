@@ -1,6 +1,8 @@
 class Admin::DirectorySegmentsController < Admin::AdminController
   before_action :set_segment, only: [:edit, :update]
-  
+
+  helper_method :map
+
   def new
     respond_to do |format|
       format.html
@@ -58,8 +60,23 @@ class Admin::DirectorySegmentsController < Admin::AdminController
   end
   
   def set_segment
-    @directory_segment = DirectorySegment.for(params.slice(:country, :city))
+    @directory_segment = DirectorySegment.find(params[:id])
+    @directory_segment ||= DirectorySegment.for(params.slice(:country, :city))
 
     head :not_found and return false unless @directory_segment.present?
+  end
+
+  def map
+    @_map ||= Map.new(
+      location_type: Location::LOCATION_TYPE_ALL,
+      event_type: [Event::EVENT_TYPE_TOURNAMENT, Event::EVENT_TYPE_SEMINAR, Event::EVENT_TYPE_CAMP],
+      lat: @directory_segment.lat,
+      lng: @directory_segment.lng,
+      segment: @directory_segment.id.to_s,
+      zoom: @directory_segment.zoom,
+      minZoom: 1,
+      geolocate: 0,
+      refresh: 0
+    )
   end
 end

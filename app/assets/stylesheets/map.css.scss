@@ -33,17 +33,17 @@
   .close-btn { display: block; }
   .open-btn { display: none; }
   .content { display: block; }
-
-  label {
-    &.academy {
-      color: $academyColor;
-    }
-    &.tournament {
-      color: $tournamentColor;
-    }
-    &.seminar {
-      color: $seminarColor;
-    }
+}
+  
+label {
+  &.academy {
+    color: $academyColor;
+  }
+  &.tournament {
+    color: $tournamentColor;
+  }
+  &.seminar {
+    color: $seminarColor;
   }
 }
 

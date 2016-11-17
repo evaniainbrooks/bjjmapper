@@ -60,13 +60,37 @@ describe MapsController do
           assigns[:locations].collect(&:to_param).should_not include(pending_location.to_param)
           assigns[:locations].collect(&:to_param).should_not include(rejected_location.to_param)
         end
-        context 'with pending flag' do
-          it 'returns pending and rejected locations' do
-            get :search, pending: 1, location_type: [location.loctype], lat: location.lat, lng: location.lng, format: 'json'
+        context 'with unverified flag' do
+          it 'returns pending locations' do
+            get :search, unverified: 1, location_type: [location.loctype], lat: location.lat, lng: location.lng, format: 'json'
             
             response.status.should eq 200
             assigns[:locations].collect(&:to_param).should include(pending_location.to_param)
-            assigns[:locations].collect(&:to_param).should include(rejected_location.to_param)
+            assigns[:locations].collect(&:to_param).should_not include(rejected_location.to_param)
+          end
+        end
+        context 'with closed flag' do
+          it 'also returns closed locations' do
+            get :search, closed: 1, location_type: [location.loctype], lat: location.lat, lng: location.lng, format: 'json'
+            
+            response.status.should eq 200
+            assigns[:locations].collect(&:to_param).should include(location.to_param)
+            assigns[:locations].collect(&:to_param).should include(closed_location.to_param)
+          end
+        end
+        context 'with bbonly flag' do
+          let(:bb_location) do
+            build(:location, title: 'bb').tap do |o|
+              o.instructors << build(:black_belt)
+              o.save
+            end
+          end
+          it 'only returns locations with flag_has_black_belt' do
+            get :search, bbonly: 1, location_type: [bb_location.loctype], lat: location.lat, lng: location.lng, format: 'json'
+            
+            response.status.should eq 200
+            assigns[:locations].collect(&:to_param).should_not include(location.to_param)
+            assigns[:locations].collect(&:to_param).should include(bb_location.to_param)
           end
         end
       end
@@ -121,6 +145,16 @@ describe MapsController do
           response.status.should eq 200
           assigns[:locations].collect(&:to_param).should include(matched_location.to_param)
           assigns[:locations].collect(&:to_param).should_not include(other_location.to_param)
+        end
+      end
+      context 'with segment' do
+        let(:segment) { create(:directory_segment, name: 'Canada') }
+        let(:location) { create(:location, country: 'Canada') }
+        xit 'returns locations that are in the segment' do
+          get :search, segment: segment.id.to_s, location_type: [location.loctype], format: 'json'
+          
+          response.status.should eq 200
+          assigns[:locations].collect(&:to_param).should include(location.to_param)
         end
       end
       context 'with geocode request' do

@@ -1,0 +1,8 @@
+.container
+
+= content_for(:scripts) do
+  :coffeescript
+    templateArg = {}
+    templateArg['#{@arg_name}'] = #{render_json(@model_instance)}
+    renderedTemplate = JST['#{@template_name}'](templateArg)
+    $('.container').append(renderedTemplate)

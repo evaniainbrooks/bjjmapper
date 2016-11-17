@@ -1,4 +1,4 @@
-- title = "Brazilian Jiu-Jitsu Academies in #{directory_segment.full_name}"
+- title = "#{directory_segment.full_name} Brazilian Jiu-Jitsu"
 = content_for :title do
   = title
 .container.page.directory
@@ -13,17 +13,15 @@
     .col-md-2.text-right.pull-right.hidden-xs
       = render partial: 'create_location_button'
   .row
-    .col-md-9.map-view
-      .map-canvas{:style => 'height: 400px;'}
-      .map-list-view
-        .location-list
-          .loading-overlay
-            %span.fa.fa-refresh.fa-3x.fa-spin
-          = render partial: 'locations/map_list', locals: { show_create: true }
+    .col-md-10
+      = render partial: 'maps/map', locals: { height: 250, show_create: false }
+    .col-md-2
+      = render partial: 'maps/filter_list'
+  .row
     .col-md-3
       - if directory_segment.child_segments.present?
         %h3 Other Cities in #{directory_segment.full_name}
-        %ul.list-unstyled
+        %ul.list-unstyled.list-inline
           - directory_segment.child_segments.sort.each do |city|
             %li= link_to city.name, directory_segment_path(country: directory_segment.name, city: city.name), title: "List of Brazilian Jiu-Jitsu gyms in #{directory_segment.full_name}" 
 

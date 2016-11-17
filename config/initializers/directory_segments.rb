@@ -51,8 +51,8 @@ Central African Republic,CF,CAF,140
 Chad,TD,TCD,148
 Chile,CL,CHL,152
 China,CN,CHN,156
-"Hong Kong, Special Administrative Region of China",HK,HKG,344
-"Macao, Special Administrative Region of China",MO,MAC,446
+Hong Kong,HK,HKG,344
+Macao,MO,MAC,446
 Christmas Island,CX,CXR,162
 Cocos (Keeling) Islands,CC,CCK,166
 Colombia,CO,COL,170
@@ -103,13 +103,13 @@ Guinea-Bissau,GW,GNB,624
 Guyana,GY,GUY,328
 Haiti,HT,HTI,332
 Heard Island and Mcdonald Islands,HM,HMD,334
-Holy See (Vatican City State),VA,VAT,336
+Vatican,VA,VAT,336
 Honduras,HN,HND,340
 Hungary,HU,HUN,348
 Iceland,IS,ISL,352
 India,IN,IND,356
 Indonesia,ID,IDN,360
-"Iran, Islamic Republic of",IR,IRN,364
+Iran,IR,IRN,364
 Iraq,IQ,IRQ,368
 Ireland,IE,IRL,372
 Isle of Man,IM,IMN,833
@@ -122,8 +122,8 @@ Jordan,JO,JOR,400
 Kazakhstan,KZ,KAZ,398
 Kenya,KE,KEN,404
 Kiribati,KI,KIR,296
-"Korea, Democratic People's Republic of",KP,PRK,408
-"Korea, Republic of",KR,KOR,410
+"North Korea",KP,PRK,408
+"South Korea",KR,KOR,410
 Kuwait,KW,KWT,414
 Kyrgyzstan,KG,KGZ,417
 Lao PDR,LA,LAO,418
@@ -135,7 +135,7 @@ Libya,LY,LBY,434
 Liechtenstein,LI,LIE,438
 Lithuania,LT,LTU,440
 Luxembourg,LU,LUX,442
-"Macedonia, Republic of",MK,MKD,807
+Macedonia,MK,MKD,807
 Madagascar,MG,MDG,450
 Malawi,MW,MWI,454
 Malaysia,MY,MYS,458
@@ -148,7 +148,7 @@ Mauritania,MR,MRT,478
 Mauritius,MU,MUS,480
 Mayotte,YT,MYT,175
 Mexico,MX,MEX,484
-"Micronesia, Federated States of",FM,FSM,583
+Micronesia,FM,FSM,583
 Moldova,MD,MDA,498
 Monaco,MC,MCO,492
 Mongolia,MN,MNG,496
@@ -174,7 +174,7 @@ Norway,NO,NOR,578
 Oman,OM,OMN,512
 Pakistan,PK,PAK,586
 Palau,PW,PLW,585
-"Palestinian Territory, Occupied",PS,PSE,275
+Palestine,PS,PSE,275
 Panama,PA,PAN,591
 Papua New Guinea,PG,PNG,598
 Paraguay,PY,PRY,600
@@ -193,7 +193,7 @@ Saint-Barthélemy,BL,BLM,652
 Saint Helena,SH,SHN,654
 Saint Kitts and Nevis,KN,KNA,659
 Saint Lucia,LC,LCA,662
-Saint-Martin (French part),MF,MAF,663
+Saint-Martin,MF,MAF,663
 Saint Pierre and Miquelon,PM,SPM,666
 Saint Vincent and Grenadines,VC,VCT,670
 Samoa,WS,WSM,882
@@ -215,15 +215,15 @@ South Sudan,SS,SSD,728
 Spain,ES,ESP,724
 Sri Lanka,LK,LKA,144
 Sudan,SD,SDN,736
-Suriname *,SR,SUR,740
+Suriname,SR,SUR,740
 Svalbard and Jan Mayen Islands,SJ,SJM,744
 Swaziland,SZ,SWZ,748
 Sweden,SE,SWE,752
 Switzerland,CH,CHE,756
-Syrian Arab Republic (Syria),SY,SYR,760
-"Taiwan, Republic of China",TW,TWN,158
+Syria,SY,SYR,760
+"Taiwan",TW,TWN,158
 Tajikistan,TJ,TJK,762
-"Tanzania *, United Republic of",TZ,TZA,834
+"Tanzania",TZ,TZA,834
 Thailand,TH,THA,764
 Timor-Leste,TL,TLS,626
 Togo,TG,TGO,768
@@ -244,9 +244,9 @@ United States Minor Outlying Islands,UM,UMI,581
 Uruguay,UY,URY,858
 Uzbekistan,UZ,UZB,860
 Vanuatu,VU,VUT,548
-Venezuela (Bolivarian Republic of),VE,VEN,862
+Venezuela,VE,VEN,862
 Viet Nam,VN,VNM,704
-"Virgin Islands, US",VI,VIR,850
+"Virgin Islands",VI,VIR,850
 Wallis and Futuna Islands,WF,WLF,876
 Western Sahara,EH,ESH,732
 Yemen,YE,YEM,887
@@ -257,51 +257,8 @@ CSVFILE
 abbrev_lookup = {}
 CSV.parse(abbrevcsv) do |row|
   abbrev_lookup[ I18n.transliterate(row[0].downcase) ] = [row[1], row[2]]
+  abbrev_lookup[row[1]] = row[0]
+  abbrev_lookup[row[2]] = row[0]
 end
 
 RollFindr::DirectoryCountryAbbreviations = abbrev_lookup
-
-RollFindr::DirectoryCountries =  {
-  'Austria' => 'AT',
-  'Canada' => 'CA',
-  'Cyprus' => 'CY',
-  'Germany' => 'DE',
-  'Greece' => 'GR',
-  'France' => 'FR',
-  'Poland' => 'PL',
-  'United Kingdom' => 'UK',
-  'USA' => 'US',
-  'Brazil' => 'BR',
-  'Japan' => 'JP',
-  'South Korea' => 'KR',
-  'Spain' => 'ES',
-  'Turkey' => 'TR',
-  'Hungary' => 'HU',
-  'Sweden' => 'SE',
-  'Finland' => 'FI',
-  'Russia' => 'RU',
-  'Mexico' => 'MX'
-}
-
-RollFindr::DirectoryCities = {
-  'Austria' => ['Wien', 'Graz', 'Linz'],
-  'Hungary' => ['Budapest', 'Debrecen', 'Miskolc', 'Szeged'],
-  'Spain' => ['Madrid', 'Barcelona', 'Valencia', 'Sevilla'],
-  'Turkey' => ['Istanbul', 'Izmir', 'Ankara'],
-  'USA' => ['San Jose', 'San Antonio', 'Las Vegas', 'Boston', 'Dallas', 'Houston', 'Philadelphia', 'Phoenix', 'Chicago', 'Seattle', 'New York', 'San Francisco', 'Los Angeles', 'Portland'],
-  'Canada' => ['Ottawa', 'Vancouver', 'Halifax', 'Toronto', 'Montreal', 'Calgary', 'Edmonton', 'Winnipeg', 'Victoria'],
-  'Japan' => ['Tokyo', 'Osaka'],
-  'France' => ['Paris', 'Lyon'],
-  'United Kingdom' => ['London', 'Manchester'],
-  'South Korea' => ['Seoul'],
-  'Germany' => ['Berlin', 'Frankfurt', 'Munich', 'Hamburg', 'Cologne', 'Stuttgart', 'Dresden'],
-  'Brazil' => ['Rio de Janerio', 'Sao Paulo', 'Belo Horizonte', 'Salvador'],
-  'Poland' => ['Warszawa', 'Kraków', 'Wrocław', 'Łódź'],
-  'Greece' => ['Athens', 'Thessaloniki', 'Volos'],
-  'Sweden' => ['Stockholm', 'Göteborg', 'Malmö'],
-  'Finland' => ['Helsinki', 'Tampere'],
-  'Russia' => ['Moskva', 'Saint Petersburg', 'Novosibirsk', 'Yekaterinburg'],
-  'Mexico' => ['Mexico City', 'Ecatepec', 'Guadalajara', 'Puebla', 'Juárez'],
-  'Cyprus' => ['Nicosia']
-}
-

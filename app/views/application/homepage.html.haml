@@ -9,14 +9,7 @@
       %a.pull-right.btn.btn-default.btn-sm.title-btn{:href => map_path(lat: @map[:lat], lng: @map[:lng], :ref => 'homepage'), :title => 'Academy Map'}
         %span.fa.fa-search-plus
         See larger map
-
-      .map
-        .map-canvas.clear{:style => 'height: 300px'}
-        .map-list-view
-          .location-list.loading
-            .loading-overlay
-              %span.fa.fa-refresh.fa-3x.fa-spin
-            = render partial: 'locations/map_list', locals: { show_create: false }
+      = render partial: 'maps/map'
     .col-md-4
       %h3.pull-left
         New Additions

@@ -99,7 +99,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    #return User.where(:role => 'super_user').first if Rails.env.development?
+    # return User.where(:role => 'super_user').first if Rails.env.development?
 
     # API AUTHENTICATION
     if params.key?(:api_key)
