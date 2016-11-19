@@ -36,6 +36,7 @@ class RollFindr.Views.FiltersView extends Backbone.View
       if (@$("input[name='#{f}']").is(':checked'))
         flags[f] = 1
 
+    flags['rejected'] = 0
     @model.set('flags', flags)
 
   sortOrderChanged: (e)->
