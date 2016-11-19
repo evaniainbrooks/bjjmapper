@@ -15,7 +15,7 @@ describe Canonicalized do
       canonicalize :phone, as: :phone
     end
   end
-  subject { test_class.new(:facebook => "http://www.facebook.com/#{facebook_value}", :phone => "abcd(#{phone_value}k&%#(@") }
+  subject { test_class.new(:facebook => "http://www.facebook.com/pg/#{facebook_value}", :phone => "abcd(#{phone_value}k&%#(@") }
   before { subject.save }
 
   it 'cleans the facebook value' do

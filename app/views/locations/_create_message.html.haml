@@ -6,7 +6,7 @@
   %span This is the academy you just created. Please take a few moments to review the address and fill in any additional details. As a next step, you may want to
   %ul.small.list-inline{:style => 'display: inline'}
     %li
-      = link_to '#instructor', class: 'add-instructor' do
+      = link_to '#instructor', { :'data-toggle' => 'modal', :'data-target' => '.add-instructor-dialog' } do
         %i.fa.fa-user
         %span Add an instructor
     %li

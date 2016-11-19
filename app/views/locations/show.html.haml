@@ -88,12 +88,12 @@
     %hr/
     .row
       - if location.facebook.present? && !location.facebook_group?
-        .col-md-5
+        .col-md-5.reviews
           = render :partial => 'locations/show_news_feed', :locals => { :location => location }
       %div{:class => location.facebook.present? && !location.facebook_group? ? 'col-md-7' : 'col-md-12'}
         = render :partial => 'locations/show_reviews', :locals => { :location => location }
     %hr/
-    .row.reviews
+    .row
       .col-md-12
         = render :partial => 'locations/show_media', :locals => { :f => f, :hashtag => location.ig_hashtag }
     %hr.edit-field/

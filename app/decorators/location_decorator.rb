@@ -86,7 +86,7 @@ class LocationDecorator < Draper::Decorator
 
   def image
     img = object.image
-    img = team.object.image if img.blank? && team.present?
+    img = team.image if img.blank? && team.present?
     img = avatar_service_url(object.title) if img.blank?
     h.image_path(img)
   end

@@ -15,13 +15,11 @@
     reviewsView: null,
     events: {
       'change [name="location[team_id]"]': 'changeTeam',
-      'click .add-instructor-menu': 'addInstructor',
       'click .add-event-menu': 'addEvent',
       'click .show-metadata': 'showMetadataDialog'
     },
     initialize: function(options) {
       _.bindAll(this,
-        'addInstructor',
         'addEvent',
         'changeTeam',
         'showMetadataDialog');
@@ -36,9 +34,6 @@
         var mapModel = new RollFindr.Models.Map(options.mapModel);
         this.mapView = new RollFindr.Views.StaticMapView({editable: options.editable, model: mapModel, el: this.$('.map')});
       }
-    },
-    addInstructor: function() {
-      $('.add-instructor-dialog').modal('show');
     },
     addEvent: function() {
       $('.create-event-dialog').modal('show');

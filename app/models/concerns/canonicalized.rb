@@ -11,7 +11,7 @@ module Canonicalized
 
           case options[:as] || field
           when :website then value.gsub!(/^https?:\/\//, '')
-          when :facebook then value.gsub!(/(^https?:\/\/(www\.)?)|facebook\.com\/|fb\.com\//, '')
+          when :facebook then value.gsub!(/(^https?:\/\/(www\.)?)|(facebook\.com|fb\.com)(\/pg)?\//, '')
           when :phone then value.gsub!(/[^\d+]/, '')
           end
 
