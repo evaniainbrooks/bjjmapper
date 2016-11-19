@@ -2,7 +2,7 @@ class MapsController < ApplicationController
   DEFAULT_SEARCH_DISTANCE = 10.0
   DEFAULT_SEARCH_COUNT = Map::DEFAULT_COUNT
 
-  DEFAULT_SORT_ORDER = 'distance'
+  DEFAULT_SORT_ORDER = Map::DEFAULT_SORT_ORDER
 
   DEFAULT_EVENT_START_OFFSET = Map::DEFAULT_EVENT_START_OFFSET
   DEFAULT_EVENT_END_OFFSET = Map::DEFAULT_EVENT_END_OFFSET 
@@ -110,11 +110,10 @@ class MapsController < ApplicationController
   private
 
   def flags
-    {
-      closed: flag?(:closed) ? 1 : 0,
-      unverified: flag?(:unverified) ? 1 : 0,
-      bbonly: flag?(:bbonly) ? 1 : 0
-    }
+    Map::DEFAULT_FLAGS.keys.inject({}) do |hash, k|
+      hash[k] = flag?(k) ? 1 : 0
+      hash
+    end
   end
 
   def flag?(f)
@@ -158,7 +157,7 @@ class MapsController < ApplicationController
     return unless @locations.present?
 
     @locations = @locations.not_closed unless flag?(:closed)
-    @locations = @locations.not_rejected
+    @locations = @locations.not_rejected unless flag?(:rejected)
     @locations = @locations.verified unless flag?(:unverified) 
     @locations = @locations.with_black_belt if flag?(:bbonly)
     @locations

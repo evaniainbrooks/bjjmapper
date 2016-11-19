@@ -6,6 +6,7 @@ class RollFindr.Views.FiltersView extends Backbone.View
     'click .flag': 'flagClicked'
     'click .display-opt': 'displayTypeCheckBoxClicked'
     'click a.search': 'search'
+    'change [name="sort_order"]': 'sortOrderChanged'
     'keyup [name="search"]': 'debounceSearch'
   }
   initialize: (options)->
@@ -18,6 +19,7 @@ class RollFindr.Views.FiltersView extends Backbone.View
       'search',
       'debounceSearch',
       'flagClicked',
+      'sortOrderChanged',
       'displayTypeCheckBoxClicked')
 
     @initializeDisplayTypeCheckBoxes()
@@ -36,6 +38,9 @@ class RollFindr.Views.FiltersView extends Backbone.View
 
     @model.set('flags', flags)
 
+  sortOrderChanged: (e)->
+    sort = $('option:selected', e.currentTarget).val()
+    @model.set('sort', sort)
 
   initializeDisplayTypeCheckBoxes: ->
     _.each @model.get('location_type'), (filterVal)->

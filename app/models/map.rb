@@ -7,6 +7,8 @@ class Map
   DEFAULT_MIN_ZOOM = 5
   GLOBAL_MIN_ZOOM = 4
 
+  DEFAULT_SORT_ORDER = :distance
+  DEFAULT_FLAGS = { rejected: 0, closed: 0, bbonly: 0, unverified: 0 }.freeze
   DEFAULT_COUNT = 50
   DEFAULT_EVENT_START_OFFSET = 15.days
   DEFAULT_EVENT_END_OFFSET = 1.year
@@ -44,8 +46,8 @@ class Map
     @segment = options.fetch(:segment, nil)
     @event_start = options.fetch(:event_start, nil)
     @event_end = options.fetch(:event_end, nil)
-    @sort = options.fetch(:sort, nil)
-    @flags = options.fetch(:flags, { closed: 0, unverified: 0, bbonly: 0 })
+    @sort = options.fetch(:sort, DEFAULT_SORT_ORDER)
+    @flags = options.fetch(:flags, DEFAULT_FLAGS)
   end
 
   def [](index)

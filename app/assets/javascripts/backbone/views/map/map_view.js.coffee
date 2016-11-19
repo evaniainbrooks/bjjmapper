@@ -77,6 +77,7 @@ class RollFindr.Views.MapView extends Backbone.View
     @model.on('change:count', filtersChanged)
     @model.on('change:offset', filtersChanged)
     @model.on('change:flags', filtersChanged)
+    @model.on('change:sort', filtersChanged)
 
     RollFindr.GlobalEvents.on('geolocate', @geolocate)
     RollFindr.GlobalEvents.on('search', @search)
@@ -180,6 +181,7 @@ class RollFindr.Views.MapView extends Backbone.View
       lng: lng
       segment: @model.get('segment')
       distance: distance
+      sort: @model.get('sort')
       query: @model.get('query')
       geoquery: @model.get('geoquery')
     }, @model.get('flags')))
