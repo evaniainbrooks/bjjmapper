@@ -9,8 +9,6 @@ describe 'Views.LocationShowView', ->
   testInstructorId = viewModel.instructors[0]
   beforeEach ->
     b = $('body')
-    b.addHtml('a', {'class': 'add-instructor-menu'})
-    b.addHtml('div', {'class': 'add-instructor-dialog modal'})
     b.addHtml('a', {'data-id': testInstructorId, 'class': 'remove-instructor'})
     b.addHtml('a', {'class': 'add-review'})
     b.addHtml('a', {'class': 'add-review-dialog modal'})
@@ -19,12 +17,6 @@ describe 'Views.LocationShowView', ->
       mapModel: {},
       el: b,
     })
-
-  describe "add instructor menu", ->
-    it 'click .add-instructor-menu shows the instructor modal', ->
-      $('.add-instructor-menu').click()
-      modalData = $('.add-instructor-dialog').data('bs.modal')
-      modalData.isShown.should.equal(true)
 
   describe "subviews", ->
     it 'has a calendar subview', ->
