@@ -10,7 +10,7 @@ class Api::LocationsController < Api::ApiController
   before_filter :set_locations_scope, only: [:index]
   before_filter :filter_locations, only: [:index]
 
-  helper_method :map
+  helper_method :location
 
   def index
     @sort = params.fetch(:sort, DEFAULT_SORT_ORDER).to_sym
@@ -45,6 +45,10 @@ class Api::LocationsController < Api::ApiController
   end
 
   private
+
+  def location
+    @location
+  end
 
   def guess_team(title)
      Team.all.select{|t| title.downcase.index(t.name.downcase) != nil}.first
