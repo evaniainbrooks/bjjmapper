@@ -14,7 +14,7 @@ describe DirectorySegmentsController do
       get :index, format: 'html'
       response.status.should eq 200
 
-      assigns[:directory_segments].should eq DirectorySegment.parent_segments
+      assigns[:directory_segments].should eq DirectorySegment.parent_segments.visible_in_index
     end
   end
   describe 'GET show' do

@@ -23,6 +23,7 @@ class DirectorySegment
   field :coordinates, type: Array
   validates :coordinates, presence: true
 
+  field :flag_index_visible, type: Boolean, default: false
   field :zoom, type: Integer
   field :distance, type: Integer, default: DEFAULT_DISTANCE_MILES
   field :timezone, type: String
@@ -30,6 +31,7 @@ class DirectorySegment
   belongs_to :parent_segment, class_name: 'DirectorySegment', inverse_of: :child_segments
   has_many :child_segments, class_name: 'DirectorySegment', inverse_of: :parent_segment
 
+  scope :visible_in_index, -> { where(:flag_index_visible.ne => false) }
   scope :parent_segments, -> { where(:parent_segment => nil).asc(:name) }
   scope :child_segments, -> { where(:parent_segment.ne => nil).asc(:name) }
   default_scope -> { asc(:name) }
@@ -50,8 +52,12 @@ class DirectorySegment
     return false
   end
 
+  def name_segments
+    [self.name, self.parent_segment.try(:name)].compact
+  end
+
   def full_name
-    [self.name, self.parent_segment.try(:name)].compact.join(', ')
+    name_segments.join(', ')
   end
 
   def timezone
@@ -94,7 +100,7 @@ class DirectorySegment
   end
 
   def to_param
-    slug
+    slug || name_segments 
   end
 
   def child?

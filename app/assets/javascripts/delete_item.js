@@ -5,7 +5,8 @@
     var data = $(e.target).data();
     var deleteDefaults = {
       method: method,
-      type: type
+      type: type,
+      url: $(e.target).attr('href')
     };
 
     var options = $.extend({}, deleteDefaults, data);
@@ -21,6 +22,10 @@
   
   $('body').delegate('[data-method="post"]', 'click', function(e) {
     return confirm_dialog(e, 'POST', 'primary');
+  });
+  
+  $('body').delegate('[data-method="put"]', 'click', function(e) {
+    return confirm_dialog(e, 'PUT', 'primary');
   });
 
 }(jQuery, _);

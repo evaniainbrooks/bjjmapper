@@ -52,7 +52,8 @@ class Admin::DirectorySegmentsController < Admin::AdminController
       :parent_segment_id,
       :name,
       :description,
-      :coordinates
+      :coordinates,
+      :flag_index_visible
     )
 
     p[:abbreviations] = p[:abbreviations].split(',').collect(&:strip)

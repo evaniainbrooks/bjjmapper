@@ -45,6 +45,7 @@ class Location
     :status_updated_at,
     :facebook,
     :twitter,
+    :flag_closed,
     :instagram].freeze
 
   track_history   :on => :all,

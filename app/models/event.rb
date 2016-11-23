@@ -30,6 +30,9 @@ class Event
     :instructor,
     :location,
     :parent_event,
+    :email,
+    :website, 
+    :facebook,
     :weekly_recurrence_days => []].freeze
 
   include Mongoid::Document

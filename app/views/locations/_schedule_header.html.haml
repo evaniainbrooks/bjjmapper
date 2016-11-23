@@ -24,7 +24,4 @@
         = link_to location.title, location_path(location, ref: 'loc_sched_title')
     - else
       %h3.text-muted= location.title
-    = link_to map_path({lat: location.lat, lng: location.lng, ref: 'schedule_adr'}) do
-      %span.fa.fa-map-marker
-      = location.address
-      (view on map)
+    = render partial: 'show_address', locals: { location: location }

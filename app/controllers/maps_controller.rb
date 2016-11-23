@@ -99,7 +99,7 @@ class MapsController < ApplicationController
       when :oldest 
         @locations.sort_by {|loc| -loc.object.created_at }
       else 
-        @locations.sort_by {|loc| loc.title }
+        @locations
       end
 
     respond_to do |format|
@@ -121,8 +121,14 @@ class MapsController < ApplicationController
   end
 
   def set_segment
-    @segment = params.fetch(:segment, nil)
-    @segment = DirectorySegment.find(@segment) if @segment.present?
+    id = params.fetch(:segment, nil)
+    @segment = if id.is_a?(Array)
+      criteria = { country: id.last }
+      criteria.merge!(city: id.first) if id.length > 1
+      DirectorySegment.for(criteria)
+    else
+      DirectorySegment.find(id) unless id.blank?
+    end
   end
 
   def set_coordinates

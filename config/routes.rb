@@ -1,15 +1,21 @@
 Rails.application.routes.draw do
+  namespace :api do
+    resources :locations, only: [:index, :create]
+  end
+  
   namespace :admin do
     resources :directory_segments, only: [:new, :create, :edit, :update]
     resources :organizations, only: [:new, :create]
     resources :locations, only: [:index, :show] do
       get :pending, on: :collection
       get :rejected, on: :collection
+      get :moderate, on: :collection
     end
     resources :users do
       get :edit_merge, on: :member
       post :merge, on: :member
     end
+    resources :templates, only: [:show]
   end
 
   resources :users, :only => [:index, :show, :create, :update, :destroy] do

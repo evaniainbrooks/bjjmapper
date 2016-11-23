@@ -12,7 +12,7 @@
         %span.sr-only Toggle Dropdown
       %ul.dropdown-menu{:role => "menu"}
         %li
-          %a.add-instructor-menu{:href => "#instructor"}
+          = link_to '#instructor', { :'data-toggle' => 'modal', :'data-target' => '.add-instructor-dialog' } do
             %span.fa.fa-user
             Add Instructor
         %li

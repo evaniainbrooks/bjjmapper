@@ -7,7 +7,7 @@ class DirectorySegmentsController < ApplicationController
   helper_method :map
 
   def index
-    @directory_segments = DirectorySegment.parent_segments
+    @directory_segments = DirectorySegment.parent_segments.visible_in_index
 
     tracker.track('showDirectorySegmentsIndex',
       tl_segment_count: @directory_segments.count
@@ -46,7 +46,7 @@ class DirectorySegmentsController < ApplicationController
       event_type: [Event::EVENT_TYPE_TOURNAMENT, Event::EVENT_TYPE_SEMINAR, Event::EVENT_TYPE_CAMP],
       lat: directory_segment.lat,
       lng: directory_segment.lng,
-      segment: directory_segment.id.to_s,
+      segment: directory_segment.to_param,
       zoom: directory_segment.zoom,
       minZoom: Map::DEFAULT_MIN_ZOOM,
       geolocate: 0,

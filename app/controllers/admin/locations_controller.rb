@@ -15,4 +15,8 @@ class Admin::LocationsController < Admin::AdminController
   def rejected
     @locations = Location.limit(100).rejected.sort({created_at:-1})
   end
+
+  def moderate
+    redirect_to location_path(Location.pending.first, moderate: 1)
+  end
 end

@@ -267,20 +267,6 @@ describe LocationsController do
           response.should redirect_to(location_path(Location.last, edit: 1, create: 1))
         end.to change { Location.count }.by(1)
       end
-      context 'when the team is nil' do
-        let(:expected_team_name) {'Atos'}
-        before do
-          Team.stub(:all).and_return([
-            build_stubbed(:team, name: expected_team_name),
-            build_stubbed(:team, name: 'Other team')
-          ])
-        end
-        let(:team_name_params) { create_params.deep_merge(location: { title: "Academy #{expected_team_name}", team_id: nil}) }
-        it 'tries to guess the team from the location title' do
-          post :create, team_name_params, session_params
-          assigns[:location].team.name.should eq expected_team_name
-        end
-      end
       context 'with json format' do
         it 'creates and returns a new location' do
           post :create, create_params.merge(format: 'json'), session_params

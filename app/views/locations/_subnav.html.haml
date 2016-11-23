@@ -5,4 +5,8 @@
   %li= link_to 'Media', '#media'
   %li= link_to 'Reviews', '#reviews'
   - if current_user.super_user?
-    %li= link_to 'Admin Panel', admin_location_path(location), class: 'text-danger'
+    %li= link_to 'Admin Panel', admin_location_path(location), class: 'text-primary'
+  - if Role.power(current_user.role) >= Role.power(Role::MODERATOR)
+    %li= link_to 'Verify!', verify_location_status_path(location), :class => 'small text-success', :'data-returnto' => moderate_admin_locations_path, :'data-remote' => true, :'data-method' => 'put', :'data-body' => 'Verify location'
+    %li= link_to 'Reject!', reject_location_status_path(location), :class => 'small text-danger', :'data-returnto' => moderate_admin_locations_path, :'data-remote' => true, :'data-method' => 'put', :'data-body' => 'Reject location'
+    %li= link_to 'Pending!', pending_location_status_path(location), :class => 'small text-warning', :'data-returnto' => moderate_admin_locations_path, :'data-remote' => true, :'data-method' => 'put', :'data-body' => 'Pending location'

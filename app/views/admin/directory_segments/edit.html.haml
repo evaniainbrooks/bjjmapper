@@ -17,6 +17,9 @@
             = f.label :parent_segment_id
             = f.collection_select :parent_segment_id, DirectorySegment.where(:parent_segment_id => nil), :id, :name, { include_blank: true }, { class: 'form-control' }
           .form-group
+            = f.label :flag_index_visible
+            = f.text_area :flag_index_visible, class: 'form-control'
+          .form-group
             = f.label :zoom
             = f.text_area :zoom, class: 'form-control'
           .form-group

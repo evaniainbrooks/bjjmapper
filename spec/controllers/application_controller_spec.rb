@@ -4,27 +4,6 @@ require 'shared/tracker_context'
 describe ApplicationController do
   include_context 'skip tracking'
   describe '.current_user' do
-    context 'with api_key param' do
-      let(:api_key) { 'some-key-123' }
-      let(:user) { build(:user) }
-      context 'and key is valid' do
-        before do
-          User.stub(:where, :first).and_return(user)
-        end
-        xit 'returns the api user' do
-          get :meta, { api_key: api_key }, {}
-          controller.send(:current_user).should eq user
-        end
-      end
-      context 'and key is invalid' do
-        before { User.stub(:find).and_return(nil) }
-        it 'returns 403 forbidden' do
-          get :meta, { api_key: api_key }, {}
-          controller.send(:current_user).should be_falsey
-        end
-      end
-    end
-    
     context 'when there is no session user' do
       it 'returns a new anonymous user' do
         expect do

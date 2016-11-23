@@ -14,7 +14,7 @@ class LocationStatusesController < ApplicationController
 
     @location.update_attributes(status: Location::STATUS_PENDING, status_updated_at: Time.now, modifier: current_user)
 
-    head :accepted
+    render status: :accepted, json: {}
   end
 
   def reject
@@ -24,7 +24,7 @@ class LocationStatusesController < ApplicationController
 
     @location.update_attributes(status: Location::STATUS_REJECTED, status_updated_at: Time.now, modifier: current_user)
 
-    head :accepted
+    render status: :accepted, json: {}
   end
 
   def verify
@@ -38,7 +38,7 @@ class LocationStatusesController < ApplicationController
       @location.search_metadata!
     end
 
-    head :accepted
+    render status: :accepted, json: {}
   end
   
   private

@@ -8,7 +8,7 @@ class RollFindr.Views.LocationInstructorsView extends Backbone.View
   }
   initialize: ->
     _.bindAll(this, 'render', 'addInstructor', 'removeInstructor')
-    this.listenTo(@model.get('instructors'), 'remove sync', @render);
+    this.listenTo(@model.get('instructors'), 'remove sync', @render)
     @model.get('instructors').fetch()
 
   addInstructor: ->
@@ -25,11 +25,11 @@ class RollFindr.Views.LocationInstructorsView extends Backbone.View
       @$el.addClass('empty')
 
   removeInstructor: (e)->
-    locationId = @model.get('id');
-    instructorId = $(e.currentTarget).data('id');
+    locationId = @model.get('id')
+    instructorId = $(e.currentTarget).data('id')
 
-    instructors = @model.get('instructors');
-    instructor = instructors.findWhere({id: instructorId});
+    instructors = @model.get('instructors')
+    instructor = instructors.findWhere({id: instructorId})
 
     if instructor?
       instructor.set('location_id', locationId)
