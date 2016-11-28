@@ -127,10 +127,6 @@ class LocationDecorator < Draper::Decorator
     h.number_to_phone(object.phone)
   end
 
-  def contact_info?
-    object.phone.present? || object.email.present? || object.website.present? || object.facebook.present?
-  end
-
   def facebook_group?
     !object.facebook.try(:index, 'groups').nil?
   end

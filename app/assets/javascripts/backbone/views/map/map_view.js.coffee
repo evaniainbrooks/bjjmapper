@@ -125,8 +125,9 @@ class RollFindr.Views.MapView extends Backbone.View
       doneCallback() if doneCallback?
 
     geolocateFailedCallback = =>
-      userModelLocation = new google.maps.LatLng(RollFindr.CurrentUser.get('lat'), RollFindr.CurrentUser.get('lng'))
-      @map.setCenter(userModelLocation)
+      losAngeles = new google.maps.LatLng(34.0522, -118.2437)
+      #userModelLocation = new google.maps.LatLng(RollFindr.CurrentUser.get('lat'), RollFindr.CurrentUser.get('lng'))
+      @map.setCenter(losAngeles)
 
       doneCallback() if doneCallback?
 

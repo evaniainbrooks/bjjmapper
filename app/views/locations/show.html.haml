@@ -21,7 +21,7 @@
       .col-md-11.col-md-offset-1.hidden-xs
         = render partial: 'subnav', :locals => { location: location }
     .row
-      .col-md-2.col-xs-3{:style => 'padding-right: 0px;'}
+      .col-md-2.col-xs-4{:style => 'padding-right: 0px;'}
         .display-field
           %img{:width => 100, :height => 100, :src => location.image, :class => 'logo center-block'}/
         .edit-field
@@ -30,7 +30,7 @@
           = render partial: 'rating', :locals => { location: location }
         .display-field.small.text-center-center-block= render partial: 'favorite_button', :locals => { location: location }
         %div.small.text-muted.text-center= "last updated #{location.updated_at}"
-      .col-md-6.col-xs-9
+      .col-md-6.col-xs-8
         = render partial: 'show_header', :locals => { location: location, f: f }
       .col-md-12.hidden-lg.hidden-md.clear
         %hr/
@@ -47,7 +47,7 @@
           -# This is filled in by google maps
           %p.edit-field.text-info.small Note: you can drag the marker to a new location to change the address of this academy.
       .col-md-4
-        %h3 Nearby Academies
+        %b.small.text-muted.text-uppercase Nearby
         %div.nearby-locations.loading.location-list
           -# This is filled in by locations/nearby template
           .loading-overlay

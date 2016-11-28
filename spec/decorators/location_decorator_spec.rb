@@ -23,20 +23,6 @@ describe LocationDecorator do
       end
     end
   end
-  describe '.contact_info?' do
-    context 'when one of phone, email, website, facebook is present' do
-      subject { build(:location, website: 'web').decorate }
-      it 'is true' do
-        subject.should be_contact_info
-      end
-    end
-    context 'when phone, email, website, facebook are empty' do
-      subject { build(:location, email: nil, website: nil, phone: nil, facebook: nil).decorate }
-      it 'is false' do
-        subject.should_not be_contact_info
-      end
-    end
-  end
   describe '.facebook_group?' do
     context 'when facebook field is a group' do
       subject { build(:location, facebook: 'fb.com/groups/12345').decorate }

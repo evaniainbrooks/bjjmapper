@@ -3,7 +3,7 @@ class LocationFetchServiceDecorator < LocationDecorator
   decorates :location
 
   def google_url
-    "http://google.com/places/#{place_id}" if place_id
+    place_url
   end
 
   def yelp_url
@@ -24,33 +24,50 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
 
   def website
-    super_val = super
-    if super_val.blank?
-      service_data[:website]
+    if object.website.present? && object.website.length > 3
+      object.website
     else
-      super_val
+      (service_data[:website] || "").strip.gsub!(Canonicalized::WEBSITE_PATTERN, '')
     end
   end
   
   def phone
-    super_val = super
-    if super_val.blank?
+    if object.phone.blank?
       service_data[:phone]
     else
-      super_val
+      object.phone
     end
   end
   
   def email
-    super_val = super
-    if super_val.blank?
+    if object.email.blank? 
       service_data[:email]
     else
-      super_val
+      object.email
     end
+  end
+  
+  def website_status
+    @_response ||= begin
+      r = RollFindr::WebsiteStatusService.status(url: website, location_id: object.id.to_s)
+      if r[:code].to_i == 0
+        h.content_tag(:span, class: 'text-muted small') { '(unknown)' }
+      else
+        txtclass = r[:status] == 'available' ? 'small text-success' : 'small text-danger'
+        h.content_tag(:span, class: txtclass) { "(#{r[:status]})" }
+      end
+    end
+  end
+  
+  def contact_info?
+    phone.present? || email.present? || website.present? || facebook.present? || twitter.present? || instagram.present?
   end
 
   private
+
+  def place_url
+    service_data[:place_url]
+  end
 
   def yelp_id
     service_data[:yelp_id]
@@ -61,8 +78,8 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
 
   def service_data
-    @_data ||= (RollFindr::LocationFetchService.detail(self.id.to_s) || {}).inject({}) do |hash, prefs|
+    @_service_data ||= (RollFindr::LocationFetchService.detail(self.id.to_s) || {}).inject({}) do |hash, prefs|
       hash.merge(prefs)
-    end.with_indifferent_access
+    end.symbolize_keys
   end
 end

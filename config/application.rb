@@ -31,6 +31,9 @@ module RollFindr
 
     config.location_fetch_service_host = 'localhost'
     config.location_fetch_service_port = 80
+    
+    config.website_status_service_host = 'localhost'
+    config.website_status_service_port = 80
 
     config.google_maps_api_key = 'AIzaSyDfVeMiIo8lIaMQ_UxahKftMpIutq7QQ4I'
     config.google_maps_endpoint = '//maps.googleapis.com/maps/api/js'
