@@ -1,8 +1,10 @@
 require 'spec_helper'
 require 'shared/locationfetchsvc_context'
+require 'shared/geocoder_context'
 
 describe Location do
   include_context 'locationfetch service'
+  include_context 'geocoder service'
 
   it 'has a factory' do
     build_stubbed(:location).should be_valid
@@ -10,6 +12,45 @@ describe Location do
 
   it 'has a decorator' do
     Location.new.decorate.should be_decorated
+  end
+
+  describe 'geocode' do
+    context 'when the address changed' do
+      let(:loc) { create(:location, coordinates: [91.132, -124.432], city: 'Halifax', country: 'Canada') }
+      it 'geocodes the address' do
+        loc.street = '123 Street'
+        loc.save
+
+        loc.coordinates.should eq [geocode_lng, geocode_lat]
+      end
+    end
+    context 'when new record with coordinates' do
+      let(:expected_coords) { [91.123, -124.432] }
+      let(:loc) { build(:location, coordinates: expected_coords, city: 'Halifax', country: 'Canada') }
+      it 'does not geocode' do
+        loc.save
+        loc.coordinates.should eq expected_coords
+      end
+    end
+  end
+
+  describe 'reverse geocode' do
+    context 'when the coordinates changed' do
+      let(:loc) { create(:location, postal_code: nil, coordinates: [91.132, -124.432], city: 'Halifax', country: 'Canada') }
+      it 'fills the address' do
+        loc.coordinates = [geocode_lng, geocode_lat]
+        loc.save
+        loc.postal_code.should eq geocode_search_result.postal_code
+      end
+    end
+    context 'when new record with address' do 
+      let(:expected_coords) { [91.123, -124.432] }
+      let(:loc) { build(:location, postal_code: nil, coordinates: expected_coords, city: 'Halifax', country: 'Canada') }
+      it 'does not geocode' do
+        loc.save
+        loc.postal_code.should be_nil
+      end
+    end
   end
 
   describe '.editable_by?' do

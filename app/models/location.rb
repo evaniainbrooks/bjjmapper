@@ -58,17 +58,17 @@ class Location
 
   geocoded_by :address
   before_validation :generate_event_venue_title
-  before_validation :geocode, if: ->(obj) { obj.address.present? and obj.changed? }
+  before_validation :geocode, if: ->(obj) { (obj.address.present? && obj.address_changed?) && !(obj.new_record? && obj.coordinates.present?) }
   before_validation :reverse_geocode
 
   reverse_geocoded_by :coordinates do |obj, results|
     geo = results.first
-    if obj.address_components.include?(nil) && geo.present?
+    if obj.coordinates_changed? && geo.present? && !(obj.new_record? && obj.address.present?)
       obj.street = geo.street_address
       obj.city = geo.city
       obj.state = geo.state
       obj.postal_code = geo.postal_code
-      obj.country = geo.country_code
+      obj.country = geo.country || geo.country_code
     end
   end
 
@@ -221,11 +221,21 @@ class Location
   end
 
   def address_components
-    [street, city, state, country, postal_code]
+    { 
+      :street => street, 
+      :city => city,
+      :state => state, 
+      :country => country, 
+      :postal_code => postal_code
+    }
+  end
+
+  def address_changed?
+    address_components.keys.detect{|k| self.send("#{k}_changed?") }.present?
   end
 
   def address
-    address_components.select(&:present?).join(', ')
+    address_components.values.select(&:present?).join(', ')
   end
 
   def team_name
@@ -262,7 +272,7 @@ class Location
   end
 
   def has_generated_title?
-    return self.title == self.address_components.join('-')
+    return self.title == self.address_components.values.join('-')
   end
 
   def all_reviews
@@ -299,7 +309,7 @@ class Location
 
   def generate_event_venue_title
     if self.event_venue? && self.title.blank?
-      self.title = self.address_components.join('-')
+      self.title = self.address_components.values.join('-')
     end
   end
 

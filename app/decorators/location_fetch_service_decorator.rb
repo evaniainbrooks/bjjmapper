@@ -50,7 +50,7 @@ class LocationFetchServiceDecorator < LocationDecorator
   def website_status
     @_response ||= begin
       r = RollFindr::WebsiteStatusService.status(url: website, location_id: object.id.to_s)
-      if r[:code].to_i == 0
+      if r.nil? || r[:code].to_i == 0
         h.content_tag(:span, class: 'text-muted small') { '(unknown)' }
       else
         txtclass = r[:status] == 'available' ? 'small text-success' : 'small text-danger'

@@ -45,7 +45,6 @@ Spork.prefork do
     end
 
     config.before(:all) do
-      FactoryGirl.lint
       Geocoder.configure(:lookup => :test, :ip_lookup => :test)
       Geocoder::Lookup::Test.set_default_stub(
         [
@@ -61,7 +60,8 @@ Spork.prefork do
           }
         ]
       )
-
+      
+      FactoryGirl.lint
     end
   end
 
