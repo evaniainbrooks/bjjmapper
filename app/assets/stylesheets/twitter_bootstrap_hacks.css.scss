@@ -42,3 +42,7 @@ a.thumbnail:hover {
   width: auto; display:inline; 
 }
 
+// Google places autocomplete
+.pac-container {
+  z-index: 10000;
+}

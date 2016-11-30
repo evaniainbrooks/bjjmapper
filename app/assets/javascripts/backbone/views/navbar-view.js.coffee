@@ -8,7 +8,20 @@ class RollFindr.Views.NavbarView extends Backbone.View
     'submit form[role="search"]': 'search'
   }
   initialize: ->
-    _.bindAll(this, 'geolocateMap', 'search', 'scrollToList', 'scrollToMap')
+    _.bindAll(this, 'geolocateMap', 'search', 'scrollToList', 'scrollToMap', 'onPlaceChanged')
+  
+    input = @$('[name="geoquery"]')[0]
+    options = {
+        types: ['(cities)']
+    }
+    @autocomplete = new google.maps.places.Autocomplete(input, options)
+    @autocomplete.addListener('place_changed', @onPlaceChanged)
+
+  onPlaceChanged: ->
+    place = @autocomplete.getPlace()
+    if (place.geometry)
+      @search()
+
   geolocateMap: ->
     @$('[name="geoquery"]').val('')
     RollFindr.GlobalEvents.trigger('geolocate')
@@ -24,7 +37,7 @@ class RollFindr.Views.NavbarView extends Backbone.View
     })
 
     #@$('[name="location"]').val('')
-    e.preventDefault()
+    e.preventDefault() if e?
 
   scrollToList: ->
     $('html, body').animate({

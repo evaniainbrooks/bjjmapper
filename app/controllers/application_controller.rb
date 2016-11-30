@@ -136,7 +136,7 @@ class ApplicationController < ActionController::Base
   def google_maps_api
     ep = Rails.configuration.google_maps_endpoint
     key = Rails.configuration.google_maps_api_key
-    "#{ep}?key=#{key}&v=3.exp&sensor=false"
+    "#{ep}?key=#{key}&v=3.exp&libraries=places"
   end
 
   def ig_client_id
