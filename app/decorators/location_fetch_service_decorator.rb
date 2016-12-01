@@ -78,8 +78,6 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
 
   def service_data
-    @_service_data ||= (RollFindr::LocationFetchService.detail(self.id.to_s) || {}).inject({}) do |hash, prefs|
-      hash.merge(prefs)
-    end.symbolize_keys
+    @_service_data ||= (RollFindr::LocationFetchService.detail(self.id.to_s, 1) || {}).symbolize_keys
   end
 end

@@ -44,7 +44,7 @@ module RollFindr
       get_request(uri)
     end
 
-    def detail(location_id, combined = false)
+    def detail(location_id, combined = 0)
       query = {api_key: API_KEY, combined: combined}.to_query
       uri = URI("http://#{@host}:#{@port}/#{SERVICE_PATH}/locations/#{location_id}/detail?#{query}")
 
