@@ -36,8 +36,6 @@
   .form-group.edit-field
     = f.label :directions, class: 'small text-muted upcase'
     = f.text_area :directions, placeholder: 'Provide any extra directions to the academy (eg. signage missing; go around the back)', class: 'form-control', rows: 3
-  %p.display-field.directions
-    = location.directions
 
 = content_for(:scripts) do
   :coffeescript
