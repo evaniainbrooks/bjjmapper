@@ -52,7 +52,7 @@
         = f.label :title, class: 'small'
         = f.text_field :title, class: 'form-control input-lg'
         = f.label :instructor, class: 'small'
-        = f.select :instructor, options_for_select(location.instructors.map{|o| [o.name, o.id]}, event.instructor.id), {include_blank: true}, class: 'form-control input-md'
+        = f.select :instructor, options_for_select(location.instructors.map{|o| [o.name, o.id]}, event.instructor.try(:id)), {include_blank: true}, class: 'form-control input-md'
   .row.edit-field
     .form-group.col-md-4.col-md-offset-2.small
       = render partial: 'location_events/start_picker'

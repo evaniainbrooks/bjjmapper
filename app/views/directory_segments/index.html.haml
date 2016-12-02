@@ -6,7 +6,7 @@
     .col-md-12
       %h1
         = title
-        %span.small= "#{Location.academies.count} academies and #{Event.count} events"
+        %span.small= "#{Location.verified.academies.count} academies and #{Event.count} events"
   .row
     .col-md-12
       = render partial: 'breadcrumb'

@@ -72,7 +72,7 @@ class LocationDecorator < Draper::Decorator
     if object.description.present?
       object.description
     else
-      h.content_tag(:i, class: 'text-muted') { generated_description }
+      generated_description
     end
   end
 

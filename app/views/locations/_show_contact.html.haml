@@ -26,7 +26,7 @@
         %b.small.text-muted.upcase Phone
         %br/
         %a{:class => 'phone', :href => "tel:#{location.phone}"}
-          = location.phone
+          = number_to_phone location.phone
           %i.fa.fa-phone
     - if location.email.present?
       %span.display-field

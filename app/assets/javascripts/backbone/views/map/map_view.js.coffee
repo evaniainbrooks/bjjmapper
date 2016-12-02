@@ -182,6 +182,7 @@ class RollFindr.Views.MapView extends Backbone.View
       lng: lng
       segment: @model.get('segment')
       distance: distance
+      count: @model.get('count')
       sort: @model.get('sort')
       query: @model.get('query')
       geoquery: @model.get('geoquery')

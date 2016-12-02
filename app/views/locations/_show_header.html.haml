@@ -3,8 +3,6 @@
 %div.display-field
   - if location.team.present?
     = link_to location.team_name, team_path(location.team, ref: 'loc_title')
-  - else
-    = location.team_name
   -#%div.health-bar.pull-left
     %div.pull-left{class: "health-#{location.health / 25}", style: "width: #{location.health}%"}<
       %small.text-center.center-block= "#{location.health}/100"
@@ -16,7 +14,7 @@
   = f.label :description, class: 'small text-muted upcase'
   = f.text_area :description, placeholder: 'Provide a description of the academy', class: 'form-control', rows: 3
 %div.display-field.description
-  = simple_format(location.description)
+  %i.text-muted= simple_format(location.description)
 
 %a.media-teaser.hidden-xs.display-field{:href => '#media', :title => 'View more media'}
 

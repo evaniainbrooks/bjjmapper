@@ -21,6 +21,11 @@
           View on larger map
 %p.display-field.directions
   = location.directions
+
+%p.display-field.small.text-muted
+  Is this your academy? 
+  %a{:href => 'javascript:void(0)', :'data-claim-location' => true}
+    Click here to claim it
 - if local_assigns[:f]
   .form-group.edit-field
     = f.label :street, class: 'small text-muted upcase'
