@@ -26,6 +26,7 @@ class User
   field :role, type: String
   field :provider, type: String
   field :uid, type: String
+  field :nickname, type: String
   field :name, type: String
   slug :name, history: true do |obj|
     obj.anonymous? ? obj.ip_address.try(:to_url) : obj.name.to_url
@@ -40,12 +41,14 @@ class User
   field :image_tiny, type: String
   field :image_large, type: String
   field :image, type: String
+  field :cover_image, type: String
   field :ip_address, type: String
   field :coordinates, type: Array
   field :last_seen_at, type: Integer
   field :description, type: String
   field :description_read_more_url, type: String
   field :description_src, type: String
+  field :source, type: String
 
   field :oauth_token, type: String
   field :oauth_expires_at, type: Integer
@@ -85,6 +88,7 @@ class User
 
   index({
       :name => 'text',
+      :nickname => 'text',
       :contact_email => 'text',
       :description => 'text'
     },
