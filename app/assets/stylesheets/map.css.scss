@@ -125,7 +125,6 @@ label {
     margin-left: 98px;
   }
   img.logo {
-    opacity: 0.7;
     width: 50px;
     height: 50px;
     margin-right: 7px;
@@ -199,9 +198,12 @@ label {
 
 .wrapper {
   .map-canvas {
-    position: fixed !important;
-    top: 50px;
-    right: 33.3333%;
+    position: absolute;
+    height: auto;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
     @media screen and (max-width: 1000px) {
       position: absolute !important;
       top: 0;

@@ -73,7 +73,7 @@ def find_or_create_user(row, simulate = false)
   u = $users[name]
 
   puts "Searching for #{name} found #{u.inspect}"
-  if user.nil? || user.source != 'BJJHeroes'
+  if u.nil? || u.source != 'BJJHeroes'
     lineage = row[5].try(:split, ';').try(:last)
 
     u ||= User.new

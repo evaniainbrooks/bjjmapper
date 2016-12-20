@@ -180,9 +180,11 @@ class MapsController < ApplicationController
   end
 
   def set_coordinates_from_locations
-    if (@lat.blank? || @lng.blank?) && @locations.present?
-      @lat = @locations.first.lat
-      @lng = @locations.first.lng
+    if @locations.present?
+      if (@lat.blank? || @lng.blank?) || @text_filter.present?
+        @lat = @locations.first.lat
+        @lng = @locations.first.lng
+      end
     end
   end
 

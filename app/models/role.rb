@@ -8,7 +8,7 @@ class Role
   ALL_ROLES = [ANONYMOUS, READ_ONLY_USER, USER, MODERATOR, SUPER_USER].freeze
 
   def self.power(role)
-    return ALL_ROLES.index(role)
+    return ALL_ROLES.index(role) || 0
   end
 
   def locations_scope
