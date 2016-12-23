@@ -16,8 +16,6 @@
 %div.display-field.description
   %i.text-muted= simple_format(location.description)
 
-%a.media-teaser.hidden-xs.display-field{:href => '#media', :title => 'View more media'}
-
 = content_for(:scripts) do
   :coffeescript
     $('.description').readmore(collapsedHeight: 100)

@@ -19,8 +19,6 @@ class ApplicationController < ActionController::Base
   helper_method :action?
   helper_method :controller?
 
-  helper_method :ig_client_id
-
   after_action :log_production_mutative_events
 
   def homepage
@@ -138,10 +136,6 @@ class ApplicationController < ActionController::Base
     ep = Rails.configuration.google_maps_endpoint
     key = Rails.configuration.google_maps_api_key
     "#{ep}?key=#{key}&v=3.exp&libraries=places"
-  end
-
-  def ig_client_id
-    ENV['INSTAGRAM_CLIENT_ID']
   end
 
   def log_production_mutative_events

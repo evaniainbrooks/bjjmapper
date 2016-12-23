@@ -27,7 +27,6 @@
 //= require ext
 //= require underscore
 //= require bootstrap-datetimepicker
-//= require instafeed.min
 //= require readmore.min
 //= require richmarker
 //= require_tree ./templates
