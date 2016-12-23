@@ -14,6 +14,7 @@ class InstructorsController < ApplicationController
   def create
     @instructor = find_or_create_instructor
     @location_or_team.instructors << @instructor
+    @location_or_team.save
 
     tracker.track('createInstructor',
       location: @location_or_team.to_param,
