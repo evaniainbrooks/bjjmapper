@@ -1,8 +1,10 @@
 require 'spec_helper'
 require 'shared/locationfetchsvc_context'
 require 'shared/geocoder_context'
+require 'shared/redis_context'
 
 describe Location do
+  include_context 'redis'
   include_context 'locationfetch service'
   include_context 'geocoder service'
 
