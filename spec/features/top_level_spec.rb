@@ -1,8 +1,10 @@
 require 'rails_helper'
 require 'shared/locationfetchsvc_context'
 require 'shared/tracker_context'
+require 'shared/redis_context'
 
 feature "Top Level Pages" do
+  include_context 'redis'
   include_context 'skip tracking'
   include_context 'locationfetch service'
   background do
