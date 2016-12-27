@@ -1,7 +1,9 @@
 require 'spec_helper'
 require 'shared/tracker_context'
+require 'shared/redis_context'
 
 describe LocationReviewsController do
+  include_context 'redis'
   include_context 'skip tracking'
   describe 'POST create' do
     context 'with json format' do
