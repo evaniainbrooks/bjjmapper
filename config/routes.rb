@@ -49,7 +49,7 @@ Rails.application.routes.draw do
       put :pending, on: :member
     end
 
-    resources :reviews, only: [:create, :destroy, :index]
+    resources :reviews, controller: :location_reviews, only: [:create, :destroy, :index]
 
     resources :users, controller: :instructors, as: :instructors, path: '/instructors', only: [:create, :destroy, :index]
 

@@ -2,19 +2,22 @@ class Review
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  attr_accessor :author_name
-  attr_accessor :author_link
-  attr_accessor :src
-
   belongs_to :user, index: true
   belongs_to :location, index: true
 
+  field :author_name
+  field :author_link
+  field :src
+  field :src_id
+  field :src_group_id
   field :body
   field :rating
 
-  validates :user, presence: true
+  field :lat
+  field :lng
+  field :country
+
   validates :location, presence: true
-  validates :body, presence: true
   validates :rating, presence: true, inclusion: 1..5
 
   def as_json(args = {})

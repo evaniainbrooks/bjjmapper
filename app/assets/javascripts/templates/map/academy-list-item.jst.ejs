@@ -9,29 +9,32 @@
       <p class="team-title strong list-group-item-text small"><%= location.team_name %></p>
       <p class="upcase address list-group-item-text small">
         <%= location.street %>
-      </p>
-    </div>
-    <span class="text-info distance small"><%= location.distance %></span>
-  </div>
-  <div class="active-content">
-    <a class="location-link" href="<%= Routes.location_path(location.id) %>" alt="See more about <%= location.title %>">
-      <div class="list-index">
-        <span><%= location.marker_id %></span>
+          </p>
+        </div>
+        <span class="text-info distance small"><%= location.distance %></span>
       </div>
-      <img src="<%= location.image %>" alt="<% location.title %> logo" class="logo pull-left" />
-      <div>
-        <h4 class="list-group-item-heading"><%= location.title %></h4>
-        <p class="strong list-group-item-text small team-title"><%= location.team_name %></p>
-        <span class="rating">
-          <% for (var n = 1; n <= 5; ++n) { %> 
-            <% if (location.stars+1 >= n) { %>
-              <span class="fa fa-star"></span>
-            <% } else if (location.stars == n && location.half_star) { %>
+      <div class="active-content">
+        <a class="location-link" href="<%= Routes.location_path(location.id) %>" alt="See more about <%= location.title %>">
+          <div class="list-index">
+            <span><%= location.marker_id %></span>
+          </div>
+          <img src="<%= location.image %>" alt="<% location.title %> logo" class="logo pull-left" />
+          <div>
+            <h4 class="list-group-item-heading"><%= location.title %></h4>
+            <p class="strong list-group-item-text small team-title"><%= location.team_name %></p>
+            <span class="rating">
+              <% for (var n = 1; n <= 5; ++n) { %> 
+                <% if (location.stars >= n) { %>
+                  <span class="fa fa-star"></span>
+                <% } else if (location.stars+1 == n && location.half_star) { %>
               <span class="fa fa-star-half-o"></span>
             <% } else { %>
               <span class="fa fa-star-o"></span>
             <% } %>
           <% } %>
+        </span>
+        <span class="text-muted small">
+          (<%= location.review_count %>)  
         </span>
         <p class="list-group-item-text small upcase address">
           <span class="fa fa-map-marker"></span>

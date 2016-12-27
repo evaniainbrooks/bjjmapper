@@ -1,5 +1,6 @@
 require 'mongoid-history'
 require 'mongoid_search_ext'
+require 'redis_cache'
 
 class Location
   include Canonicalized
@@ -276,7 +277,9 @@ class Location
   end
 
   def all_reviews
-    @_all_reviews ||= LocationReviews.new(self.id.to_s)
+    @_all_reviews ||= RollFindr::Redis.cache(expire: 1.day.seconds, key: [LocationReviews, self.id].collect(&:to_s).join('-')) do
+      LocationReviews.new(self.id.to_s)
+    end
   end
   
   def search_metadata!

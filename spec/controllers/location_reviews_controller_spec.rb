@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'shared/tracker_context'
 
-describe ReviewsController do
+describe LocationReviewsController do
   include_context 'skip tracking'
   describe 'POST create' do
     context 'with json format' do
@@ -33,7 +33,7 @@ describe ReviewsController do
     context 'with json format' do
       let(:valid_params) { { format: 'json' } }
       context 'when the location has reviews' do
-        context 'with less than 10 reviews' do
+        context 'with reviews' do
           let(:location) { create(:location_with_reviews) }
           it 'returns the reviews' do
             get :index, valid_params.merge({:location_id => location.to_param})
@@ -41,12 +41,13 @@ describe ReviewsController do
             assigns[:reviews].count.should eq location.reviews.count
           end
         end
-        context 'with more than 10 reviews' do
+        context 'with more than :count reviews' do
           let(:location) { create(:location_with_many_reviews) }
-          it 'returns the reviews' do
-            get :index, valid_params.merge({:location_id => location.to_param})
+          let(:expected_count) { 5 }
+          it 'returns only :count reviews' do
+            get :index, valid_params.merge({:count => expected_count, :location_id => location.to_param})
             response.should be_ok
-            assigns[:reviews].count.should eq 10
+            assigns[:reviews].count.should eq expected_count
           end
         end
       end
