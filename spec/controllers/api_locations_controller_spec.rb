@@ -59,6 +59,13 @@ describe Api::LocationsController do
           end.to change { Location.count }.by(1)
         end
       end
+      context 'with invalid params' do
+        it 'raises an exception' do
+          expect do
+            post :create, create_params.tap{|h| h[:location].delete(:title)}.merge(api_key: user.api_key, format: 'json')
+          end.to raise_error 
+        end
+      end
     end
   end
 end

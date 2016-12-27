@@ -37,7 +37,7 @@ class Api::LocationsController < Api::ApiController
     if @location.academy? && @location.team.nil?
       @location.team = guess_team(create_params[:title])
     end
-    @location.save
+    @location.save!
 
     respond_to do |format|
       format.json { render partial: 'locations/location' }
