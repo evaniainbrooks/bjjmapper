@@ -27,14 +27,15 @@
           = render partial: 'profile_actions', locals: { :f => f }
         - else
           = render partial: 'actions'
-    %hr.clear/
-    .row
-      -# if user.locations.present?
-        .col-md-4
+        - if user.locations.present?
+          %br/
+          %br/
           %h3 Teaching at
           %ul.list-unstyled
             - user.locations.each_with_index do |location, i|
               %li= render partial: 'locations/card', object: location, as: 'location', locals: { location_counter: i }
+    %hr.clear/
+    .row
       - if own_profile? || user.flag_display_reviews?
         .col-md-4.reviews
           %h3
