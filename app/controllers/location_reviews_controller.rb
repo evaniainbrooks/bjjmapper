@@ -31,6 +31,8 @@ class LocationReviewsController < ApplicationController
   def create
     @review = Review.new(create_params)
     @location.reviews << @review
+    @location.expire_reviews_cache!
+
     respond_to do |format|
       format.json do
         status = @review.valid? ? :ok : :bad_request

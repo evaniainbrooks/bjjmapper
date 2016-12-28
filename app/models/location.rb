@@ -276,8 +276,12 @@ class Location
     return self.title == self.address_components.values.join('-')
   end
 
+  def expire_reviews_cache!
+    RollFindr::Redis.del(reviews_cache_key)
+  end
+
   def all_reviews
-    @_all_reviews ||= RollFindr::Redis.cache(expire: 1.day.seconds, key: [LocationReviews, self.id].collect(&:to_s).join('-')) do
+    @_all_reviews ||= RollFindr::Redis.cache(expire: 1.day.seconds, key: reviews_cache_key) do
       LocationReviews.new(self.id.to_s)
     end
   end
@@ -304,6 +308,10 @@ class Location
 
   private
 
+  def reviews_cache_key
+   [LocationReviews, self.id.to_s].collect(&:to_s).join('-')
+  end
+
   def maybe_search_metadata!
     if self.status == STATUS_VERIFIED
       self.search_metadata!
@@ -319,10 +327,6 @@ class Location
   def set_closed_flag
     self.flag_closed = true if self.moved_to_location.present?
     return true
-  end
-
-  def default_ig_hashtag
-    'bjjmapper' + self.title.parameterize('').first(6)
   end
 
   def populate_timezone

@@ -19,6 +19,11 @@ describe LocationReviewsController do
             response.should be_ok
           end.to change { Review.count }.by(1)
         end
+        it 'expires the location review cache' do
+          RollFindr::Redis.should_receive(:del).with(anything)
+
+          post :create, valid_params, session_params
+        end
       end
       context 'when not logged in' do
         it 'returns not_authorized' do
