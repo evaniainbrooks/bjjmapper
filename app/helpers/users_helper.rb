@@ -4,7 +4,7 @@ module UsersHelper
   end
   
   def all_instructors
-    User.jitsukas.limit(1000).sort_by(&:name)
+    User.where(:belt_rank.in => ['black', 'brown']).limit(1500).sort_by(&:name)
   end
 
   def select_instructors
