@@ -18,7 +18,7 @@ describe UsersHelper do
         withrank('white')
       ]
 
-      User.stub_chain(:jitsukas, :limit, :sort_by).and_return(users)
+      User.stub_chain(:where, :limit, :sort_by).and_return(users)
     end
 
     subject { helper.all_instructors_select_groups }

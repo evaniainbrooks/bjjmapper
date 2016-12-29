@@ -21,7 +21,6 @@ class Team
   field :image_large, type: String
   field :primary_color_index, type: String
   field :locked, type: Boolean
-  field :ig_hashtag, type: String
 
   has_many :locations, order: :title.asc
   belongs_to :parent_team, class_name: 'Team', inverse_of: :child_teams
@@ -41,10 +40,6 @@ class Team
 
   def to_param
     slug
-  end
-
-  def ig_hashtag
-    super || self.name.parameterize('')
   end
 
   def as_json(args = {})

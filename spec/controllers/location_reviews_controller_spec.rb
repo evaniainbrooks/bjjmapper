@@ -20,7 +20,7 @@ describe LocationReviewsController do
           end.to change { Review.count }.by(1)
         end
         it 'expires the location review cache' do
-          RollFindr::Redis.should_receive(:del).with(anything)
+          Location.any_instance.should_receive(:expire_reviews_cache!) 
 
           post :create, valid_params, session_params
         end
