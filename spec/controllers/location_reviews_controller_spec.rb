@@ -14,6 +14,8 @@ describe LocationReviewsController do
         let(:user) { create(:user) }
         let(:session_params) { { user_id: user.id } }
         it 'creates a new review' do
+          Location.any_instance.stub(:expire_reviews_cache!)
+
           expect do
             post :create, valid_params, session_params
             response.should be_ok
