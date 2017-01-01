@@ -38,8 +38,25 @@ class UserDecorator < Draper::Decorator
     object.stripe_rank || 0
   end
 
-  def rank_image
-    h.image_path("belts/#{belt_rank}#{[stripe_rank, 7].min}.png")
+  def full_name
+    if nickname.blank?
+      name
+    else
+      components = name.split(' ', 2)
+      "#{components[0]} \"#{nickname}\" #{components[1]}"
+    end
+  end
+
+  def descriptive_rank_in_words
+    if object.belt_rank == 'black'
+      if object.stripe_rank > 0
+        "#{stripe_rank.ordinalize} degree #{belt_rank} belt"
+      else
+        "black belt"
+      end
+    else
+      rank_in_words
+    end
   end
 
   def rank_in_words

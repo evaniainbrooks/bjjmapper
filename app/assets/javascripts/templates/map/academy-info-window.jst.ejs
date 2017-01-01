@@ -1,10 +1,5 @@
 <div class="show-location-overlay container-fluid">
   <a href="<%= Routes.location_path(location.param, { ref: 'map_item' }) %>" data-no-turbolink>
-    <div class="row">
-      <div class="col-md-3">
-        <img class="center-block" src="<%= location.image %>" />
-      </div>
-      <div class="col-md-9">
         <h4 class="list-group-item-heading"><%= location.title %></h4>
         <p class="list-group-item-text small team-title"><%= location.team_name %></p>
         <span class="rating">
@@ -26,8 +21,6 @@
           <span class="fa fa-map-marker"></span>
           <%= location.street %>
         </span>
-      </div>
-    </div>
   </a>
   <br />
   <ul class="text-center nav">

@@ -1,4 +1,7 @@
-@import "marker";
+/* 
+ *= require marker
+ */
+
 @import "colors";
 
 .map-canvas {
@@ -6,43 +9,17 @@
   background-color: #eee;
 }
 
-.map-legend {
-  margin-top: 10px;
-  margin-right: 10px;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 5px;
-  width: 100px;
-  h5 {
-    text-align: center;
-    margin-top: 2px;
-    margin-bottom: 4px;
-  }
-
-  button.close {
-    font-size: 16px !important;
-  }
-
-  &.collapsed {
-    .close-btn { display: none; }
-    .open-btn { display: block; }
-    .content { display: none; }
-  }
-  
-  .close-btn { display: block; }
-  .open-btn { display: none; }
-  .content { display: block; }
-}
-  
 label {
   &.academy {
+    display: block;
     color: $academyColor;
   }
   &.tournament {
+    display: block;
     color: $tournamentColor;
   }
   &.seminar {
+    display: block;
     color: $seminarColor;
   }
 }
@@ -198,12 +175,10 @@ label {
 
 .wrapper {
   .map-canvas {
-    position: absolute;
+    position: fixed !important;
+    top: 50px;
+    right: 33.3333%;
     height: auto;
-    bottom: 0;
-    top: 0;
-    left: 0;
-    right: 0;
     @media screen and (max-width: 1000px) {
       position: absolute !important;
       top: 0;

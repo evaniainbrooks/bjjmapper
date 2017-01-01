@@ -5,6 +5,8 @@
       %td
         %h1.display-field
           = user.name
+          - if user.nickname.present?
+            %small= "\"#{user.nickname}\""
     - if user.contact_email.present? && (own_profile? || user.flag_display_email?)
       %tr
         %td.text-muted.text-right Email
@@ -28,7 +30,7 @@
             .display-field
               = user.birthdate.strftime('%B %d, %Y')
               &nbsp;&nbsp;
-              = "(#{user.age_in_years} years old)"
+              %span.small= "(#{user.age_in_years} years old)"
     - if user.birth_place.present?
       %tr
         %td
@@ -40,7 +42,13 @@
               &nbsp;
     %tr
       %td.text-muted.text-right Lineage
-      %td= render partial: 'users/lineage', locals: { :user => user }
+      %td
+        - if user.lineal_parent.present?
+          %ul.display-field.list-unstyled
+            - user.full_lineage.each_with_index do |parent,i|
+              %li{:style => "font-size: #{150 - i * 15}%"}= link_to(parent.try(:name), user_path(parent))
+        - else
+          %i.text-danger.display-field Unknown
     - unless user.female.nil?
       %tr
         %td.text-muted.text-right Gender
@@ -58,3 +66,4 @@
             = link_to user.description_read_more_url do
               = surround '(', ')' do
                 %span Read more
+                %span.fa.fa-external-link

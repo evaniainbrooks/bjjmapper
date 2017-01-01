@@ -63,9 +63,6 @@ class RollFindr.Views.MapView extends Backbone.View
       @map.controls[google.maps.ControlPosition.TOP_LEFT].push($(refreshButton)[0])
       @createLocationView = new RollFindr.Views.MapCreateLocationView({map: @map})
 
-    if @model.get('legend')
-      @legendView = new RollFindr.Views.MapLegendView({map: @map, model: @model})
-
     return true
 
   setupEventListeners: ->

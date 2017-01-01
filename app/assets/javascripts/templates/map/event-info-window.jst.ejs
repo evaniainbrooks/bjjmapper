@@ -1,17 +1,5 @@
 <div class="show-location-overlay container-fluid">
   <a href="<%= location.link %>" data-no-turbolink>
-    <div class="row">
-      <div class="col-md-3">
-        <div class="image-container">
-          <img src="<%= location.image %>" alt="<%= location.title %> logo" />
-          <span class="timestamp small">
-            <span class="month"><%= moment(location.dates[0]).format("MMM") %></span>
-            <br />
-            <span class="day"><%= moment(location.dates[0]).date() %></span>
-          </span>
-        </div>
-      </div>
-      <div class="col-md-9">
         <h4 class="list-group-item-heading"><%= location.title %></h4>
         <p class="list-group-item-text small team-title"><%= location.entities %></p>
         <p class="date list-group-item-text small">
@@ -22,8 +10,6 @@
           <span class="fa fa-map-marker"></span>
           <%= location.street %>
         </span>
-      </div>
-    </div>
   </a>
   <br />
   <ul class="text-center nav">

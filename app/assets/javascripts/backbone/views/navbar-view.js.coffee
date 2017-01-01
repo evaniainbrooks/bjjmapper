@@ -10,7 +10,7 @@ class RollFindr.Views.NavbarView extends Backbone.View
   initialize: ->
     _.bindAll(this, 'geolocateMap', 'search', 'scrollToList', 'scrollToMap', 'onPlaceChanged')
   
-    input = @$('[name="geoquery"]')[0]
+    input = @$('[name="query"]')[0]
     options = {
         types: ['(cities)']
     }

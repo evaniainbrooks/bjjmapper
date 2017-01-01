@@ -72,6 +72,7 @@
          id: id,
          map: self.map,
          position: position,
+         anchor: RichMarkerPosition.MIDDLE,
          content: self.getMarkerContent(loc),
          draggable: self.draggable,
          cursor: 'pointer',
