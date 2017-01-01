@@ -98,7 +98,10 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    return User.where(:role => 'super_user').first if Rails.env.development?
+    if Rails.env.development?
+      @current_user ||= User.where(:role => 'super_user').first
+      return @current_user
+    end
 
     # NORMAL USER AUTHENTICATION
     begin
