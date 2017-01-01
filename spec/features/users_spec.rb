@@ -19,6 +19,7 @@ feature "Locations Pages" do
   end
 
   scenario 'user visits the users index' do
+    pending 'in progress'
     User.create(name: 'Evan', role: 'user', belt_rank: 'black')
     visit users_path
     expect(page).to have_text('Evan')

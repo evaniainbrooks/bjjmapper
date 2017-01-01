@@ -32,7 +32,6 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.json { render json: @users.collect{ |o| { id: o.id.to_s, name: [o.name, o.nickname].compact.join(', ') } } }
-      format.html
     end
   end
 
