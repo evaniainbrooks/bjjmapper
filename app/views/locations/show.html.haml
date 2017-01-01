@@ -116,6 +116,7 @@
   = render :partial => 'claim_location_dialog', locals: { location: location }
   = render :partial => 'metadata_dialog', locals: { location: location }
 = content_for(:scripts) do
+  = javascript_include_tag 'calendar'
   :coffeescript
     $(document).ready ->
       mapView = new RollFindr.Views.LocationShowView({ editable: #{edit_mode?}, model: #{render_json(location)}, mapModel: #{render_json(@map)}, el: $('.show-location')})

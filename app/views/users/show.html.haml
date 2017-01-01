@@ -1,3 +1,6 @@
+= content_for(:title) do
+  = "#{user.full_name} Brazilian Jiu-Jitsu #{user.descriptive_rank_in_words}"
+
 .container.page.show-user
   = form_for(user, html: { class: 'form ' + edit_mode_classes }) do |f|
     .row
@@ -83,6 +86,7 @@
 
   = render :partial => 'users/add_student_dialog', locals: { instructor: user }
 = content_for(:scripts) do
+  = javascript_include_tag 'calendar'
   :coffeescript
     $(document).ready ->
       model = new RollFindr.Models.User(#{render_json(user)})

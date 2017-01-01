@@ -17,16 +17,14 @@
 //= require mixpanel_init
 //= require mixpanel_track_links
 //= require exception_logger
+//= require bootstrap-datetimepicker
 //= require moment
-//= require fullcalendar
-//= require lang-all
 //= require js-routes
 //= require toastr
 //= require toastr_bootstrap
 //= require bootstrap
 //= require ext
 //= require underscore
-//= require bootstrap-datetimepicker
 //= require readmore.min
 //= require richmarker
 //= require_tree ./templates
@@ -35,6 +33,7 @@
 //= require backbone_datalink
 //= require backbone/rollfindr
 //= require_tree .
+//= stub calendar
 //= require_self
 
 Backbone.history.start({pushState: true, hashChange: false});

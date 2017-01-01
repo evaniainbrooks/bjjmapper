@@ -17,6 +17,7 @@
 = render :partial => 'location_events/create_event_modal', locals: { location: location }
 = render :partial => 'location_events/move_event_modal', locals: { location: location }
 = content_for(:scripts) do
+  = javascript_include_tag 'calendar'
   :coffeescript
     $(document).ready ->
       mapView = new RollFindr.Views.LocationShowView({ starting: "#{@starting}", editable: #{edit_mode?}, model: #{render_json(location)}, el: $('.show-location')})
