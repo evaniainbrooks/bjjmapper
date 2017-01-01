@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'shared/tracker_context'
 require 'shared/timezonesvc_context'
+require 'shared/redis_context'
 
 describe EventsController do
   include_context 'skip tracking'
