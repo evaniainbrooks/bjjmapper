@@ -1,11 +1,13 @@
 require 'spec_helper'
 require 'shared/tracker_context'
 require 'shared/timezonesvc_context'
+require 'shared/redis_context'
 
 describe LocationsController do
   include_context 'skip tracking'
   include_context 'timezone service'
-  
+  include_context 'redis'
+
   describe 'POST unlock' do
     subject { build(:location, team: nil) }
     before { Location.stub_chain(:verified, :academies, :find).and_return(subject) }

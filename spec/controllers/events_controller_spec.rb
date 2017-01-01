@@ -5,7 +5,8 @@ require 'shared/timezonesvc_context'
 describe EventsController do
   include_context 'skip tracking'
   include_context 'timezone service'
-  
+  include_context 'redis'
+
   describe 'GET wizard' do
     context 'when not signed in' do
       it 'redirects to the login page' do
