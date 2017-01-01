@@ -1,3 +1,5 @@
+require 'redis_cache'
+
 class EventsController < ApplicationController
   include EventsHelper
   include LocationsHelper
@@ -67,14 +69,18 @@ class EventsController < ApplicationController
     organization = params.fetch(:organization_id, nil)
     instructor = params.fetch(:instructor_id, nil)
 
-    @events = Event
-      .where(:event_type.in => event_types)
-      .between_time(Time.now.beginning_of_day, Time.now + 1.year)
-      .limit(count)
-      .asc(:starting)
+    cache_key = ['Upcoming', count, event_types, organization, instructor].compact.collect(&:to_s).join('-')
+    @events = RollFindr::Redis.cache(expire: 1.hour.seconds, key: cache_key) do
+      events = Event.where(:event_type.in => event_types)
+        .between_time(Time.now.beginning_of_day, Time.now + 1.year)
+        .limit(count)
+        .asc(:starting)
 
-    @events = @events.where(:organization_id => organization) if organization.present?
-    @events = @events.where(:instructor_id => instructor) if instructor.present?
+      events = events.where(:organization_id => organization) if organization.present?
+      events = events.where(:instructor_id => instructor) if instructor.present?
+    
+      events.to_a
+    end
 
     tracker.track('showUpcomingEvents',
       event_count: @events.count

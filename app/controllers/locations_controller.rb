@@ -59,7 +59,10 @@ class LocationsController < ApplicationController
       count: count
     )
 
-    @locations = Location.academies.verified.desc('created_at').limit(count)
+    cache_key = ['Recent', count].compact.collect(&:to_s).join('-')
+    @locations = RollFindr::Redis.cache(expire: 1.hour.seconds, key: cache_key) do
+      Location.academies.verified.desc('created_at').limit(count).to_a
+    end
 
     respond_to do |format|
       format.json 

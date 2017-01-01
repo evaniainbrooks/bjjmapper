@@ -12,15 +12,18 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require underscore
+//= require ext
+//= require js-routes
 //= require backbone
 //= require backbone_rails_sync
 //= require backbone_datalink
+//= require_tree ./templates
 //= require backbone/rollfindr
 //= require moment
 //= require bootstrap
 //= require toastr
 //= require toastr_bootstrap
-//= require js-routes
 //= require confirm_page_exit
 //= require mixpanel
 //= require mixpanel_init
@@ -28,10 +31,8 @@
 //= require exception_logger
 //= require bootstrap-datetimepicker
 //= require ext
-//= require underscore
 //= require readmore.min
 //= require richmarker
-//= require_tree ./templates
 //= require_tree .
 //= stub calendar
 //= require_self
