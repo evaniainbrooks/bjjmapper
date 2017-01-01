@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :ensure_signed_in, only: [:update, :create, :remove_image]
   before_action :check_permissions, only: [:destroy, :update, :remove_image]
 
-  decorates_assigned :user
+  decorates_assigned :user, :users 
 
   helper_method :created?
   helper_method :welcome?
@@ -14,17 +14,24 @@ class UsersController < ApplicationController
   REVIEW_COUNT_MAX = 50
 
   def index
-    @users = User
-      .jitsukas
+    @rank = params.fetch(:rank, nil)
+    @query = params.fetch(:query, nil)
+    @scope = @rank.present? ? User.where(belt_rank: @rank) : User.jitsukas
+
+    @users = @scope
       .where(:flag_display_directory => true)
       .where(:role.ne => 'anonymous')
       .asc(:name)
-      .all
-      .group_by(&:belt_rank)
+
+    if @query.present?
+      filter_ids = User.search_ids(@query) || []
+      @users = @users.where(:_id.in => filter_ids)
+    end
 
     tracker.track('showUsersIndex')
 
     respond_to do |format|
+      format.json { render json: @users.collect{ |o| { id: o.id.to_s, name: [o.name, o.nickname].compact.join(', ') } } }
       format.html
     end
   end
@@ -156,7 +163,7 @@ class UsersController < ApplicationController
 
   def set_user
     @user = User.unscoped.find(params[:id])
-    render status: :not_found and return unless @user.present?
+    head :not_found and return false unless @user.present?
   end
 
   def own_profile?

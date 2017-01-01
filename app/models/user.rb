@@ -1,5 +1,6 @@
 require 'wikipedia'
 require 'mongoid_search_ext'
+require 'redis_cache'
 
 class User
   include Mongoid::Document
@@ -9,6 +10,8 @@ class User
 
   include Mongoid::History::Trackable
   include MongoidSearchExt::Search
+  
+  extend MongoidSearchExt::Search
 
   DEFAULT_THUMBNAIL_X = 50
   DEFAULT_THUMBNAIL_Y = 0
@@ -96,6 +99,7 @@ class User
       :name => 'user_text_index',
       :weights => {
         :name => 20,
+        :nickname => 15,
         :description => 10,
         :contact_email => 10
       }
@@ -104,6 +108,18 @@ class User
 
   default_scope -> { where(:redirect_to_user_id => nil) }
   scope :jitsukas, -> { where(:belt_rank.in => ['blue', 'purple', 'brown', 'black']) }
+
+  #def self.grandmasters
+  #  user_ids = RollFindr::Redis.zrevrange('UserStudentCount', 0, 10)
+  #  User.where(:id.in => user_ids).sort_by(&:student_count).reverse
+  #end
+
+  #def student_count
+  #  RollFindr::Redis.cache(expire: 1.hour.seconds, key: ['UserStudentCount', self.id.to_s].join('-')) do
+  #    RollFindr::Redis.zadd('UserStudentCount', self.lineal_children.count, self.id.to_s)
+  #    self.lineal_children.count
+  #  end
+  #end
 
   def preference(sym)
     preferences[sym]
@@ -203,6 +219,7 @@ class User
       u = u.lineal_parent
       break if lineage.count > 10
     end
+
     lineage
   end
 
