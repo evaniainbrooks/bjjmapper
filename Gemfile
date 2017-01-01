@@ -47,6 +47,8 @@ group :development do
   gem 'capistrano-rails', require: false
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rvm', require: false
+  gem 'rack-mini-profiler'
+  gem 'flamegraph'
 end
 
 group :test, :development do
@@ -62,8 +64,6 @@ group :test, :development do
   gem 'rubocop'
   gem 'letter_opener'
   gem 'webmock'  
-  gem 'rack-mini-profiler'
-  gem 'flamegraph'
 end
 
 
