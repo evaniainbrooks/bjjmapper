@@ -62,6 +62,8 @@ group :test, :development do
   gem 'rubocop'
   gem 'letter_opener'
   gem 'webmock'  
+  gem 'rack-mini-profiler'
+  gem 'flamegraph'
 end
 
 

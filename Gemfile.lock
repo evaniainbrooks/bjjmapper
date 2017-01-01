@@ -132,6 +132,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     ffi (1.9.3)
     ffi (1.9.3-java)
+    flamegraph (0.9.5)
     formatador (0.2.5)
     geocoder (1.2.0)
     google-analytics-rails (0.0.5)
@@ -286,6 +287,8 @@ GEM
     puma (2.8.2-java)
       rack (>= 1.1, < 2.0)
     rack (1.5.2)
+    rack-mini-profiler (0.10.1)
+      rack (>= 1.2.0)
     rack-test (0.6.2)
       rack (>= 1.0)
     rails (4.1.6)
@@ -439,6 +442,7 @@ DEPENDENCIES
   ejs
   exception_notification
   factory_girl_rails
+  flamegraph
   geocoder
   google-analytics-rails
   guard-rspec (~> 4.3.1)
@@ -464,6 +468,7 @@ DEPENDENCIES
   poltergeist
   pry
   puma
+  rack-mini-profiler
   rails (>= 4.1.0)
   rails-backbone!
   redis-rails
