@@ -185,7 +185,7 @@ class User
   end
 
   def self.anonymous(ip_address)
-    User.where(role: Role::ANONYMOUS, ip_address: ip_address).first_or_create(provider: 'anonymous', role: Role::ANONYNOUS, name: "Anonymous #{ip_address}", last_seen_at: Time.now)
+    User.where(role: Role::ANONYMOUS, ip_address: ip_address).first_or_create(provider: 'anonymous', role: Role::ANONYMOUS, name: "Anonymous #{ip_address}", last_seen_at: Time.now)
   end
 
   def self.from_omniauth(auth, ip_address)
