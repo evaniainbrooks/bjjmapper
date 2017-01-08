@@ -62,6 +62,9 @@ class User
   field :birth_month, type: Integer
   field :birth_year, type: Integer
   field :birth_place, type: String
+  field :deceased_day, type: Integer
+  field :deceased_month, type: Integer
+  field :deceased_year, type: Integer
   field :internal, type: Boolean
   field :female, type: Boolean
 
@@ -120,6 +123,7 @@ class User
   #    self.lineal_children.count
   #  end
   #end
+  #
 
   def preference(sym)
     preferences[sym]
@@ -181,7 +185,7 @@ class User
   end
 
   def self.anonymous(ip_address)
-    User.where(ip_address: ip_address).first_or_create(provider: 'anonymous', role: 'anonymous', name: "Anonymous #{ip_address}", last_seen_at: Time.now)
+    User.where(role: Role::ANONYMOUS, ip_address: ip_address).first_or_create(provider: 'anonymous', role: Role::ANONYNOUS, name: "Anonymous #{ip_address}", last_seen_at: Time.now)
   end
 
   def self.from_omniauth(auth, ip_address)
@@ -226,6 +230,15 @@ class User
   def birthdate
     return nil unless birth_year.present? && birth_month.present? && birth_day.present?
     Date.new(birth_year, birth_month, birth_day) rescue nil
+  end
+
+  def deceased_date
+    return nil unless deceased_year.present?
+    Date.new(deceased_year, deceased_month, deceased_day) rescue nil
+  end
+
+  def deceased?
+    return deceased_date.present?
   end
 
   def age_in_years
