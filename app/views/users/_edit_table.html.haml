@@ -2,25 +2,35 @@
 %table.table.table-user-information.edit-field
   %tbody
     %tr
-      %td.text-muted.text-right Name
+      %td.text-right
+        %b.text-muted.small.upcase Name
       %td
         .edit-field.form-group
           = f.text_field :name, class: 'form-control input-lg'
+    %tr
+      %td.text-right
+        %b.text-muted.small.upcase Nickname 
+      %td
+        .edit-field.form-group
+          = f.text_field :nickname, class: 'form-control input-md'
     - if defined?(own_profile?) && own_profile? || user.flag_display_email?
       %tr
-        %td.text-muted.text-right Email
+        %td.text-right
+          %b.text-muted.small.upcase Email
         %td
           .edit-field.form-group
             = f.text_field :contact_email, class: 'form-control input-md'
     %tr
-      %td.text-muted.text-right Rank
+      %td.text-right
+        %b.text-muted.small.upcase Rank
       %td
         .edit-field.form-group
           = f.select :belt_rank, options_for_select(belt_ranks, user.belt_rank), {}, class: 'form-control input-md'
         .edit-field.form-group
           = f.select :stripe_rank, options_for_select(stripe_ranks, user.stripe_rank), {}, class: 'form-control input-md'
     %tr
-      %td.text-muted.text-right Born
+      %td.text-right
+        %b.text-muted.small.upcase Born
       %td
         .edit-field.form-group.form-inline
           = f.select :birth_day, options_for_select(select_days, user.birth_day), { include_blank: true, prompt: 'Day' }, class: 'form-control'
@@ -34,14 +44,17 @@
       = f.hidden_field :lineal_parent, value: force_lineal_parent
     - else
       %tr
-        %td.text-muted.text-right Lineage
+        %td.text-right
+          %b.text-muted.small.upcase Lineage
         %td= render partial: 'users/lineage', locals: { :f => f, :user => user }
     %tr
-      %td.text-muted.text-right Gender
+      %td.text-right 
+        %b.text-muted.small.upcase Gender
       %td= f.select :female, options_for_select([['Male', 0], [ 'Female', 1]], user.female? ? 1 : 0), { include_blank: true }, class: 'form-control'
     - if show_biography
       %tr
-        %td.text-muted.text-right Biography
+        %td.text-right 
+          %b.text-muted.small.upcase Biography
         %td
           = f.text_area :description, rows: 5, class: 'form-control'
       = f.hidden_field :thumbnailx

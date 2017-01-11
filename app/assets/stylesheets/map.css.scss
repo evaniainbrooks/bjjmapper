@@ -59,9 +59,11 @@ label {
       background-color: lighten($academyColor, 30%);
       border: 1px solid $academyColor;
     }
-    &.academybb .list-index span {
-      background-color: lighten($academyColor, 30%);
-      border: 1px solid $academyColor;
+    &.independent-academy .list-index span {
+      background-color: lighten($independentAcademyColor, 30%);
+      border: 1px solid $independentAcademyColor;
+    }
+    &.blackbelt-academy .list-index span {
       border-top: 3px solid black;
     }
     &.tournament .list-index span {
@@ -125,10 +127,14 @@ label {
       border: 1px solid $academyColor;
     }
 
-    &.academybb .list-index span {
-      background-color: $academyColor;
+    &.blackbelt-academy .list-index span {
       border: 1px solid $academyColor;
       border-top: 3px solid black;
+    }
+    
+    &.independent-academy .list-index span {
+      background-color: $independentAcademyColor;
+      border: 1px solid $independentAcademyColor;
     }
 
     &.tournament .list-index span {

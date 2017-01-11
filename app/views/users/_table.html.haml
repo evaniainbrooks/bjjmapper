@@ -1,7 +1,8 @@
 %table.table.table-user-information.display-field
   %tbody
     %tr
-      %td.text-muted.text-right Name
+      %td.text-right
+        %b.text-muted.small.upcase Name
       %td
         %h1.display-field
           = user.name
@@ -9,7 +10,8 @@
             %small= "\"#{user.nickname}\""
     - if user.contact_email.present? && (own_profile? || user.flag_display_email?)
       %tr
-        %td.text-muted.text-right Email
+        %td.text-right
+          %b.text-muted.small.upcase Email
         %td
           .display-field
             %span= mail_to(user.contact_email)
@@ -17,31 +19,32 @@
               = surround '(', ')' do
                 %i.text-muted Not displayed publicly
     %tr
-      %td.text-muted.text-right Rank
+      %td.text-right
+        %b.text-muted.small.upcase Rank
       %td
         .display-field
           = render partial: 'users/belt', locals: { user: user }
 
     - if user.birthdate.present?
       %tr
-        %td.text-muted.text-right Born
+        %td.text-right
+          %b.text-muted.small.upcase Born
         - if user.birthdate.present?
           %td
             .display-field
               = user.birthdate.strftime('%B %d, %Y')
               &nbsp;&nbsp;
               %span.small= "(#{user.age_in_years} years old)"
-    - if user.birth_place.present?
-      %tr
-        %td
-        %td
-          %span.display-field
-            = link_to map_path({location: user.birth_place, ref: 'user_dp'}) do
-              %span.fa.fa-map-marker
-              = user.birth_place
-              &nbsp;
+              - if user.birth_place.present?
+                %br/
+                %span.display-field
+                  = link_to map_path({location: user.birth_place, ref: 'user_dp'}) do
+                    %span.fa.fa-map-marker
+                    = user.birth_place
+                    &nbsp;
     %tr
-      %td.text-muted.text-right Lineage
+      %td.text-right
+        %b.text-muted.small.upcase Lineage
       %td
         - if user.lineal_parent.present?
           %ul.display-field.list-unstyled
@@ -49,17 +52,10 @@
               %li{:style => "font-size: #{150 - i * 15}%"}= link_to(parent.try(:name), user_path(parent))
         - else
           %i.text-danger.display-field Unknown
-    - unless user.female.nil?
-      %tr
-        %td.text-muted.text-right Gender
-        %td
-          - if user.female?
-            Female
-          - else
-            Male
     - if user.description?
       %tr
-        %td.text-muted.text-right Biography
+        %td.text-right 
+          %b.text-muted.small.upcase Biography
         %td.biography
           = simple_format(user.description)
           - if user.description_read_more_url.present?

@@ -1,7 +1,7 @@
 #= require spec_helper
 #= require backbone/rollfindr
 #= require backbone/models/event
-#= require backbone/views/create-event-view
+#= require backbone/views/events/create-event-view
 
 describe 'Views.CreateEventView', ->
   view = null

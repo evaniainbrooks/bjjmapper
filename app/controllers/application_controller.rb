@@ -133,7 +133,7 @@ class ApplicationController < ActionController::Base
   def google_maps_api
     ep = Rails.configuration.google_maps_endpoint
     key = Rails.configuration.google_maps_api_key
-    "#{ep}?key=#{key}&v=3.exp&libraries=places"
+    "#{ep}?key=#{key}&v=3.exp"
   end
 
   def log_production_mutative_events

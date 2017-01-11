@@ -26,6 +26,7 @@
             %li= link_to city.name, directory_segment_path(country: directory_segment.name, city: city.name), title: "List of Brazilian Jiu-Jitsu gyms in #{directory_segment.full_name}" 
 
 = content_for(:scripts) do
+  = javascript_include_tag 'map'
   :coffeescript
     $(document).ready ->
       segmentModel = new RollFindr.Models.DirectorySegment(#{render_json(directory_segment)})

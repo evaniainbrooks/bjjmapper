@@ -61,6 +61,7 @@
       = render partial: 'application/google_adsense_banner'
 
 = content_for(:scripts) do
+  = javascript_include_tag 'map'
   :coffeescript
     $(document).ready ->
       recentView = new RollFindr.Views.RecentLocationsView()

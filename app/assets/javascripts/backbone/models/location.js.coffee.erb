@@ -32,8 +32,11 @@ class RollFindr.Models.Location extends Backbone.Model
       if @get('events').length > 0
         return @get('events').first().getColor()
 
-    return 'academybb' if @get('has_black_belt')
-    'academy'
+    types = ['academy']
+    types.push('blackbelt-academy') if @get('has_black_belt')
+    types.push('independent-academy') unless @get('team_id') && @get('team_id').length > 0
+
+    return types.join(' ')
 
   isVisible: (center, radius)->
   paramRoot: 'location'

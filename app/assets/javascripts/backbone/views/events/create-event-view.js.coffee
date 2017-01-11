@@ -1,5 +1,5 @@
 #= require moment
-#= require backbone/views/event-view-base
+#= require backbone/views/events/event-view-base
 
 class RollFindr.Views.CreateEventView extends RollFindr.Views.EventViewBase
   el: $('.create-event-dialog')

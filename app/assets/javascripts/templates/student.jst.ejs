@@ -7,7 +7,10 @@
       <div class="avatar pull-left" style="background: url('<%= student.image %>') top center no-repeat"></div>
     <% } %>
     <div class="caption">
-      <h3 style="margin-top: 10px !important"><%= student.name %></h3>
+      <h3 style="margin-top: 10px !important">
+        <%= student.name %>
+        <small><%= student.nickname %></small>
+      </h3>
       <div class="belt-<%= student.belt_rank %> belt">
         <b class="pull-left small">
           <%= student.rank_in_words %>

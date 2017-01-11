@@ -1,4 +1,4 @@
-- new_student = User.new(lineal_parent_id: instructor).decorate
+- new_student = User.new(lineal_parent: instructor).decorate
 .add-student-dialog.modal.fade{'aria-hidden' => 'true', 'aria-labelledby' => 'addstudent', 'role' => 'dialog', 'tabindex' => -1}
   .modal-dialog
     .modal-content
@@ -11,40 +11,19 @@
           Add Student
         %span.small.text-info Note that this will change the student's lineage.
       .modal-body
-        %ul.nav.nav-tabs{:role => 'tablist'}
-          %li.active
-            %a{:href => '#existing-student', 'role' => 'tab', 'data-toggle' => 'tab'} Existing
-          %li
-            %a{:href => '#create-student', 'role' => 'tab', 'data-toggle' => 'tab'} Create
-
-      .tab-content
-        %div.tab-pane#create-student
-          = form_for([instructor, new_student], url: user_students_path(instructor), html: { class: 'form editable edit-mode' }) do |f|
-            .container-fluid
-              .row
-                .col-md-4
-                  %div.text-center
-                    %img.center-block{:style => 'max-width: 150px', :alt => "default profile image", :src => image_path(UserDecorator::DEFAULT_IMAGE)}
-                    %button.image-caption.center-block.btn.btn-primary.btn-small{:type => 'button'} Upload Image
-                .col-md-8
-                  = render partial: 'users/edit_table', :locals => { :force_lineal_parent => instructor, :f => f, :user => new_student }
-            .modal-footer
-              %button.btn.btn-default{'data-dismiss' => 'modal'}
-                Cancel
-              %button.btn.btn-primary{:type => 'submit'}
-                Create student
-
-        %div.tab-pane.active#existing-student
-          %form{:action => user_students_path(instructor), :method => 'POST'}
-            .container-fluid
-              %img.center-block.img-block{:style => 'max-width: 300px', 'data-default-src' => '//storage.googleapis.com/bjjmapper/default-user-250.png', 'src' => '//storage.googleapis.com/bjjmapper/default-user-250.png'}
-              %br/
-              = hidden_field_tag :user_id, instructor.id
+        .editable
+          .display-field
+            %form{:action => user_students_path(instructor), :method => 'POST'}
+              = hidden_field_tag :lineal_parent_id, instructor.id
               = hidden_field_tag :authenticity_token, form_authenticity_token
-              = select_tag :id, options_for_select(select_instructors), include_blank: true, class: 'student-name form-control input-md'
+              = text_field_tag :name, nil, class: 'typeahead student-name form-control input-md'
+              = hidden_field_tag :id, nil
               %br/
-            .modal-footer
-              %button.btn.btn-default{'data-dismiss' => 'modal'}
-                Cancel
-              %button.btn.btn-primary{:type => 'submit'}
-                Add student
+              %br/
+              %button.pull-right.btn.btn-primary{:type => 'submit'}
+                Add Student 
+            %br.clear.clear-fix/
+
+= content_for(:scripts) do
+  :coffeescript
+    view = new RollFindr.Views.UserAutocompleteView({el: $('.add-student-dialog .student-name'), target: $('.add-student-dialog [name="id"]')})

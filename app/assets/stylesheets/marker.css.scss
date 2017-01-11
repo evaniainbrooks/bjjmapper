@@ -30,12 +30,15 @@
   }
 }
 
-.map-label-content.academybb {
-  background-color: $academyColor;
-  border-top: solid 3px black;
+.map-label-content.independent-academy {
+  background-color: $independentAcademyColor;
   &:after {
-    border-top: solid 5px $academyColor;
+    border-top: solid 5px $independentAcademyColor;
   }
+}
+
+.map-label-content.blackbelt-academy {
+  border-top: solid 3px black;
 }
 
 .map-label-content.tournament {

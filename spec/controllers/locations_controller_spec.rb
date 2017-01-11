@@ -7,6 +7,27 @@ describe LocationsController do
   include_context 'skip tracking'
   include_context 'timezone service'
   include_context 'redis'
+  
+  describe 'POST remove_image' do
+    let(:location) { create(:location, image_tiny: 'evan', image: 'xyz', image_large: 'abc') }
+    context 'when not signed in' do
+      it 'returns not_authorized' do
+        post :remove_image, { id: location.to_param, :format => 'json' }
+        response.status.should eq 401
+      end
+    end
+    context 'when signed in' do
+      let(:session_params) { { user_id: create(:user).to_param } }
+      context 'with json format' do
+        it 'clears the images and returns the location' do
+          post :remove_image, { id: location.to_param, :format => 'json' }, session_params
+          assigns[:location].image.should eq nil
+          assigns[:location].image_large.should eq nil
+          assigns[:location].image_tiny.should eq nil
+        end
+      end
+    end
+  end
 
   describe 'POST unlock' do
     subject { build(:location, team: nil) }

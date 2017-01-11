@@ -7,17 +7,18 @@
           %span.sr-only Close
         %h4.modal-title
           %i.fa.fa-user
-          - if defined?(@location) || defined?(@team)
-            %span Add Instructor
-          - else
-            %span Create Person
+          %span= local_assigns[:title] || 'Choose Person'
       .modal-body
-        - if defined?(@location) || defined?(@team)
-          = render partial: 'instructors/add_instructor_tabs'
         - if defined?(@location)
           = render partial: 'instructors/location_add_instructor'
         - elsif defined?(@team)
           = render partial: 'instructors/team_add_instructor'
         - else
           = render partial: 'instructors/add_instructor'
+
+= content_for(:scripts) do
+  :javascript
+    $(document).ready(function() {
+      var autocomplete = new RollFindr.Views.UserAutocompleteView({el: $('.typeahead.instructor-name')});
+    });
 

@@ -98,6 +98,8 @@ class Location
   field :description
   field :directions
   field :image
+  field :image_large
+  field :image_tiny
   field :website
   field :phone
   field :email

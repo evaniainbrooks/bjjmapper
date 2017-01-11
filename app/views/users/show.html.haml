@@ -90,6 +90,4 @@
   :coffeescript
     $(document).ready ->
       model = new RollFindr.Models.User(#{render_json(user)})
-      studentsView = new RollFindr.Views.UserStudentsView({ model: model })
-      reviewsView = new RollFindr.Views.UserReviewsView({ model: model })
-      scheduleView = new RollFindr.Views.ScheduleView({ model: model, el: $('.scheduler-container'), editable: false })
+      view = new RollFindr.Views.UserShowView({model: model})

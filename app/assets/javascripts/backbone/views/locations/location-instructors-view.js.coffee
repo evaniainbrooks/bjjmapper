@@ -19,7 +19,7 @@ class RollFindr.Views.LocationInstructorsView extends Backbone.View
     if @model.get('instructors').size() > 0
       @$el.removeClass('empty')
       @model.get('instructors').each (instructor)=>
-        elem = @template({instructor: instructor.toJSON()})
+        elem = @template({user: instructor.toJSON()})
         @$('.items').append(elem)
     else
       @$el.addClass('empty')

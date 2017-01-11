@@ -134,6 +134,7 @@ class UsersController < ApplicationController
   def create_params
     p = params.require(:user).permit(
       :name,
+      :nickname,
       :email,
       :contact_email,
       :belt_rank,

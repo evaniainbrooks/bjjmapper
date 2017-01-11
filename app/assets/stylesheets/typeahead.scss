@@ -1,3 +1,4 @@
+
 .twitter-typeahead {
   width: 100% !important;
 }
@@ -50,9 +51,17 @@
 }
 
 .tt-suggestion {
-  padding: 3px 20px;
-  font-size: 18px;
-  line-height: 24px;
+  font-size: 95%;
+  padding: 3px 10px;
+}
+
+.tt-suggestion-header {
+  padding-right: 5px;
+  font-weight: bold;
+  color: white;
+  background-color: #333;
+  text-align: center;
+  display: block;
 }
 
 .tt-suggestion:hover {

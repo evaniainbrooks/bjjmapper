@@ -14,7 +14,7 @@
         %button.btn.btn-default.btn-sm{:'data-cancel-edit' => true } Cancel
         %button.btn.btn-primary.btn-sm{:type => 'submit'} Save
   .row
-    .col-md-2.text-center.center-block
+    .col-md-2.col-xs-4.text-center.center-block{:style => 'padding-right: 0px;'}
       %img.logo{:src => event.image, :alt => event.title}/
       %br/
       %p.text-small.small.text-muted= "last updated #{distance_of_time_in_words_to_now(event.updated_at)} ago"
@@ -129,6 +129,7 @@
         %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes
 
 = content_for(:scripts) do
+  = javascript_include_tag 'map'
   :coffeescript
     $(document).ready ->
       eventModel = new RollFindr.Models.Event(#{render_json(event)})

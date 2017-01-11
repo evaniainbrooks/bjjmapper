@@ -55,6 +55,10 @@ class Event
   field :event_type, type: Integer, default: EVENT_TYPE_CLASS 
   field :source, type: String
 
+  field :lat
+  field :lng
+  field :country
+
   default_scope -> { where(:event_type.ne => EVENT_TYPE_SUBEVENT).asc(:starting) }
 
   scope :before_time, ->(time) { where(:ending.gte => time) }
@@ -87,6 +91,7 @@ class Event
 
   field :schedule
 
+  before_save :set_coordinates
   before_save :set_event_type
   before_save :create_schedule
   before_save :serialize_schedule
@@ -188,5 +193,11 @@ class Event
       self.event_type = EVENT_TYPE_SUBEVENT
       self.schedule = nil
     end
+  end
+
+  def set_coordinates
+    self.lat = self.location.lat
+    self.lng = self.location.lng
+    self.country = self.location.country
   end
 end

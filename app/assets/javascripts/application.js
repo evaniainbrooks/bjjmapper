@@ -32,8 +32,9 @@
 //= require bootstrap-datetimepicker
 //= require ext
 //= require readmore.min
-//= require richmarker
 //= require_tree .
+//= stub_tree ./backbone/views/map
+//= stub map
 //= stub calendar
 //= require_self
 

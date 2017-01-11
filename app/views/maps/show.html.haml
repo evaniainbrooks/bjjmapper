@@ -19,6 +19,7 @@
 = render partial: 'locations/create_modal_small'
 .directions-dialog-container
 - content_for :scripts do
+  = javascript_include_tag 'map'
   :javascript
     $(document).ready(function() {
       var mapModel = new RollFindr.Models.Map(#{render_json(map)});

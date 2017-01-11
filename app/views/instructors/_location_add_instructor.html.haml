@@ -1,32 +1,23 @@
 - new_instructor = User.new(locations: [location]).decorate
-.tab-content
-  %div.tab-pane#create-instructor
-    = form_for([location, new_instructor], url: location_instructors_path(location), html: { class: 'form editable edit-mode' }) do |f|
-      .container-fluid
-        .row
-          .col-md-4
-            %div.text-center
-              %img.center-block{:style => 'max-width: 150px', :alt => "default profile image", :src => image_path(UserDecorator::DEFAULT_IMAGE)}
-              %p.text-info.small Note: You can upload an image on the next page.
-          .col-md-8
-            = render partial: 'users/edit_table', :locals => { :f => f, :user => new_instructor, :show_biography => false }
+.editable
+  .display-field
+    %form{:action => location_instructors_path(location), :method => 'POST'}
+      = hidden_field_tag :location_id, location.id
+      = hidden_field_tag :authenticity_token, form_authenticity_token
+      = text_field_tag :name, nil, class: 'typeahead instructor-name form-control input-md'
+      = hidden_field_tag :id, nil
+      %br/
+      %br/
+      %button.pull-right.btn.btn-primary{:type => 'submit'}
+        Add Instructor
+    %br.clear.clear-fix/
+
+  .edit-field
+    = form_for([location, new_instructor], url: location_instructors_path(location)) do |f|
+      = render partial: 'users/edit_table', :locals => { :f => f, :user => new_instructor, :show_biography => false }
       .modal-footer
-        %button.btn.btn-default{'data-dismiss' => 'modal'}
+        %button.btn.btn-default{'data-cancel-edit' => true}
           Cancel
         %button.btn.btn-primary{:type => 'submit'}
           Create Instructor
 
-  %div.tab-pane.active#existing-instructor
-    %form{:action => location_instructors_path(location), :method => 'POST'}
-      .container-fluid
-        %img.center-block.img-block{:style => 'max-width: 150px', 'data-default-src' => '//storage.googleapis.com/bjjmapper/default-user-250.png', 'src' => '//storage.googleapis.com/bjjmapper/default-user-250.png'}
-        %br/
-        = hidden_field_tag :location_id, location.id
-        = hidden_field_tag :authenticity_token, form_authenticity_token
-        = select_tag :id, grouped_options_for_select(all_instructors_select_groups), include_blank: true, class: 'instructor-name form-control input-md'
-        %br/
-      .modal-footer
-        %button.btn.btn-default{'data-dismiss' => 'modal'}
-          Cancel
-        %button.btn.btn-primary{:type => 'submit'}
-          Add Instructor

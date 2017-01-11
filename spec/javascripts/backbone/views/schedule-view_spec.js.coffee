@@ -2,7 +2,7 @@
 #= require backbone/rollfindr
 #= require backbone/models/location
 #= require backbone/views/schedule-view
-#= require backbone/views/create-event-view
+#= require backbone/views/events/create-event-view
 
 describe 'Views.ScheduleView', ->
   model = new RollFindr.Models.Location({id: '123'})

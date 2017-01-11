@@ -1,4 +1,4 @@
-#= require backbone/views/create-event-view
+#= require backbone/views/events/create-event-view
 
 class RollFindr.Views.LocationNearbyView extends Backbone.View
   el: $('.nearby-locations')

@@ -1,7 +1,7 @@
 //= require backbone/views/add-instructor-view
 //= require backbone/views/schedule-view
-//= require backbone/views/location-nearby-view
-//= require backbone/views/location-reviews-view
+//= require backbone/views/locations/location-nearby-view
+//= require backbone/views/locations/location-reviews-view
 //= require backbone/views/map/map_view
 
 +function($) {

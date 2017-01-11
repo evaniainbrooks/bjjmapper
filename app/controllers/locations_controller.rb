@@ -1,11 +1,11 @@
 class LocationsController < ApplicationController
   include LocationsHelper
 
-  before_action :set_location, only: [:favorite, :schedule, :destroy, :show, :update, :move, :unlock, :close]
+  before_action :set_location, only: [:favorite, :schedule, :destroy, :show, :update, :move, :unlock, :close, :remove_image]
   before_action :redirect_legacy_bsonid, only: [:schedule, :show]
   before_action :set_map, only: :show
-  before_action :ensure_signed_in, only: [:wizard, :destroy, :create, :update, :move, :unlock, :close]
-  before_action :check_permissions, only: [:destroy, :update, :move, :unlock, :close]
+  before_action :ensure_signed_in, only: [:wizard, :destroy, :create, :update, :move, :unlock, :close, :remove_image]
+  before_action :check_permissions, only: [:destroy, :update, :move, :unlock, :close, :remove_image]
 
   decorates_assigned :location, :locations, :with => LocationFetchServiceDecorator
 
@@ -128,6 +128,23 @@ class LocationsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to root_path }
       format.json { render status: :ok, partial: 'location' }
+    end
+  end
+  
+  def remove_image
+    tracker.track('removeLocationImage',
+      id: @location.to_param,
+      image: @location.image
+    )
+
+    @location.update!({
+      :image => nil,
+      :image_large => nil,
+      :image_tiny => nil
+    })
+
+    respond_to do |format|
+      format.json { render partial: 'locations/location' }
     end
   end
 

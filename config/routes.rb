@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   namespace :api do
     resources :locations, only: [:index, :create]
+    resources :reviews, only: [:index, :create]
   end
   
   namespace :admin do
@@ -18,7 +19,7 @@ Rails.application.routes.draw do
     resources :templates, only: [:show]
   end
 
-  resources :users, :only => [:index, :show, :create, :update, :destroy] do
+  resources :users, :path => '/people', :only => [:index, :show, :create, :update, :destroy] do
     post :remove_image, on: :member
     resources :users, controller: :students, as: :students, path: '/students', only: [:create, :destroy, :index]
     resources :events, controller: :user_events, only: [:index]
@@ -30,18 +31,19 @@ Rails.application.routes.draw do
   end
 
   resource :geocoder, only: [:show]
+  resource :search, only: [:show], controller: :search
 
   resources :locations, only: [:create, :destroy, :update, :show] do
     post :favorite, on: :member
     get :wizard, on: :collection
     get :recent, on: :collection
     get :nearby, on: :collection
-    get :search, on: :collection, controller: :search_locations, action: 'show'
     get :schedule, on: :member
 
     post :move, on: :member
     post :unlock, on: :member
     post :close, on: :member
+    post :remove_image, on: :member
 
     resource :status, controller: :location_statuses, only: [] do
       put :verify, on: :member

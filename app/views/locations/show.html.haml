@@ -26,6 +26,10 @@
           %img{:width => 100, :height => 100, :src => location.image, :class => 'logo center-block'}/
         .edit-field
           %img{:width => 100, :height => 100, :src => location.image, :class => 'logo center-block edit-image'}/
+          %br/
+          %input{:'data-url' => upload_image_location_path(location), :'data-upload-avatar' => true, :type => 'file', :class => 'input-md form-control'}/
+          - if location.object.image.present?
+            %input{:'data-url' => remove_image_location_path(location), :'data-clear-avatar' => true, :type => 'button', :value => 'Remove Image', :class => 'btn btn-default btn-small btn-block'}/
         .rating-container
           = render partial: 'rating', :locals => { location: location }
         .display-field.small.text-center-center-block= render partial: 'favorite_button', :locals => { location: location }
@@ -71,7 +75,8 @@
           Add Instructor
         .clear.items
         .empty-message
-          %i.text-muted We don't know who teaches at this academy
+          %i.text-muted We don't know who teaches at this academy.
+          %a.add-instructor{href: 'javascript:void(0)'} Do you?
         %br/
         -#= render :partial => 'locations/instructors', :locals => { :location => location }
       .col-md-8
@@ -117,11 +122,10 @@
   = render :partial => 'metadata_dialog', locals: { location: location }
 = content_for(:scripts) do
   = javascript_include_tag 'calendar'
+  = javascript_include_tag 'map'
   :coffeescript
     $(document).ready ->
       mapView = new RollFindr.Views.LocationShowView({ editable: #{edit_mode?}, model: #{render_json(location)}, mapModel: #{render_json(@map)}, el: $('.show-location')})
-
-= content_for(:scripts) do
   = render partial: 'facebook_sdk'
 
 = content_for(:head) do

@@ -48,7 +48,6 @@ group :development do
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rvm', require: false
   gem 'rack-mini-profiler'
-  gem 'flamegraph'
 end
 
 group :test, :development do

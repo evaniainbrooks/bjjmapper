@@ -1,31 +1,9 @@
-- if local_assigns[:f]
-  -# f.select :lineal_parent_id, grouped_options_for_select(all_instructors_select_groups, user.lineal_parent.try(:id)), {include_blank: true}, class: 'form-control'
-  %input.lineage.typeahead.form-control.input-md.edit-field{type: 'text', placeholder: user.lineal_parent.try(:name), value: user.lineal_parent.try(:name)}/
-  %input.edit-field{name: 'user[lineal_parent_id]', type: 'hidden', value: user.lineal_parent_id}/
+%input.lineage.typeahead.form-control.input-md.edit-field{type: 'text', placeholder: user.lineal_parent.try(:name), value: user.lineal_parent.try(:name)}/
+%input.edit-field{name: 'user[lineal_parent_id]', type: 'hidden', value: user.lineal_parent_id}/
 
 = content_for(:scripts) do
-  = javascript_include_tag 'typeahead.bundle.min.js'
   :javascript
-    var userNames = new Bloodhound({
-      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-      queryTokenizer: Bloodhound.tokenizers.whitespace,
-      identify: function(o) { return o.name; },
-      sufficient: 2,
-      prefetch: Routes.users_path({ format: 'json', rank: 'black' }),
-      remote: {
-        url: Routes.users_path({ format: 'json', query: 'QQQUERY' }),
-        wildcard: 'QQQUERY'
-      }
-    });
-
     $(document).ready(function() {
-      var options = { minLength: 3 };
-      $('.lineage.typeahead').typeahead(options, {
-        name: 'user-names',
-        display: 'name',
-        source: userNames
-      }).bind('typeahead:selected', function(e, datum, name) {
-        $('[name="user[lineal_parent_id]"]').val(datum.id)
-      }); 
+      var autocomplete = new RollFindr.Views.UserAutocompleteView({target: $('[name="user[lineal_parent_id]"]'), el: $('.typeahead.lineage')});
     });
 	

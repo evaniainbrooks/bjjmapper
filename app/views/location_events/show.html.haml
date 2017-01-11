@@ -11,3 +11,6 @@
     = render partial: 'show_seminar'
   - when Event::EVENT_TYPE_TOURNAMENT
     = render partial: 'show_tournament'
+
+= content_for(:scripts) do
+  = javascript_include_tag 'map'

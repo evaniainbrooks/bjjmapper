@@ -1,5 +1,5 @@
-#= require backbone/views/create-event-view
-#= require backbone/views/move-event-view
+#= require backbone/views/events/create-event-view
+#= require backbone/views/events/move-event-view
 
 class RollFindr.Views.ScheduleView extends Backbone.View
   createEventView: null
@@ -17,7 +17,8 @@ class RollFindr.Views.ScheduleView extends Backbone.View
       'calendarEventRender',
       'calendarEventClick'
 
-    RollFindr.GlobalEvents.on('editing', @initializeCalendarView)
+    if @editable?
+      RollFindr.GlobalEvents.on('editing', @initializeCalendarView)
 
     @createEventView = new RollFindr.Views.CreateEventView()
     @moveEventView = new RollFindr.Views.MoveEventView()

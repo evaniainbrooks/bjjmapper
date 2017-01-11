@@ -7,7 +7,28 @@
           %img.center-block{:style => 'max-width: 150px', :alt => "default profile image", :src => image_path(UserDecorator::DEFAULT_IMAGE)}
           %p.text-info.small Note: You can upload an image on the next page.
       .col-md-8
-        = render partial: 'users/edit_table', :locals => { :f => f, :user => new_instructor, :show_biography => false }
+        %table.table.table-user-information.edit-field
+          %tbody
+            %tr
+              %td.text-muted.text-right Name
+              %td
+                .edit-field.form-group
+                  = f.text_field :name, class: 'form-control input-lg'
+            %tr
+              %td.text-muted.text-right Nickname
+              %td
+                .edit-field.form-group
+                  = f.text_field :nickname, class: 'form-control input-lg'
+            %tr
+              %td.text-muted.text-right Rank
+              %td
+                .edit-field.form-group
+                  = f.select :belt_rank, options_for_select(belt_ranks, user.belt_rank), {}, class: 'form-control input-md'
+                .edit-field.form-group
+                  = f.select :stripe_rank, options_for_select(stripe_ranks, user.stripe_rank), {}, class: 'form-control input-md'
+            %tr
+              %td.text-muted.text-right Lineage
+              %td= render partial: 'users/lineage', locals: { :f => f, :user => user }
   .modal-footer
     %button.btn.btn-default{'data-dismiss' => 'modal'}
       Cancel

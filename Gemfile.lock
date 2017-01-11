@@ -132,7 +132,6 @@ GEM
       multipart-post (>= 1.2, < 3)
     ffi (1.9.3)
     ffi (1.9.3-java)
-    flamegraph (0.9.5)
     formatador (0.2.5)
     geocoder (1.2.0)
     google-analytics-rails (0.0.5)
@@ -442,7 +441,6 @@ DEPENDENCIES
   ejs
   exception_notification
   factory_girl_rails
-  flamegraph
   geocoder
   google-analytics-rails
   guard-rspec (~> 4.3.1)

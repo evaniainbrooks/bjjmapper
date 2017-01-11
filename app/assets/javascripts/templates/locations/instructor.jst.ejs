@@ -1,34 +1,37 @@
-<div class="card instructor-card">
-  <button class="edit-field close remove-instructor" aria-hidden="true" type="button" data-id="<%= instructor.id %>">&times;</button>
-  <a class="thumbnail" data-user-id="<%= instructor.id %>" href="<%= Routes.user_path(instructor) %>">
-    <% if (instructor.thumbnailx && instructor.thumbnaily) { %>
-      <div class="avatar pull-left" style="background: url('<%= instructor.image %>') top -<%= instructor.thumbnaily %>px left -<%= instructor.thumbnailx %>px no-repeat"></div>
+<div class="card user-card">
+  <button class="edit-field close remove-user" aria-hidden="true" type="button" data-id="<%= user.id %>">&times;</button>
+  <a class="thumbnail" data-user-id="<%= user.id %>" href="<%= Routes.user_path(user) %>">
+    <% if (user.thumbnailx && user.thumbnaily) { %>
+      <div class="avatar pull-left" style="background: url('<%= user.image %>') top -<%= user.thumbnaily %>px left -<%= user.thumbnailx %>px no-repeat"></div>
     <% } else { %>
-      <div class="avatar pull-left" style="background: url('<%= instructor.image %>') top center no-repeat"></div>
+      <div class="avatar pull-left" style="background: url('<%= user.image %>') top center no-repeat"></div>
     <% } %>
     <div class="caption">
       <div class="small">
-      <% if (instructor.full_lineage.length > 0) { %>
-      <% _.each(instructor.full_lineage, function(o) { %>
+      <% if (user.full_lineage.length > 0) { %>
+      <% _.each(user.full_lineage, function(o) { %>
         <%= o.name %> &raquo;
       <% }) %>
       <% } else { %>
         <i class="text-danger">(Unknown Lineage) &raquo;</i>
       <% } %>
       </div>
-      <h3><%= instructor.name %></h3>
-      <div class="belt-<%= instructor.belt_rank %> belt">
+      <h3>
+        <%= user.name %>
+        <small><%= user.nickname %></small>
+      </h3>
+      <div class="belt-<%= user.belt_rank %> belt">
         <b class="pull-left small">
-          <%= instructor.rank_in_words %>
+          <%= user.rank_in_words %>
         </b>
-        <div class="grade-<%= instructor.stripe_rank %> grade">
-          <% _.times(instructor.stripe_rank, function() { %>
+        <div class="grade-<%= user.stripe_rank %> grade">
+          <% _.times(user.stripe_rank, function() { %>
             <span class="stripe"></span>
           <% }) %>
         </div>
       </div>
       <p>
-        <%= instructor.summary %>
+        <%= user.summary %>
       </p>
     </div>
   </a>

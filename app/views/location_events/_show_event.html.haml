@@ -31,7 +31,7 @@
     .col-md-12
       = render partial: 'locations/edit_success_message' if edit_success?
   .row
-    .col-md-2.text-center.center-block
+    .col-md-2.col-xs-4.text-center.center-block{:style => 'padding-right: 0px;'}
       %img{:src => event.location.image, :alt => event.location.title}/
     .col-md-6.display-field
       %h1
@@ -83,6 +83,7 @@
         %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes
   
 = content_for(:scripts) do
+  = javascript_include_tag 'map'
   :coffeescript
     $(document).ready ->
       eventModel = new RollFindr.Models.Event(#{render_json(event)})

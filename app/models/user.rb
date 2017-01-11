@@ -7,9 +7,7 @@ class User
   include Mongoid::Slug
   include Geocoder::Model::Mongoid
   include Mongoid::Timestamps
-
   include Mongoid::History::Trackable
-  include MongoidSearchExt::Search
   
   extend MongoidSearchExt::Search
 
@@ -171,6 +169,14 @@ class User
     return false if user.anonymous?
 
     !self.flag_locked? || user.id.eql?(self.id)
+  end
+
+  def lat
+    self.coordinates.try(:[], 1)
+  end
+  
+  def lng
+    self.coordinates.try(:[], 0)
   end
 
   def jitsuka?
