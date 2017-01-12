@@ -85,7 +85,14 @@ html, body {
     top: 0px;
     left: 0px;
     margin-bottom: 0px !important;
+    form {
+      margin-top: 2px !important;
+    }
   }
+}
+
+.navbar form {
+  margin-top: 2px;
 }
 
 .page {

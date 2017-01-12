@@ -50,7 +50,7 @@ class RollFindr.Views.NavbarView extends Backbone.View
             div.appendChild(document.createTextNode(o.title))
             div
 
-          header: '<small class="tt-suggestion-header"><span class="fa fa-dot-circle-o"></span> Locations</small>'
+          header: '<small class="tt-suggestion-header"><span class="fa fa-dot-circle-o"></span> Academies</small>'
         }
       },
       {
@@ -74,7 +74,7 @@ class RollFindr.Views.NavbarView extends Backbone.View
             div = document.createElement("div")
             div.appendChild(document.createTextNode(o.name))
             div
-          header: '<small class="tt-suggestion-header"><span class="fa fa-user"></span> Users</small>'
+          header: '<small class="tt-suggestion-header"><span class="fa fa-user"></span> People</small>'
         }
       },
       {

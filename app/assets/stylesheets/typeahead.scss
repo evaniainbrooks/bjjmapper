@@ -57,11 +57,14 @@
 
 .tt-suggestion-header {
   padding-right: 5px;
+  padding-top: 3px;
+  padding-bottom: 3px;
   font-weight: bold;
   color: white;
   background-color: #333;
   text-align: center;
   display: block;
+  text-transform: uppercase;
 }
 
 .tt-suggestion:hover {
