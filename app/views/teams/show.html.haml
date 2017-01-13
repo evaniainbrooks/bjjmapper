@@ -9,12 +9,12 @@
 .container.page.show-team
   = form_for(team, html: { class: 'form ' + edit_mode_classes }) do |f|
     .row
-      .col-md-10= render partial: 'breadcrumb', locals: { team: team }
+      .col-md-10.hidden-xs= render partial: 'breadcrumb', locals: { team: team }
       .col-md-2.text-right= render partial: 'edit_controls', locals: { team: team }
     .row
       .col-md-12= render partial: 'teams/create_message' if created?
     .row
-      .col-md-2{:style => 'padding-right: 0px;'}
+      .col-md-2.col-xs-4{:style => 'padding-right: 0px;'}
         .display-field
           %img.center-block.profile{:src => team.image}
         .edit-field
@@ -23,7 +23,7 @@
           %input{:'data-url' => upload_image_team_path(team), :'data-upload-avatar' => true, :type => 'file', :class => 'input-md form-control'}/
           - if team.object.image.present?
             %input{:'data-url' => remove_image_team_path(team), :'data-clear-avatar' => true, :type => 'button', :value => 'Remove Image', :class => 'btn btn-default btn-small btn-block'}/
-      .col-md-6
+      .col-md-6.col-xs-8
         .edit-field
           = f.label :name, class: 'small'
           = f.text_field :name, placeholder: 'Name of the team/association (eg. Alliance)', class: 'form-control input-lg'
@@ -51,9 +51,9 @@
     - if team.locations.count > 0
       %br/
       .row
-        .col-md-10
+        .col-md-9.col-xs-6
           %h3= "#{pluralize(team.locations.count, 'Academy')}"
-        .col-md-2.text-right
+        .col-md-3.text-right.col-xs-6
           = link_to wizard_locations_path(ref: 'tdp', team: team.id), style: 'margin-top: -5px', class: 'btn btn-success' do
             %i.fa.fa-map-marker
             Create Academy

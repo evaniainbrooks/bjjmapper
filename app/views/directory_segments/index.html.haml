@@ -7,10 +7,10 @@
       %h1
         = title
         %span.small= "#{Location.verified.academies.count} academies and #{Event.count} events"
-  .row
+  .row.hidden-xs
     .col-md-12
       = render partial: 'breadcrumb'
-  .row
+  .row.hidden-xs
     .col-md-3
       %h3.h4
         %span.fa.fa-plus-square

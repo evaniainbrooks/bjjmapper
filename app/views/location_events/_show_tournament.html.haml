@@ -36,7 +36,6 @@
       = f.label :description, class: 'small text-muted upcase'
       = f.text_area :description, class: 'input-md form-control'
     .col-md-3.display-field
-      %h3.hidden-md.hidden-lg.hidden-xl Contact
       - if event.organization.try(:email).present?
         %span.display-field
           %b.small.text-muted.upcase Email
