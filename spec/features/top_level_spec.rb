@@ -20,14 +20,12 @@ feature "Top Level Pages" do
   scenario "user visits the map" do
     visit map_path
     expect(page).to have_selector('.map-canvas')
-    expect(page).to have_selector('[data-show-map]')
   end
   scenario "user visits the directory" do
     create(:directory_segment)
     create(:team)
     visit directory_index_path
     expect(page).to have_selector('.directory')
-    expect(page).not_to have_selector('[data-show-map]')
   end
   scenario "user visits the meta page" do
     visit meta_path

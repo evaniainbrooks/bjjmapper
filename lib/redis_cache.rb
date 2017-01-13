@@ -5,7 +5,16 @@ class Redis
     expire = params[:expire] || nil 
     timeout = params[:timeout] || 0 
     default = params[:default] || nil 
-    yaml_value = if (value = get(key)).nil? || recalculate
+    
+    value = nil
+    begin
+      value = get(key)
+    rescue StandardError => e
+      ::Rails.logger.error(e)
+      return default 
+    end
+    
+    yaml_value = if value.nil? || recalculate
       begin 
         value = Timeout::timeout(timeout) { yield(self) }
       rescue Timeout::Error 
