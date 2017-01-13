@@ -1,14 +1,7 @@
 class RollFindr.Views.NavbarView extends Backbone.View
   el: $('.navbar')
   tagName: 'div'
-  events: {
-    'click [data-geolocate]': 'geolocateMap'
-    'click [data-show-list]': 'scrollToList'
-    'click [data-show-map]': 'scrollToMap'
-  }
   initialize: ->
-    _.bindAll(this, 'geolocateMap', 'scrollToList', 'scrollToMap')
-    
     globalSearch = new Bloodhound({
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace('title'),
       queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -93,15 +86,4 @@ class RollFindr.Views.NavbarView extends Backbone.View
     el.bind 'typeahead:selected', (e, datum, name)->
       window.location = datum.url
 
-  geolocateMap: ->
-    @$('[name="geoquery"]').val('')
-    RollFindr.GlobalEvents.trigger('geolocate')
 
-  scrollToList: ->
-    $('html, body').animate({
-      scrollTop: $('.map-list-view').offset().top - @$el.height()
-    }, 1000)
-  scrollToMap: ->
-    $('html, body').animate({
-      scrollTop: 0
-    }, 1000)

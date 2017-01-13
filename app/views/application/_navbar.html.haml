@@ -11,19 +11,7 @@
         %img{:src => 'https://storage.googleapis.com/bjjmapper/logo.png', :style => 'margin-top: -17px; width: 60px; height: 60px'}/
       .col-md-10.col-xs-7
         %form{:role => "search"}
-          %input.input-lg.form-control{:name => 'query', :size => '25', :placeholder => "eg. New York, Gracie Barra", :type => "text", :value => params[:query]}/
-          -#%button.btn.btn-default{'data-nodisable' => true, :type => "submit"} Go
-          -#%a.btn.btn-default{'data-geolocate' => 'true', :href => '#geolocate'}
-            %i.fa.fa-location-arrow
-          -# link_to wizard_locations_path(ref: 'nav'), class: 'btn btn-success' do
-            %i.fa.fa-map-marker
-            Create Academy
-      - if controller?(:maps)
-        .btn-group.pull-left{:role => 'group'}
-          %button.navbar-toggle.btn{'data-toggle' => 'button', 'style' => 'color: white; margin-right: 0px; margin-left: 15px', 'data-show-list' => true}
-            %span List
-          %button.navbar-toggle.btn{'data-toggle' => 'button', 'style' => 'color: white', 'data-show-map' => true}
-            %span Map
+          %input.input-lg.form-control{:name => 'query', :size => '25', :placeholder => "eg. Gracie, New York", :type => "text", :value => params[:query]}/
     / Collect the nav links, forms, and other content for toggling
     .main-navbar-collapse.collapse.navbar-collapse
       %ul.nav.navbar-nav
