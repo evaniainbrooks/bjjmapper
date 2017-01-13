@@ -28,6 +28,6 @@ class Redis
       value
     end 
 
-    YAML::load(yaml_value)
+    yaml_value.nil? ? nil : YAML::load(yaml_value)
   end 
 end
