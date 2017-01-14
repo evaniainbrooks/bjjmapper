@@ -59,8 +59,7 @@ class LocationsController < ApplicationController
       count: count
     )
 
-    cache_key = ['Recent', count].compact.collect(&:to_s).join('-')
-    @locations = RollFindr::Redis.cache(expire: 1.hour.seconds, key: cache_key) do
+    @locations = RollFindr::Redis.cache(expire: 1.hour.seconds, key: recent_cache_key(count)) do
       Location.academies.verified.desc('created_at').limit(count).to_a
     end
 
@@ -161,6 +160,8 @@ class LocationsController < ApplicationController
     tracker.track('createLocation',
       location: @location.attributes.as_json({})
     )
+
+    RollFindr::Redis.del(recent_cache_key(RECENT_COUNT_DEFAULT))
 
     respond_to do |format|
       format.json
@@ -263,6 +264,10 @@ class LocationsController < ApplicationController
   
   def error?
     return params.fetch(:error, 0).to_i.eql?(1)
+  end
+
+  def recent_cache_key(count)
+    cache_key = ['Recent', count].compact.collect(&:to_s).join('-')
   end
 
   def set_map

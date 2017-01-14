@@ -290,6 +290,11 @@ describe LocationsController do
           response.should redirect_to(location_path(Location.last, edit: 1, create: 1))
         end.to change { Location.count }.by(1)
       end
+      it 'expires the recent review cache' do
+        Redis.any_instance.should_receive(:del).with(controller.send(:recent_cache_key, LocationsController::RECENT_COUNT_DEFAULT))
+
+        post :create, create_params, session_params
+      end
       context 'with json format' do
         it 'creates and returns a new location' do
           post :create, create_params.merge(format: 'json'), session_params

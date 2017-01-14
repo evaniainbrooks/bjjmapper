@@ -4,7 +4,7 @@ class SearchController < ApplicationController
 
     head :bad_request and return false unless query.present?
 
-    @geocoder_results = GeocodersHelper.search(query)
+    @addresses = GeocodersHelper.search(query)
     @locations = begin
       ids = Location.search_ids(query)
       Location.verified.where(:_id.in => ids)
@@ -23,12 +23,12 @@ class SearchController < ApplicationController
     tracker.track('search',
       query: query,
       locations: @locations.count,
-      addresses: @geocoder_results.count,
+      addresses: @addresses.count,
       users: @users.count,
       teams: @teams.count
     )
 
-    @responses = [@geocoder_results, @locations, @users, @teams].zip(['address', 'location', 'user', 'team']).inject([]) do |a, e|
+    @responses = [@addresses, @locations, @users, @teams].zip(['address', 'location', 'user', 'team']).inject([]) do |a, e|
       a.push({ results: e[0], name: e[1] })
       a
     end
