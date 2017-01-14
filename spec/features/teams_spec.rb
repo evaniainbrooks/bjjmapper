@@ -19,6 +19,8 @@ feature "Teams Pages" do
   end
 
   scenario 'user visits a team with locations detail page' do
+    pending 'locations are now ajax loaded'
+
     Team.create(name: 'Test Team', description: 'Test Description')
     Location.create(title: 'Location 123', city: 'Prague', country: 'CZ', team: Team.last)
 

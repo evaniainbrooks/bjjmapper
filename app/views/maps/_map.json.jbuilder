@@ -1,6 +1,7 @@
 json.lat map.lat
 json.lng map.lng
 json.zoom map.zoom
+json.distance map.distance
 json.query map.query
 json.geoquery map.geoquery
 json.refresh map.refresh

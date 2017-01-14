@@ -1,8 +1,8 @@
 class Map
-  ZOOM_DEFAULT = 12
-  ZOOM_LOCATION = 15
-  ZOOM_CITY = 9
   ZOOM_HOMEPAGE = 7
+  ZOOM_CITY = 9
+  ZOOM_LOCATION = 15
+  ZOOM_DEFAULT = ZOOM_CITY
 
   DEFAULT_MIN_ZOOM = 5
   GLOBAL_MIN_ZOOM = 4
@@ -12,11 +12,12 @@ class Map
   DEFAULT_COUNT = 50
   DEFAULT_EVENT_START_OFFSET = 15.days
   DEFAULT_EVENT_END_OFFSET = 1.year
+  DEFAULT_SEARCH_DISTANCE = 10.0
 
   attr_accessor :event_start, :event_end
   attr_accessor :count, :offset # for pagination
   attr_accessor :location_count, :event_count # results count
-  attr_accessor :lat, :lng, :segment
+  attr_accessor :lat, :lng, :segment, :distance
   attr_accessor :zoom, :query
   attr_accessor :geoquery, :query
   attr_accessor :minZoom, :geolocate, :sort
@@ -28,6 +29,7 @@ class Map
   def initialize(options = {})
     @zoom = options.fetch(:zoom, ZOOM_DEFAULT)
     @minZoom = options.fetch(:minZoom, DEFAULT_MIN_ZOOM)
+    @distance = options.fetch(:distance, nil)
     @geolocate = options.fetch(:geolocate, 1)
     @locations = options.fetch(:locations, [])
     @refresh = options.fetch(:refresh, 0)

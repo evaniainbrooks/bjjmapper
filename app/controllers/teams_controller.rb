@@ -103,6 +103,7 @@ class TeamsController < ApplicationController
       lat: 50.0,
       lng: 0.0,
       team: [@team.id.to_s],
+      distance: 10000.0,
       zoom: 2,
       minZoom: 2,
       geolocate: 0,
