@@ -285,6 +285,8 @@ describe LocationsController do
     context 'when signed in' do
       let(:session_params) { { user_id: create(:user).to_param } }
       it 'creates and redirects to a new location in edit mode' do
+        Redis.any_instance.stub(:del)
+
         expect do
           post :create, create_params, session_params
           response.should redirect_to(location_path(Location.last, edit: 1, create: 1))
