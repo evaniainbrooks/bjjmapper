@@ -298,9 +298,9 @@ describe LocationsController do
         post :create, create_params, session_params
       end
       context 'with json format' do
-        Redis.any_instance.stub(:del)
-
         it 'creates and returns a new location' do
+          Redis.any_instance.stub(:del)
+          
           post :create, create_params.merge(format: 'json'), session_params
           assigns[:location].title.should eq create_params[:location][:title]
         end
