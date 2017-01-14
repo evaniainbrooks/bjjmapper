@@ -23,6 +23,7 @@
           %input{:'data-url' => upload_image_team_path(team), :'data-upload-avatar' => true, :type => 'file', :class => 'input-md form-control'}/
           - if team.object.image.present?
             %input{:'data-url' => remove_image_team_path(team), :'data-clear-avatar' => true, :type => 'button', :value => 'Remove Image', :class => 'btn btn-default btn-small btn-block'}/
+        %br/
       .col-md-6.col-xs-8
         .edit-field
           = f.label :name, class: 'small'
@@ -38,6 +39,7 @@
           = f.label :description, class: 'small'
           = f.text_area :description, placeholder: 'Provide a description of the team/association', class: 'form-control', rows: 4
         .display-field= simple_format(team.description)
+        %br/
       .col-md-4.instructors
         %h3.pull-left Head Instructors
         %a{:name => 'instructor'}
@@ -48,18 +50,11 @@
         .empty-message
           %i.text-muted We don't know who the head instructors are 
         %br/
-    - if team.locations.count > 0
-      %br/
-      .row
-        .col-md-9.col-xs-6
-          %h3= "#{pluralize(team.locations.count, 'Academy')}"
-        .col-md-3.text-right.col-xs-6
-          = link_to wizard_locations_path(ref: 'tdp', team: team.id), style: 'margin-top: -5px', class: 'btn btn-success' do
-            %i.fa.fa-map-marker
-            Create Academy
-      .row
-        .col-md-12
-          = render partial: 'directory_segments/table', locals: { locations: team.locations, exclude: [:team] }
+    .row
+      .col-md-10
+        = render partial: 'maps/map', locals: { height: 250, show_create: false }
+      .col-md-2
+        = render partial: 'maps/filter_list'
     %hr.edit-field/
     .row.edit-field.edit-control
       .col-md-12
@@ -85,8 +80,10 @@
   = render :partial => 'instructors/add_instructor_dialog'
 
 = content_for(:scripts) do
+  = javascript_include_tag 'map'
   :coffeescript
     $(document).ready ->
       model = new RollFindr.Models.Team(#{render_json(team)})
-      instructorView = new RollFindr.Views.LocationInstructorsView({ model: model })
+      mapModel = new RollFindr.Models.Map(#{render_json(map)})
+      mapView = new RollFindr.Views.TeamShowView(mapModel: mapModel, model: model)
 

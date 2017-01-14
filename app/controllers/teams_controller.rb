@@ -9,6 +9,7 @@ class TeamsController < ApplicationController
   decorates_assigned :team, :teams
 
   helper_method :created?
+  helper_method :map
 
   def new
     @team = Team.new
@@ -94,6 +95,20 @@ class TeamsController < ApplicationController
   end
 
   private
+  
+  def map
+    @_map ||= Map.new(
+      location_type: [Location::LOCATION_TYPE_ACADEMY],
+      event_type: [],
+      lat: 50.0,
+      lng: 0.0,
+      team: [@team.id.to_s],
+      zoom: 2,
+      minZoom: 2,
+      geolocate: 0,
+      refresh: 0
+    )
+  end
 
   def check_permissions
     if request.delete?

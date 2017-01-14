@@ -175,6 +175,7 @@ class RollFindr.Views.MapView extends Backbone.View
     @fetchMap(_.extend({
       location_type: @model.get('location_type')
       event_type: @model.get('event_type')
+      team: @model.get('team')
       lat: lat
       lng: lng
       segment: @model.get('segment')
