@@ -8,9 +8,11 @@ class RollFindr.Views.UserAutocompleteView extends Backbone.View
   template: JST['templates/locations/instructor']
   initialize: (options)->
     _.bindAll(this, 'userSelected')
+
+    @target = options.target if options.target?
   
-    options = { minLength: 3 };
-    @$el.typeahead(options, {
+    ttOpts = { minLength: 3 };
+    @$el.typeahead(ttOpts, {
       name: 'user-names',
       display: 'name',
       source: window.UserNamesAutocomplete
