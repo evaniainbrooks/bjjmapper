@@ -69,6 +69,7 @@
       .row
         .col-md-12
           %h3 Media
+          %a{:name => 'media'}
           - location.small_photos.take(10).each do |url|
             %div.media-thumbnail
               %a{:target => '_blank', :href => url.gsub(/w100/, 'w1000')}
