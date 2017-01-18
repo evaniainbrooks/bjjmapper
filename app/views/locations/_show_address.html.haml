@@ -19,6 +19,15 @@
         = surround '(', ')' do
           %span.fa.fa-search-plus
           View on larger map
+%p.small
+  - if location.google_address.present?
+    %a.text-success{:href => '#', :'data-toggle' => 'tooltip', :'data-placement' => 'bottom', :title => "Google address match: #{location.google_address}"}
+      %span.fa.fa-google
+      = "(#{location.google_error}%)"
+  - if location.yelp_address.present?
+    %a.text-success{:href => '#', :'data-toggle' => 'tooltip', :'data-placement' => 'bottom', :title => "Yelp address match: #{location.yelp_address}"}
+      %span.fa.fa-yelp
+      = "(#{location.yelp_error}%)"
 %p.display-field.directions
   = location.directions
 

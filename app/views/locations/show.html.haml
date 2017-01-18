@@ -64,7 +64,15 @@
           - more_schools = [location.city, location.state || location.country].compact.join(', ')
           = link_to map_path(ref: 'loc_dp', geoquery: more_schools), title: "Brazilian Jiu-Jitsu schools in #{more_schools}" do
             %p See more Brazilian Jiu-Jitsu schools in #{more_schools}
-
+    - if location.small_photos.present?
+      %hr/
+      .row
+        .col-md-12
+          %h3 Media
+          - location.small_photos.take(10).each do |url|
+            %div.media-thumbnail
+              %a{:target => '_blank', :href => url.gsub(/w100/, 'w1000')}
+                %img.img-rounded{:src => url}/
     %hr/
     .row
       .col-md-4.instructors

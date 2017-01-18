@@ -81,7 +81,7 @@ class LocationDecorator < Draper::Decorator
   end
 
   def address
-    object.address.split(',',2).join(h.tag(:br)).html_safe
+    h.format_address(object.address) 
   end
 
   def image

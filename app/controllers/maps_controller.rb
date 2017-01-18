@@ -214,7 +214,7 @@ class MapsController < ApplicationController
   def map
     geolocate = @lat.blank? || @lng.blank? ? 1 : 0
 
-    default_zoom = @lat.present? && @lng.present? ? Map::ZOOM_LOCATION : Map::ZOOM_DEFAULT
+    default_zoom = Map::ZOOM_DEFAULT
     zoom = params.fetch(:zoom, default_zoom).to_i
 
     @_map ||= Map.new(
