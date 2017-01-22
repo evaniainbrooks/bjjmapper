@@ -25,9 +25,6 @@
 //= require toastr
 //= require toastr_bootstrap
 //= require confirm_page_exit
-//= require mixpanel
-//= require mixpanel_init
-//= require mixpanel_track_links
 //= require exception_logger
 //= require bootstrap-datetimepicker
 //= require ext
