@@ -3,7 +3,20 @@
   <div class="clear clear-fix"></div>
   <img width="50" height="50" src="<%= location.image %>" alt="<% location.title %> logo" class="logo pull-left" />
   <div class="content">
-    <span class="pull-left team-title strong small"><%= location.team_name %></span>
+    <span class="rating">
+      <% for (var n = 1; n <= 5; ++n) { %> 
+        <% if (location.stars >= n) { %>
+          <span class="fa fa-star"></span>
+        <% } else if (location.stars+1 == n && location.half_star) { %>
+          <span class="fa fa-star-half-o"></span>
+        <% } else { %>
+          <span class="fa fa-star-o"></span>
+        <% } %>
+      <% } %>
+    </span>
+    <span class="text-muted small">
+      (<%= location.review_count %>)  
+    </span>
     <p class="timestamp small text-right pull-right text-muted"><%= location.created_at %></p>
     <br />
     <a class="address" href="<%= Routes.map_path({lat: location.lat, lng: location.lng, ref: 'recent_l'}) %>" title="See <%= location.title %> on the map">

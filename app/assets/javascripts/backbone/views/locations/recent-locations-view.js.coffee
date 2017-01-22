@@ -5,8 +5,9 @@ class RollFindr.Views.RecentLocationsView extends Backbone.View
   collection: null
   initialize: (options)->
     _.bindAll(this, 'render')
-
-    @collection = new RollFindr.Collections.RecentLocationsCollection({count: 5})
+    
+    count = options.count || 5
+    @collection = new RollFindr.Collections.RecentLocationsCollection({count: count})
     @collection.fetch({
       beforeSend: =>
         @$el.addClass('loading')

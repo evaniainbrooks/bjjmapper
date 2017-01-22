@@ -34,6 +34,7 @@
           %i.text-muted There are no recent locations
         .items
     .col-md-3
+      = render partial: 'application/google_adsense'
       %h3.pull-left Upcoming Events
       .upcoming-events.location-list.loading.clear
         .loading-overlay
@@ -64,7 +65,7 @@
   = javascript_include_tag 'map'
   :coffeescript
     $(document).ready ->
-      recentView = new RollFindr.Views.RecentLocationsView()
+      recentView = new RollFindr.Views.RecentLocationsView({count: 6})
       upcomingView = new RollFindr.Views.UpcomingEventsView()
 
       mapModel = new RollFindr.Models.Map(#{render_json(@map)})
