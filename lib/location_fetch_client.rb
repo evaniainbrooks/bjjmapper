@@ -13,7 +13,7 @@ module RollFindr
 
     def search_async(location_data, scope = nil)
       query = {api_key: API_KEY}
-      query.merge(scope: scope) if scope.present?
+      query = query.merge(scope: scope) if scope.present?
       uri = URI("http://#{@host}:#{@port}/#{SERVICE_PATH}/search/async?#{query.to_query}")
 
       http = Net::HTTP.new(uri.host, uri.port)

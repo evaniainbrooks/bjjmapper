@@ -11,17 +11,8 @@
     .col-md-12
       = render partial: 'breadcrumb'
   .row.hidden-xs
-    .col-md-3
-      %h3.h4
-        %span.fa.fa-plus-square
-        Contribute
-    .col-md-3
-      = render partial: 'create_location_button'
-    .col-md-3
-      = render partial: 'create_event_button'
-    .col-md-3
-      = render partial: 'teams/create_button'
-  %hr/
+    .col-md-12
+      = render partial: 'directory_welcome_message'
   .row
     .col-md-12
       = render partial: 'directory_index'

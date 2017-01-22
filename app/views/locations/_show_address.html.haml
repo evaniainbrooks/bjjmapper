@@ -28,6 +28,10 @@
     %a.text-success{:href => '#', :'data-toggle' => 'tooltip', :'data-placement' => 'bottom', :title => "Yelp address match: #{location.yelp_address}"}
       %span.fa.fa-yelp
       = "(#{location.yelp_error}%)"
+  - if location.facebook_address.present?
+    %a.text-success{:href => '#', :'data-toggle' => 'tooltip', :'data-placement' => 'bottom', :title => "Yelp address match: #{location.facebook_address}"}
+      %span.fa.fa-yelp
+      = "(#{location.facebook_error}%)"
 %p.display-field.directions
   = location.directions
 

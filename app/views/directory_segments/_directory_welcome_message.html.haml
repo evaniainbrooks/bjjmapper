@@ -2,5 +2,9 @@
   %button.close{"data-dismiss" => "alert", :type => "button"} 
     %span{"aria-hidden" => "true"} &times;
     %span.sr-only Close
-  %strong Welcome to the Brazilian Jiu-Jitsu academy directory.  
-  %span Our directory still needs a lot of work, but we are feverishly adding new locations in every corner of the globe. With your help, BJJMapper will become the authoritative destination for information about Brazilian Jiu-Jitsu training worldwide. Anyone can add to the directory, just click the 'Create Academy' button in the top right.
+  %strong Welcome to the academy directory.  
+  %span 
+    Our directory still needs a lot of work, but we are feverishly adding new locations in every corner of the globe. With your help, BJJMapper will become the authoritative destination for information about Brazilian Jiu-Jitsu training worldwide. Can't find your academy?
+    = link_to wizard_locations_path(ref: 'directory_index') do
+      %i.fa.fa-map-marker
+      Click here to create it.

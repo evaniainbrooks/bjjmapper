@@ -56,29 +56,42 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
   
   def yelp_error
-    dist = service_data_arr.find {|profile| profile[:source] == 'Yelp'}.try(:[], :levenshtein_distance)
     if yelp_address.present?
+      dist = yelp_profile.try(:[], :levenshtein_distance)
       pct = (dist.to_f / [object.address.length, yelp_address.length].max) * 100.0
       (100.0 - pct).round(2)
     end
   end
   
   def yelp_address
-    addr = service_data_arr.find {|profile| profile[:source] == 'Yelp'}
-    addr.slice(:street, :city, :country, :state, :postal_code).values.join(', ') if addr.present?
+    addr = yelp_profile 
+    addr.slice(:street, :city, :state, :postal_code, :country).values.compact.join(', ') if addr.present?
   end
 
   def google_error
-    dist = service_data_arr.find {|profile| profile[:source] == 'Google'}.try(:[], :levenshtein_distance)
     if google_address.present?
+      dist = google_profile.try(:[], :levenshtein_distance)
       pct = (dist.to_f / [object.address.length, google_address.length].max) * 100.0
       (100.0 - pct).round(2)
     end
   end
   
   def google_address
-    addr = service_data_arr.find {|profile| profile[:source] == 'Google'}
-    addr.slice(:street, :city, :country, :state, :postal_code).values.join(', ') if addr.present?
+    addr = google_profile 
+    addr.slice(:street, :city, :state, :postal_code, :country).values.compact.join(', ') if addr.present?
+  end
+  
+  def facebook_error
+    if facebook_address.present?
+      dist = google_profile.try(:[], :levenshtein_distance)
+      pct = (dist.to_f / [object.address.length, facebook_address.length].max) * 100.0
+      (100.0 - pct).round(2)
+    end
+  end
+  
+  def facebook_address
+    addr = facebook_profile 
+    addr.slice(:street, :city, :state, :postal_code, :country).values.compact.join(', ') if addr.present?
   end
 
   def photos
@@ -86,7 +99,7 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
 
   def small_photos
-    photos_data.collect{|x| x[:url].gsub(/w500/, 'w100') }
+    photos_data.collect{|x| x[:url].gsub(/w\d\d\d/, 'w100') }
   end
 
   private
@@ -101,6 +114,22 @@ class LocationFetchServiceDecorator < LocationDecorator
 
   def place_id
     service_data(:place_id)
+  end
+
+  def facebook_id
+    service_data(:facebook_id)
+  end
+
+  def yelp_profile
+    service_data_arr.find {|profile| profile[:source] == 'Yelp'}
+  end
+
+  def google_profile
+    service_data_arr.find {|profile| profile[:source] == 'Google'}
+  end
+
+  def facebook_profile
+    service_data_arr.find {|profile| profile[:source] == 'Facebook'}
   end
   
   def photos_data

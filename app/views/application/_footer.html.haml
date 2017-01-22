@@ -1,13 +1,18 @@
 %footer.container-fluid.footer
   .row
     .col-md-6.text-left.small
-      &copy; 2014 BJJMapper
+      &copy; 2017 BJJMapper
       %span &#124;
       = link_to 'Contact Us', meta_path
       %span &#124;
       = link_to 'Sitemap', sitemap_path
       %span &#124;
       = link_to 'Privacy Policy', privacy_policy_path
+      %span &#124;
+      %span
+        = link_to 'https://www.facebook.com/BJJMapper', target: '_blank' do
+          %b.fa.fa-facebook
+          Facebook
     .col-md-6.text-right
       = render partial: 'mixpanel_partner'
 

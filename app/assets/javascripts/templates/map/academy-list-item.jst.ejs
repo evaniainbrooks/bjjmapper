@@ -45,16 +45,16 @@
     </a>
     <ul class="small list-unstyled">
       <% if (null !== location.phone && location.phone.length > 0) { %>
-        <li><span class="col-md-offset-1 label">Phone</span> <a class="phone" href="tel:<%= location.phone %>"><%= location.phone %></a></li>
+        <li><span class="col-md-offset-1 label text-muted upcase">Phone</span> <a class="phone" href="tel:<%= location.phone %>"><%= location.phone %></a></li>
       <% } %>
       <% if (null !== location.email && location.email.length > 0) { %>
-        <li><span class="col-md-offset-1 label">Email</span> <a class="email" href="mailto:<%= location.email %>"><%= location.email %></a></li>
+        <li><span class="col-md-offset-1 label text-muted upcase">Email</span> <a class="email" href="mailto:<%= location.email %>"><%= location.email %></a></li>
       <% } %>
       <% if (null !== location.website && location.website.length > 0) { %>
-        <li><span class="col-md-offset-1 label">Website</span> <a class="website" href="http://<%= location.website %>"><%= location.website %></a></li>
+        <li><span class="col-md-offset-1 label text-muted upcase">Website</span> <a class="website" href="http://<%= location.website %>"><%= location.website %></a></li>
       <% } %>
       <li>
-        <span class="col-md-offset-1 label"></span>
+        <span class="col-md-offset-1 label text-muted upcase">Profiles</span>
         <% if (null !== location.facebook && location.facebook.length > 0) { %>
           <a class="facebook" href="http://fb.com/<%= location.facebook %>"><i class="fa fa-facebook-square fa-2x"></i></a>
         <% } %>
