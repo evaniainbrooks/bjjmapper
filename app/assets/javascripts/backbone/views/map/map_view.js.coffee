@@ -87,7 +87,7 @@ class RollFindr.Views.MapView extends Backbone.View
       lat = locationModel.get('lat')
       lng = locationModel.get('lng')
       newCenter = new google.maps.LatLng(lat, lng)
-      @map.setCenter(newCenter)
+      @map.panTo(newCenter)
 
   visibleLocations: ->
     @filteredLocations.filter(
