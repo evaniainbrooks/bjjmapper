@@ -9,6 +9,14 @@ describe Redis do
     context 'when redis is up' do
       context 'when the item is not cached' do
         before { subject.stub(:get).and_return(nil) }
+        context 'when the result is nil' do
+          it 'does not cache the result' do
+            subject.should_not_receive(:set)
+            
+            subject.cache(key: key) { nil }
+          end
+        end
+
         it 'caches the result as yaml' do
           subject.should_receive(:set).with(key, anything)
           

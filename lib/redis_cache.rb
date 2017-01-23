@@ -20,10 +20,12 @@ class Redis
       rescue Timeout::Error 
         value = default
       end 
-    
-      set(key, YAML::dump(value)) 
-      expire(key, expire) if expire 
-      get(key)
+   
+      if !value.nil?
+        set(key, YAML::dump(value)) 
+        expire(key, expire) if expire 
+        get(key)
+      end
     else 
       value
     end 
