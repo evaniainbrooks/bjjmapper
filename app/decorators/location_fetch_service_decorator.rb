@@ -2,16 +2,22 @@ class LocationFetchServiceDecorator < LocationDecorator
   delegate_all
   decorates :location
 
+  ALTERNATE_TITLE_DISTANCE = 3
+
+  def facebook_url
+    facebook_profile.try(:[], :url)
+  end
+
   def google_url
-    place_url
+    google_profile.try(:[], :url)
   end
 
   def yelp_url
-    "http://yelp.com/biz/#{yelp_id}" if yelp_id
+    yelp_profile.try(:[], :url)
   end
 
   def health
-    health_components = [yelp_url, google_url, facebook, twitter, instagram, team_id, website, email, phone]
+    health_components = [facebook_url, yelp_url, google_url, facebook, twitter, instagram, team_id, website, email, phone]
     health_val = ((health_components.compact.size / health_components.size.to_f) * 100).to_i
   end
 
@@ -28,6 +34,14 @@ class LocationFetchServiceDecorator < LocationDecorator
       service_data(:phone)
     else
       object.phone
+    end
+  end
+
+  def facebook
+    if object.facebook.blank?
+      (facebook_url || "").strip.gsub!(Canonicalized::FACEBOOK_PATTERN, '')
+    else
+      object.facebook
     end
   end
   
@@ -57,7 +71,7 @@ class LocationFetchServiceDecorator < LocationDecorator
   
   def yelp_error
     if yelp_address.present?
-      dist = yelp_profile.try(:[], :levenshtein_distance)
+      dist = yelp_profile.try(:[], :address_levenshtein_distance)
       pct = (dist.to_f / [object.address.length, yelp_address.length].max) * 100.0
       (100.0 - pct).round(2)
     end
@@ -70,7 +84,7 @@ class LocationFetchServiceDecorator < LocationDecorator
 
   def google_error
     if google_address.present?
-      dist = google_profile.try(:[], :levenshtein_distance)
+      dist = google_profile.try(:[], :address_levenshtein_distance)
       pct = (dist.to_f / [object.address.length, google_address.length].max) * 100.0
       (100.0 - pct).round(2)
     end
@@ -83,7 +97,7 @@ class LocationFetchServiceDecorator < LocationDecorator
   
   def facebook_error
     if facebook_address.present?
-      dist = google_profile.try(:[], :levenshtein_distance)
+      dist = google_profile.try(:[], :address_levenshtein_distance)
       pct = (dist.to_f / [object.address.length, facebook_address.length].max) * 100.0
       (100.0 - pct).round(2)
     end
@@ -102,22 +116,33 @@ class LocationFetchServiceDecorator < LocationDecorator
     photos_data.collect{|x| x[:url].gsub(/w\d\d\d/, 'w100') }
   end
 
+  def alternate_titles
+    [google_profile, yelp_profile, facebook_profile].collect do |profile|
+      profile[:title] if profile && profile[:title_levenshtein_distance] >= ALTERNATE_TITLE_DISTANCE
+    end.compact.uniq
+  end
+
+  def alternate_titles_tooltip
+    header = "Alternate names: #{}"
+    titles = alternate_titles.collect do |title|
+      "\"#{title}\""
+    end.join("<br/>")
+
+    [header, titles].join("<br/>").html_safe
+  end
+
   private
 
-  def place_url
-    service_data(:place_url)
-  end
-
   def yelp_id
-    service_data(:yelp_id)
+    yelp_profile.try(:[], :yelp_id)
   end
 
-  def place_id
-    service_data(:place_id)
+  def google_id
+    google_profile.try(:[], :google_id)
   end
 
   def facebook_id
-    service_data(:facebook_id)
+    facebook_profile.try(:[], :facebook_id)
   end
 
   def yelp_profile
@@ -141,6 +166,6 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
 
   def service_data_arr
-    @_service_data ||= (RollFindr::LocationFetchService.detail(self.id, self.address_components) || [])
+    @_service_data ||= (RollFindr::LocationFetchService.detail(self.id, self.address_components.merge(title: object.title)) || [])
   end
 end

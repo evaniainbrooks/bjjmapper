@@ -1,5 +1,11 @@
-%h1.display-field
-  = location.title
+- if location.alternate_titles.present?
+  %h1.display-field{:'data-html' => true, :'data-toggle' => 'tooltip', :'data-placement' => 'bottom', :title => location.alternate_titles_tooltip}
+    = location.title
+    %small
+      %span.fa.fa-search
+- else
+  %h1.display-field= location.title
+
 %div.display-field
   - if location.team.present?
     = link_to location.team_name, team_path(location.team, ref: 'loc_title')

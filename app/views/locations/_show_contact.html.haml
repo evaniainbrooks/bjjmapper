@@ -45,15 +45,15 @@
         = location.website_status
 .col-md-1.col-xs-3.display-field
   %b.small.text-muted.upcase Profiles
-  - if location.yelp_url.present?
-    = link_to location.yelp_url, class: 'yelp', target: '_blank' do
-      %i.fa.fa-yelp.fa-2x
   - if location.google_url.present?
     = link_to location.google_url, class: 'google', target: '_blank' do
       %i.fa.fa-google.fa-2x
   - if location.facebook.present?
     = link_to 'http://facebook.com/' + location.facebook, class: 'facebook', target: '_blank' do
       %i.fa.fa-facebook-square.fa-2x
+  - if location.yelp_url.present?
+    = link_to location.yelp_url, class: 'yelp', target: '_blank' do
+      %i.fa.fa-yelp.fa-2x
   - if location.instagram.present?
     = link_to 'http://instagram.com/' + location.instagram, class: 'instagram', target: '_blank' do
       %i.fa.fa-instagram.fa-2x

@@ -35,7 +35,7 @@
         this.mapView = new RollFindr.Views.StaticMapView({editable: options.editable, model: mapModel, el: this.$('.map')});
       }
 
-      this.$('[data-toggle="tooltip"]').tooltip();
+      this.$('[data-toggle="tooltip"]').tooltip({html: true});
     },
     addEvent: function() {
       $('.create-event-dialog').modal('show');

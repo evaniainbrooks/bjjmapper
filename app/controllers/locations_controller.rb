@@ -17,7 +17,7 @@ class LocationsController < ApplicationController
   helper_method :closed?
   helper_method :moved?
 
-  RECENT_COUNT_DEFAULT = 5
+  RECENT_COUNT_DEFAULT = 6
   RECENT_COUNT_MAX = 10
 
   NEARBY_DISTANCE_DEFAULT = 200
