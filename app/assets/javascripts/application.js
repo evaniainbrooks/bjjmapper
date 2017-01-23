@@ -25,7 +25,6 @@
 //= require toastr
 //= require toastr_bootstrap
 //= require confirm_page_exit
-//= require exception_logger
 //= require bootstrap-datetimepicker
 //= require ext
 //= require readmore.min
