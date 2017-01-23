@@ -211,15 +211,15 @@ class Location
   end
 
   def rating
-    all_reviews.rating
+    all_reviews.try(:rating) || 0.0
   end
 
   def stars
-    all_reviews.rating.try(:floor) || 0
+    all_reviews.try(:rating).try(:floor) || 0
   end
 
   def half_star?
-    return false unless all_reviews.rating.present?
+    return false unless all_reviews.try(:rating).present?
     (all_reviews.rating - all_reviews.rating.floor) >= 0.5
   end
 

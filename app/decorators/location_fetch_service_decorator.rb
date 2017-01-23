@@ -118,7 +118,7 @@ class LocationFetchServiceDecorator < LocationDecorator
 
   def alternate_titles
     [google_profile, yelp_profile, facebook_profile].collect do |profile|
-      profile[:title] if profile && profile[:title_levenshtein_distance] >= ALTERNATE_TITLE_DISTANCE
+      profile[:title] if profile && (profile[:title_levenshtein_distance] || 0) >= ALTERNATE_TITLE_DISTANCE
     end.compact.uniq
   end
 
