@@ -71,9 +71,13 @@
           %h3 Media
           %a{:name => 'media'}
           - location.small_photos.take(10).each do |url|
+            - large_url = url.gsub(/w100/, 'w1000')    
             %div.media-thumbnail
-              %a{:target => '_blank', :href => url.gsub(/w100/, 'w1000')}
+              %a{:target => '_blank', :href => large_url}
                 %img.img-thumbnail{:src => url}/
+              - if Role.power(current_user.role) >= Role.power(Role::MODERATOR)
+                %a.overlay.btn.btn-xs.btn-default{'data-id' => location.id, 'data-set-avatar-url' => large_url, href: '#'}
+                  %span.fa.fa-eye
     %hr/
     .row
       .col-md-4.instructors
@@ -85,7 +89,8 @@
         .clear.items
         .empty-message
           %i.text-muted We don't know who teaches at this academy.
-          %a.add-instructor{href: 'javascript:void(0)'} Do you?
+          %a.add-instructor{href: 'javascript:void(0)'} 
+            %i Do you?
         %br/
         -#= render :partial => 'locations/instructors', :locals => { :location => location }
       .col-md-8
@@ -102,7 +107,7 @@
     %hr/
     .row
       - if location.facebook.present? && !location.facebook_group?
-        .col-md-5.reviews
+        .col-md-5
           = render :partial => 'locations/show_news_feed', :locals => { :location => location }
       %div{:class => location.facebook.present? && !location.facebook_group? ? 'col-md-7' : 'col-md-12'}
         = render :partial => 'locations/show_reviews', :locals => { :location => location }

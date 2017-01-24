@@ -68,5 +68,26 @@
       e.preventDefault();
       return false;
     });
+    
+    $('html').delegate('[data-set-avatar-url]', 'click', function(e) {
+      var url = $(e.currentTarget).data('set-avatar-url');
+      var id = $(e.currentTarget).data('id');
+
+      $.ajax({
+        url:  '/service/avatar/upload/locations/' + id + '/url',
+        type: 'POST',
+        contentType: 'json',
+        dataType: 'json',
+        data: JSON.stringify({
+          url: url
+        }),
+        complete: function() {
+          toastr.success('Image processing may take a few minutes. Please check back soon.', 'Image successfully uploaded');
+        }
+      });
+
+      e.preventDefault();
+      return false;
+    });
   });
 }();
