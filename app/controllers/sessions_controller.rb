@@ -39,6 +39,8 @@ class SessionsController < ApplicationController
       ip_address: request.remote_ip,
       provider: auth_info.try(:[], 'provider')
     )
+
+    redirect_to user_path(current_user, signed_in: 1) if signed_in?
   end
 
   def failure
