@@ -80,6 +80,19 @@ class LocationsController < ApplicationController
     end
   end
 
+  def random
+    @location = current_user_location_scope.skip(rand(current_user_location_scope.count)).first
+
+    tracker.track('showRandomLocation',
+      id: @location.to_param
+    )
+
+    respond_to do |format|
+      format.html { redirect_to @location, random: 1 }
+      format.json { render partial: 'location' }
+    end
+  end
+
   def show
     tracker.track('showLocation',
       id: @location.to_param

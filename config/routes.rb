@@ -38,6 +38,7 @@ Rails.application.routes.draw do
     get :wizard, on: :collection
     get :recent, on: :collection
     get :nearby, on: :collection
+    get :random, on: :collection
     get :schedule, on: :member
 
     post :move, on: :member
