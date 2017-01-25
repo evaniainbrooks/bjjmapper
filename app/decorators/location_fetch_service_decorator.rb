@@ -37,6 +37,18 @@ class LocationFetchServiceDecorator < LocationDecorator
     end
   end
 
+  def image
+    profile_photo || super
+  end
+
+  def description
+    if object.description.blank?
+      facebook_profile.try(:[], :description) || facebook_profile.try(:[], :about) || super
+    else
+      object.description
+    end
+  end
+
   def facebook
     if object.facebook.blank?
       (facebook_url || "").strip.gsub!(Canonicalized::FACEBOOK_PATTERN, '')
@@ -109,11 +121,7 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
 
   def photos
-    photos_data.collect{|x| x[:large_url]}
-  end
-
-  def small_photos
-    photos_data.collect{|x| x[:url].gsub(/w\d\d\d/, 'w100') }
+    photos_data.to_a
   end
 
   def alternate_titles
@@ -155,6 +163,10 @@ class LocationFetchServiceDecorator < LocationDecorator
 
   def facebook_profile
     service_data_arr.find {|profile| profile[:source] == 'Facebook'}
+  end
+
+  def profile_photo
+    photos_data.find {|o| o[:is_profile_photo] }.try(:[], :url)
   end
   
   def photos_data

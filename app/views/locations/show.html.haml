@@ -64,20 +64,23 @@
           - more_schools = [location.city, location.state || location.country].compact.join(', ')
           = link_to map_path(ref: 'loc_dp', geoquery: more_schools), title: "Brazilian Jiu-Jitsu schools in #{more_schools}" do
             %p See more Brazilian Jiu-Jitsu schools in #{more_schools}
-    - if location.small_photos.present?
+    - if location.photos.present?
       %hr/
       .row
         .col-md-12
-          %h3 Media
+          %h3
+            Media
+            - if location.photos.size > 0
+              %small= "#{pluralize(location.photos.size, 'image')}"
           %a{:name => 'media'}
-          - location.small_photos.take(10).each do |url|
-            - large_url = url.gsub(/w100/, 'w1000')    
-            %div.media-thumbnail
-              %a{:target => '_blank', :href => large_url}
-                %img.img-thumbnail{:src => url}/
-              - if Role.power(current_user.role) >= Role.power(Role::MODERATOR)
-                %a.overlay.btn.btn-xs.btn-default{'data-id' => location.id, 'data-set-avatar-url' => large_url, href: '#'}
-                  %span.fa.fa-eye
+          .media
+            - location.photos.take(50).each do |photo|
+              %div.media-thumbnail
+                %a{:target => '_blank', :href => photo[:url]}
+                  %img.img-thumbnail{:src => photo[:small_url], :width => 130}/
+                - if Role.power(current_user.role) >= Role.power(Role::MODERATOR)
+                  %a.overlay.btn.btn-xs.btn-default{'data-id' => location.id, 'data-set-avatar-url' => photo[:url], href: '#'}
+                    %span.fa.fa-eye
     %hr/
     .row
       .col-md-4.instructors
@@ -138,6 +141,7 @@
   = javascript_include_tag 'calendar'
   = javascript_include_tag 'map'
   :coffeescript
+    $('.media').readmore(collapsedHeight: 105, moreLink: "<a class='pull-right btn btn-default btn-small' href='#'>See more</a>", lessLink: "<a class='pull-right btn btn-default btn-small' href='#'>Close</a>")
     $(document).ready ->
       mapView = new RollFindr.Views.LocationShowView({ editable: #{edit_mode?}, model: #{render_json(location)}, mapModel: #{render_json(@map)}, el: $('.show-location')})
   = render partial: 'facebook_sdk'
