@@ -97,7 +97,7 @@ describe LocationsController do
   describe 'GET recent' do
     context 'with json format' do
       subject { build_list(:location, 2) }
-      before { Location.stub_chain(:verified, :desc, :limit).and_return(subject) }
+      before { Location.stub_chain(:not_closed, :verified, :desc, :limit).and_return(subject) }
       it 'returns the recent locations' do
         get :recent, format: 'json', count: 2
         response.should be_success

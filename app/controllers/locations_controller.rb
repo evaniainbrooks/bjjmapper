@@ -81,7 +81,8 @@ class LocationsController < ApplicationController
   end
 
   def random
-    @location = current_user_location_scope.skip(rand(current_user_location_scope.count)).first
+    scope = current_user_location_scope.academies.not_rejected
+    @location = scope.skip(rand(scope.count)).first
 
     tracker.track('showRandomLocation',
       id: @location.to_param
@@ -117,7 +118,7 @@ class LocationsController < ApplicationController
 
     head :bad_request and return false unless lat.present? && lng.present?
 
-    @locations = Location.near([lat, lng], distance).where(:loctype.in => location_filter).verified.limit(fetch_count).to_a
+    @locations = Location.near([lat, lng], distance).where(:loctype.in => location_filter).not_closed.verified.limit(fetch_count).to_a
     @locations.reject!{|loc| loc.to_param.eql?(reject)} if reject.present?
 
     head :no_content and return false unless @locations.present?

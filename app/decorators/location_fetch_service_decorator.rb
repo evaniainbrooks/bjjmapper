@@ -37,6 +37,14 @@ class LocationFetchServiceDecorator < LocationDecorator
     end
   end
 
+  def image_height
+    100
+  end
+
+  def image_width
+    100
+  end
+
   def image
     profile_photo || super
   end
@@ -81,11 +89,9 @@ class LocationFetchServiceDecorator < LocationDecorator
     phone.present? || email.present? || website.present? || facebook.present? || twitter.present? || instagram.present?
   end
   
-  def yelp_error
+  def yelp_match
     if yelp_address.present?
-      dist = yelp_profile.try(:[], :address_levenshtein_distance)
-      pct = (dist.to_f / [object.address.length, yelp_address.length].max) * 100.0
-      (100.0 - pct).round(2)
+      yelp_profile.try(:[], :address_match).try(:round, 1)
     end
   end
   
@@ -94,11 +100,9 @@ class LocationFetchServiceDecorator < LocationDecorator
     addr.slice(:street, :city, :state, :postal_code, :country).values.compact.join(', ') if addr.present?
   end
 
-  def google_error
+  def google_match
     if google_address.present?
-      dist = google_profile.try(:[], :address_levenshtein_distance)
-      pct = (dist.to_f / [object.address.length, google_address.length].max) * 100.0
-      (100.0 - pct).round(2)
+      google_profile.try(:[], :address_match).try(:round, 1)
     end
   end
   
@@ -107,16 +111,14 @@ class LocationFetchServiceDecorator < LocationDecorator
     addr.slice(:street, :city, :state, :postal_code, :country).values.compact.join(', ') if addr.present?
   end
   
-  def facebook_error
+  def facebook_match
     if facebook_address.present?
-      dist = google_profile.try(:[], :address_levenshtein_distance)
-      pct = (dist.to_f / [object.address.length, facebook_address.length].max) * 100.0
-      (100.0 - pct).round(2)
+      facebook_profile.try(:[], :address_match).try(:round, 1)
     end
   end
   
   def facebook_address
-    addr = facebook_profile 
+    addr = facebook_profile
     addr.slice(:street, :city, :state, :postal_code, :country).values.compact.join(', ') if addr.present?
   end
 
@@ -124,9 +126,13 @@ class LocationFetchServiceDecorator < LocationDecorator
     photos_data.to_a
   end
 
+  def profiles
+    [google_profile, yelp_profile, facebook_profile].compact || []
+  end
+
   def alternate_titles
-    [google_profile, yelp_profile, facebook_profile].collect do |profile|
-      profile[:title] if profile && (profile[:title_levenshtein_distance] || 0) >= ALTERNATE_TITLE_DISTANCE
+    profiles.collect do |profile|
+      profile[:title] if profile && (profile[:title_match] || 0) < 90.0
     end.compact.uniq
   end
 

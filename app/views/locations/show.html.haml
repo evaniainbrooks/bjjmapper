@@ -18,14 +18,12 @@
         = render partial: 'schedule_timezone_missing_message' if location.timezone.blank?
         = render partial: 'closed_message' if closed? || moved?
     .row
-      .col-md-11.col-md-offset-1.hidden-xs
-        = render partial: 'subnav', :locals => { location: location }
-    .row
-      .col-md-2.col-xs-4{:style => 'padding-right: 0px;'}
+      .col-md-2.col-xs-4.col-sm-3{:style => 'padding-right: 0px;'}
         .display-field
-          %img{:width => 100, :height => 100, :src => location.image, :class => 'logo center-block'}/
+          %a{target: '_blank', href: location.image_large, title: "View large logo"}
+            %img.img-thumbnail{:width => location.image_width, :height => location.image_height, :src => location.image, :class => 'logo center-block'}/
         .edit-field
-          %img{:width => 100, :height => 100, :src => location.image, :class => 'logo center-block edit-image'}/
+          %img.img-thumbnail{:width => location.image_height, :height => location.image_height, :src => location.image, :class => 'logo center-block edit-image'}/
           %br/
           %input{:'data-url' => upload_image_location_path(location), :'data-upload-avatar' => true, :type => 'file', :class => 'input-md form-control'}/
           - if location.object.image.present?
@@ -34,18 +32,15 @@
           = render partial: 'rating', :locals => { location: location }
         .display-field.small.text-center-center-block= render partial: 'favorite_button', :locals => { location: location }
         %div.small.text-muted.text-center= "last updated #{location.updated_at}"
-      .col-md-6.col-xs-8
+      .col-md-7.col-xs-8.col-sm-5
         = render partial: 'show_header', :locals => { location: location, f: f }
-      .col-md-12.hidden-lg.hidden-md.clear
+      .col-md-12.hidden-lg.hidden-md.hidden-sm.clear
         %hr/
       = render partial: 'show_contact', :locals => { location: location, f: f }
-    %hr/
-    .row
-      .col-md-2
-        %h3 Location
-        %a{:name => 'location'}
-        = render partial: 'show_address', locals: { location: location, f: f }
-      .col-md-6
+      .col-md-12.hidden-md.clear
+        %hr/
+      = render partial: 'show_address', locals: { location: location, f: f }
+      .col-md-6.col-xs-12.col-sm-9
         .map
           %div.map-canvas{:style => 'height: 275px'}
           -# This is filled in by google maps
@@ -62,8 +57,9 @@
             = render partial: 'application/google_adsense'
 
           - more_schools = [location.city, location.state || location.country].compact.join(', ')
-          = link_to map_path(ref: 'loc_dp', geoquery: more_schools), title: "Brazilian Jiu-Jitsu schools in #{more_schools}" do
-            %p See more Brazilian Jiu-Jitsu schools in #{more_schools}
+          %span.small
+            = link_to map_path(ref: 'loc_dp', geoquery: more_schools), title: "Brazilian Jiu-Jitsu schools in #{more_schools}" do
+              %p See more Brazilian Jiu-Jitsu schools in #{more_schools}
     - if location.photos.present?
       %hr/
       .row

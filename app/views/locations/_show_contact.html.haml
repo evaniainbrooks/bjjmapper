@@ -1,4 +1,4 @@
-.col-md-3.col-xs-9
+.col-md-3.col-xs-12.col-sm-4
   .edit-field
     = f.label :phone, class: 'small text-muted upcase'
     = f.text_field :phone, class: 'input-sm form-control'
@@ -21,42 +21,32 @@
   - if !location.contact_info?
     %i.display-field.text-muted No contact information was provided
   - else
+    %b.small.text-muted.upcase Contact 
+    %br/
     - if location.phone.present?
-      %span.display-field
-        %b.small.text-muted.upcase Phone
-        %br/
+      %span.small.display-field
         %a{:class => 'phone', :href => "tel:#{location.phone}"}
-          = number_to_phone location.phone
           %i.fa.fa-phone
+          = number_to_phone location.phone
     - if location.email.present?
-      %span.display-field
-        %b.small.text-muted.upcase Email
-        %br/
+      %span.small.display-field
         = link_to 'mailto:' + location.email, class: 'email' do
-          = location.email
           %i.fa.fa-envelope
+          = location.email
     - if location.website.present?
-      %span.display-field
-        %b.small.text-muted.upcase Websites
-        %br/
+      %span.small.display-field
         = link_to 'http://' + location.website, target: '_blank', class: 'website' do
-          = location.website
           %i.fa.fa-external-link
-        = location.website_status
-.col-md-1.col-xs-3.display-field
+          = location.website
+          = location.website_status
+  %br/
   %b.small.text-muted.upcase Profiles
-  - if location.google_url.present?
-    = link_to location.google_url, class: 'google', target: '_blank' do
-      %i.fa.fa-google.fa-2x
-  - if location.facebook.present?
-    = link_to 'http://facebook.com/' + location.facebook, class: 'facebook', target: '_blank' do
-      %i.fa.fa-facebook-square.fa-2x
-  - if location.yelp_url.present?
-    = link_to location.yelp_url, class: 'yelp', target: '_blank' do
-      %i.fa.fa-yelp.fa-2x
+  %br/
+  - [:google, :yelp, :facebook].each do |profile|
+    = render partial: 'progress_bar', locals: { sym: profile, address: location.send("#{profile}_address"), href: location.send("#{profile}_url"), value: location.send("#{profile}_match") }
   - if location.instagram.present?
     = link_to 'http://instagram.com/' + location.instagram, class: 'instagram', target: '_blank' do
-      %i.fa.fa-instagram.fa-2x
+      %i.fa.fa-instagram
   - if location.twitter.present?
     = link_to 'http://twitter.com/' + location.twitter, class: 'twitter', target: '_blank' do
-      %i.fa.fa-twitter-square.fa-2x
+      %i.fa.fa-twitter-square

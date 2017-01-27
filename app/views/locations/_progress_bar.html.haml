@@ -1,0 +1,9 @@
+- if local_assigns[:href].present?
+  - color = 'success' if value >= 70
+  - color ||= 'warning' if value >= 50
+  - color ||= 'danger' if value >= 0
+  %a.block{:target => '_blank', :href => href, :'data-toggle' => 'tooltip', :'data-placement' => 'bottom', :title => address}
+    %div.fa.pull-left{style: 'width: 12px', class: "fa-#{sym}"}
+    .progress
+      .progress-bar{:class => "progress-bar-#{color}", :role => 'progressbar', :'aria-valuenow' => value, :'aria-valuemin' => 0, :'aria-valuemax' => 100, :style => "width: #{value}%"}
+        = "(#{value}%)"
