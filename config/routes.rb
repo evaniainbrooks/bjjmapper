@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     resources :directory_segments, only: [:new, :create, :edit, :update]
     resources :organizations, only: [:new, :create]
     resources :locations, only: [:index, :show] do
+      post :fetch, on: :member
       get :pending, on: :collection
       get :rejected, on: :collection
       get :moderate, on: :collection

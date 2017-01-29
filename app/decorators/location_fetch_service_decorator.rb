@@ -2,7 +2,12 @@ class LocationFetchServiceDecorator < LocationDecorator
   delegate_all
   decorates :location
 
-  ALTERNATE_TITLE_DISTANCE = 3
+  PHOTO_COUNT = 50
+
+  def updated_at
+    val = profiles.collect{|p| p[:created_at]}.push(object.updated_at).compact.max
+    "#{h.time_ago_in_words(val)} ago"
+  end
 
   def facebook_url
     facebook_profile.try(:[], :url)
@@ -46,7 +51,27 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
 
   def image
-    profile_photo || super
+    if object.image.present?
+      super
+    else
+      profile_photo || super
+    end
+  end
+  
+  def image_tiny
+    if object.image_tiny.present?
+      super
+    else
+      profile_photo || super
+    end
+  end
+  
+  def image_large
+    if object.image_large.present?
+      super
+    else
+      profile_photo || super
+    end
   end
 
   def description
@@ -176,7 +201,7 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
   
   def photos_data
-    @_photos_data ||= (RollFindr::LocationFetchService.photos(self.id) || [])
+    @_photos_data ||= (RollFindr::LocationFetchService.photos(self.id, count: PHOTO_COUNT) || [])
   end
 
   def service_data(sym)

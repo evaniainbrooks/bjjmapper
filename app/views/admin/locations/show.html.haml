@@ -7,6 +7,7 @@
         = link_to 'Edit', location_path(@location, edit: 1)
 
   %h3 Actions
+  = link_to 'Fetch!', fetch_admin_location_path(@location), :class => 'btn btn-primary', :'data-remote' => true, :'data-method' => 'POST'
   = link_to 'Verify!', verify_location_status_path(@location), :class => 'btn btn-success text-success', :'data-remote' => true, :'data-method' => 'PUT'
   = link_to 'Reject!', reject_location_status_path(@location), :class => 'btn btn-danger text-danger', :'data-remote' => true, :'data-method' => 'PUT'
   = link_to 'Pending!', pending_location_status_path(@location), :class => 'btn btn-warning text-warning', :'data-remote' => true, :'data-method' => 'PUT'

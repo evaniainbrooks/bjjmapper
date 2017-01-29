@@ -30,8 +30,8 @@ module RollFindr
       end
     end
 
-    def photos(location_id)
-      query = {api_key: API_KEY}.to_query
+    def photos(location_id, opts = {})
+      query = {api_key: API_KEY}.merge(opts.slice(:count)).to_query
       uri = URI("http://#{@host}:#{@port}/#{SERVICE_PATH}/locations/#{location_id}/photos?#{query}")
 
       get_request(uri)

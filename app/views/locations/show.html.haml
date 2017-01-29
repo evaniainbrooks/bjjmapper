@@ -30,8 +30,8 @@
             %input{:'data-url' => remove_image_location_path(location), :'data-clear-avatar' => true, :type => 'button', :value => 'Remove Image', :class => 'btn btn-default btn-small btn-block'}/
         .rating-container
           = render partial: 'rating', :locals => { location: location }
-        .display-field.small.text-center-center-block= render partial: 'favorite_button', :locals => { location: location }
         %div.small.text-muted.text-center= "last updated #{location.updated_at}"
+        .display-field.small.text-center-center-block= render partial: 'favorite_button', :locals => { location: location }
       .col-md-7.col-xs-8.col-sm-5
         = render partial: 'show_header', :locals => { location: location, f: f }
       .col-md-12.hidden-lg.hidden-md.hidden-sm.clear
@@ -39,7 +39,20 @@
       = render partial: 'show_contact', :locals => { location: location, f: f }
       .col-md-12.hidden-md.clear
         %hr/
-      = render partial: 'show_address', locals: { location: location, f: f }
+      .col-md-2.col-xs-6.col-sm-3.text-center.hidden-xs
+        = render partial: 'show_address', locals: { location: location, f: f }
+        - if Role.power(current_user.role) >= Role.power(Role::MODERATOR)
+          %b.small.text-muted.upcase Moderation
+          %ul.list-unstyled
+            %li= link_to 'Admin Panel', admin_location_path(location), class: 'small text-primary'
+            %li
+              = link_to fetch_admin_location_path(location), :class => 'small text-primary', :'data-remote' => true, :'data-method' => 'post' do
+                %span.fa.fa-refresh
+                Fetch
+            %li= link_to 'Verify', verify_location_status_path(location), :class => 'small text-success', :'data-returnto' => moderate_admin_locations_path, :'data-remote' => true, :'data-method' => 'put', :'data-body' => 'Verify location'
+            %li= link_to 'Reject', reject_location_status_path(location), :class => 'small text-danger', :'data-returnto' => moderate_admin_locations_path, :'data-remote' => true, :'data-method' => 'put', :'data-body' => 'Reject location'
+            %li= link_to 'Pending', pending_location_status_path(location), :class => 'small text-warning', :'data-returnto' => moderate_admin_locations_path, :'data-remote' => true, :'data-method' => 'put', :'data-body' => 'Pending location'
+      
       .col-md-6.col-xs-12.col-sm-9
         .map
           %div.map-canvas{:style => 'height: 275px'}
@@ -70,10 +83,10 @@
               %small= "#{pluralize(location.photos.size, 'image')}"
           %a{:name => 'media'}
           .media
-            - location.photos.take(50).each do |photo|
+            - location.photos.each do |photo|
               %div.media-thumbnail
                 %a{:target => '_blank', :href => photo[:url]}
-                  %img.img-thumbnail{:src => photo[:small_url], :width => 130}/
+                  %img.img-rounded{:src => photo[:small_url], :width => 130}/
                 - if Role.power(current_user.role) >= Role.power(Role::MODERATOR)
                   %a.overlay.btn.btn-xs.btn-default{'data-id' => location.id, 'data-set-avatar-url' => photo[:url], href: '#'}
                     %span.fa.fa-eye

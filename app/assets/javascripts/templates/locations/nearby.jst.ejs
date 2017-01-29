@@ -7,11 +7,23 @@
         <h5 class="text-primary">
           <%= location.title %>
         </h5>
-        <p class="small">
-          <%= location.team_name %>
-        </p>
+        <span class="rating">
+          <% for (var n = 1; n <= 5; ++n) { %> 
+            <% if (location.stars >= n) { %>
+              <span class="fa fa-star"></span>
+            <% } else if (location.stars+1 == n && location.half_star) { %>
+              <span class="fa fa-star-half-o"></span>
+            <% } else { %>
+              <span class="fa fa-star-o"></span>
+            <% } %>
+          <% } %>
+        </span>
+        <span class="text-muted small">
+          (<%= location.review_count %>)  
+        </span>
         <p>
-          <span class="upcase small text-muted">
+          <span class="upcase small text-muted address">
+            <span class="fa fa-map-marker"></span>
             <%= location.street %>
           </span>
         </p>

@@ -3,6 +3,13 @@ class Admin::LocationsController < Admin::AdminController
     id_param = params.fetch(:id, '')
     @location = Location.find(id_param)
   end
+  
+  def fetch
+    id_param = params.fetch(:id, '')
+    @location = Location.find(id_param)
+    @location.search_metadata!
+    head :no_content
+  end
 
   def index
     @locations = Location.limit(100).sort({created_at:-1})
