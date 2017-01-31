@@ -61,14 +61,17 @@ class TeamDecorator < Draper::Decorator
       object.locations.to_a.collect(&:country).uniq.count
     end
 
-    "#{object.name} is a Brazilian Jiu-Jitsu association with #{h.pluralize(count, 'affiliated academy')}  in #{h.pluralize(countries, 'different country')}." +
-    if object.instructors.present?
+    academies = "#{object.name} is a Brazilian Jiu-Jitsu association with #{h.pluralize(count, 'affiliated academy')}  in #{h.pluralize(countries, 'different country')}." +
+    
+    instructors = if object.instructors.present?
       if object.instructors.count > 1
-        " #{object.instructors.collect(&:name).join(', ')} are the head instructors."
+        "#{object.instructors.collect(&:name).join(', ')} are the head instructors."
       else
-        " #{object.instructors.first.name} is the founder and head instructor."
+        "#{object.instructors.first.name} is the founder and head instructor."
       end
     end || ''
+
+    return [academies, instructors].join(' ')
   end
 
   def avatar_service_url(name, size)

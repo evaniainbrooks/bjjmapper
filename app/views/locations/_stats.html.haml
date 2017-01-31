@@ -1,0 +1,10 @@
+%ul.list-unstyled
+  %li
+    %span.fa.fa-thumbs-o-up.text-primary
+    %span.text-muted= pluralize(location.fan_count, 'like')
+  %li
+    %span.fa.fa-check.text-primary
+    %span.text-muted= pluralize(location.checkins, 'checkin')
+  %li
+    %span.fa.fa-star-o.text-primary
+    %span.text-muted= pluralize(location.rating_count, 'rating')
