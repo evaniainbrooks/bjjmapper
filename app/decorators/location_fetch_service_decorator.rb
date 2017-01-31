@@ -42,6 +42,18 @@ class LocationFetchServiceDecorator < LocationDecorator
     end
   end
 
+  def cover_image
+    cover_photo.try(:[], :url)    
+  end
+
+  def cover_image_offset_x
+    cover_photo.try(:[], :offset_x)
+  end
+
+  def cover_image_offset_y
+    cover_photo.try(:[], :offset_y)
+  end
+
   def image_height
     100
   end
@@ -54,7 +66,7 @@ class LocationFetchServiceDecorator < LocationDecorator
     if object.image.present?
       super
     else
-      profile_photo || super
+      profile_photo.try(:[], :url) || super
     end
   end
   
@@ -62,7 +74,7 @@ class LocationFetchServiceDecorator < LocationDecorator
     if object.image_tiny.present?
       super
     else
-      profile_photo || super
+      profile_photo.try(:[], :url) || super
     end
   end
   
@@ -70,7 +82,7 @@ class LocationFetchServiceDecorator < LocationDecorator
     if object.image_large.present?
       super
     else
-      profile_photo || super
+      profile_photo.try(:[], :url) || super
     end
   end
 
@@ -157,7 +169,7 @@ class LocationFetchServiceDecorator < LocationDecorator
 
   def alternate_titles
     profiles.collect do |profile|
-      profile[:title] if profile && (profile[:title_match] || 0) < 90.0
+      profile[:title] if profile && (profile[:title_match] || 0) < 95.0
     end.compact.uniq
   end
 
@@ -168,6 +180,18 @@ class LocationFetchServiceDecorator < LocationDecorator
     end.join("<br/>")
 
     [header, titles].join("<br/>").html_safe
+  end
+
+  def fan_count
+    facebook_profile.try(:[], :fan_count)
+  end
+
+  def checkins
+    facebook_profile.try(:[], :checkins)
+  end
+
+  def rating_count
+    facebook_profile.try(:[], :rating_count)
   end
 
   private
@@ -196,8 +220,12 @@ class LocationFetchServiceDecorator < LocationDecorator
     service_data_arr.find {|profile| profile[:source] == 'Facebook'}
   end
 
+  def cover_photo
+    photos_data.find {|o| o[:is_cover_photo] }
+  end
+
   def profile_photo
-    photos_data.find {|o| o[:is_profile_photo] }.try(:[], :url)
+    photos_data.find {|o| o[:is_profile_photo] && true != o[:is_silhouette] }
   end
   
   def photos_data

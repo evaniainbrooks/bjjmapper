@@ -4,14 +4,11 @@
     %small
       %span.fa.fa-search
 - else
-  %h1.display-field= location.title
-
-%div.display-field
-  - if location.team.present?
-    = link_to location.team_name, team_path(location.team, ref: 'loc_title')
-  -#%div.health-bar.pull-left
-    %div.pull-left{class: "health-#{location.health / 25}", style: "width: #{location.health}%"}<
-      %small.text-center.center-block= "#{location.health}/100"
+  %h1.display-field
+    = location.title
+    - if location.team.present?
+      %small
+        = link_to location.team_name, team_path(location.team, ref: 'loc_title')
 .edit-field
   = f.label :title, class: 'small text-muted upcase'
   = f.text_field :title, class: 'form-control input-lg'
@@ -20,7 +17,7 @@
   = f.label :description, class: 'small text-muted upcase'
   = f.text_area :description, placeholder: 'Provide a description of the academy', class: 'form-control', rows: 3
 %div.display-field.description
-  %i.text-muted= simple_format(location.description)
+  = simple_format(location.description)
 
 = content_for(:scripts) do
   :coffeescript

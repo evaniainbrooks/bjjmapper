@@ -28,6 +28,7 @@
 .rating-container {
   min-width: 85px;
   margin-left: -5px !important;
+  white-space: nowrap;
 }
 
 .rating, .rating a, .rating a:hover, .rating span {

@@ -72,7 +72,7 @@ class LocationDecorator < Draper::Decorator
     if object.description.present?
       object.description
     else
-      generated_description
+      h.content_tag(:i, class: 'text-muted') { generated_description }
     end
   end
 
@@ -126,7 +126,7 @@ class LocationDecorator < Draper::Decorator
   end
 
   def team_name
-    object.team_name.present? ? "Team #{object.team_name}" : DEFAULT_TEAM_NAME
+    object.team_name.present? ? object.team_name : DEFAULT_TEAM_NAME
   end
 
   def phone

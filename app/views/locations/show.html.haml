@@ -17,6 +17,7 @@
         = render partial: 'review_message' if reviewed?
         = render partial: 'schedule_timezone_missing_message' if location.timezone.blank?
         = render partial: 'closed_message' if closed? || moved?
+    .row{:style => "position: absolute; background-size: cover; background: url('#{location.cover_image}') -#{location.cover_image_offset_x}px -#{location.cover_image_offset_y}px"}
     .row
       .col-md-2.col-xs-4.col-sm-3{:style => 'padding-right: 0px;'}
         .display-field
@@ -30,8 +31,8 @@
             %input{:'data-url' => remove_image_location_path(location), :'data-clear-avatar' => true, :type => 'button', :value => 'Remove Image', :class => 'btn btn-default btn-small btn-block'}/
         .rating-container
           = render partial: 'rating', :locals => { location: location }
-        %div.small.text-muted.text-center= "last updated #{location.updated_at}"
-        .display-field.small.text-center-center-block= render partial: 'favorite_button', :locals => { location: location }
+        %div.small.text-center.center-block.display-field
+          = render partial: 'stats'  
       .col-md-7.col-xs-8.col-sm-5
         = render partial: 'show_header', :locals => { location: location, f: f }
       .col-md-12.hidden-lg.hidden-md.hidden-sm.clear
@@ -87,8 +88,10 @@
               %div.media-thumbnail
                 %a{:target => '_blank', :href => photo[:url]}
                   %img.img-rounded{:src => photo[:small_url], :width => 130}/
+                %span.top-right.overlay.small
+                  %span.fa{class: "fa-#{photo[:source].downcase}"}
                 - if Role.power(current_user.role) >= Role.power(Role::MODERATOR)
-                  %a.overlay.btn.btn-xs.btn-default{'data-id' => location.id, 'data-set-avatar-url' => photo[:url], href: '#'}
+                  %a.top-left.overlay.btn.btn-xs.btn-default{'data-id' => location.id, 'data-set-avatar-url' => photo[:url], href: '#'}
                     %span.fa.fa-eye
     %hr/
     .row
@@ -140,6 +143,9 @@
             %i.fa.fa-trash
             Delete Academy
     %br/
+    %div.pull-left.small
+      %a{href: '#'} Back to top
+    %div.pull-right.small.text-muted= "last updated #{location.updated_at}"
 
   = render :partial => 'instructors/add_instructor_dialog'
   = render :partial => 'location_events/create_event_modal', locals: { location: location }

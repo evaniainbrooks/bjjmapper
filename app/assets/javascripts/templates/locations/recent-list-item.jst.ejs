@@ -1,7 +1,7 @@
 <div data-id="<%= location.id %>" class="location-list-item list-group-item">
   <a class="pull-left text-primary" title="<%= location.title %>" href="<%= Routes.location_path(location.param, {ref: 'recent_l'}) %>"><h4 class="list-group-item-heading"><%= location.title %></h4></a>
   <div class="clear clear-fix"></div>
-  <img width="50" height="50" src="<%= location.image %>" alt="<% location.title %> logo" class="logo pull-left" />
+  <img width="50" height="50" src="<%= location.image %>" alt="<% location.title %> logo" class="img-rounded logo pull-left" />
   <div class="content">
     <span class="rating">
       <% for (var n = 1; n <= 5; ++n) { %> 

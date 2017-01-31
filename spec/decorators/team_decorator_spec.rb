@@ -27,7 +27,7 @@ describe TeamDecorator do
   describe '.description' do
     context 'with blank description' do
       subject { build(:team, description: nil).decorate }
-      it { subject.description.should match TeamDecorator::DEFAULT_DESCRIPTION }
+      it { subject.description.should match subject.send(:generated_description) }
     end
     context 'with explicit description' do
       subject { build(:team, description: 'xyz').decorate }
@@ -41,7 +41,7 @@ describe TeamDecorator do
     end
     context 'with not independent' do
       subject { build(:team, name: 'xyz').decorate }
-      it { subject.name.should eq 'Team xyz' }
+      it { subject.name.should eq 'xyz' }
     end
   end
 end

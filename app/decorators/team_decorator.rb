@@ -8,14 +8,6 @@ class TeamDecorator < Draper::Decorator
   decorates_association :parent_team
   decorates_association :child_teams
 
-  def name
-    if INDEPENDENT.eql? object.name
-      object.name
-    else
-      "Team #{object.name}"
-    end
-  end
-
   # TODO: DRY up these methods
   def image_large
     img = object.image_large
@@ -54,11 +46,30 @@ class TeamDecorator < Draper::Decorator
     if object.description.present?
       object.description
     else
-      h.content_tag(:i, class: 'text-muted') { DEFAULT_DESCRIPTION }
+      h.content_tag(:i, class: 'text-muted') { generated_description }
     end
   end
 
   private
+
+  def generated_description
+    count = RollFindr::Redis.cache(key: ['TeamLocationCount', object.id.to_s].join('-'), expire: 1.day.seconds) do
+      object.locations.count
+    end
+
+    countries = RollFindr::Redis.cache(key: ['TeamLocationCountryCount', object.id.to_s].join('-'), expire: 1.day.seconds) do
+      object.locations.to_a.collect(&:country).uniq.count
+    end
+
+    "#{object.name} is a Brazilian Jiu-Jitsu association with #{h.pluralize(count, 'affiliated academy')}  in #{h.pluralize(countries, 'different country')}." +
+    if object.instructors.present?
+      if object.instructors.count > 1
+        " #{object.instructors.collect(&:name).join(', ')} are the head instructors."
+      else
+        " #{object.instructors.first.name} is the founder and head instructor."
+      end
+    end || ''
+  end
 
   def avatar_service_url(name, size)
     "/service/avatar/#{size}x#{size}/#{CGI.escape(name)}/image.png"

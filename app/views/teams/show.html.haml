@@ -16,9 +16,11 @@
     .row
       .col-md-2.col-xs-4{:style => 'padding-right: 0px;'}
         .display-field
-          %img.center-block.profile{:src => team.image}
+          %a.center-block.profile{target: '_blank', href: team.image_large, title: "View large logo"}
+            %img.img-thumbnail{:width => 100, :height => 100, :src => team.image, :class => 'logo center-block'}/
+          
         .edit-field
-          %img.center-block.edit-image.profile{:src => team.image}
+          %img.center-block.edit-image.profile.img-thumbnail{:src => team.image}
           %br/
           %input{:'data-url' => upload_image_team_path(team), :'data-upload-avatar' => true, :type => 'file', :class => 'input-md form-control'}/
           - if team.object.image.present?
@@ -40,8 +42,8 @@
           = f.text_area :description, placeholder: 'Provide a description of the team/association', class: 'form-control', rows: 4
         .display-field= simple_format(team.description)
         %br/
-      .col-md-4.instructors
-        %h3.pull-left Head Instructors
+      .col-md-4.col-xs-12.instructors
+        %span.text-muted.small.upcase Head Instructors
         %a{:name => 'instructor'}
         %button.pull-right.edit-field.btn.btn-small.btn-default.add-instructor{:style => 'margin-top: -5px', :type => 'button'}
           %i.fa.fa-plus-circle
@@ -52,6 +54,7 @@
         %br/
     .row
       .col-md-10
+        %h4 See all #{team.name} affiliated academies on the map
         = render partial: 'maps/map', locals: { height: 250, show_create: false }
       .col-md-2
         = render partial: 'maps/filter_list'
