@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   namespace :api do
-    resources :locations, only: [:index, :create]
+    resources :locations, only: [:index, :create] do
+      get :random, on: :collection
+    end
     resources :reviews, only: [:index, :create]
   end
   

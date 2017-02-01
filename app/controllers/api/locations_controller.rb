@@ -43,6 +43,15 @@ class Api::LocationsController < Api::ApiController
       format.json { render partial: 'locations/location' }
     end
   end
+  
+  def random
+    scope = Location.academies.verified
+    @location = scope.skip(rand(scope.count)).first
+
+    respond_to do |format|
+      format.json { render partial: 'locations/location' }
+    end
+  end
 
   private
 

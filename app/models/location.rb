@@ -121,8 +121,7 @@ class Location
   has_one :moved_from_location, class_name: 'Location', inverse_of: :moved_to_location
 
   validates :title, presence: true
-  validates :country, presence: true
-  validates :city, presence: true
+  validates :coordinates, presence: true
 
   belongs_to :team, index: true
   belongs_to :owner, class_name: 'User', index: true, inverse_of: :owned_locations
