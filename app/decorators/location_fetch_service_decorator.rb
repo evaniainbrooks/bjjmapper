@@ -220,7 +220,7 @@ class LocationFetchServiceDecorator < LocationDecorator
     @_source_profile ||= service_data_arr.find {|profile| profile[:source] == object.source}
     return nil unless @_source_profile.present?
 
-    source_profile[component]
+    @_source_profile[component]
   end
 
   def yelp_id
