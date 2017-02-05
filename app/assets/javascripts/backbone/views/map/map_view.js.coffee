@@ -168,7 +168,8 @@ class RollFindr.Views.MapView extends Backbone.View
     lat = @map.getCenter().lat()
     lng = @map.getCenter().lng()
 
-    distance = @model.get('distance') || Math.circleDistance(@map.getCenter(), @map.getBounds().getNorthEast())
+    distance = @model.get('distance') 
+    distance = Math.circleDistance(@map.getCenter(), @map.getBounds().getNorthEast()) unless distance?
 
     @$('.refresh-button .fa').addClass('fa-spin')
 

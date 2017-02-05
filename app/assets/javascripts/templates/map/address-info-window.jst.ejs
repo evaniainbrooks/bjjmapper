@@ -1,5 +1,5 @@
 <div class="show-location-overlay container-fluid">
-  <a href="<%= Routes.map_path({lat: location.lat, lng: location.lng, ref: 'map_item' }) %>" data-no-turbolink>
+  <a href="<%= Routes.map_path({zoom: 15, lat: location.lat, lng: location.lng, ref: 'map_item' }) %>" data-no-turbolink>
     <h4 class="list-group-item-heading"><%= location.title %></h4>
     <span class="address">
       <span class="fa fa-map-marker"></span>

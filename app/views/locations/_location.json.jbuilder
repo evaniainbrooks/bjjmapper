@@ -3,7 +3,6 @@ json.param location.to_param
 json.loctype location.loctype
 json.status location.status
 json.title location.title
-json.description location.description
 json.team_name location.team_name
 json.team_id location.team.try(:to_param)
 json.website location.website.try(:strip) || ''

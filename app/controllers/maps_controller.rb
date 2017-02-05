@@ -43,6 +43,7 @@ class MapsController < ApplicationController
   end
 
   def search
+    @locations = @locations.try(:to_a)
     @event_type = params.fetch(:event_type, []).collect(&:to_i)
     @location_type = params.fetch(:location_type, []).collect(&:to_i)
 
@@ -54,7 +55,8 @@ class MapsController < ApplicationController
       @event_end)
     .where(
       :location_id.in => @locations.collect(&:id),
-      :event_type.in => @event_type)
+      :event_type.in => @event_type).to_a
+
     @event_count = @events.count
     @events = @events.group_by(&:location_id)
 
@@ -155,12 +157,12 @@ class MapsController < ApplicationController
     @locations = if @segment.present?
       @segment.locations.limit(@count).offset(@offset)
     elsif @lat.present? && @lng.present?
-      Location.near([@lat, @lng], @distance).limit(@count).offset(@offset)
+      Location.limit(@count).offset(@offset).where(:coordinates => { "$geoWithin" => { "$centerSphere" => [[@lng, @lat], @distance/3963.2] }})
     elsif @text_filter.present?
       Location.limit(@count).offset(@offset)
     end
 
-    return unless @locations.present?
+    return if @locations.nil?
 
     @locations = @locations.not_closed unless flag?(:closed)
     @locations = @locations.not_rejected unless flag?(:rejected)
@@ -180,7 +182,7 @@ class MapsController < ApplicationController
   end
 
   def set_coordinates_from_locations
-    if @locations.present?
+    unless @locations.nil?
       if (@lat.blank? || @lng.blank?) || @text_filter.present?
         @lat = @locations.first.lat
         @lng = @locations.first.lng
