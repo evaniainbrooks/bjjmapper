@@ -194,7 +194,34 @@ class LocationFetchServiceDecorator < LocationDecorator
     facebook_profile.try(:[], :rating_count)
   end
 
+  def street
+    object.street || source_address_component(:street)
+  end
+  
+  def city
+    object.city || source_address_component(:city)
+  end
+  
+  def state
+    object.state || source_address_component(:state)
+  end
+
+  def postal_code
+    object.postal_code || source_address_component(:postal_code)
+  end
+
+  def country
+    object.country || source_address_component(:country)
+  end
+
   private
+
+  def source_address_component(component)
+    @_source_profile ||= service_data_arr.find {|profile| profile[:source] == object.source}
+    return nil unless @_source_profile.present?
+
+    source_profile[component]
+  end
 
   def yelp_id
     yelp_profile.try(:[], :yelp_id)
