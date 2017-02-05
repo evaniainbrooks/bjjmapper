@@ -23,7 +23,7 @@ class RollFindr.Views.DirectionsDialogView extends Backbone.View
     geolocateSuccessCallback = (position)=>
       initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
       @$('[name="address"]').val(initialLocation.toString())
-      @getDirections()
+      @getDirections(initialLocation)
 
     geolocateFailedCallback = =>
       toastr.error('Could not pinpoint your location', 'Error')
@@ -33,9 +33,12 @@ class RollFindr.Views.DirectionsDialogView extends Backbone.View
     else
       geolocateFailedCallback()
 
-  getDirections: ->
-    startPoint = @$('[name="address"]').val()
-    endPoint = @$('.directions-dialog').data('address')
+  getDirections: (startPoint)->
+    startPoint = @$('[name="address"]').val() unless startPoint?
+    endPointLat = @$('.directions-dialog').data('lat')
+    endPointLng = @$('.directions-dialog').data('lng')
+    endPoint = new google.maps.LatLng(endPointLat, endPointLng)
+
     travelMode = @$('[name="travel_mode"]:checked').val()
 
     @directionsService.route({

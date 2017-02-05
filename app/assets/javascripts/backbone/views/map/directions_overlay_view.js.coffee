@@ -15,6 +15,7 @@ class RollFindr.Views.DirectionsOverlayView extends Backbone.View
       'setDirectionsOverlay',
       'hideDirectionsOverlay')
 
+    @map = options.map
     @setupEventListeners()
 
   setDirectionsOverlay: (e)->
