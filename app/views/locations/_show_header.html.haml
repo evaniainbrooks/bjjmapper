@@ -3,6 +3,9 @@
     = location.title
     %small
       %span.fa.fa-search
+    - if location.team.present?
+      %small
+        = link_to location.team_name, team_path(location.team, ref: 'loc_title')
 - else
   %h1.display-field
     = location.title

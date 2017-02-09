@@ -14,7 +14,15 @@ module LocationsHelper
   
   def location_create_params
     p = params.require(:location).permit(*Location::CREATE_PARAMS_WHITELIST)
-    p[:coordinates] = JSON.parse(p[:coordinates]) if p[:coordinates].present?
+    
+    if params[:status].blank?
+      p[:status] = params.fetch(:pending, true) ? Location::STATUS_PENDING : Location::STATUS_VERIFIED
+    end
+
+    if p[:coordinates].present? && p[:coordinates].instance_of?(String)
+      p[:coordinates] = JSON.parse(p[:coordinates])
+    end
+
     p[:modifier] = current_user if signed_in?
     p
   end

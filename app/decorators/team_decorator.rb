@@ -61,7 +61,7 @@ class TeamDecorator < Draper::Decorator
       object.locations.to_a.collect(&:country).uniq.count
     end
 
-    academies = "#{object.name} is a Brazilian Jiu-Jitsu association with #{h.pluralize(count, 'affiliated academy')}  in #{h.pluralize(countries, 'different country')}." +
+    academies = "#{object.name} is a Brazilian Jiu-Jitsu association with #{h.pluralize(count, 'affiliated academy')} in #{h.pluralize(countries, 'different country')}."
     
     instructors = if object.instructors.present?
       if object.instructors.count > 1
