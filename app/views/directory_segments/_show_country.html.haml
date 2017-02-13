@@ -7,6 +7,10 @@
       %h1
         = directory_segment.full_name
         %small BJJ academies and events
+        %small
+          %a{:href => map_path(segment: directory_segment.to_param, zoom: directory_segment.zoom, lat: directory_segment.lat, lng: directory_segment.lng, :ref => 'segment_city'), :title => "#{directory_segment.full_name} BJJ schools on the map"}
+            %span.fa.fa-search-plus
+            See larger map
   .row.hidden-xs
     .col-md-10
       = render partial: 'breadcrumb'
@@ -14,7 +18,7 @@
       = render partial: 'create_location_button'
   .row
     .col-md-10
-      = render partial: 'maps/map', locals: { height: 250, show_create: false }
+      = render partial: 'maps/map', locals: { height: 275, show_create: false }
     .col-md-2
       = render partial: 'maps/filter_list'
   .row

@@ -4,21 +4,10 @@ class SearchController < ApplicationController
 
     head :bad_request and return false unless query.present?
 
-    @addresses = GeocodersHelper.search(query)
-    @locations = begin
-      ids = Location.search_ids(query)
-      Location.verified.where(:_id.in => ids)
-    end
-
-    @users = begin
-      ids = User.search_ids(query)
-      User.jitsukas.where(:_id.in => ids).where(:role.ne => Role::ANONYMOUS).where(:flag_display_directory => true)
-    end
-
-    @teams = begin
-      ids = Team.search_ids(query)
-      Team.where(:_id.in => ids)
-    end
+    @addresses = GeocodersHelper.search(query).to_a
+    @locations = Location.search(query).verified.to_a
+    @users = User.search(query).jitsukas.where(:role.ne => Role::ANONYMOUS).where(:flag_display_directory => true).to_a
+    @teams = Team.search(query).to_a
     
     tracker.track('search',
       query: query,
