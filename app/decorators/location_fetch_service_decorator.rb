@@ -111,14 +111,12 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
   
   def website_status
-    @_response ||= begin
-      r = RollFindr::WebsiteStatusService.status(url: website, location_id: object.id.to_s)
-      if r.nil? || r[:code].to_i == 0
-        h.content_tag(:span, class: 'text-muted small') { '(unknown)' }
-      else
-        txtclass = r[:status] == 'available' ? 'small text-success' : 'small text-danger'
-        h.content_tag(:span, class: txtclass) { "(#{r[:status]})" }
-      end
+    r = website_status_data
+    if r.nil? || r[:code].to_i == 0
+      h.content_tag(:span, class: 'text-muted small') { '(unknown)' }
+    else
+      txtclass = r[:status] == 'available' ? 'small text-success' : 'small text-danger'
+      h.content_tag(:span, class: txtclass) { "(#{r[:status]})" }
     end
   end
   
@@ -256,7 +254,9 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
   
   def photos_data
-    @_photos_data ||= (RollFindr::LocationFetchService.photos(self.id, count: PHOTO_COUNT) || [])
+    @_photos_data ||= RollFindr::Redis.cache(key: ['Photos', self.id, PHOTO_COUNT].join('-'), expire: 1.hour.seconds) do
+      RollFindr::LocationFetchService.photos(self.id, count: PHOTO_COUNT) || []
+    end
   end
 
   def service_data(sym)
@@ -264,6 +264,14 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
 
   def service_data_arr
-    @_service_data ||= (RollFindr::LocationFetchService.detail(self.id, self.address_components.merge(title: object.title)) || [])
+    @_service_data ||= RollFindr::Redis.cache(key: ['Detail', self.id].join('-'), expire: 1.hour.seconds) do
+      RollFindr::LocationFetchService.detail(self.id, self.address_components.merge(title: object.title)) || []
+    end
+  end
+  
+  def website_status_data
+    @_response ||= RollFindr::Redis.cache(key: ['WebsiteStatus', self.id].join('-'), expire: 1.hour.seconds) do
+      RollFindr::WebsiteStatusService.status(url: website, location_id: self.id.to_s)
+    end
   end
 end
