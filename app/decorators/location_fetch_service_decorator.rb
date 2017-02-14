@@ -254,9 +254,9 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
   
   def photos_data
-    @_photos_data ||= RollFindr::Redis.cache(key: ['Photos', self.id, PHOTO_COUNT].join('-'), expire: 1.hour.seconds) do
-      RollFindr::LocationFetchService.photos(self.id, count: PHOTO_COUNT) || []
-    end
+    @_photos_data ||= (RollFindr::Redis.cache(key: ['Photos', self.id, PHOTO_COUNT].join('-'), expire: 1.hour.seconds) do
+      RollFindr::LocationFetchService.photos(self.id, count: PHOTO_COUNT)
+    end || [])
   end
 
   def service_data(sym)
@@ -264,9 +264,9 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
 
   def service_data_arr
-    @_service_data ||= RollFindr::Redis.cache(key: ['Detail', self.id].join('-'), expire: 1.hour.seconds) do
-      RollFindr::LocationFetchService.detail(self.id, self.address_components.merge(title: object.title)) || []
-    end
+    @_service_data ||= (RollFindr::Redis.cache(key: ['Detail', self.id].join('-'), expire: 1.hour.seconds) do
+      RollFindr::LocationFetchService.detail(self.id, self.address_components.merge(title: object.title))
+    end || [])
   end
   
   def website_status_data
