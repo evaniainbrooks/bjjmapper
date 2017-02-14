@@ -173,8 +173,7 @@ class MapsController < ApplicationController
 
   def filter_locations
     if @text_filter.present? && @locations.present?
-      filter_ids = Location.search_ids(@text_filter)
-      @locations = @locations.where(:_id.in => filter_ids) if filter_ids.present?
+      @locations = @locations.search(@text_filter)
     end
 
     @team = params.fetch(:team, [])

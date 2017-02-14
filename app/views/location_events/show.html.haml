@@ -15,7 +15,7 @@
 = content_for(:head) do
   %meta{:name => 'ICBM', :content => "#{event.location.lat},#{event.location.lng}"}/
   %meta{:name => 'geo.position', :content => "#{event.location.lat},#{event.location.lng}"}/
-  %meta{:name => 'geo.placename', :content => "#{event.location.address_components.join(', ')}"}/
+  %meta{:name => 'geo.placename', :content => "#{event.location.address_components.values.join(', ')}"}/
 
 = content_for(:scripts) do
   = javascript_include_tag 'map'

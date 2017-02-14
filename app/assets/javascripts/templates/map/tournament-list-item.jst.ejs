@@ -37,13 +37,13 @@
     </a>
     <ul class="small list-unstyled">
       <% if (null !== location.events[0].organization.website && location.events[0].organization.website.length > 0) { %>
-        <li><span class="col-md-offset-1 label">Org website</span> <a class="website" href="http://<%= location.events[0].organization.website %>"><%= location.events[0].organization.website %></a></li>
+        <li><span class="col-md-offset-1 label upcase">Org website</span> <a class="website" href="http://<%= location.events[0].organization.website %>"><%= location.events[0].organization.website %></a></li>
       <% } %>
       <% if (null !== location.events[0].website && location.events[0].website.length > 0) { %>
-        <li><span class="col-md-offset-1 label">Website</span> <a class="website" href="http://<%= location.events[0].website %>"><%= location.events[0].website %></a></li>
+        <li><span class="col-md-offset-1 label upcase">Website</span> <a class="website" href="http://<%= location.events[0].website %>"><%= location.events[0].website %></a></li>
       <% } %>
       <% if (null !== location.events[0].facebook && location.events[0].facebook.length > 0) { %>
-        <li><span class="col-md-offset-1 label">Facebook</span> <a class="website" href="http://facebook.com/<%= location.events[0].facebook %>"><%= location.events[0].facebook %></a></li>
+        <li><span class="col-md-offset-1 label upcase">Facebook</span> <a class="website" href="http://facebook.com/<%= location.events[0].facebook %>"><%= location.events[0].facebook %></a></li>
       <% } %>
     </ul>
     <span class="text-info distance small"><%= location.distance %></span>
