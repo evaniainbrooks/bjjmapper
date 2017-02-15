@@ -52,9 +52,15 @@ class InstructorsController < ApplicationController
   def find_or_create_instructor
     if params.key?(:user)
       User.create!(create_params)
-    else
+    elsif params.fetch(:id, nil).present?
       User.find(params[:id])
+    else
+      User.create!(create_stub_params)
     end
+  end
+
+  def create_stub_params
+    { name: params[:name], belt_rank: 'black', stripe_rank: 0, role: 'instructor_stub', flag_stub: true }
   end
 
   def create_params

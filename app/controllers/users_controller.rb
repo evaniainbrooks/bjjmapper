@@ -24,8 +24,7 @@ class UsersController < ApplicationController
       .asc(:name)
 
     if @query.present?
-      filter_ids = User.search_ids(@query) || []
-      @users = @users.where(:_id.in => filter_ids)
+      @users = @users.search(@query)
     end
 
     tracker.track('showUsersIndex')

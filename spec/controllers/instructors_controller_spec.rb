@@ -33,6 +33,15 @@ describe InstructorsController do
           end.to change{ Location.find(location.id).instructors.count }.by(1)
         end
       end
+      context 'with only a name' do
+        let(:expected_name) { 'Evan Brooks' }
+        it 'creates and adds the instructor stub to the location' do
+          expect do
+            post :create, { format: 'json', name: expected_name, location_id: location.id }, session_params
+          end.to change{ Location.find(location.id).instructors.count }.by(1)
+          User.last.name.should eq expected_name
+        end
+      end
       context 'with a user object' do
         let(:instructor_params) do
           {
