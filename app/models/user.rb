@@ -66,6 +66,7 @@ class User
   field :internal, type: Boolean
   field :female, type: Boolean
 
+  field :flag_stub, type: Boolean, default: false
   field :flag_display_email, type: Boolean, default: false
   field :flag_display_directory, type: Boolean, default: true
   field :flag_display_reviews, type: Boolean, default: true
