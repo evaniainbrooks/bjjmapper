@@ -1,4 +1,6 @@
 require 'mongoid-history'
+require 'mongoid_search_ext'
+require 'redis_cache'
 require 'ice_cube'
 
 class Event
@@ -39,6 +41,8 @@ class Event
   include Mongoid::Slug
   include Mongoid::Timestamps
   include Mongoid::History::Trackable
+  
+  extend MongoidSearchExt::Search
 
   attr_accessor :event_recurrence
   attr_accessor :weekly_recurrence_days
@@ -102,6 +106,24 @@ class Event
   index :event_type => 1
   index :ending => 1
   index :starting => 1
+  
+  index({
+    :title => 'text',
+    :description => 'text',
+    :email => 'text',
+    :website => 'text',
+    :facebook => 'text'
+  },
+  {
+    :name => 'event_text_index',
+    :weights => {
+      :title => 20,
+      :description => 10,
+      :email => 5,
+      :website => 5,
+      :facebook => 5
+    }
+  })
 
   def to_param
     slug || id.try(:to_s)

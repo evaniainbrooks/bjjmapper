@@ -8,7 +8,6 @@ class Location
   include Mongoid::Document
   include Mongoid::Slug
   include Mongoid::Timestamps
-  include Geocoder::Model::Mongoid
 
   include Mongoid::History::Trackable
 
@@ -35,7 +34,7 @@ class Location
     :country,
     :title,
     :description,
-    :coordinates,
+    #:coordinates,
     :team_id,
     :directions,
     :phone,
@@ -44,7 +43,9 @@ class Location
     :source,
     :status,
     :status_updated_at,
-    :facebook,
+    :facebook_id,
+    :yelp_id,
+    :google_id,
     :twitter,
     :flag_closed,
     :instagram].freeze
@@ -57,22 +58,9 @@ class Location
                   :track_update   =>  true,     # track document updates, default is true
                   :track_destroy  =>  true     # track document destruction, default is false
 
-  geocoded_by :address
   before_validation :generate_event_venue_title
-  before_validation :geocode, if: ->(obj) { (obj.address.present? && obj.address_changed?) && !(obj.new_record? && obj.coordinates.present?) }
-  before_validation :reverse_geocode
 
-  reverse_geocoded_by :coordinates do |obj, results|
-    geo = results.first
-    if obj.coordinates_changed? && geo.present? && !(obj.new_record? && obj.address.present?)
-      obj.street = geo.street_address
-      obj.city = geo.city
-      obj.state = geo.state
-      obj.postal_code = geo.postal_code
-      obj.country = geo.country || geo.country_code
-    end
-  end
-
+  before_save :set_profile_associations
   before_save :set_closed_flag
   before_save :populate_timezone
   before_save :set_has_black_belt_flag
@@ -104,7 +92,12 @@ class Location
   field :phone
   field :email
   field :timezone
-  field :facebook
+  field :facebook # Deprecated
+  
+  attr_accessor :facebook_id
+  attr_accessor :google_id
+  attr_accessor :yelp_id
+  
   field :instagram
   field :twitter
   field :ig_hashtag
@@ -114,7 +107,7 @@ class Location
   field :flag_closed, type: Boolean, default: false
 
   canonicalize :website, as: :website
-  canonicalize :facebook, as: :facebook
+  canonicalize :facebook, as: :facebook # Deprecated
   canonicalize :phone, as: :phone
 
   belongs_to :moved_to_location, class_name: 'Location', inverse_of: :moved_from_location
@@ -237,7 +230,7 @@ class Location
   end
 
   def address
-    address_components.values.select(&:present?).join(', ')
+    address_components.values.compact.join(', ')
   end
 
   def team_name
@@ -262,6 +255,10 @@ class Location
 
   def lng
     self.to_coordinates[1]
+  end
+
+  def to_coordinates
+    self.coordinates.reverse
   end
 
   def coordinates=(coordinates)
@@ -341,5 +338,17 @@ class Location
   def set_has_black_belt_flag
     self.flag_has_black_belt = self.instructors.any?{|i| i.belt_rank == 'black'}
     return true
+  end
+
+  def set_profile_associations
+    [:yelp, :facebook, :google].each do |profile|
+      idfield = "#{profile}_id".to_sym
+      val = self.send(idfield)
+      if val
+        params = { scope: profile }
+        params[idfield] = val
+        RollFindr::LocationFetchService.associate(self.id.to_s, params)
+      end
+    end
   end
 end

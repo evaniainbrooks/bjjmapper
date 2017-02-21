@@ -34,11 +34,11 @@ describe SessionsController do
       it 'creates a session with the new user' do
         session[:user_id].should be_nil
         post :create, { provider: omniauth_provider }, session_params
-        session[:user_id].should eq User.last.to_param
+        session[:user_id].should_not be_blank
       end
       it 'redirects to the edit profile page with the new user' do
         post :create, { provider: omniauth_provider }, session_params
-        response.should redirect_to user_path(User.last.to_param, welcome: 1, edit: 1)
+        response.should redirect_to user_path(User.find(omniauth_name), welcome: 1, edit: 1)
       end
     end
     context 'when the user does exist' do

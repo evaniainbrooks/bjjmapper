@@ -2,12 +2,14 @@ require 'spec_helper'
 require 'shared/tracker_context'
 require 'shared/timezonesvc_context'
 require 'shared/redis_context'
+require 'shared/geocoder_context'
 
 describe LocationsController do
   include_context 'skip tracking'
   include_context 'timezone service'
   include_context 'redis'
-  
+  include_context 'geocoder service'
+
   describe 'POST remove_image' do
     let(:location) { create(:location, image_tiny: 'evan', image: 'xyz', image_large: 'abc') }
     context 'when not signed in' do
@@ -131,7 +133,7 @@ describe LocationsController do
       end
       context 'when there are locations nearby' do
         let(:other_location) { build(:location, title: 'near you location') }
-        before { Location.stub_chain(:near, :where, :not_closed, :verified, :limit, :to_a).and_return([location, other_location]) }
+        before { Location.stub_chain(:where, :not_closed, :verified, :limit, :where, :to_a).and_return([location, other_location]) }
         context 'with reject parameter' do
           it 'returns the nearby locations without the rejected location' do
             get :nearby, format: 'json', reject: location.to_param, lat: 80.0, lng: 80.0
@@ -154,7 +156,7 @@ describe LocationsController do
         end
       end
       context 'when there are no locations nearby' do
-        before { Location.stub_chain(:near, :where, :not_closed, :verified, :limit, :to_a).and_return([]) }
+        before { Location.stub_chain(:where, :not_closed, :verified, :limit, :where, :to_a).and_return([]) }
         it 'returns 204 no content' do
           get :nearby, format: 'json', lat: 80.0, lng: 80.0
           response.status.should eq 204
@@ -298,11 +300,21 @@ describe LocationsController do
         post :create, create_params, session_params
       end
       context 'with json format' do
+        before { Redis.any_instance.stub(:del) }
         it 'creates and returns a new location' do
-          Redis.any_instance.stub(:del)
-          
           post :create, create_params.merge(format: 'json'), session_params
+          
           assigns[:location].title.should eq create_params[:location][:title]
+        end
+        it 'geocodes the address' do
+          post :create, {location: { title: 'Meow', coordinates: [80.0, 80.0] }}.merge(format: 'json'), session_params
+
+          assigns[:location].street.should_not be_blank
+        end
+        it 'reverse geocodes the coordinates' do
+          post :create, {location: { title: 'Meow', city: 'Halifax', country: 'NS' }}.merge(format: 'json'), session_params
+
+          assigns[:location].coordinates.should_not be_blank
         end
       end
     end

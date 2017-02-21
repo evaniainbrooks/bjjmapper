@@ -158,12 +158,12 @@ describe User do
     end
     context 'when there is a lineal_parent' do
       before do
-        create(:user, name: 'a')
-        create(:user, name: 'b', lineal_parent: User.last)
+        @a = create(:user, name: 'a')
+        @b = create(:user, name: 'b', lineal_parent: @a)
       end
       let(:expected_names) { ['b', 'a'] }
       it 'returns a list of the ancestors' do
-        build_stubbed(:user, lineal_parent: User.last).full_lineage.map(&:name).should eq expected_names
+        create(:user, lineal_parent: @b).full_lineage.map(&:name).should eq expected_names
       end
     end
   end

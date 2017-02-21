@@ -8,7 +8,6 @@ FactoryGirl.define do
     country 'Canada'
     city 'Halifax'
     loctype Location::LOCATION_TYPE_ACADEMY
-    team
 
     factory :event_venue do
       loctype Location::LOCATION_TYPE_EVENT_VENUE

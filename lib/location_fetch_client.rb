@@ -10,6 +10,24 @@ module RollFindr
       @host = host
       @port = port
     end
+    
+    def associate(location_id, opts = {})
+      query = {api_key: API_KEY}.merge(opts.slice(:scope, :yelp_id, :facebook_id, :google_id)).to_query
+      uri = URI("http://#{@host}:#{@port}/#{SERVICE_PATH}/locations/#{location_id}/associate?#{query}")
+      
+      http = Net::HTTP.new(uri.host, uri.port)
+      request = Net::HTTP::Post.new(uri.request_uri)
+      request.body = location_data.to_json
+      request.content_type = 'application/json'
+
+      begin
+        response = http.request(request)
+        response.code.to_i
+      rescue StandardError => e
+        Rails.logger.error e.message
+        500
+      end
+    end
 
     def search_async(location_data, scope = nil)
       query = {api_key: API_KEY}
@@ -28,6 +46,13 @@ module RollFindr
         Rails.logger.error e.message
         500
       end
+    end
+
+    def listings(location_id, opts = {})
+      query = {api_key: API_KEY}.merge(opts.slice(:scope, :lat, :lng)).to_query
+      uri = URI("http://#{@host}:#{@port}/#{SERVICE_PATH}/locations/#{location_id}/listings?#{query}")
+
+      get_request(uri)
     end
 
     def photos(location_id, opts = {})

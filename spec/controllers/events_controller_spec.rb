@@ -61,6 +61,7 @@ describe EventsController do
               :city => 'New York',
               :country => 'USA',
               :title => 'New title',
+              :coordinates => [80.0, 80.0],
               :description => 'New description'
             }
           }

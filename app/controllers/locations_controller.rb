@@ -118,7 +118,12 @@ class LocationsController < ApplicationController
 
     head :bad_request and return false unless lat.present? && lng.present?
 
-    @locations = Location.near([lat, lng], distance).where(:loctype.in => location_filter).not_closed.verified.limit(fetch_count).to_a
+    @locations = Location
+      .where(:loctype.in => location_filter)
+      .not_closed.verified.limit(fetch_count)
+      .where(:coordinates => { "$geoWithin" => { "$centerSphere" => [[lng, lat], distance/3963.2] }})
+      .to_a
+
     @locations.reject!{|loc| loc.to_param.eql?(reject)} if reject.present?
 
     head :no_content and return false unless @locations.present?
@@ -169,7 +174,9 @@ class LocationsController < ApplicationController
   end
 
   def create
-    @location = Location.create(create_params)
+    @location = Location.new(create_params)
+    LocationGeocoder.update(@location)
+    @location.save!
 
     tracker.track('createLocation',
       location: @location.attributes.as_json({})
@@ -194,7 +201,7 @@ class LocationsController < ApplicationController
       old_coords: @location.to_coordinates,
       new_coords: [lat, lng])
 
-    @location.update!({
+    @location.assign_attributes({
       coordinates: [lng, lat],
       street: nil,
       city: nil,
@@ -202,6 +209,9 @@ class LocationsController < ApplicationController
       country: nil,
       postal_code: nil
     })
+
+    LocationGeocoder.update(@location)
+    @location.save!
 
     respond_to do |format|
       format.json { render partial: 'location' }
@@ -216,7 +226,9 @@ class LocationsController < ApplicationController
       updates: create_params
     )
 
-    @location.update!(create_params)
+    @location.assign_attributes(create_params)
+    LocationGeocoder.update(@location)
+    @location.save!
 
     respond_to do |format|
       format.json { render partial: 'location' }
@@ -247,7 +259,7 @@ class LocationsController < ApplicationController
   private
 
   def decorated_locations_with_distance_to_center(locations, lat, lng)
-    LocationDecorator.decorate_collection(locations, context: { lat: lat, lng: lng })
+    LocationFetchServiceDecorator.decorate_collection(locations, context: { lat: lat, lng: lng })
   end
   
   private
