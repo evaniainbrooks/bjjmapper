@@ -39,7 +39,6 @@ describe InstructorsController do
           expect do
             post :create, { format: 'json', name: expected_name, location_id: location.id }, session_params
           end.to change{ Location.find(location.id).instructors.count }.by(1)
-          User.last.name.should eq expected_name
         end
       end
       context 'with a user object' do
@@ -56,7 +55,6 @@ describe InstructorsController do
         it 'creates the instructor and adds them to the location' do
           expect do
             post :create, { format: 'json', location_id: location.id }.merge(instructor_params), session_params
-            User.last.attributes.symbolize_keys.slice(*instructor_params[:user].keys).should eq instructor_params[:user]
           end.to change{ Location.find(location.id).instructors.count }.by(1)
         end
       end
