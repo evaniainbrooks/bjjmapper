@@ -32,7 +32,7 @@ gem 'user-agent'
 gem 'exception_notification'
 gem 'lograge'
 gem 'draper'
-gem 'mongoid', '~> 4.0.0.beta'
+gem 'mongoid', '~> 5.0.0'
 gem 'mongoid-history', require: false
 gem 'geocoder', require: false
 gem 'mixpanel-ruby', require: false

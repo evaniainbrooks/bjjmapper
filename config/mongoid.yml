@@ -1,34 +1,20 @@
 production:
-  options:
-    raise_not_found_error: false
-  sessions:
+  clients:
     default:
       database: rollfindr_prod
       hosts:
         - services.bjjmapper.com:27017
 
-production_old:
-  options:
-    raise_not_found_error: false
-  sessions:
-    default:
-      database: rollfindr_prod
-      hosts:
-        - localhost:27017
-
 development:
-  options:
-    raise_not_found_error: false
-  sessions:
+  clients:
     default:
       database: rollfindr
       hosts:
         - localhost:27017
+
 test:
-  options:
-    raise_not_found_error: false
-  sessions:
+  clients:
     default:
-      database: mongoid_test
+      database: mongoid_test 
       hosts:
         - localhost:27017
