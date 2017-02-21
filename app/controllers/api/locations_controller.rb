@@ -44,6 +44,19 @@ class Api::LocationsController < Api::ApiController
     end
   end
   
+  def update
+    id_param = params.fetch(:id, '')
+    @location = Location.find(id_param)
+    
+    head :not_found and return false unless @location.present?
+
+    @location.update!(create_params)
+
+    respond_to do |format|
+      format.json { render partial: 'locations/location' }
+    end
+  end
+  
   def random
     scope = Location.academies.verified
     @location = scope.skip(rand(scope.count)).first
@@ -99,7 +112,7 @@ class Api::LocationsController < Api::ApiController
     @distance = params.fetch(:distance, DEFAULT_SEARCH_DISTANCE).to_f
 
     @locations = if @lat.present? && @lng.present?
-      Location.near([@lat, @lng], @distance).limit(@count).offset(@offset)
+      Location.limit(@count).offset(@offset).where(:coordinates => { "$geoWithin" => { "$centerSphere" => [[@lng, @lat], @distance/3963.2] }})
     elsif @text_filter.present?
       Location.limit(@count).offset(@offset)
     end
@@ -115,8 +128,7 @@ class Api::LocationsController < Api::ApiController
 
   def filter_locations
     if @text_filter.present? && @locations.present?
-      filter_ids = Location.search_ids(@text_filter)
-      @locations = @locations.where(:_id.in => filter_ids) if filter_ids.present?
+      @locations = @locations.search(@text_filter)
     end
 
     @team = params.fetch(:team, [])

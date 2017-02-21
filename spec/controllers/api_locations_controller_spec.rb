@@ -29,7 +29,8 @@ describe Api::LocationsController do
   describe 'POST create' do
     let(:create_params) do
       { :location => 
-        { :city => 'New York', 
+        { :city => 'New York',
+          :coordinates => [80.0, 80.0],
           :country => 'USA', 
           :title => 'New title', 
           :description => 'New description' 
@@ -64,6 +65,19 @@ describe Api::LocationsController do
           expect do
             post :create, create_params.tap{|h| h[:location].delete(:title)}.merge(api_key: user.api_key, format: 'json')
           end.to raise_error 
+        end
+      end
+    end
+  end
+  describe 'POST update' do
+    let(:update_params) { { :location => { :title => 'New title', :description => 'New description' } } }
+    let(:original_description) { 'xyz' }
+    let(:location) { create(:location, description: original_description) }
+    context 'when signed in' do
+      context 'with json format' do
+        it 'updates and returns the location' do
+          post :update, { id: location.to_param, :format => 'json', api_key: user.api_key }.merge(update_params)
+          assigns[:location].description.should eq update_params[:location][:description]
         end
       end
     end

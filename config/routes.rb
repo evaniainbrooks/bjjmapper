@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   namespace :api do
-    resources :locations, only: [:index, :create] do
+    resources :locations, only: [:index, :create, :update] do
       get :random, on: :collection
     end
     resources :reviews, only: [:index, :create]
@@ -11,9 +11,11 @@ Rails.application.routes.draw do
     resources :organizations, only: [:new, :create]
     resources :locations, only: [:index, :show] do
       post :fetch, on: :member
+
       get :pending, on: :collection
       get :rejected, on: :collection
       get :moderate, on: :collection
+
     end
     resources :users do
       get :edit_merge, on: :member
