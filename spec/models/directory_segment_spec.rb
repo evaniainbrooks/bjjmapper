@@ -25,7 +25,7 @@ describe DirectorySegment do
     context 'when it is a child' do
       subject { build_stubbed(:directory_segment, parent_segment: build_stubbed(:directory_segment)) }
       before do 
-        Location.should_receive(:near).with(subject.coordinates, subject.distance) { Location }
+        Location.should_receive(:where) { Location }
       end
       it 'selects locations near the coordinates' do
         subject.locations

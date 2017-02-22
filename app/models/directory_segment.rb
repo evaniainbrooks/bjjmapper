@@ -93,7 +93,7 @@ class DirectorySegment
 
   def locations
     if self.child?
-      @_locations ||= Location.near(self.to_coordinates, self.distance)
+      @_locations ||= Location.where(:coordinates => { "$geoWithin" => { "$centerSphere" => [self.coordinates, self.distance/3963.2] }})
     else
       @_locations ||= Location.where(:country.in => self.abbreviations.push(self.name))
     end
