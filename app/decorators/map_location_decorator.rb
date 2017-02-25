@@ -1,6 +1,6 @@
 require 'i18n'
 
-class MapLocationDecorator < LocationFetchServiceDecorator
+class MapLocationDecorator < LocationDecorator 
   decorates :location
 
   def initialize(object, options = EMPTY_HASH)

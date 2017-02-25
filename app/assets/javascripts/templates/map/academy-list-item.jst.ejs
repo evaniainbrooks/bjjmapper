@@ -53,24 +53,6 @@
       <% if (null !== location.website && location.website.length > 0) { %>
         <li><span class="col-md-offset-1 label text-muted upcase">Website</span> <a class="website" href="http://<%= location.website %>"><%= location.website %></a></li>
       <% } %>
-      <li>
-        <span class="col-md-offset-1 label text-muted upcase">Profiles</span>
-        <% if (null !== location.facebook_url && location.facebook_url.length > 0) { %>
-          <a class="facebook" href="<%= location.facebook_url %>"><i class="fa fa-facebook-square "></i></a>
-        <% } %>
-        <% if (null !== location.twitter && location.twitter.length > 0) { %>
-          <a class="twitter" href="http://twitter.com/<%= location.twitter %>"><i class="fa fa-twitter-square "></i></a>
-        <% } %>
-        <% if (null !== location.instagram && location.instagram.length > 0) { %>
-          <a class="instagram" href="http://instagram.com/<%= location.instagram %>"><i class="fa fa-instagram "></i></a>
-        <% } %>
-        <% if (null !== location.google_url && location.google_url.length > 0) { %>
-          <a class="google" href="<%= location.google_url %>"><i class="fa fa-google "></i></a>
-        <% } %>
-        <% if (null !== location.yelp_url && location.yelp_url.length > 0) { %>
-          <a class="yelp" href="<%= location.yelp_url %>"><i class="fa fa-yelp "></i></a>
-        <% } %>
-      </li>
     </ul>
     <span class="text-info distance small"><%= location.distance %></span>
   </div>
