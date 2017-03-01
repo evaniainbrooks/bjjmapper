@@ -6,6 +6,7 @@ class RollFindr.Views.StaticMapView extends Backbone.View
   initialize: (options)->
     _.bindAll(this,
       'activeMarkerChanged',
+      'activateSingularMarker',
       'setupEventListeners',
       'setupGoogleMap',
       'setCenterAndRefresh',
@@ -19,9 +20,12 @@ class RollFindr.Views.StaticMapView extends Backbone.View
 
       @setupEventListeners()
       @setCenterAndRefresh()
-      if (@model.get('locations').size() == 1)
-        id = @model.get('locations').first().get('id')
-        RollFindr.GlobalEvents.trigger('markerActive', {id: id})
+      #@activateSingularMarker()
+
+  activateSingularMarker: ->
+    if (@model.get('locations').size() == 1)
+      id = @model.get('locations').first().get('id')
+      RollFindr.GlobalEvents.trigger('markerActive', {id: id})
 
   initializeMarkerView: (editable)->
     shouldRender = @markerView?
