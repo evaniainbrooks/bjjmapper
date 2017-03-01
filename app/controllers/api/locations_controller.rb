@@ -4,8 +4,6 @@ class Api::LocationsController < Api::ApiController
   DEFAULT_SEARCH_DISTANCE = 10.0
   DEFAULT_SEARCH_COUNT = 100
 
-  DEFAULT_SORT_ORDER = Map::DEFAULT_SORT_ORDER
-
   before_filter :set_coordinates, only: [:index]
   before_filter :set_locations_scope, only: [:index]
   before_filter :filter_locations, only: [:index]
@@ -13,20 +11,6 @@ class Api::LocationsController < Api::ApiController
   helper_method :location
 
   def index
-    @sort = params.fetch(:sort, DEFAULT_SORT_ORDER).to_sym
-    @locations = case @sort
-      when :distance 
-        @locations.sort_by {|loc| loc.instance_variable_get('@distance') }
-      when :title 
-        @locations.sort_by {|loc| loc.title }
-      when :newest 
-        @locations.sort_by {|loc| loc.object.created_at }
-      when :oldest 
-        @locations.sort_by {|loc| -loc.object.created_at }
-      else 
-        @locations
-      end
-
     respond_to do |format|
       format.json
     end
@@ -111,18 +95,17 @@ class Api::LocationsController < Api::ApiController
     @text_filter = params.fetch(:query, nil)
     @distance = params.fetch(:distance, DEFAULT_SEARCH_DISTANCE).to_f
 
-    @locations = if @lat.present? && @lng.present?
-      Location.limit(@count).offset(@offset).where(:coordinates => { "$geoWithin" => { "$centerSphere" => [[@lng, @lat], @distance/3963.2] }})
-    elsif @text_filter.present?
-      Location.limit(@count).offset(@offset)
-    end
-
-    return unless @locations.present?
+    return unless @lat.present? && @lng.present?
+    @locations = Location
+      .limit(@count)
+      .offset(@offset)
+      .where(:coordinates => { "$geoWithin" => { "$centerSphere" => [[@lng, @lat], @distance/3963.2] }})
 
     @locations = @locations.not_closed unless flag?(:closed)
     @locations = @locations.not_rejected unless flag?(:rejected)
     @locations = @locations.verified unless flag?(:unverified) 
     @locations = @locations.with_black_belt if flag?(:bbonly)
+    @locations = @locations.sort_by {|loc| Geocoder::Calculations.distance_between([@lat, @lng], loc.to_coordinates) }
     @locations
   end
 

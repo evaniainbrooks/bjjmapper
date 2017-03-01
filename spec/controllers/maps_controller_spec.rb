@@ -181,7 +181,7 @@ describe MapsController do
         context 'and with search terms' do
           let(:location) { build(:location) }
           before do
-            Location.stub_chain(:not_closed, :limit, :where).and_return([location])
+            Location.stub_chain(:limit, :offset, :geo_near, :max_distance, :verified).and_return([location])
             Location.stub(:first).and_return(location)
           end
           xit 'sets the lat and lng from the first returned location' do

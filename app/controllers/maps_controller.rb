@@ -91,7 +91,7 @@ class MapsController < ApplicationController
     @sort = params.fetch(:sort, DEFAULT_SORT_ORDER).to_sym
     @locations = case @sort
       when :distance 
-        @locations.sort_by {|loc| loc.instance_variable_get('@distance') }
+        @locations.sort_by {|loc| Geocoder::Calculations.distance_between([@lat, @lng], loc.to_coordinates) }
       when :rating 
         @locations.sort_by {|loc| loc.rating }
       when :title 

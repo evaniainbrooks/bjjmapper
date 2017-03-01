@@ -121,7 +121,8 @@ class LocationsController < ApplicationController
     @locations = Location
       .where(:loctype.in => location_filter)
       .not_closed.verified.limit(fetch_count)
-      .where(:coordinates => { "$geoWithin" => { "$centerSphere" => [[lng, lat], distance/3963.2] }})
+      .geo_near([lng, lat])
+      .max_distance(distance)
       .to_a
 
     @locations.reject!{|loc| loc.to_param.eql?(reject)} if reject.present?
@@ -129,7 +130,7 @@ class LocationsController < ApplicationController
     head :no_content and return false unless @locations.present?
 
     @locations = decorated_locations_with_distance_to_center(@locations, lat, lng)
-    @locations = @locations.sort_by { |o| -o.distance_raw }
+    @locations = @locations.sort_by {|loc| Geocoder::Calculations.distance_between([lat, lng], loc.to_coordinates) }
 
     respond_to do |format|
       format.json
