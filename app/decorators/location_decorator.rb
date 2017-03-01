@@ -64,6 +64,10 @@ class LocationDecorator < Draper::Decorator
     @bearing
   end
 
+  def distance_raw
+    @distance
+  end
+
   def distance
     @distance.present? ? "#{h.number_with_precision(@distance, precision: 2)}mi" : nil
   end

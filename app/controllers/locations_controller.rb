@@ -20,7 +20,7 @@ class LocationsController < ApplicationController
   RECENT_COUNT_DEFAULT = 6
   RECENT_COUNT_MAX = 10
 
-  NEARBY_DISTANCE_DEFAULT = 200
+  NEARBY_DISTANCE_DEFAULT = 50
   NEARBY_COUNT_DEFAULT = 4
 
   def close
@@ -129,6 +129,7 @@ class LocationsController < ApplicationController
     head :no_content and return false unless @locations.present?
 
     @locations = decorated_locations_with_distance_to_center(@locations, lat, lng)
+    @locations = @locations.sort_by { |o| -o.distance_raw }
 
     respond_to do |format|
       format.json
