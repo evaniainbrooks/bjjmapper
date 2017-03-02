@@ -8,7 +8,7 @@ class LocationGeocoder
   end
 
   def self.geocode(loc)
-    results = Geocoder.search(loc.address_components)
+    results = Geocoder.search(loc.address_components.values.join(', '))
     if results.present?
       loc.coordinates = results[0].coordinates.reverse 
     end

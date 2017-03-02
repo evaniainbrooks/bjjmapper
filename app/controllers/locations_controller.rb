@@ -1,5 +1,5 @@
 class LocationsController < ApplicationController
-  include LocationsHelper
+  include LocationCreateParams
 
   before_action :set_location, only: [:favorite, :schedule, :destroy, :show, :update, :move, :unlock, :close, :remove_image]
   before_action :redirect_legacy_bsonid, only: [:schedule, :show]
@@ -176,7 +176,7 @@ class LocationsController < ApplicationController
   end
 
   def create
-    @location = Location.new(create_params)
+    @location = Location.new(location_create_params)
     LocationGeocoder.update(@location)
     @location.save!
 
@@ -225,10 +225,10 @@ class LocationsController < ApplicationController
     tracker.track('updateLocation',
       id: @location.to_param,
       location: @location.attributes.as_json({}),
-      updates: create_params
+      updates: location_create_params
     )
 
-    @location.assign_attributes(create_params)
+    @location.assign_attributes(location_create_params)
     LocationGeocoder.update(@location)
     @location.save!
 
@@ -309,10 +309,6 @@ class LocationsController < ApplicationController
       :locations => [location],
       :refresh => 0
     )
-  end
-
-  def create_params
-    location_create_params
   end
 
   def redirect_legacy_bsonid

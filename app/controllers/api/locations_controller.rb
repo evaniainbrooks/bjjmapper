@@ -1,5 +1,5 @@
 class Api::LocationsController < Api::ApiController
-  include LocationsHelper
+  include LocationCreateParams
 
   DEFAULT_SEARCH_DISTANCE = 10.0
   DEFAULT_SEARCH_COUNT = 100
@@ -17,9 +17,9 @@ class Api::LocationsController < Api::ApiController
   end
 
   def create
-    @location = Location.new(create_params)
+    @location = Location.new(location_create_params)
     if @location.academy? && @location.team.nil?
-      @location.team = guess_team(create_params[:title])
+      @location.team = guess_team(location_create_params[:title])
     end
     @location.save!
 
@@ -34,7 +34,7 @@ class Api::LocationsController < Api::ApiController
     
     head :not_found and return false unless @location.present?
 
-    @location.update!(create_params)
+    @location.update!(location_create_params)
 
     respond_to do |format|
       format.json { render partial: 'locations/location' }
@@ -58,10 +58,6 @@ class Api::LocationsController < Api::ApiController
 
   def guess_team(title)
      Team.all.select{|t| title.downcase.index(t.name.downcase) != nil}.first
-  end
-
-  def create_params
-    location_create_params
   end
 
   def flags

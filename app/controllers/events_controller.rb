@@ -1,8 +1,8 @@
 require 'redis_cache'
 
 class EventsController < ApplicationController
-  include EventsHelper
-  include LocationsHelper
+  include EventCreateParams
+  include LocationCreateParams
 
   before_action :set_locations, only: [:index]
   before_action :validate_time_range, only: [:index]

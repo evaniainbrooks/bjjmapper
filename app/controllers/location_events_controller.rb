@@ -1,7 +1,7 @@
 require 'event_schedule'
 
 class LocationEventsController < ApplicationController
-  include EventsHelper
+  include EventCreateParams
 
   before_action :set_location
 
