@@ -2,7 +2,7 @@ require 'active_support/concern'
 
 module Canonicalized
   extend ActiveSupport::Concern
-          
+
   WEBSITE_PATTERN = /^https?:\/\//
   FACEBOOK_PATTERN = /(^https?:\/\/(www\.)?)|(facebook\.com|fb\.com)(\/pg)?\//
   PHONE_PATTERN = /[^\d+]/

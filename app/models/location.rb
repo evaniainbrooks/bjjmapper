@@ -93,11 +93,11 @@ class Location
   field :email
   field :timezone
   field :facebook # Deprecated
-  
+
   attr_accessor :facebook_id
   attr_accessor :google_id
   attr_accessor :yelp_id
-  
+
   field :instagram
   field :twitter
   field :ig_hashtag
@@ -173,7 +173,7 @@ class Location
   scope :with_black_belt, -> { where(:flag_has_black_belt => true) }
 
   scope :not_closed, -> { where(:flag_closed.ne => true) }
-  
+
   def academy?
     self.loctype == Location::LOCATION_TYPE_ACADEMY
   end
@@ -216,11 +216,11 @@ class Location
   end
 
   def address_components
-    { 
-      :street => street, 
+    {
+      :street => street,
       :city => city,
-      :state => state, 
-      :country => country, 
+      :state => state,
+      :country => country,
       :postal_code => postal_code
     }
   end
@@ -283,20 +283,20 @@ class Location
       LocationReviews.new(self.id.to_s)
     end
   end
-  
+
   def search_metadata!
-    params = { 
-      id: self.id.to_s, 
-      lat: self.lat, 
-      lng: self.lng, 
-      title: self.title, 
-      street: self.street, 
-      city: self.city, 
-      state: self.state, 
-      postal_code: self.postal_code, 
-      country: self.country 
+    params = {
+      id: self.id.to_s,
+      lat: self.lat,
+      lng: self.lng,
+      title: self.title,
+      street: self.street,
+      city: self.city,
+      state: self.state,
+      postal_code: self.postal_code,
+      country: self.country
     }
-    
+
     if self.academy?
       RollFindr::LocationFetchService.search_async(location: params) == 202
     else

@@ -3,7 +3,7 @@ require 'shared/locationfetchsvc_context'
 
 describe Event do
   include_context 'locationfetch service'
-  
+
   it 'has a factory' do
     build(:event).should be_valid
   end

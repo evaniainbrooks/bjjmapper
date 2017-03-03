@@ -21,9 +21,9 @@ class Admin::DirectorySegmentsController < Admin::AdminController
     respond_to do |format|
       format.html do
         if @directory_segment.child?
-          redirect_to directory_segment_path(country: @directory_segment.parent_directory_segment.name, city: @directory_segment.name, edit: 1, create: 1) 
+          redirect_to directory_segment_path(country: @directory_segment.parent_directory_segment.name, city: @directory_segment.name, edit: 1, create: 1)
         else
-          redirect_to directory_segment_path(country: @directory_segment.name, edit: 1, create: 1) 
+          redirect_to directory_segment_path(country: @directory_segment.name, edit: 1, create: 1)
         end
       end
     end
@@ -34,9 +34,9 @@ class Admin::DirectorySegmentsController < Admin::AdminController
     respond_to do |format|
       format.html do
         if segment.child?
-          redirect_to directory_segment_path(country: segment.parent_segment.name, city: segment.name, edit: 1, create: 1) 
+          redirect_to directory_segment_path(country: segment.parent_segment.name, city: segment.name, edit: 1, create: 1)
         else
-          redirect_to directory_segment_path(country: segment.name, edit: 1, create: 1) 
+          redirect_to directory_segment_path(country: segment.name, edit: 1, create: 1)
         end
       end
     end
@@ -59,7 +59,7 @@ class Admin::DirectorySegmentsController < Admin::AdminController
     p[:abbreviations] = p[:abbreviations].split(',').collect(&:strip)
     p
   end
-  
+
   def set_segment
     @directory_segment = DirectorySegment.find(params[:id])
     @directory_segment ||= DirectorySegment.for(params.slice(:country, :city))

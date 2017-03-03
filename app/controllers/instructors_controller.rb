@@ -7,7 +7,7 @@ class InstructorsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.json 
+      format.json
     end
   end
 

@@ -1,13 +1,13 @@
 require 'i18n'
 
-class MapLocationDecorator < LocationDecorator 
+class MapLocationDecorator < LocationDecorator
   decorates :location
 
   def initialize(object, options = EMPTY_HASH)
     super(object, options)
     @event_type = context[:event_type]
     @location_type = context[:location_type]
-    
+
     events = context.fetch(:events, [])
     @_events = EventDecorator.decorate_collection(events) if events.present?
   end

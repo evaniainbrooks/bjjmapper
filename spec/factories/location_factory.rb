@@ -19,7 +19,7 @@ FactoryGirl.define do
         instance.events << create(:tournament)
       end
     end
-    
+
     factory :event_venue_with_seminar do
       loctype Location::LOCATION_TYPE_EVENT_VENUE
       after(:create) do |instance|

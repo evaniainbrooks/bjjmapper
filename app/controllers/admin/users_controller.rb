@@ -34,7 +34,7 @@ class Admin::UsersController < Admin::AdminController
   end
 
   private
-  
+
   def create_params
     p = params.require(:user).permit(
       :name,

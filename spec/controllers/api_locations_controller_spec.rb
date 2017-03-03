@@ -42,13 +42,13 @@ describe Api::LocationsController do
   end
   describe 'POST create' do
     let(:create_params) do
-      { :location => 
+      { :location =>
         { :city => 'New York',
           :coordinates => [80.0, 80.0],
-          :country => 'USA', 
-          :title => 'New title', 
-          :description => 'New description' 
-        } 
+          :country => 'USA',
+          :title => 'New title',
+          :description => 'New description'
+        }
       }
     end
     context 'when signed in' do
@@ -78,7 +78,7 @@ describe Api::LocationsController do
         it 'raises an exception' do
           expect do
             post :create, create_params.tap{|h| h[:location].delete(:title)}.merge(api_key: user.api_key, format: 'json')
-          end.to raise_error 
+          end.to raise_error
         end
       end
     end

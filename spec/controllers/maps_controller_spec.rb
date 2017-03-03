@@ -52,7 +52,7 @@ describe MapsController do
           response.status.should eq 200
           assigns[:locations].collect(&:to_param).should_not include(closed_location.to_param)
         end
-        
+
         it 'does not return pending or rejected locations' do
           get :search, location_type: [location.loctype], lat: location.lat, lng: location.lng, format: 'json'
 
@@ -63,7 +63,7 @@ describe MapsController do
         context 'with unverified flag' do
           it 'returns pending locations' do
             get :search, unverified: 1, location_type: [location.loctype], lat: location.lat, lng: location.lng, format: 'json'
-            
+
             response.status.should eq 200
             assigns[:locations].collect(&:to_param).should include(pending_location.to_param)
             assigns[:locations].collect(&:to_param).should_not include(rejected_location.to_param)
@@ -72,7 +72,7 @@ describe MapsController do
         context 'with closed flag' do
           it 'also returns closed locations' do
             get :search, closed: 1, location_type: [location.loctype], lat: location.lat, lng: location.lng, format: 'json'
-            
+
             response.status.should eq 200
             assigns[:locations].collect(&:to_param).should include(location.to_param)
             assigns[:locations].collect(&:to_param).should include(closed_location.to_param)
@@ -87,7 +87,7 @@ describe MapsController do
           end
           it 'only returns locations with flag_has_black_belt' do
             get :search, bbonly: 1, location_type: [bb_location.loctype], lat: location.lat, lng: location.lng, format: 'json'
-            
+
             response.status.should eq 200
             assigns[:locations].collect(&:to_param).should_not include(location.to_param)
             assigns[:locations].collect(&:to_param).should include(bb_location.to_param)
@@ -152,7 +152,7 @@ describe MapsController do
         let(:location) { create(:location, country: 'Canada') }
         xit 'returns locations that are in the segment' do
           get :search, segment: segment.id.to_s, location_type: [location.loctype], format: 'json'
-          
+
           response.status.should eq 200
           assigns[:locations].collect(&:to_param).should include(location.to_param)
         end

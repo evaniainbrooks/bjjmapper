@@ -1,7 +1,7 @@
 class GeocodersController < ApplicationController
   def show
     search_query = params.fetch(:query, '')
-    @search_results = GeocodersHelper.search(search_query) 
+    @search_results = GeocodersHelper.search(search_query)
 
     tracker.track('geocodeQuery',
       query: search_query,

@@ -96,7 +96,7 @@ describe Location do
       before { RollFindr::TimezoneService.stub(:timezone_for).and_raise(StandardError.new) }
       let(:previous_value) { 'some/timezone' }
       subject { build(:location, coordinates: [80.0, 80.0], timezone: previous_value) }
-      before do 
+      before do
         subject.save
         subject.update_attribute(:timezone, previous_value)
       end

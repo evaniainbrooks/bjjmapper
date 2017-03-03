@@ -95,7 +95,7 @@ class TeamsController < ApplicationController
   end
 
   private
-  
+
   def map
     @_map ||= Map.new(
       location_type: [Location::LOCATION_TYPE_ACADEMY],

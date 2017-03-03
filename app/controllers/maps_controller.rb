@@ -5,7 +5,7 @@ class MapsController < ApplicationController
   DEFAULT_SORT_ORDER = Map::DEFAULT_SORT_ORDER
 
   DEFAULT_EVENT_START_OFFSET = Map::DEFAULT_EVENT_START_OFFSET
-  DEFAULT_EVENT_END_OFFSET = Map::DEFAULT_EVENT_END_OFFSET 
+  DEFAULT_EVENT_END_OFFSET = Map::DEFAULT_EVENT_END_OFFSET
 
 
   before_filter :validate_event_time_range, only: [:show, :search]
@@ -90,17 +90,17 @@ class MapsController < ApplicationController
     #TODO: Don't use the decorator in controller...
     @sort = params.fetch(:sort, DEFAULT_SORT_ORDER).to_sym
     @locations = case @sort
-      when :distance 
+      when :distance
         @locations.sort_by {|loc| Geocoder::Calculations.distance_between([@lat, @lng], loc.to_coordinates) }
-      when :rating 
+      when :rating
         @locations.sort_by {|loc| loc.rating }
-      when :title 
+      when :title
         @locations.sort_by {|loc| loc.title }
-      when :newest 
+      when :newest
         @locations.sort_by {|loc| loc.object.created_at }
-      when :oldest 
+      when :oldest
         @locations.sort_by {|loc| -loc.object.created_at }
-      else 
+      else
         @locations
       end
 
@@ -166,7 +166,7 @@ class MapsController < ApplicationController
 
     @locations = @locations.not_closed unless flag?(:closed)
     @locations = @locations.not_rejected unless flag?(:rejected)
-    @locations = @locations.verified unless flag?(:unverified) 
+    @locations = @locations.verified unless flag?(:unverified)
     @locations = @locations.with_black_belt if flag?(:bbonly)
     @locations
   end
@@ -229,7 +229,7 @@ class MapsController < ApplicationController
       lng: @lng,
       query: @text_filter,
       geoquery: @geocode_query,
-      segment: @segment.try(:id).try(:to_s), 
+      segment: @segment.try(:id).try(:to_s),
       minZoom: [Map::DEFAULT_MIN_ZOOM, zoom].min,
       geolocate: geolocate,
       locations: action?(:search) ? @locations : [],

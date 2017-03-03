@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :ensure_signed_in, only: [:update, :create, :remove_image]
   before_action :check_permissions, only: [:destroy, :update, :remove_image]
 
-  decorates_assigned :user, :users 
+  decorates_assigned :user, :users
 
   helper_method :created?
   helper_method :welcome?

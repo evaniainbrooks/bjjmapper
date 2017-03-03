@@ -1,4 +1,4 @@
-require 'spec_helper' 
+require 'spec_helper'
 require 'shared/tracker_context'
 
 describe UserReviewsController do

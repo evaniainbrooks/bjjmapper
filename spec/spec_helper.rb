@@ -60,7 +60,7 @@ Spork.prefork do
           }
         ]
       )
-      
+
       FactoryGirl.lint
     end
   end

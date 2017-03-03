@@ -33,7 +33,7 @@ class LocationFetchServiceDecorator < LocationDecorator
       (service_data(:website) || "").strip.gsub!(Canonicalized::WEBSITE_PATTERN, '')
     end
   end
-  
+
   def phone
     if object.phone.blank?
       service_data(:phone)
@@ -43,7 +43,7 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
 
   def cover_image
-    cover_photo.try(:[], :url)    
+    cover_photo.try(:[], :url)
   end
 
   def cover_image_offset_x
@@ -69,7 +69,7 @@ class LocationFetchServiceDecorator < LocationDecorator
       profile_photo.try(:[], :url) || super
     end
   end
-  
+
   def image_tiny
     if object.image_tiny.present?
       super
@@ -77,7 +77,7 @@ class LocationFetchServiceDecorator < LocationDecorator
       profile_photo.try(:[], :url) || super
     end
   end
-  
+
   def image_large
     if object.image_large.present?
       super
@@ -101,15 +101,15 @@ class LocationFetchServiceDecorator < LocationDecorator
       object.facebook
     end
   end
-  
+
   def email
-    if object.email.blank? 
+    if object.email.blank?
       service_data(:email)
     else
       object.email
     end
   end
-  
+
   def website_status
     r = website_status_data
     if r.nil? || r[:code].to_i == 0
@@ -119,19 +119,19 @@ class LocationFetchServiceDecorator < LocationDecorator
       h.content_tag(:span, class: txtclass) { "(#{r[:status]})" }
     end
   end
-  
+
   def contact_info?
     phone.present? || email.present? || website.present? || facebook.present? || twitter.present? || instagram.present?
   end
-  
+
   def yelp_match
     if yelp_address.present?
       yelp_profile.try(:[], :address_match).try(:round, 1)
     end
   end
-  
+
   def yelp_address
-    addr = yelp_profile 
+    addr = yelp_profile
     addr.slice(:street, :city, :state, :postal_code, :country).values.compact.join(', ') if addr.present?
   end
 
@@ -140,18 +140,18 @@ class LocationFetchServiceDecorator < LocationDecorator
       google_profile.try(:[], :address_match).try(:round, 1)
     end
   end
-  
+
   def google_address
-    addr = google_profile 
+    addr = google_profile
     addr.slice(:street, :city, :state, :postal_code, :country).values.compact.join(', ') if addr.present?
   end
-  
+
   def facebook_match
     if facebook_address.present?
       facebook_profile.try(:[], :address_match).try(:round, 1)
     end
   end
-  
+
   def facebook_address
     addr = facebook_profile
     addr.slice(:street, :city, :state, :postal_code, :country).values.compact.join(', ') if addr.present?
@@ -195,11 +195,11 @@ class LocationFetchServiceDecorator < LocationDecorator
   def street
     object.street || source_address_component(:street)
   end
-  
+
   def city
     object.city || source_address_component(:city)
   end
-  
+
   def state
     object.state || source_address_component(:state)
   end
@@ -252,7 +252,7 @@ class LocationFetchServiceDecorator < LocationDecorator
   def profile_photo
     photos_data.find {|o| o[:is_profile_photo] && true != o[:is_silhouette] }
   end
-  
+
   def photos_data
     @_photos_data ||= (RollFindr::Redis.cache(key: ['Photos', self.id, PHOTO_COUNT].join('-'), expire: 1.hour.seconds) do
       RollFindr::LocationFetchService.photos(self.id, count: PHOTO_COUNT)
@@ -268,7 +268,7 @@ class LocationFetchServiceDecorator < LocationDecorator
       RollFindr::LocationFetchService.detail(self.id, self.address_components.merge(title: object.title))
     end || [])
   end
-  
+
   def website_status_data
     @_response ||= RollFindr::Redis.cache(key: ['WebsiteStatus', self.id].join('-'), expire: 1.hour.seconds) do
       RollFindr::WebsiteStatusService.status(url: website, location_id: self.id.to_s)

@@ -268,12 +268,12 @@ describe LocationsController do
   end
   describe 'POST create' do
     let(:create_params) do
-      { :location => 
-        { :city => 'New York', 
-          :country => 'USA', 
-          :title => 'New title', 
-          :description => 'New description' 
-        } 
+      { :location =>
+        { :city => 'New York',
+          :country => 'USA',
+          :title => 'New title',
+          :description => 'New description'
+        }
       }
     end
     context 'when not signed in' do
@@ -303,7 +303,7 @@ describe LocationsController do
         before { Redis.any_instance.stub(:del) }
         it 'creates and returns a new location' do
           post :create, create_params.merge(format: 'json'), session_params
-          
+
           assigns[:location].title.should eq create_params[:location][:title]
         end
         it 'geocodes the address' do

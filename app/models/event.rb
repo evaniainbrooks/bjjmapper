@@ -33,7 +33,7 @@ class Event
     :location,
     :parent_event,
     :email,
-    :website, 
+    :website,
     :facebook,
     :weekly_recurrence_days => []].freeze
 
@@ -41,7 +41,7 @@ class Event
   include Mongoid::Slug
   include Mongoid::Timestamps
   include Mongoid::History::Trackable
-  
+
   extend MongoidSearchExt::Search
 
   attr_accessor :event_recurrence
@@ -56,7 +56,7 @@ class Event
   field :email, type: String
   field :website, type: String
   field :facebook, type: String
-  field :event_type, type: Integer, default: EVENT_TYPE_CLASS 
+  field :event_type, type: Integer, default: EVENT_TYPE_CLASS
   field :source, type: String
 
   field :lat
@@ -106,7 +106,7 @@ class Event
   index :event_type => 1
   index :ending => 1
   index :starting => 1
-  
+
   index({
     :title => 'text',
     :description => 'text',
@@ -143,7 +143,7 @@ class Event
       end
     end
   end
-  
+
   def recurrence_type
     case self.schedule.try(:rrules).try(:first)
     when IceCube::WeeklyRule

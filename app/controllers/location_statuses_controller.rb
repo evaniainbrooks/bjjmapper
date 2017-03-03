@@ -40,7 +40,7 @@ class LocationStatusesController < ApplicationController
 
     render status: :accepted, json: {}
   end
-  
+
   private
 
   def set_location

@@ -4,7 +4,7 @@ require 'shared/locationfetchsvc_context'
 
 describe User do
   include_context 'locationfetch service'
-  
+
   it 'has a factory' do
     build_stubbed(:user).should be_valid
   end

@@ -9,7 +9,7 @@ class LocationReviewsController < ApplicationController
   def index
     @offset = params.fetch(:offset, 0).try(:to_i)
     @limit = params.fetch(:count, DEFAULT_REVIEW_COUNT).try(:to_i)
-  
+
     @reviews = @location.all_reviews.drop(@offset).take(@limit)
 
     head :no_content and return false unless @reviews.count > 0
@@ -22,7 +22,7 @@ class LocationReviewsController < ApplicationController
       stars: @location.stars,
       half_star: @location.half_star?
     })
-      
+
     respond_to do |format|
       format.json
     end

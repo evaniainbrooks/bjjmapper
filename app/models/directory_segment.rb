@@ -100,7 +100,7 @@ class DirectorySegment
   end
 
   def to_param
-    slug || name_segments 
+    slug || name_segments
   end
 
   def child?

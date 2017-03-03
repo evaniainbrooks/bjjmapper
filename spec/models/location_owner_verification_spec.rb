@@ -3,7 +3,7 @@ require 'shared/locationfetchsvc_context'
 
 describe LocationOwnerVerification do
   include_context 'locationfetch service'
-  
+
   it 'has a factory' do
     build_stubbed(:location_owner_verification).should be_valid
   end

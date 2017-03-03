@@ -1,6 +1,6 @@
 class FeedbackMailer < ActionMailer::Base
   DEFAULT_TO = "evan@bjjmapper.com"
-  
+
   default from: "no-reply@bjjmapper.com"
   default to: DEFAULT_TO
 

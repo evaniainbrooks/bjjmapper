@@ -3,7 +3,7 @@ class Admin::LocationsController < Admin::AdminController
     location_id = params.fetch(:id, '')
     @location = Location.find(location_id)
   end
-  
+
   def fetch
     location_id = params.fetch(:id, '')
     @location = Location.find(location_id)

@@ -3,7 +3,7 @@ require 'shared/locationfetchsvc_context'
 
 describe DirectorySegment do
   include_context 'locationfetch service'
-  
+
   it 'has a factory' do
     build_stubbed(:directory_segment).should be_valid
   end
@@ -24,7 +24,7 @@ describe DirectorySegment do
   describe '.locations' do
     context 'when it is a child' do
       subject { build_stubbed(:directory_segment, parent_segment: build_stubbed(:directory_segment)) }
-      before do 
+      before do
         Location.should_receive(:where) { Location }
       end
       it 'selects locations near the coordinates' do

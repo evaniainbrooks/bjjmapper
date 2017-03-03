@@ -6,9 +6,9 @@ class Team
   include Mongoid::Slug
   include Mongoid::Timestamps
   include Mongoid::History::Trackable
-  
+
   extend MongoidSearchExt::Search
-  
+
   track_history   :on => :all,
                   :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier
                   :modifier_field_inverse_of => :nil, # adds an ":inverse_of" option to the "belongs_to :modifier" relation, default is not set
@@ -25,7 +25,7 @@ class Team
   field :image_large, type: String
   field :primary_color_index, type: String
   field :locked, type: Boolean
-  
+
   index({
       :name => 'text',
       :description => 'text'

@@ -4,12 +4,12 @@ require 'shared/tracker_context'
 describe LocationStatusesController do
   include_context 'skip tracking'
 
-  STATUSES = { 
+  STATUSES = {
     'pending' => Location::STATUS_PENDING,
     'reject' => Location::STATUS_REJECTED,
     'verify' => Location::STATUS_VERIFIED
   }.freeze
-  
+
   STATUSES.keys.each do |status|
     describe "PUT #{status}" do
       subject { build_stubbed(:location, status: 99999) }

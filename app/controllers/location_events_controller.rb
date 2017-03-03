@@ -21,7 +21,7 @@ class LocationEventsController < ApplicationController
   def create
     event = Event.new(event_create_params)
     @location.events << event
-    
+
     tracker.track('createEvent',
       location: @location.to_param,
       event: @event.to_json({}),
@@ -76,7 +76,7 @@ class LocationEventsController < ApplicationController
     tracker.track('deleteEvent',
       event: @event.to_param
     )
-    
+
     respond_to do |format|
       format.json { render status: :ok, json: {} }
       format.html { redirect_to schedule_location_path(location, edit: 1) }
@@ -85,7 +85,7 @@ class LocationEventsController < ApplicationController
 
   def move
     delta_seconds = params.fetch(:deltams, 0).to_i / 1000
-    
+
     tracker.track('moveEvent',
       delta_seconds: delta_seconds,
       starting: @event.starting,

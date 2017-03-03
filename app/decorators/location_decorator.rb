@@ -85,7 +85,7 @@ class LocationDecorator < Draper::Decorator
   end
 
   def address
-    h.format_address(object.address) 
+    h.format_address(object.address)
   end
 
   def image
@@ -174,7 +174,7 @@ class LocationDecorator < Draper::Decorator
 
   def avatar_service_url(name, wh = 100)
     clean_name = I18n.transliterate(name)
-    clean_name = clean_name.gsub(/[^\w ]/i, '') 
+    clean_name = clean_name.gsub(/[^\w ]/i, '')
     "/service/avatar/#{wh}x#{wh}/#{CGI.escape(clean_name)}/image.png"
   end
 end

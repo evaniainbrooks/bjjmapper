@@ -3,7 +3,7 @@ require 'shared/locationfetchsvc_context'
 
 describe Role do
   include_context 'locationfetch service'
-  
+
   describe '#power' do
     context 'with role' do
       it 'returns 0' do

@@ -10,11 +10,11 @@ module RollFindr
       @host = host
       @port = port
     end
-    
+
     def associate(location_id, opts = {})
       query = {api_key: API_KEY}.merge(opts.slice(:scope, :yelp_id, :facebook_id, :google_id)).to_query
       uri = URI("http://#{@host}:#{@port}/#{SERVICE_PATH}/locations/#{location_id}/associate?#{query}")
-      
+
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Post.new(uri.request_uri)
       request.body = location_data.to_json
@@ -82,7 +82,7 @@ module RollFindr
       begin
         response = Net::HTTP.get_response(uri)
         return nil unless response.code.to_i == 200
-        
+
         result = JSON.parse(response.body)
         if result.is_a?(Array)
           result.map {|h| h.deep_symbolize_keys}

@@ -16,7 +16,7 @@ describe SearchController do
       it 'returns the addresses' do
         # Geocoder is already stubbed in test
         get :show, query_params
-        
+
         assigns[:addresses].length.should > 0
       end
     end
@@ -30,7 +30,7 @@ describe SearchController do
       end
       it 'returns the locations' do
         get :show, query_params
-        
+
         assigns[:locations].length.should > 0
       end
     end

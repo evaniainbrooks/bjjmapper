@@ -78,7 +78,7 @@ class EventsController < ApplicationController
 
       events = events.where(:organization_id => organization) if organization.present?
       events = events.where(:instructor_id => instructor) if instructor.present?
-    
+
       events.to_a
     end
 
@@ -113,7 +113,7 @@ private
     tz = (@locations.first.timezone) || 'UTC'
     Time.use_zone(tz, &block)
   end
-  
+
   def validate_time_range
     start_param = params.fetch(:start, nil)
     head :bad_request and return false unless start_param.present?

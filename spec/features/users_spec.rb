@@ -12,7 +12,7 @@ feature "Locations Pages" do
     Capybara.current_session.driver.header('User-Agent', 'TestUserAgent')
   end
 
-  scenario 'user visits his own profile' do 
+  scenario 'user visits his own profile' do
     User.create(name: 'Evan', role: 'user')
     visit user_path(User.last)
     expect(page).to have_text('Evan')

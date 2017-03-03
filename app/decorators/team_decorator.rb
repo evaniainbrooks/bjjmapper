@@ -62,7 +62,7 @@ class TeamDecorator < Draper::Decorator
     end
 
     academies = "#{object.name} is a Brazilian Jiu-Jitsu association with #{h.pluralize(count, 'affiliated academy')} in #{h.pluralize(countries, 'different country')}."
-    
+
     instructors = if object.instructors.present?
       if object.instructors.count > 1
         "#{object.instructors.collect(&:name).join(', ')} are the head instructors."

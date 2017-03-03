@@ -1,35 +1,35 @@
 class Redis
   def cache(params)
-    key = params[:key] || raise(":key parameter is required!") 
+    key = params[:key] || raise(":key parameter is required!")
     recalculate = params[:recalculate] || nil
-    expire = params[:expire] || nil 
-    timeout = params[:timeout] || 0 
-    default = params[:default] || nil 
-    
+    expire = params[:expire] || nil
+    timeout = params[:timeout] || 0
+    default = params[:default] || nil
+
     value = nil
     begin
       value = get(key)
     rescue StandardError => e
       ::Rails.logger.error(e)
-      return default 
+      return default
     end
-    
+
     yaml_value = if value.nil? || recalculate
-      begin 
+      begin
         value = Timeout::timeout(timeout) { yield(self) }
-      rescue Timeout::Error 
+      rescue Timeout::Error
         value = default
-      end 
-   
+      end
+
       if !value.nil?
-        set(key, YAML::dump(value)) 
-        expire(key, expire) if expire 
+        set(key, YAML::dump(value))
+        expire(key, expire) if expire
         get(key)
       end
-    else 
+    else
       value
-    end 
+    end
 
     yaml_value.nil? ? nil : YAML::load(yaml_value)
-  end 
+  end
 end

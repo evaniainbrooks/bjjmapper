@@ -9,6 +9,6 @@ class LocationOwnerVerificationMailer < ActionMailer::Base
     @user = verification.user
     @location = verification.location
 
-    mail(to: @to, subject: 'BJJMapper.com Academy Owner Verification')  
+    mail(to: @to, subject: 'BJJMapper.com Academy Owner Verification')
   end
 end

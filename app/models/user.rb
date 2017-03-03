@@ -8,7 +8,7 @@ class User
   include Geocoder::Model::Mongoid
   include Mongoid::Timestamps
   include Mongoid::History::Trackable
-  
+
   extend MongoidSearchExt::Search
 
   DEFAULT_THUMBNAIL_X = 50
@@ -175,7 +175,7 @@ class User
   def lat
     self.coordinates.try(:[], 1)
   end
-  
+
   def lng
     self.coordinates.try(:[], 0)
   end

@@ -27,11 +27,11 @@ class Api::LocationsController < Api::ApiController
       format.json { render partial: 'locations/location' }
     end
   end
-  
+
   def update
     id_param = params.fetch(:id, '')
     @location = Location.find(id_param)
-    
+
     head :not_found and return false unless @location.present?
 
     @location.update!(location_create_params)
@@ -40,7 +40,7 @@ class Api::LocationsController < Api::ApiController
       format.json { render partial: 'locations/location' }
     end
   end
-  
+
   def random
     scope = Location.academies.verified
     @location = scope.skip(rand(scope.count)).first
@@ -86,7 +86,7 @@ class Api::LocationsController < Api::ApiController
       @lat = params.fetch(:lat, nil).try(:to_f)
       @lng = params.fetch(:lng, nil).try(:to_f)
     end
-  
+
     head :bad_request and return false unless @lat.present? && @lng.present?
   end
 
@@ -104,7 +104,7 @@ class Api::LocationsController < Api::ApiController
 
     @locations = @locations.not_closed unless flag?(:closed)
     @locations = @locations.not_rejected unless flag?(:rejected)
-    @locations = @locations.verified unless flag?(:unverified) 
+    @locations = @locations.verified unless flag?(:unverified)
     @locations = @locations.with_black_belt if flag?(:bbonly)
     @locations = @locations.sort_by {|loc| Geocoder::Calculations.distance_between([@lat, @lng], loc.to_coordinates) }
     @locations

@@ -25,7 +25,7 @@ class LocationsController < ApplicationController
 
   def close
     reopen = params.fetch(:reopen, 0).to_i.eql?(1)
-    
+
     tracker.track('closeLocation',
       location: @location.to_param,
       reopen: reopen
@@ -64,13 +64,13 @@ class LocationsController < ApplicationController
     end
 
     respond_to do |format|
-      format.json 
+      format.json
     end
   end
 
   def schedule
     @starting = params.fetch(:starting, nil)
-    
+
     tracker.track('showSchedule',
       id: @location.to_param
     )
@@ -150,7 +150,7 @@ class LocationsController < ApplicationController
       format.json { render status: :ok, partial: 'location' }
     end
   end
-  
+
   def remove_image
     tracker.track('removeLocationImage',
       id: @location.to_param,
@@ -171,7 +171,7 @@ class LocationsController < ApplicationController
   def wizard
     tracker.track('showLocationWizard')
     respond_to do |format|
-      format.html 
+      format.html
     end
   end
 
@@ -263,7 +263,7 @@ class LocationsController < ApplicationController
   def decorated_locations_with_distance_to_center(locations, lat, lng)
     LocationFetchServiceDecorator.decorate_collection(locations, context: { lat: lat, lng: lng })
   end
-  
+
   private
 
   def moved?
@@ -285,11 +285,11 @@ class LocationsController < ApplicationController
   def created?
     return params.fetch(:create, 0).to_i.eql?(1)
   end
-  
+
   def reviewed?
     return params.fetch(:reviewed, 0).to_i.eql?(1)
   end
-  
+
   def error?
     return params.fetch(:error, 0).to_i.eql?(1)
   end
@@ -304,7 +304,7 @@ class LocationsController < ApplicationController
       :minZoom => Map::ZOOM_CITY,
       :lat => @location.lat,
       :lng => @location.lng,
-      :location_type => Location::LOCATION_TYPE_ALL, 
+      :location_type => Location::LOCATION_TYPE_ALL,
       :geolocate => 0,
       :locations => [location],
       :refresh => 0

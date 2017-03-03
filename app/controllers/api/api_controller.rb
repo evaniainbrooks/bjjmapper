@@ -2,7 +2,7 @@ class Api::ApiController <  ApplicationController
   before_action :ensure_api_user
 
   private
-    
+
   def current_user
     @current_user ||= User.where(:api_key => params[:api_key]).first
   end

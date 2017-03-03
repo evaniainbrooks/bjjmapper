@@ -1,6 +1,6 @@
 class EventDecorator < Draper::Decorator
   DEFAULT_DESCRIPTION = 'No description was provided'
-  
+
   delegate_all
   decorates_finders
   decorates_association :location
@@ -16,7 +16,7 @@ class EventDecorator < Draper::Decorator
   def event_type_name
     return h.event_type_name(object.event_type)
   end
-  
+
   def image
     organization.try(:image) || instructor.try(:image) || location.try(:image)
   end
@@ -24,7 +24,7 @@ class EventDecorator < Draper::Decorator
   def image_large
     organization.try(:image_large) || instructor.try(:image_large) || location.try(:image_large)
   end
-  
+
   def description
     if object.description.present?
       object.description

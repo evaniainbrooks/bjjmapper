@@ -8,7 +8,7 @@ class SearchController < ApplicationController
     @locations = Location.search(query).verified.to_a
     @users = User.search(query).jitsukas.where(:role.ne => Role::ANONYMOUS).where(:flag_display_directory => true).to_a
     @teams = Team.search(query).to_a
-    
+
     tracker.track('search',
       query: query,
       locations: @locations.count,

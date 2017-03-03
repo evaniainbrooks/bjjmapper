@@ -73,7 +73,7 @@ describe SessionsController do
   end
   describe 'DELETE destroy' do
     let(:referrer) { 'http://referrer.com/123' }
-    before do 
+    before do
       session[:user_id] = 'loggedin12345'
       request.env['HTTP_REFERER'] = referrer
     end

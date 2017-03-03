@@ -25,7 +25,7 @@ class Review
   def as_json(args = {})
     raise StandardError, "Use a JBuilder template"
   end
-  
+
   def set_coordinates
     self.lat = self.location.lat
     self.lng = self.location.lng

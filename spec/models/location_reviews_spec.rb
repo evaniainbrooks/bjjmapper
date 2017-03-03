@@ -5,7 +5,7 @@ describe LocationReviews do
   let(:local_review_rating) { 3.0 }
   before { Review.stub(:where).and_return([build(:review, rating: local_review_rating, location: nil, user: nil)]) }
 
-  
+
   let(:service_rating) { 5.0 }
   let(:service_response) { { reviews: [{body: 'test'}], rating: service_rating } }
   before { ::RollFindr::LocationFetchService.stub(:reviews).and_return(service_response) }

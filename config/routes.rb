@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     end
     resources :reviews, only: [:index, :create]
   end
-  
+
   namespace :admin do
     resources :directory_segments, only: [:new, :create, :edit, :update]
     resources :organizations, only: [:new, :create]

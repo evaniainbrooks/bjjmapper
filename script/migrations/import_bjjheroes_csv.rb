@@ -12,7 +12,7 @@ OptionParser.new do |opts|
   opts.on("-f", "--filename", "Set filename") do |v|
     options[:filename] = ARGV.pop
   end
-  
+
   opts.on("-s", "--simulate", "Simulate") do |v|
     options[:simulate] = true
   end
@@ -32,7 +32,7 @@ FIXUPS = {
   'Rubens Charles' => 'Rubens Charles Maciel',
   'L. Irvin' => 'Lloyd Irvin',
   'R. Lovato' => 'Rafael Lovato Jr.',
-  'R. Lovato Jr' => 'Rafael Lovato Jr.', 
+  'R. Lovato Jr' => 'Rafael Lovato Jr.',
   'Vinicius Magalhaes' => 'Vinny Magalhaes',
   'Helio G.' => 'Helio Gracie',
   'Helio G' => 'Helio Gracie',
@@ -58,7 +58,7 @@ def find_or_create_user_simple(name, lineage_stack, simulate = false)
     o
   end
   puts "Searching for lineal parent #{name} found #{u.inspect}"
-  
+
   unless simulate
     u.save
     $users[u.name] = u

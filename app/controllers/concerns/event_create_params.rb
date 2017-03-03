@@ -1,6 +1,6 @@
 module EventCreateParams
   extend ActiveSupport::Concern
-  
+
   def event_create_params
     p = params.require(:event).permit(*Event::CREATE_PARAMS_WHITELIST)
     p[:modifier] = current_user if signed_in?

@@ -32,11 +32,11 @@ module ApplicationHelper
   def edit_mode?
     current_user.present? && params.fetch(:edit, 0).to_i.eql?(1)
   end
-  
+
   def edit_success?
     params.fetch(:success, 0).to_i.eql?(1)
   end
-  
+
   def render_json(object, options = {})
     sym = object.model_name.to_s.underscore
     directory = sym.pluralize
