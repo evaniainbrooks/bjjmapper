@@ -26,6 +26,20 @@ describe Api::LocationsController do
       assigns[:locations].count.should eq locations.count
     end
   end
+  describe 'POST notifications' do
+    before do
+      mailer = double
+      mailer.should_receive(:deliver)
+      ReportMailer.should_receive(:report_email).and_return(mailer)
+    end
+    context 'with json format' do
+      let(:location) { create(:location) }
+      it 'mails the report' do
+        post :notifications, { api_key: user.api_key, id: location.id, format: 'json', type: 1, message: 'Duplicate location', extras: {} }
+        response.status.should eq 202
+      end
+    end
+  end
   describe 'POST create' do
     let(:create_params) do
       { :location => 

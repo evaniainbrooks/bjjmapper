@@ -50,6 +50,11 @@ class Api::LocationsController < Api::ApiController
     end
   end
 
+  def notifications
+    ReportMailer.report_email(params[:message], 'Duplicate location', params.fetch(:extras, {}).inspect.to_s, current_user).deliver
+    head :accepted
+  end
+
   private
 
   def location

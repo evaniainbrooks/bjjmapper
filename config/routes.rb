@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   namespace :api do
     resources :locations, only: [:index, :create, :update] do
       get :random, on: :collection
+      post :notifications, on: :member
     end
     resources :reviews, only: [:index, :create]
   end
