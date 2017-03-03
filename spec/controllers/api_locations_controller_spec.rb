@@ -35,7 +35,7 @@ describe Api::LocationsController do
     context 'with json format' do
       let(:location) { create(:location) }
       it 'mails the report' do
-        post :notifications, { api_key: user.api_key, id: location.id, format: 'json', type: 1, message: 'Duplicate location', extras: {} }
+        post :notifications, { api_key: user.api_key, duplicate_location_id: 123, id: location.id, format: 'json', type: 1, message: 'Duplicate location' }
         response.status.should eq 202
       end
     end
