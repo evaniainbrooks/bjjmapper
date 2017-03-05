@@ -5,7 +5,7 @@
       = "(src: #{location.object.source || 'BJJMapper'})"
   %br/
   - [:google, :yelp, :facebook].each do |profile|
-    = render partial: 'progress_bar', locals: { sym: profile, address: location.send("#{profile}_address"), href: location.send("#{profile}_url"), value: location.send("#{profile}_match") }
+    = render partial: 'locations/progress_bar', locals: { sym: profile, address: location.send("#{profile}_address"), href: location.send("#{profile}_url"), value: location.send("#{profile}_match") }
   - if location.instagram.present?
     = link_to 'http://instagram.com/' + location.instagram, class: 'instagram', target: '_blank' do
       %i.fa.fa-instagram

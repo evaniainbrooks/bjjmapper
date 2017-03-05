@@ -2,10 +2,12 @@
   - notifications.each do |notification|
     .row.well
       .col-md-12
-        %h5.display-field{:'data-html' => true, :'data-toggle' => 'tooltip', :'data-placement' => 'bottom', :title => notification.attributes.inspect}
+        %h5.display-field.pull-left{:'data-html' => true, :'data-toggle' => 'tooltip', :'data-placement' => 'bottom', :title => notification.attributes.inspect}
           = notification.message
           %small
             = notification.object.source
+        %button.pull-right.btn.btn-default{'data-dismiss-notification' => true, 'data-id' => notification.id.to_s}
+          %span.fa.fa-close
       - if notification.type == ModerationNotification::TYPE_DUPLICATE_LOCATION
         .col-md-4
           = link_to notification.location do
@@ -22,4 +24,21 @@
           = link_to notification.location do
             = render partial: 'locations/show_header', locals: { location: notification.location }
         .col-md-2= render partial: 'locations/show_moderation', locals: { location: notification.location }
-      
+
+= content_for(:scripts) do
+  :javascript
+    $(document).ready(function() {
+      $('body').delegate('[data-dismiss-notification]', 'click', function(e) {
+
+        var id = $(e.currentTarget).data('id');
+        $.ajax({
+          url: Routes.dismiss_moderation_notification_path(id),
+          type: 'PUT',
+          dataType: 'json',
+          complete: function() {
+            toastr.success('Dismissed')
+            $(e.currentTarget).parents('.well').remove();
+          }
+        });
+      });
+    });

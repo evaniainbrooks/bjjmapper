@@ -10,7 +10,7 @@ class ModerationNotificationsController < ApplicationController
     lng = params.fetch(:lng, nil).try(:to_f)
     distance = params.fetch(:distance, 25).to_i
 
-    @notifications = ModerationNotification.offset(offset).limit(count).order(created_at: :desc)
+    @notifications = ModerationNotification.where(:dismissed_by_user_id => nil).offset(offset).limit(count).order(created_at: :desc)
 
     @notifications = @notifications.near([lng, lat], distance) if lng.present? && lat.present?
 
@@ -19,12 +19,11 @@ class ModerationNotificationsController < ApplicationController
     end
   end
 
-  def show
+  def dismiss
     @notification = ModerationNotification.find(params[:id])
+    @notification.dismiss!(current_user)
 
-    respond_to do |format|
-      format.html
-    end
+    head :accepted
   end
 
   private

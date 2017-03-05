@@ -39,7 +39,9 @@ Rails.application.routes.draw do
   resource :geocoder, only: [:show]
   resource :search, only: [:show], controller: :search
 
-  resources :moderation_notifications, path: '/notifications', only: [:index]
+  resources :moderation_notifications, path: '/notifications', only: [:index] do
+    put :dismiss, on: :member
+  end
   resources :locations, only: [:create, :destroy, :update, :show] do
     post :favorite, on: :member
     get :wizard, on: :collection
