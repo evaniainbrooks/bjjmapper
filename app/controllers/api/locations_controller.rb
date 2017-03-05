@@ -1,5 +1,6 @@
 class Api::LocationsController < Api::ApiController
   include LocationCreateParams
+  include ModerationNotificationCreateParams
 
   DEFAULT_SEARCH_DISTANCE = 10.0
   DEFAULT_SEARCH_COUNT = 100
@@ -22,6 +23,12 @@ class Api::LocationsController < Api::ApiController
       @location.team = guess_team(location_create_params[:title])
     end
     @location.save!
+    
+    ModerationNotification.create(type: ModerationNotification::TYPE_REVIEW_LOCATION,
+                                  coordinates: @location.coordinates,
+                                  message: "#{@location.title} was automatically created and requires review",
+                                  source: "Api::LocationsController #{@location.source}",
+                                  info: { location_id: @location.id.to_s })
 
     respond_to do |format|
       format.json { render partial: 'locations/location' }
@@ -48,11 +55,6 @@ class Api::LocationsController < Api::ApiController
     respond_to do |format|
       format.json { render partial: 'locations/location' }
     end
-  end
-
-  def notifications
-    ReportMailer.report_email(params[:message], "Duplicate location", params.slice(:duplicate_location_id, :id), current_user).deliver
-    head :accepted
   end
 
   private

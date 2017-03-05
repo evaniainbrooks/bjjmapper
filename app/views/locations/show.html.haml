@@ -5,7 +5,7 @@
   %div#fb-root
   = form_for(location, html: { class: 'form ' + edit_mode_classes }) do |f|
     .row
-      .col-md-10.hidden-xs
+      .col-md-10.pull-left
         = render partial: 'breadcrumb', locals: { location: location }
       .col-md-2.pull-right
         = render partial: 'edit_controls', locals: { location: location }
@@ -37,23 +37,14 @@
         = render partial: 'show_header', :locals => { location: location, f: f }
       .col-md-12.hidden-lg.hidden-md.hidden-sm.clear
         %hr/
-      = render partial: 'show_contact', :locals => { location: location, f: f }
+      .col-md-3.col-xs-12.col-sm-4
+        = render partial: 'show_contact', :locals => { location: location, f: f }
       .col-md-12.hidden-md.clear
         %hr/
       .col-md-2.col-xs-6.col-sm-3.text-center.hidden-xs
         = render partial: 'show_address', locals: { location: location, f: f }
         - if Role.power(current_user.role) >= Role.power(Role::MODERATOR)
-          %b.small.text-muted.upcase Moderation
-          %ul.list-unstyled
-            %li= link_to 'Admin Panel', admin_location_path(location), class: 'small text-primary'
-            %li
-              = link_to fetch_admin_location_path(location), :class => 'small text-primary', :'data-remote' => true, :'data-method' => 'post' do
-                %span.fa.fa-refresh
-                Fetch
-            %li= link_to 'Verify', verify_location_status_path(location), :class => 'small text-success', :'data-returnto' => moderate_admin_locations_path, :'data-remote' => true, :'data-method' => 'put', :'data-body' => 'Verify location'
-            %li= link_to 'Reject', reject_location_status_path(location), :class => 'small text-danger', :'data-returnto' => moderate_admin_locations_path, :'data-remote' => true, :'data-method' => 'put', :'data-body' => 'Reject location'
-            %li= link_to 'Pending', pending_location_status_path(location), :class => 'small text-warning', :'data-returnto' => moderate_admin_locations_path, :'data-remote' => true, :'data-method' => 'put', :'data-body' => 'Pending location'
-      
+          = render partial: 'show_moderation', locals: { location: location, f: f } 
       .col-md-6.col-xs-12.col-sm-9
         .map
           %div.map-canvas{:style => 'height: 275px'}

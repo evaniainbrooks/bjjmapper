@@ -2,7 +2,7 @@
   %button.btn.btn-default.btn-sm{:type => "button", :disabled => true}
     %span.fa.fa-lock
     Edit
-  = render partial: 'report_button'
+  %span.hidden-xs= render partial: 'report_button'
 - else
   .display-field
     .btn-group
@@ -41,7 +41,7 @@
               %span.fa.fa-check
               Re-open academy
 
-    = render partial: 'report_button'
+    %span.hidden-xs= render partial: 'report_button'
   .edit-field
     %button.btn.btn-default.btn-sm{:'data-cancel-edit' => true } Cancel
     %button.btn.btn-primary.btn-sm{:type => 'submit'} Save

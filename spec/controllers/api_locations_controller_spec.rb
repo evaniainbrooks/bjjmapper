@@ -26,20 +26,6 @@ describe Api::LocationsController do
       assigns[:locations].count.should eq locations.count
     end
   end
-  describe 'POST notifications' do
-    before do
-      mailer = double
-      mailer.should_receive(:deliver)
-      ReportMailer.should_receive(:report_email).and_return(mailer)
-    end
-    context 'with json format' do
-      let(:location) { create(:location) }
-      it 'mails the report' do
-        post :notifications, { api_key: user.api_key, duplicate_location_id: 123, id: location.id, format: 'json', type: 1, message: 'Duplicate location' }
-        response.status.should eq 202
-      end
-    end
-  end
   describe 'POST create' do
     let(:create_params) do
       { :location =>
@@ -64,6 +50,11 @@ describe Api::LocationsController do
         it 'tries to guess the team from the location title' do
           post :create, team_name_params.merge(api_key: user.api_key, format: 'json')
           assigns[:location].team.name.should eq expected_team_name
+        end
+        it 'creates a moderation notification' do
+          expect {
+            post :create, create_params.merge(api_key: user.api_key, format: 'json')
+          }.to change { ModerationNotification.count }.by(1) 
         end
       end
       context 'with json format' do

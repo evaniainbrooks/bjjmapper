@@ -4,6 +4,7 @@ Rails.application.routes.draw do
       get :random, on: :collection
       post :notifications, on: :member
     end
+    resources :moderation_notifications, path: '/notifications', only: [:create]
     resources :reviews, only: [:index, :create]
   end
 
@@ -16,7 +17,6 @@ Rails.application.routes.draw do
       get :pending, on: :collection
       get :rejected, on: :collection
       get :moderate, on: :collection
-
     end
     resources :users do
       get :edit_merge, on: :member
@@ -39,6 +39,7 @@ Rails.application.routes.draw do
   resource :geocoder, only: [:show]
   resource :search, only: [:show], controller: :search
 
+  resources :moderation_notifications, path: '/notifications', only: [:index]
   resources :locations, only: [:create, :destroy, :update, :show] do
     post :favorite, on: :member
     get :wizard, on: :collection

@@ -20,7 +20,7 @@ class RollFindr.Views.StaticMapView extends Backbone.View
 
       @setupEventListeners()
       @setCenterAndRefresh()
-      #@activateSingularMarker()
+      @activateSingularMarker()
 
   activateSingularMarker: ->
     if (@model.get('locations').size() == 1)

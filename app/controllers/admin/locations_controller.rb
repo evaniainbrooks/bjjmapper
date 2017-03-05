@@ -36,11 +36,18 @@ class Admin::LocationsController < Admin::AdminController
 
   def pending
     order = params.fetch(:order, 1).to_i
-    @locations = Location.limit(100).pending.sort({status_updated_at: order})
+    count = params.fetch(:count, 100).to_i
+    offset = params.fetch(:offset, 0).to_i
+
+    @locations = Location.limit(count).offset(offset).pending.sort({status_updated_at: order})
   end
 
   def rejected
-    @locations = Location.limit(100).rejected.sort({created_at:-1})
+    order = params.fetch(:order, 1).to_i
+    count = params.fetch(:count, 100).to_i
+    offset = params.fetch(:offset, 0).to_i
+    
+    @locations = Location.limit(count).offset(offset).rejected.sort({created_at: order})
   end
 
   def moderate
