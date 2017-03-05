@@ -1,6 +1,7 @@
 class ModerationNotification
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Attributes::Dynamic
 
   TYPE_DUPLICATE_LOCATION = 1
   TYPE_DUPLICATE_PERSON = 2
@@ -9,11 +10,16 @@ class ModerationNotification
   validates :type, presence: true
   validates :source, presence: true
   validates :message, presence: true
-  validates :coordinates, presence: true
 
   belongs_to :dismissed_by_user, class_name: 'User'
 
   index(coordinates: '2dsphere')
+ 
+  field :type, type: Integer
+  field :source, type: String
+  field :message, type: String
+  field :info, type: Hash
+  field :coordinates, type: Array
 
   def dismissed?
     return dismissed_by_user.present?
@@ -23,10 +29,4 @@ class ModerationNotification
     dismissed_by_user = user
     save!
   end
-
-  field :type, type: Integer
-  field :source, type: String
-  field :message, type: String
-  field :info, type: Hash
-  field :coordinates, type: Array
 end

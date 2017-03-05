@@ -98,6 +98,8 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
+    @current_user ||= User.where(:role => 'super_user').first if Rails.env.development?
+    
     # NORMAL USER AUTHENTICATION
     begin
       @current_user ||= User.find(session[:user_id]) if session[:user_id]

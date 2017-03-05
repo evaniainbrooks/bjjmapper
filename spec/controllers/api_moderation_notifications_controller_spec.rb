@@ -13,7 +13,8 @@ describe Api::ModerationNotificationsController do
           }, 
           message: 'Duplicate location',
           source: 'Test',
-          coordinates: [80.0, 80.0],
+          lat: 80.0,
+          lng: 80.0,
           type: 1
         }
       }
