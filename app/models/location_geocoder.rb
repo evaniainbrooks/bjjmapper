@@ -1,8 +1,8 @@
 class LocationGeocoder
   def self.update(loc)
-    if loc.coordinates.present? && loc.address.blank?
+    if loc.coordinates.present? && loc.address.blank? || loc.coordinates_changed?
       LocationGeocoder.reverse_geocode(loc)
-    elsif loc.address.present? && loc.coordinates.blank?
+    elsif loc.address.present? && loc.coordinates.blank? || loc.address_changed?
       LocationGeocoder.geocode(loc)
     end
   end
