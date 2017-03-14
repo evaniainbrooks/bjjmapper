@@ -9,6 +9,10 @@ FactoryGirl.define do
     city 'Halifax'
     loctype Location::LOCATION_TYPE_ACADEMY
 
+    after(:build) do |instance|
+      RollFindr::LocationFetchService.stub(:search).and_return(true)
+    end
+
     factory :event_venue do
       loctype Location::LOCATION_TYPE_EVENT_VENUE
     end

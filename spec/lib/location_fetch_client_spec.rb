@@ -1,19 +1,19 @@
 require 'spec_helper'
 
 describe RollFindr::LocationFetchClient do
-  subject { RollFindr::LocationFetchClient.new('localhost', 9999) }
+  subject { RollFindr::LocationFetchClient.new('localhost', 443) }
   describe '.search' do
     context 'with success response' do
       let(:response) { double('http_response', code: 202) }
       before { Net::HTTP.any_instance.should_receive(:request).with(instance_of(Net::HTTP::Post)).and_return(response) }
       it 'fetches the response from the service' do
-        subject.search('loc1234').should eq 202
+        subject.search('loc1234', {}).should eq 202
       end
     end
     context 'when the service is down' do
       before { Net::HTTP.any_instance.should_receive(:request).with(instance_of(Net::HTTP::Post)).and_raise(StandardError, 'service is down') }
       it 'returns 500' do
-        subject.search('loc1234').should eq 500
+        subject.search('loc1234', {}).should eq 500
       end
     end
   end
