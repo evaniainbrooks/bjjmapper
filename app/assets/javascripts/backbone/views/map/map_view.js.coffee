@@ -129,7 +129,7 @@ class RollFindr.Views.MapView extends Backbone.View
       doneCallback() if doneCallback?
 
     if navigator? && navigator.geolocation?
-      options = { enableHighAccuracy: true }
+      options = { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 }
       navigator.geolocation.getCurrentPosition(geolocateSuccessCallback, geolocateFailedCallback, options)
     else
       geolocateFailedCallback()
