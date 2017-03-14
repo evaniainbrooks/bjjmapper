@@ -1,39 +1,39 @@
 <li class="card nearby-card">
   <a class="thumbnail" href="<%= Routes.location_path(location) %>">
-      <div class="pull-left">
-        <img class="img-rounded img-tiny" src="<%= location.image %>" alt="<%= location.title %> logo" />
-      </div>
-      <div class="pull-left list-group-item-heading">
-        <h5 class="text-primary">
-          <%= location.title %>
-        </h5>
-        <span class="rating">
-          <% for (var n = 1; n <= 5; ++n) { %> 
-            <% if (location.stars >= n) { %>
-              <span class="fa fa-star"></span>
-            <% } else if (location.stars+1 == n && location.half_star) { %>
-              <span class="fa fa-star-half-o"></span>
-            <% } else { %>
-              <span class="fa fa-star-o"></span>
-            <% } %>
+    <div class="pull-left">
+      <img class="img-rounded img-tiny" src="<%= location.image %>" alt="<%= location.title %> logo" />
+    </div>
+    <div class="pull-left list-group-item-heading">
+      <h5 class="text-primary">
+        <%= location.title %>
+      </h5>
+      <span class="rating">
+        <% for (var n = 1; n <= 5; ++n) { %> 
+          <% if (location.stars >= n) { %>
+            <span class="fa fa-star"></span>
+          <% } else if (location.stars+1 == n && location.half_star) { %>
+            <span class="fa fa-star-half-o"></span>
+          <% } else { %>
+            <span class="fa fa-star-o"></span>
           <% } %>
+        <% } %>
+      </span>
+      <span class="text-muted small">
+        (<%= location.review_count %>)  
+      </span>
+      <p>
+        <span class="small text-muted">
+          <span class="fa fa-map-marker"></span>
+          <%= location.street %>
         </span>
-        <span class="text-muted small">
-          (<%= location.review_count %>)  
-        </span>
-        <p>
-          <span class="upcase small text-muted address">
-            <span class="fa fa-map-marker"></span>
-            <%= location.street %>
-          </span>
-        </p>
-      </div>
-      <div class="pull-right direction">
-        <i class="center-block fa-3x fa fa-arrow-up direction-<%= location.bearing_direction %>"></i>
-        <p class="text-center small text-info distance">
-          <%= location.bearing_name %> (<%= location.distance %>)
-        </p>
-      </div>
+      </p>
+    </div>
+    <div class="pull-right direction">
+      <i class="center-block fa-2x fa fa-arrow-up direction-<%= location.bearing_direction %>"></i>
+      <p class="text-center small text-info distance">
+        <%= location.bearing_name %> <%= location.distance %>
+      </p>
+    </div>
     <div class="clear"></div>
   </a>
 </li>

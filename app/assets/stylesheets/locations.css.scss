@@ -107,13 +107,19 @@
 }
 
 .card.nearby-card, .card.location-card {
+  position: relative;
+
   .thumbnail .caption { margin-left: 55px; }
-  .direction {  margin: 5px 10px 0px 0px; } 
+  .direction {  
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+  } 
   .img-tiny { margin: 10px; }
   p { margin: 0px; }
   h5 { margin-bottom: 0px; }
   .list-group-item-heading {
-    width: 50%;
+    width: 70%;
   }
 
   .list-group-item-heading * {
