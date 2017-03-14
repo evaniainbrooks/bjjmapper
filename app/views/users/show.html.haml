@@ -37,52 +37,53 @@
           %ul.list-unstyled
             - user.locations.each_with_index do |location, i|
               %li= render partial: 'locations/card', object: location, as: 'location', locals: { location_counter: i }
-    %hr.clear/
-    .row
-      - if own_profile? || user.flag_display_reviews?
-        .col-md-4.reviews
+    - if !current_user.anonymous?
+      %hr.clear/
+      .row
+        - if own_profile? || user.flag_display_reviews?
+          .col-md-4.reviews
+            %h3
+              Reviews
+              - unless user.flag_display_reviews?
+                %small
+                  %i Not displayed publicly
+            .items.clear
+            .empty-message
+              %i.text-muted This person has not written any reviews
+        .col-md-8
           %h3
-            Reviews
-            - unless user.flag_display_reviews?
-              %small
-                %i Not displayed publicly
-          .items.clear
+            %span.fa.fa-calendar
+            Schedule
+          = render partial: 'users/schedule'
+        -# if user.favorite_locations.present?
+          .col-md-4
+            %h3 Favorite Academies
+            %ul.list-unstyled
+              - user.favorite_locations.each_with_index do |location, i|
+                %li= render partial: 'locations/card', object: location, as: 'location', locals: { location_counter: i }
+      %hr/
+      .row
+        .col-md-12.students
+          %h3.pull-left Students
+          %button.pull-right.edit-field.btn.btn-small.btn-default.add-student{:style => 'margin-top: -5px', :type => 'button'}
+            %i.fa.fa-plus-circle
+            Add Student 
+          .row.items.clear
           .empty-message
-            %i.text-muted This person has not written any reviews
-      .col-md-8
-        %h3
-          %span.fa.fa-calendar
-          Schedule
-        = render partial: 'users/schedule'
-      -# if user.favorite_locations.present?
-        .col-md-4
-          %h3 Favorite Academies
-          %ul.list-unstyled
-            - user.favorite_locations.each_with_index do |location, i|
-              %li= render partial: 'locations/card', object: location, as: 'location', locals: { location_counter: i }
-    %hr/
-    .row
-      .col-md-12.students
-        %h3.pull-left Students
-        %button.pull-right.edit-field.btn.btn-small.btn-default.add-student{:style => 'margin-top: -5px', :type => 'button'}
-          %i.fa.fa-plus-circle
-          Add Student 
-        .row.items.clear
-        .empty-message
-          %i.text-muted No students are listed for this person
-    %hr.edit-field/
-    .row.edit-field
-      .col-md-12
-        .pull-right
-          %button.delete-field.btn.btn-danger.btn-md{:type => 'button',
-            :data => { :method => :delete,
-                       :url => user_path(user),
-                       :title => 'Are you sure you want to delete this user?',
-                       :body => "You are performing this action as <b>#{current_user.try(:name)}</b>. Press 'Confirm' to permanently delete this user. Note that this action cannot be un-done." } }
-            %i.fa.fa-trash
-            Delete User
-          %button.btn.btn-default.btn-md{:type => 'button', 'data-cancel-edit' => true} Cancel Editing
-          %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes
+            %i.text-muted No students are listed for this person
+      %hr.edit-field/
+      .row.edit-field
+        .col-md-12
+          .pull-right
+            %button.delete-field.btn.btn-danger.btn-md{:type => 'button',
+              :data => { :method => :delete,
+                         :url => user_path(user),
+                         :title => 'Are you sure you want to delete this user?',
+                         :body => "You are performing this action as <b>#{current_user.try(:name)}</b>. Press 'Confirm' to permanently delete this user. Note that this action cannot be un-done." } }
+              %i.fa.fa-trash
+              Delete User
+            %button.btn.btn-default.btn-md{:type => 'button', 'data-cancel-edit' => true} Cancel Editing
+            %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes
 
   = render :partial => 'users/add_student_dialog', locals: { instructor: user }
 = content_for(:scripts) do
