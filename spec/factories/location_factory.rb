@@ -10,7 +10,9 @@ FactoryGirl.define do
     loctype Location::LOCATION_TYPE_ACADEMY
 
     after(:build) do |instance|
-      RollFindr::LocationFetchService.stub(:search).and_return(true)
+      RSpec::Mocks.with_temporary_scope do
+        RollFindr::LocationFetchService.stub(:search).and_return(true)
+      end
     end
 
     factory :event_venue do
