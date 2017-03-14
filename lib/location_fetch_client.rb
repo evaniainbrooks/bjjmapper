@@ -16,6 +16,7 @@ module RollFindr
       uri = URI("http://#{@host}:#{@port}/#{SERVICE_PATH}/locations/#{location_id}/associate?#{query}")
 
       http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
       request = Net::HTTP::Post.new(uri.request_uri)
       request.body = location_data.to_json
       request.content_type = 'application/json'
@@ -35,6 +36,7 @@ module RollFindr
       uri = URI("http://#{@host}:#{@port}/#{SERVICE_PATH}/search/async?#{query.to_query}")
 
       http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
       request = Net::HTTP::Post.new(uri.request_uri)
       request.body = location_data.to_json
       request.content_type = 'application/json'
@@ -80,7 +82,10 @@ module RollFindr
 
     def get_request(uri)
       begin
-        response = Net::HTTP.get_response(uri)
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true
+        request = Net::HTTP::Get.new(uri.request_uri)
+        response = http.request(request) 
         return nil unless response.code.to_i == 200
 
         result = JSON.parse(response.body)
