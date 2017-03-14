@@ -212,8 +212,8 @@ describe Location do
 
   describe 'after create callback' do
     subject { build(:location) }
-    it 'calls the location fetch service search_async method' do
-      RollFindr::LocationFetchService.should_receive(:search_async)
+    it 'calls the location fetch service search method' do
+      RollFindr::LocationFetchService.should_receive(:search)
       subject.save
     end
   end

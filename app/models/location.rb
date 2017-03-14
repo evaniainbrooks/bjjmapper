@@ -286,7 +286,6 @@ class Location
 
   def search_metadata!
     params = {
-      id: self.id.to_s,
       lat: self.lat,
       lng: self.lng,
       title: self.title,
@@ -298,7 +297,7 @@ class Location
     }
 
     if self.academy?
-      RollFindr::LocationFetchService.search_async(location: params) == 202
+      RollFindr::LocationFetchService.search(self.id.to_s, location: params) == 202
     else
       false
     end

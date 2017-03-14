@@ -265,7 +265,7 @@ class LocationFetchServiceDecorator < LocationDecorator
 
   def service_data_arr
     @_service_data ||= (RollFindr::Redis.cache(key: ['Detail', self.id].join('-'), expire: 1.hour.seconds) do
-      RollFindr::LocationFetchService.detail(self.id, self.address_components.merge(title: object.title))
+      RollFindr::LocationFetchService.listings(self.id, self.address_components.merge(title: object.title))
     end || [])
   end
 
