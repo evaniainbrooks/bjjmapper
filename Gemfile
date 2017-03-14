@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 #ruby '1.9.3', :engine => 'jruby', :engine_version => '1.7.12'
 gem 'rails', '>= 4.1.0'
 gem 'i18n', '>= 0.7.0.beta1 '
+gem 'certified'
 gem 'sass-rails', :git => 'git://github.com/rails/sass-rails', :branch => :master
 gem 'sprockets-rails'
 gem 'uglifier', '>= 1.3.0'
