@@ -55,17 +55,26 @@ class ApplicationController < ActionController::Base
   def report
     reason = params.fetch(:reason, nil)
     description = params.fetch(:description, nil)
+    email = params.fetch(:email, current_user.contact_email || current_user.email)
     subject_url = request.referer
 
     tracker.track('metaSendReport',
       reason: reason,
+      email: email,
       description: description,
       subject_url: request.referer
     )
 
     render :bad_request and return false unless reason.present?
 
-    ReportMailer.report_email(subject_url, reason, description, current_user).deliver
+    ReportMailer.report_email(
+      subject: subject_url, 
+      reason: reason, 
+      description: description, 
+      email: email, 
+      user: current_user
+    ).deliver
+
     respond_to do |format|
       format.html { redirect_to :back }
       format.json { render status: :ok, json: {} }
@@ -98,7 +107,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    @current_user ||= User.where(:role => 'super_user').first if Rails.env.development?
+    #@current_user ||= User.where(:role => 'super_user').first if Rails.env.development?
     
     # NORMAL USER AUTHENTICATION
     begin

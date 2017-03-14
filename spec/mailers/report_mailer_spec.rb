@@ -5,10 +5,11 @@ describe ReportMailer do
     let(:subject) { '12345' }
     let(:reason) { 'reason' }
     let(:description) { 'description' }
-    let(:user) { build(:user, id: '9438') }
-    let(:mail) { ReportMailer.report_email(subject, reason, description, user) }
+    let(:user) { build(:user, id: '9438', role: 'anonymous') }
+    let(:email) { 'test@gmail.com' }
+    let(:mail) { ReportMailer.report_email(email: email, subject: subject, reason: reason, description: description, user: user) }
     it 'renders the subject' do
-      expect(mail.subject).to eql("#{reason} report from website")
+      expect(mail.subject).to match("#{reason} report from #{email}")
     end
     it 'renders the receiver email' do
       expect(mail.to).to eql([ReportMailer::DEFAULT_TO])

@@ -11,6 +11,10 @@
               %option{:value => 'Innacurate'}This is inaccurate
               %option{:value => 'Owner'}I am the owner
               %option{:value => 'Other'}Other
+          - if !signed_in?
+            %label.form-control.input-md{:for => 'email'} Email Address
+            %input.form-control.input-md{:name => 'email', :type => 'text'}/
+          
           .form-group
             %label{:for => 'description'} Additional information (optional)
             %textarea.form-control.input-md{:name => 'description'}
