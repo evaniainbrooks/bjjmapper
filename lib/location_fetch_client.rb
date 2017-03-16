@@ -13,73 +13,92 @@ module RollFindr
     end
 
     def associate(location_id, opts = {})
-      query = {api_key: API_KEY}.merge(opts.slice(:scope, :yelp_id, :facebook_id, :google_id)).to_query
+      query = common_params.merge(opts.slice(:scope, :yelp_id, :facebook_id, :google_id)).to_query
       uri = URI("#{@scheme}://#{@host}:#{@port}/#{SERVICE_PATH}/locations/#{location_id}/associate?#{query}")
 
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true if 'https' == @scheme
-      request = Net::HTTP::Post.new(uri.request_uri)
-      request.body = location_data.to_json
-      request.content_type = 'application/json'
-
-      begin
-        response = http.request(request)
-        response.code.to_i
-      rescue StandardError => e
-        Rails.logger.error e.message
-        500
-      end
+      response = post_request(uri, nil)
+      response.nil? ? 500 : response.code.to_i
     end
 
-    def search(location_id, location_data, scope = nil)
-      query = {api_key: API_KEY}
-      query = query.merge(scope: scope) if scope.present?
-      uri = URI("#{@scheme}://#{@host}:#{@port}/#{SERVICE_PATH}/#{location_id}/search?#{query.to_query}")
+    def search(location_id, location_data, params = {})
+      query = common_params.merge(params.slice(:scope))
+      uri = URI("#{@scheme}://#{@host}:#{@port}/#{SERVICE_PATH}/locations/#{location_id}/search?#{query.to_query}")
 
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true if 'https' == @scheme
-      request = Net::HTTP::Post.new(uri.request_uri)
-      request.body = location_data.to_json
-      request.content_type = 'application/json'
+      response = post_request(uri, location_data.to_json)
+      response.nil? ? 500 : response.code.to_i
+    end
 
-      begin
-        response = http.request(request)
-        response.code.to_i
-      rescue StandardError => e
-        Rails.logger.error e.message
-        500
-      end
+    def search_near(location_data, params = {})
+      query = common_params.merge(params.slice(:scope))
+      uri = URI("#{@scheme}://#{@host}:#{@port}/#{SERVICE_PATH}/search?#{query.to_query}")
+
+      response = post_request(uri, location_data.to_json)
+      response.nil? ? 500 : response.code.to_i
+    end
+    
+    def photos_near(params = {})
+      query = common_params.merge(params.slice(:lat, :lng, :distance, :count, :scope)).to_query
+      uri = URI("#{@scheme}://#{@host}:#{@port}/#{SERVICE_PATH}/photos?#{query}")
+
+      get_request(uri)
+    end
+    
+    def reviews_near(params = {})
+      query = common_params.merge(params.slice(:lat, :lng, :distance, :count, :scope)).to_query
+      uri = URI("#{@scheme}://#{@host}:#{@port}/#{SERVICE_PATH}/reviews?#{query}")
+
+      get_request(uri)
     end
 
     def all_listings(location_id, opts = {})
-      query = {api_key: API_KEY}.merge(opts.slice(:scope, :lat, :lng)).to_query
+      query = common_params.merge(params.slice(:title, :lat, :lng, :street, :city, :state, :country, :postal_code, :scope)).to_query
       uri = URI("#{@scheme}://#{@host}:#{@port}/#{SERVICE_PATH}/locations/#{location_id}/listings?#{query}")
 
       get_request(uri)
     end
 
     def photos(location_id, opts = {})
-      query = {api_key: API_KEY}.merge(opts.slice(:count)).to_query
+      query = common_params.merge(opts.slice(:scope, :count)).to_query
       uri = URI("#{@scheme}://#{@host}:#{@port}/#{SERVICE_PATH}/locations/#{location_id}/photos?#{query}")
 
       get_request(uri)
     end
 
-    def reviews(location_id)
-      query = {api_key: API_KEY}.to_query
+    def reviews(location_id, opts = {})
+      query = common_params.merge(opts.slice(:scope, :count)).to_query
       uri = URI("#{@scheme}://#{@host}:#{@port}/#{SERVICE_PATH}/locations/#{location_id}/reviews?#{query}")
 
       get_request(uri)
     end
 
     def listings(location_id, params = {})
-      query = {api_key: API_KEY}.merge(params.slice(:title, :lat, :lng, :street, :city, :state, :country, :postal_code, :combined)).to_query
+      query = common_params.merge(params.slice(:title, :lat, :lng, :street, :city, :state, :country, :postal_code, :combined, :scope)).to_query
       uri = URI("#{@scheme}://#{@host}:#{@port}/#{SERVICE_PATH}/locations/#{location_id}?#{query}")
 
       get_request(uri)
     end
 
     private
+
+    def common_params
+      { api_key: API_KEY }
+    end
+
+    def post_request(uri, body)
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true if 'https' == @scheme
+      request = Net::HTTP::Post.new(uri.request_uri)
+      request.body = body 
+      request.content_type = 'application/json'
+
+      begin
+        response = http.request(request)
+        response
+      rescue StandardError => e
+        Rails.logger.error e.message
+        nil
+      end
+    end
 
     def get_request(uri)
       begin
