@@ -107,7 +107,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    #@current_user ||= User.where(:role => 'super_user').first if Rails.env.development?
+    @current_user ||= User.where(:role => 'super_user').first if Rails.env.development?
     
     # NORMAL USER AUTHENTICATION
     begin
@@ -155,7 +155,12 @@ class ApplicationController < ActionController::Base
       description =  "#{request.inspect}"
       subject_url = "#{request.original_url}"
 
-      ReportMailer.report_email(subject_url, reason, description, current_user).deliver
+      ReportMailer.report_email(
+        subject: subject_url, 
+        reason: reason, 
+        description: description, 
+        user: current_user
+      ).deliver
     end
   end
 
