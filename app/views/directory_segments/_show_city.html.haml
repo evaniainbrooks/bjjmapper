@@ -28,7 +28,7 @@
         %ul.list-unstyled.list-inline
           - directory_segment.child_segments.sort.each do |city|
             %li= link_to city.name, directory_segment_path(country: directory_segment.name, city: city.name), title: "List of Brazilian Jiu-Jitsu gyms in #{directory_segment.full_name}" 
-    - if Role.power(current_user.role) >= Role.power(Role::ROLE_MODERATOR)
+    - if Role.power(current_user.role) >= Role.power(Role::MODERATOR)
       .col-md-9
         %h3 Moderation Notifications
         - directory_segment.notifications.each do |notification|
