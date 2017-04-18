@@ -1,29 +1,6 @@
 .container
   - notifications.each do |notification|
-    .row.well
-      .col-md-12
-        %h5.display-field.pull-left{:'data-html' => true, :'data-toggle' => 'tooltip', :'data-placement' => 'bottom', :title => notification.attributes.inspect}
-          = notification.message
-          %small
-            = notification.object.source
-        %button.pull-right.btn.btn-default{'data-dismiss-notification' => true, 'data-id' => notification.id.to_s}
-          %span.fa.fa-close
-      - if notification.type == ModerationNotification::TYPE_DUPLICATE_LOCATION
-        .col-md-4
-          = link_to notification.location do
-            = render partial: 'locations/show_header', locals: { location: notification.location }
-          = render partial: 'locations/show_profiles', locals: { location: notification.location }
-        .col-md-2= render partial: 'locations/show_moderation', locals: { location: notification.location }
-        .col-md-4
-          = link_to notification.duplicate_location do
-            = render partial: 'locations/show_header', locals: { location: notification.duplicate_location }
-          = render partial: 'locations/show_profiles', locals: { location: notification.duplicate_location }
-        .col-md-2= render partial: 'locations/show_moderation', locals: { location: notification.duplicate_location }
-      - else
-        .col-md-4
-          = link_to notification.location do
-            = render partial: 'locations/show_header', locals: { location: notification.location }
-        .col-md-2= render partial: 'locations/show_moderation', locals: { location: notification.location }
+    = render partial: 'moderation_notifications/notification', object: notification
 
 = content_for(:scripts) do
   :javascript

@@ -92,10 +92,18 @@ class DirectorySegment
   end
 
   def locations
-    if self.child?
-      @_locations ||= Location.where(:coordinates => { "$geoWithin" => { "$centerSphere" => [self.coordinates, self.distance/3963.2] }})
+    @_locations ||= if self.child?
+      Location.where(:coordinates => { "$geoWithin" => { "$centerSphere" => [self.coordinates, self.distance/3963.2] }})
     else
-      @_locations ||= Location.where(:country.in => self.abbreviations.push(self.name))
+      Location.where(:country.in => self.abbreviations.push(self.name))
+    end
+  end
+  
+  def notifications
+    @_notifications ||= if self.child?
+      ModerationNotification.where(:coordinates => { "$geoWithin" => { "$centerSphere" => [self.coordinates, self.distance/3963.2] }})
+    else
+      ModerationNotification.where(:country.in => self.abbreviations.push(self.name))
     end
   end
 

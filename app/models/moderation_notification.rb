@@ -14,19 +14,21 @@ class ModerationNotification
   belongs_to :dismissed_by_user, class_name: 'User'
 
   index(coordinates: '2dsphere')
+  index(country: 1)
  
   field :type, type: Integer
   field :source, type: String
   field :message, type: String
   field :info, type: Hash
   field :coordinates, type: Array
+  field :country, type: String
 
   def dismissed?
     return dismissed_by_user.present?
   end
 
   def dismiss!(user)
-    dismissed_by_user = user
-    save!
+    self.dismissed_by_user = user
+    self.save!
   end
 end

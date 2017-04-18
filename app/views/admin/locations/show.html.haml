@@ -18,7 +18,7 @@
   %h3 Model
   %pre.small= JSON.pretty_generate(JSON.parse(render_json(@location)))
   %h3 Service Metadata
-  %pre= JSON.pretty_generate(RollFindr::LocationFetchService.detail(@location.id.to_s) || {})
+  %pre= JSON.pretty_generate(RollFindr::LocationFetchService.listings(@location.id.to_s, @location.address_components.merge(title: @location.title)) || {})
   
   %h3= pluralize(@location.history_tracks.count, "Changes")
   %table.table.table-striped
