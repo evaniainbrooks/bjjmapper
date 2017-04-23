@@ -25,6 +25,12 @@ class Event
   CREATE_PARAMS_WHITELIST = [
     :event_type,
     :organization,
+    :cover_image,
+    :cover_image_x,
+    :cover_image_y,
+    :image,
+    :image_large,
+    :image_tiny,
     :starting,
     :ending,
     :event_recurrence,
@@ -59,6 +65,12 @@ class Event
   field :facebook, type: String
   field :event_type, type: Integer, default: EVENT_TYPE_CLASS
   field :source, type: String
+  field :cover_image, type: String
+  field :cover_image_x, type: Integer, default: 0
+  field :cover_image_y, type: Integer, default: 0
+  field :image, type: String
+  field :image_large, type: String
+  field :image_tiny, type: String
 
   field :lat
   field :lng

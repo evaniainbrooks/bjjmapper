@@ -85,6 +85,9 @@ class Location
 
   field :description
   field :directions
+  field :cover_image
+  field :cover_image_x, default: 0, type: Integer
+  field :cover_image_y, default: 0, type: Integer
   field :image
   field :image_large
   field :image_tiny

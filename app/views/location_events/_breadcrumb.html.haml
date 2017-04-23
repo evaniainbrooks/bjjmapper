@@ -1,5 +1,13 @@
+- location = event.location
 - country_name = country_name_for(location.country)
-%ol.breadcrumb
+%ol.breadcrumb.visible-xs.small.display-field{style: 'margin-bottom: 4px !important'}
+  %li
+    %a{href: directory_segment_path(country_name), title: "List of Brazilian Jiu-Jitsu events in #{country_name}"}= location.country 
+  - if location.country.present? && location.city.present?
+    %li
+      %a{href: directory_segment_path(location.country, location.city), title: "List of Brazilian Jiu-Jitsu events in #{location.city}"}= location.city
+
+%ol.breadcrumb.hidden-xs
   %li
     %a{href: root_path} Home
   %li

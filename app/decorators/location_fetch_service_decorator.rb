@@ -43,15 +43,23 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
 
   def cover_image
-    cover_photo.try(:[], :url)
+    location.cover_image || cover_photo.try(:[], :url)
   end
 
-  def cover_image_offset_x
-    cover_photo.try(:[], :offset_x)
+  def cover_image_x
+    if location.cover_image
+      location.cover_image_x
+    else
+      cover_photo.try(:[], :offset_x)
+    end
   end
 
-  def cover_image_offset_y
-    cover_photo.try(:[], :offset_y)
+  def cover_image_y
+    if location.cover_image
+      location.cover_image_y
+    else
+      cover_photo.try(:[], :offset_y)
+    end
   end
 
   def image_height

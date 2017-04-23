@@ -17,7 +17,7 @@
         = render partial: 'review_message' if reviewed?
         = render partial: 'schedule_timezone_missing_message' if location.timezone.blank?
         = render partial: 'closed_message' if closed? || moved?
-    .row{:style => "position: absolute; background-size: cover; background: url('#{location.cover_image}') -#{location.cover_image_offset_x}px -#{location.cover_image_offset_y}px"}
+    -#.row{:style => "position: absolute; background-size: cover; background: url('#{location.cover_image}') -#{location.cover_image_x}px -#{location.cover_image_y}px"}
     .row
       .col-md-2.col-xs-4.col-sm-3{:style => 'padding-right: 0px;'}
         .display-field
@@ -50,7 +50,7 @@
           %div.map-canvas{:style => 'height: 275px'}
           -# This is filled in by google maps
           %p.edit-field.text-info.small Note: you can drag the marker to a new location to change the address of this academy.
-      .col-md-4
+      .col-md-3.col-xs-12
         %b.small.text-muted.text-uppercase Nearby
         %div.nearby-locations.loading.location-list
           -# This is filled in by locations/nearby template

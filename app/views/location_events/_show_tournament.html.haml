@@ -3,9 +3,9 @@
 
 = form_for([location, event], html: { class: 'form ' + edit_mode_classes }) do |f|
   .row
-    .col-md-10
+    .col-md-10.pull-left
       = render partial: 'breadcrumb', locals: { location: location, event: event }
-    .col-md-2
+    .col-md-2.pull-right
       .display-field
         %button.btn.btn-default.btn-sm{:type => "button", 'data-begin-edit' => true} Edit
         %button.btn.btn-default.btn-sm{'data-report-item' => true}
@@ -13,21 +13,27 @@
       .edit-field
         %button.btn.btn-default.btn-sm{:'data-cancel-edit' => true } Cancel
         %button.btn.btn-primary.btn-sm{:type => 'submit'} Save
+  -#.row{style: 'position: relative'}
+    %img.cover-image{src: event.cover_image}/
   .row
-    .col-md-2.col-xs-4.text-center.center-block{:style => 'padding-right: 0px;'}
-      %img.logo{:src => event.image, :alt => event.title}/
-      %br/
+    .col-sm-3.col-md-2.col-xs-4.text-center.center-block{:style => 'padding-right: 0px;'}
+      %a{target: '_blank', href:  event.image_large, title: "View large logo"}
+        %img.img-thumbnail{alt: event.title, :src => event.image, :class => 'logo center-block'}/
       %p.text-small.small.text-muted= "last updated #{distance_of_time_in_words_to_now(event.updated_at)} ago"
-    .col-md-7.display-field
+    .col-md-7.col-xs-8.display-field
       %h1
         = event.title
         - if event.organization.present?
           .small
-            = link_to event.organization.name, '#'
-      %p.text-info
-        %span.fa.fa-calendar
-        = event.schedule.try(:to_s)
+            = link_to event.organization.abbreviation, '#'
+      %p
+        %span.text-info
+          %span.fa.fa-calendar
+          = "#{event.schedule.try(:to_s)}"
+        %span.text-muted.small
+          = "(#{distance_of_time_in_words_to_now(event.starting)} from now)"
       %p.display-field.description= event.description
+      %div.clear.clear-fix
     .col-md-7.edit-field
       = f.label :title, class: 'small text-muted upcase'
       = f.text_field :title, class: 'input-lg form-control'
@@ -35,17 +41,14 @@
       = f.select :organization, Organization.asc(:name).map{|o| [o.name, o.id]}, {include_blank: true}, class: 'form-control input-md', selected: event.organization.id
       = f.label :description, class: 'small text-muted upcase'
       = f.text_area :description, class: 'input-md form-control'
-    .col-md-3.display-field
+    .col-md-3.display-field.col-sm-12
+      %b.small.text-muted.upcase Contact
       - if event.organization.try(:email).present?
         %span.display-field
-          %b.small.text-muted.upcase Email
-          %br/
           = link_to 'mailto:' + event.organization.email, class: 'email' do
             = event.organization.email
             %i.fa.fa-envelope
               %br/
-        %b.small.text-muted.upcase Websites
-        %br/
         - if event.website.present?
           = link_to 'http://' + event.website, class: 'website' do
             = event.website
@@ -61,6 +64,8 @@
             = event.facebook
             %i.fa.fa-facebook
           %br/
+        %br/
+
     .col-md-3.edit-field
       = f.label :email, class: 'small text-muted upcase'
       = f.text_field :email, class: 'input-sm form-control'
@@ -71,10 +76,11 @@
       .input-group
         %span.input-group-addon http://facebook.com/
         = f.text_field :facebook, class: 'input-sm form-control'
-  %hr/
+  %hr.hidden-xs/
   .row
     .col-md-3.edit-field
-      %h3.pull-left
+      %br/
+      %b.pull-left.small.text-muted.upcase
         %span.fa.fa-calendar
         Schedule
       %span.pull-right
@@ -85,7 +91,7 @@
         = render partial: 'location_events/start_picker', locals: { value: event.starting }
         = render partial: 'location_events/end_picker', locals: { value: event.ending }
     .col-md-3.display-field
-      %h3
+      %b.small.text-muted.upcase
         %span.fa.fa-calendar
         Schedule
       %ul.list-unstyled
@@ -103,7 +109,8 @@
         %div.map-canvas{:style => 'height: 300px'}
           -# This is filled in by google maps
     .col-md-3
-      %h3= "Upcoming #{event.organization.abbreviation} Events"
+      %b.small.text-muted.upcase
+        = "Upcoming #{event.organization.abbreviation} Events"
       .upcoming-events.location-list.loading.clear
         .loading-overlay
           %span.fa.fa-refresh.fa-3x.fa-spin

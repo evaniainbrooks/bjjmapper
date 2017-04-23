@@ -115,6 +115,15 @@ html, body {
   }
 }
 
+img.cover-image {
+  position: absolute;
+  top: -10px;
+  left: 0px;
+  opacity: 0.5;
+  width: 100%;
+  min-height: 100%;
+}
+
 .create-location-dialog {
   img.logo {
     width: 100px;

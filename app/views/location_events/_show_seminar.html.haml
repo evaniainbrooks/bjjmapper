@@ -21,9 +21,12 @@
       %h1
         = event.title
         .small= link_to event.instructor.name, event.instructor
-      %p.text-info
-        %span.fa.fa-calendar
-        = event.schedule.try(:to_s)
+      %p
+        %span.text-info
+          %span.fa.fa-calendar
+          = "#{event.schedule.try(:to_s)}"
+        %span.text-muted.small
+          = "(#{distance_of_time_in_words_to_now(event.starting)} from now)"
       %p.display-field.description= event.description
     .col-md-4.display-field.instructors
       %h3.pull-left Instructor

@@ -3,7 +3,7 @@ require 'csv'
 
 options = {}
 OptionParser.new do |opts|
-  opts.banner = "Usage: rails runner import_uaejjf_csv.rb [options]"
+  opts.banner = "Usage: rails runner import_ibjjf_csv.rb [options]"
 
   opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
     options[:verbose] = v
@@ -18,17 +18,18 @@ f = File.open(options[:filename], "r")
 csv = CSV.parse(f, :headers => true)
 puts "Running as #{Rails.env}"
 
-org = Organization.where(:abbreviation => "UAEJJF").first
+org = Organization.where(:abbreviation => "IBJJF").first
 if org.blank?
-  puts "No UAEJJF org found!"
+  puts "No IBJJF org found!"
   abort
 else
-  puts "UAEJJF org is #{org.inspect}"
+  puts "IBJJF org is #{org.inspect}"
 end
 
 puts "Processing CSV file #{options[:filename]}"
 csv.each do |row|
   title = row[0].strip.split.map(&:capitalize).join(' ')
+  
   puts "Row is #{title}"
   date_start = row[1].strip
   date_start.slice!("Date: ")
@@ -41,29 +42,26 @@ csv.each do |row|
   venue_name.slice!("Location: ")
   venue_name = venue_name.split(',', 1)[0]
   venue_address = row[6].gsub(/Telephone Number: [^a-zA-Z]+/, '').gsub(/Homepage: [a-zA-Z.]+/, '').gsub('Federative Republic of', '').gsub('Republic of the', '').gsub('Republic of', '').gsub('Kingdom of', '')
-  link = "https://www.uaejjf.org" + row[9].strip
-  coords = [row[7], row[8]].reverse
+  link = row[9].strip
 
-  unless coords.present?
-    results = GeocodersHelper.search(venue_address)
-    if results.blank?
-      puts "*** Couldn't geocode #{venue_address}, skipping #{title}"
-      next
-    else
-      puts "Got #{results.count} geocode results #{results.inspect}"
-      coords = [results[0].lat, results[0].lng].reverse
-    end
+  results = GeocodersHelper.search(venue_address)
+  if results.blank?
+    puts "*** Couldn't geocode #{venue_address}, skipping #{title}"
+    next
+  else
+    puts "Got #{results.count} geocode results #{results.inspect}"
   end
 
   source = File.basename(__FILE__)
   venue = Location.where(:title => venue_name).first_or_create({
     loctype: Location::LOCATION_TYPE_EVENT_VENUE,
     street: results[0].street,
+    #image: row[10] || row[11],
     city: results[0].city,
     postal_code: results[0].postal_code,
     country: results[0].country,
     state: results[0].state,
-    coordinates: coords,
+    coordinates: [results[0].lng, results[0].lat],
     source: source
   })
 
@@ -73,6 +71,8 @@ csv.each do |row|
   Time.use_zone(venue.timezone) do
     event = Event.create({
       title: title,
+      image: row[11],
+      cover_image: row[10],
       event_type: Event::EVENT_TYPE_TOURNAMENT,
       organization: org,
       location: venue,
