@@ -43,7 +43,7 @@ class RollFindr.Views.UpcomingEventsView extends Backbone.View
       _.each @collection.models, (e)=>
         t = @template(e)
         ejson = e.toJSON()
-        current_date = ejson.starting
+        current_date = moment(ejson.starting).format("MMM Do YY")
 
         element = t({show_date: current_date != last_date, event: ejson})
         @$('.items').append(element)
