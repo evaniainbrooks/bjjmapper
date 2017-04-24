@@ -38,9 +38,16 @@ class RollFindr.Views.UpcomingEventsView extends Backbone.View
 
     if @collection.size() > 0
       @$el.removeClass('empty')
+      
+      last_date = null
       _.each @collection.models, (e)=>
         t = @template(e)
-        element = t({event: e.toJSON()})
+        ejson = e.toJSON()
+        current_date = ejson.starting
+
+        element = t({show_date: current_date != last_date, event: ejson})
         @$('.items').append(element)
+
+        last_date = current_date
     else
       @$el.addClass('empty')

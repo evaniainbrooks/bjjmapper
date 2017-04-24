@@ -1,4 +1,4 @@
-- location = event.location
+- location = local_assigns[:event] ? event.location : location
 - country_name = country_name_for(location.country)
 %ol.breadcrumb.visible-xs.small.display-field{style: 'margin-bottom: 4px !important'}
   %li

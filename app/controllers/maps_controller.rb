@@ -9,6 +9,7 @@ class MapsController < ApplicationController
 
 
   before_filter :validate_event_time_range, only: [:show, :search]
+  before_filter :set_filters, only: [:show, :search]
   before_filter :set_segment, only: [:show, :search]
   before_filter :set_coordinates, only: [:show, :search]
   before_filter :set_locations_scope, only: [:show, :search]
@@ -20,9 +21,6 @@ class MapsController < ApplicationController
   helper_method :map
 
   def show
-    @location_type = params.fetch(:location_type, [Location::LOCATION_TYPE_ACADEMY]).collect(&:to_i)
-    @event_type = params.fetch(:event_type, [Event::EVENT_TYPE_TOURNAMENT]).collect(&:to_i)
-
     tracker.track('showMap',
       zoom: map.zoom,
       lat: map.lat,
@@ -44,11 +42,6 @@ class MapsController < ApplicationController
 
   def search
     @locations = @locations.try(:to_a)
-    @event_type = params.fetch(:event_type, []).collect(&:to_i)
-    @location_type = params.fetch(:location_type, []).collect(&:to_i)
-
-    location_filter = @location_type.dup
-    location_filter << Location::LOCATION_TYPE_EVENT_VENUE if @event_type.present?
 
     @events = Event.between_time(
       @event_start,
@@ -65,7 +58,7 @@ class MapsController < ApplicationController
       is_event_venue = has_events && Location::LOCATION_TYPE_ACADEMY == location.loctype
       is_empty_event_venue = !has_events && Location::LOCATION_TYPE_EVENT_VENUE == location.loctype
 
-      (location_filter.include?(location.loctype) || is_event_venue) && !is_empty_event_venue
+      (@location_type.include?(location.loctype) || is_event_venue) && !is_empty_event_venue
     end
 
     tracker.track('searchMap',
@@ -74,7 +67,7 @@ class MapsController < ApplicationController
       team: @team,
       distance: @distance,
       query: @text_filter,
-      location_type: location_filter,
+      location_type: @location_type,
       event_type: @event_type,
       event_start: @event_start,
       event_end: @event_end,
@@ -85,7 +78,7 @@ class MapsController < ApplicationController
       flags: flags
     )
 
-    @locations = decorated_locations(@locations, events: @events, lat: @lat, lng: @lng, event_type: @event_type, location_type: location_filter)
+    @locations = decorated_locations(@locations, events: @events, lat: @lat, lng: @lng, event_type: @event_type, location_type: @location_type)
 
     #TODO: Don't use the decorator in controller...
     @sort = params.fetch(:sort, DEFAULT_SORT_ORDER).to_sym
@@ -122,6 +115,13 @@ class MapsController < ApplicationController
     params.fetch(f, 0).try(:to_i) == 1
   end
 
+  def set_filters
+    @event_type = params.fetch(:event_type, action?(:show) ? [Event::EVENT_TYPE_TOURNAMENT] : []).collect(&:to_i)
+    @location_type = params.fetch(:location_type, action?(:show) ? [Location::LOCATION_TYPE_ACADEMY] : []).collect(&:to_i)
+    @location_type << Location::LOCATION_TYPE_EVENT_VENUE if @event_type.present?
+    @location_type.uniq!
+  end
+
   def set_segment
     id = params.fetch(:segment, nil)
     @segment = if id.is_a?(Array)
@@ -153,13 +153,13 @@ class MapsController < ApplicationController
     @offset = params.fetch(:offset, 0).to_i
     @text_filter = params.fetch(:query, nil)
     @distance = params.fetch(:distance, DEFAULT_SEARCH_DISTANCE).to_f
-
+    
     @locations = if @segment.present?
       @segment.locations.limit(@count).offset(@offset)
     elsif @lat.present? && @lng.present?
-      Location.limit(@count).offset(@offset).where(:coordinates => { "$geoWithin" => { "$centerSphere" => [[@lng, @lat], @distance/3963.2] }})
+      Location.where(:loctype.in => @location_type).limit(@count).offset(@offset).where(:coordinates => { "$geoWithin" => { "$centerSphere" => [[@lng, @lat], @distance/3963.2] }})
     elsif @text_filter.present?
-      Location.limit(@count).offset(@offset)
+      Location.where(:loctype.in => @location_type).limit(@count).offset(@offset)
     end
 
     return if @locations.nil?

@@ -24,7 +24,7 @@
       %h1
         = event.title
         - if event.organization.present?
-          .small
+          %small
             = link_to event.organization.abbreviation, '#'
       %p
         %span.text-info
@@ -45,24 +45,24 @@
       %b.small.text-muted.upcase Contact
       - if event.organization.try(:email).present?
         %span.display-field
-          = link_to 'mailto:' + event.organization.email, class: 'email' do
-            = event.organization.email
+          = link_to 'mailto:' + event.organization.email, class: 'small email' do
             %i.fa.fa-envelope
-              %br/
+            = event.organization.email
+          %br/
         - if event.website.present?
-          = link_to 'http://' + event.website, class: 'website' do
-            = event.website
+          = link_to 'http://' + event.website, class: 'small website' do
             %i.fa.fa-external-link
+            = event.website
           %br/
         - if event.organization.try(:website).present?
-          = link_to 'http://' + event.organization.website, class: 'website' do
-            = event.organization.website
+          = link_to 'http://' + event.organization.website, class: 'small website' do
             %i.fa.fa-external-link
+            = event.organization.website
           %br/
         - if event.facebook.present?
-          = link_to 'http://facebook.com/' + event.facebook, class: 'facebook website' do
-            = event.facebook
+          = link_to 'http://facebook.com/' + event.facebook, class: 'small facebook website' do
             %i.fa.fa-facebook
+            = event.facebook
           %br/
         %br/
 
@@ -78,11 +78,10 @@
         = f.text_field :facebook, class: 'input-sm form-control'
   %hr.hidden-xs/
   .row
-    .col-md-3.edit-field
+    .col-md-2.edit-field
       %br/
       %b.pull-left.small.text-muted.upcase
-        %span.fa.fa-calendar
-        Schedule
+        Tournament Schedule
       %span.pull-right
         %button.title-btn.btn.btn-default{type: 'button'}
           Add Date
@@ -90,25 +89,36 @@
       .form-group.small.upcase.text-muted
         = render partial: 'location_events/start_picker', locals: { value: event.starting }
         = render partial: 'location_events/end_picker', locals: { value: event.ending }
-    .col-md-3.display-field
+    .col-md-2.display-field
       %b.small.text-muted.upcase
-        %span.fa.fa-calendar
-        Schedule
+        Tournament Schedule
       %ul.list-unstyled
         - event.sub_events.unscoped.each do |sub_event|
-          %li.clear.clear-fix
-            %span.pull-left= sub_event.title
-            %span.pull-right.text-muted
-              = sub_event.starting.strftime('%v')
-        %li.clear.clear-fix
-          %span.pull-left Tournament begins
-          %span.pull-right.text-muted
-            = event.starting.strftime('%v')
+          %li.list-group-item
+            %span.pull-left.text-muted
+              %span.day= sub_event.starting.strftime('%d')
+              %span.month= sub_event.starting.strftime('%b')
+            - if (sub_event.starting > Time.now)
+              %span.small.text-muted.pull-right
+                = "in "
+                = distance_of_time_in_words_to_now(sub_event.starting)
+            %br.clear.clear-fix/
+            %h4= sub_event.title
+        %li.list-group-item{style: 'background-color: lightgreen; border-color: green'}
+          %span.pull-left.text-muted
+            %span.day= event.starting.strftime('%d')
+            %span.month= event.starting.strftime('%b')
+          - if (event.starting > Time.now)
+            %span.small.pull-right
+              = "in "
+              = distance_of_time_in_words_to_now(event.starting)
+          %br.clear.clear-fix/
+          %h4 Tournament begins
     .col-md-6
       .map.clear.clear-fix
         %div.map-canvas{:style => 'height: 300px'}
           -# This is filled in by google maps
-    .col-md-3
+    .col-md-4
       %b.small.text-muted.upcase
         = "Upcoming #{event.organization.abbreviation} Events"
       .upcoming-events.location-list.loading.clear

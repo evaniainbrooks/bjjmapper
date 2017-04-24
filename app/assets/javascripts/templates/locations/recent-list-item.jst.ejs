@@ -1,5 +1,5 @@
 <div data-id="<%= location.id %>" class="location-list-item list-group-item">
-  <a class="pull-left text-primary" title="<%= location.title %>" href="<%= Routes.location_path(location.param, {ref: 'recent_l'}) %>"><h4 class="list-group-item-heading"><%= location.title %></h4></a>
+  <a style="width: 100%" class="pull-left text-primary" title="<%= location.title %>" href="<%= Routes.location_path(location.param, {ref: 'recent_l'}) %>"><h4 class="list-group-item-heading"><%= location.title %></h4></a>
   <div class="clear clear-fix"></div>
   <img width="50" height="50" src="<%= location.image %>" alt="<% location.title %> logo" class="img-rounded logo pull-left" />
   <div class="content">
@@ -21,7 +21,7 @@
     <br />
     <a class="address" href="<%= Routes.map_path({lat: location.lat, lng: location.lng, ref: 'recent_l'}) %>" title="See <%= location.title %> on the map">
       <span class="fa fa-map-marker"></span>
-      <span class="small"><%= location.address %></span>
+      <span class="small"><%= location.city %>, <%= location.country %></span>
     </a>
   </div>
   <div class="clear"></div>

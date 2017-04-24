@@ -9,16 +9,16 @@
     %a{'href' => 'javascript:void(0)', 'data-toggle' => 'collapse', 'data-target' => '.display-type'} 
       Display Types
   .display-type.collapse
-    %label.form-label.academy.small
+    %label.form-label.academy.small.upcase
       %input.display-opt{:type => 'checkbox', :name => 'show_academies', :data => { :type => 'location', :id => Location::LOCATION_TYPE_ACADEMY } }
         &nbsp;Academies
-    %label.form-label.tournament.small
+    %label.form-label.tournament.small.upcase
       %input.display-opt{:type => 'checkbox', :name => 'show_tournaments', :data => { :type => 'event', :id => Event::EVENT_TYPE_TOURNAMENT } }
         &nbsp;Tournaments
-    %label.form-label.seminar.small
+    %label.form-label.seminar.small.upcase
       %input.display-opt{:type => 'checkbox', :name => 'show_seminars', :data => { :type => 'event', :id => Event::EVENT_TYPE_SEMINAR } }
         &nbsp;Seminars
-    %label.form-label.camp.small
+    %label.form-label.camp.small.upcase
       %input.display-opt{:type => 'checkbox', :name => 'show_camps', :data => { :type => 'event', :id => Event::EVENT_TYPE_CAMP } }
         &nbsp;Training Camps
   %h4.small.text-muted.text-uppercase
@@ -47,12 +47,12 @@
     .team-list
       -# This is filled in by team-list template
     %br/
-    %label.form-label.small
-      %input.flag{:type => 'checkbox', :name => 'unverified' }
+    %label.form-label.small.upcase
+      %input.flag.block{:type => 'checkbox', :name => 'unverified' }
         &nbsp;Include Unverified
-    %label.form-label.small
-      %input.flag{:type => 'checkbox', :name => 'closed' }
+    %label.form-label.small.upcase
+      %input.flag.block{:type => 'checkbox', :name => 'closed' }
         &nbsp;Include Closed
-    %label.form-label.small
-      %input.flag{:type => 'checkbox', :name => 'bbonly' }
+    %label.form-label.small.upcase
+      %input.flag.block{:type => 'checkbox', :name => 'bbonly' }
         &nbsp;Exclude Non-Black Belt

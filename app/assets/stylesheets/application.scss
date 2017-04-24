@@ -18,12 +18,25 @@
  *= require bootstrap-social
  *= require toastr
  *= require bootstrap-datetimepicker
+ *= stub homepage
 */
 
 html, body {
   margin: 0px;
   padding: 0px;
   height: 100%;
+}
+
+.homepage, .directory, .page {
+  h3 {
+    text-transform: uppercase;
+    font-size: 125%;
+    font-weight: bold;
+  }
+
+  .title-btn {
+    margin-top: 15px; 
+  }
 }
 
 .team-list ul {

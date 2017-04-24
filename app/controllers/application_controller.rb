@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
       minZoom: Map::DEFAULT_MIN_ZOOM,
       geolocate: 1,
       legend: 0,
-      count: 5,
+      count: 10,
       location_type: Location::LOCATION_TYPE_ALL,
       event_type: [Event::EVENT_TYPE_TOURNAMENT],
       locations: [],

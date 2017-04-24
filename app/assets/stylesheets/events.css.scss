@@ -186,6 +186,14 @@ $colors: $color0, $color3, $color6, $color9, $color1, $color4, $color7, $color10
 }
 
 .upcoming-events {
+  .location-list-item:nth-child(even) { 
+  }
+  .sub-item {
+    border-top: 0px !important;
+    border-bottom: 0px !important;
+    .day { display: none; }
+    .month { display: none; }
+  }
   .location-list-item {
     h4 {
       font-size: 100%;
@@ -204,35 +212,37 @@ $colors: $color0, $color3, $color6, $color9, $color1, $color4, $color7, $color10
 
   .image-container {
     float: left;
-    width: 50px;
+    width: 100px;
     height: 50px;
     margin-right: 7px;
     position: relative;
     img { 
       width: 50px;
       height: 50px;
-      opacity: 0.5;
+      opacity: 0.6;
     }
 
     span.timestamp {
-      position: absolute;
-      top: 10px;
-      left: 0;
-      width: 100%;
+      position: relative;
+      width: 50px;
+      float: left;
       text-align: center;
     }
   }
+}
+  
+.month {
+  text-transform: uppercase;
+  color: #8b0000;
+  font-weight: bold;
+  text-shadow: 0px 1px 4px white;
+}
 
-  .month {
-    text-transform: uppercase;
-    color: #8b0000;
-    font-weight: bold;
-  }
-
-  .day {
-    color: black;
-    font-weight: bold;
-  }
+.day {
+  font-size: 175%;
+  color: black;
+  line-height: 0.1em;
+  text-shadow: 0px 1px 4px white;
 }
 
 .image-container {
@@ -253,15 +263,5 @@ $colors: $color0, $color3, $color6, $color9, $color1, $color4, $color7, $color10
     left: 0;
     width: 100%;
     text-align: center;
-  }
-  .month {
-    text-transform: uppercase;
-    color: #8b0000;
-    font-weight: bold;
-  }
-
-  .day {
-    color: black;
-    font-weight: bold;
   }
 }

@@ -42,27 +42,28 @@ csv.each do |row|
   venue_name = venue_name.split(',', 1)[0]
   venue_address = row[6].gsub(/Telephone Number: [^a-zA-Z]+/, '').gsub(/Homepage: [a-zA-Z.]+/, '').gsub('Federative Republic of', '').gsub('Republic of the', '').gsub('Republic of', '').gsub('Kingdom of', '')
   link = "https://www.uaejjf.org" + row[9].strip
-  coords = [row[7], row[8]].reverse
+  coords = [row[7], row[8]].collect(&:to_f).reverse
 
-  unless coords.present?
-    results = GeocodersHelper.search(venue_address)
-    if results.blank?
-      puts "*** Couldn't geocode #{venue_address}, skipping #{title}"
-      next
-    else
-      puts "Got #{results.count} geocode results #{results.inspect}"
-      coords = [results[0].lat, results[0].lng].reverse
-    end
-  end
+  next if coords.blank?
+  #unless coords.present?
+    #results = GeocodersHelper.search(venue_address)
+    #if results.blank?
+    #  puts "*** Couldn't geocode #{venue_address}, skipping #{title}"
+    #  next
+    #else
+    #  puts "Got #{results.count} geocode results #{results.inspect}"
+    #  coords = [results[0].lat, results[0].lng].reverse
+    #end
+  #end
 
   source = File.basename(__FILE__)
   venue = Location.where(:title => venue_name).first_or_create({
     loctype: Location::LOCATION_TYPE_EVENT_VENUE,
-    street: results[0].street,
-    city: results[0].city,
-    postal_code: results[0].postal_code,
-    country: results[0].country,
-    state: results[0].state,
+    #street: results[0].street,
+    #city: results[0].city,
+    #postal_code: results[0].postal_code,
+    #country: results[0].country,
+    #state: results[0].state,
     coordinates: coords,
     source: source
   })

@@ -1,41 +1,33 @@
 = content_for(:scripts) do
   = render partial: 'facebook_sdk'
+= content_for(:head) do
+  = stylesheet_link_tag 'homepage', :media => "all"
 
 .container.homepage
   .div#fb-root
   .row
     .col-md-5
-      %h3.pull-left Near You
-      %a.pull-right.btn.btn-default.btn-sm.title-btn{:href => map_path(lat: @map[:lat], lng: @map[:lng], :ref => 'homepage'), :title => 'Academy Map'}
-        %span.fa.fa-search-plus
-        See larger map
+      %h3.pull-left BJJ Near You
+      %span.pull-right
+        %a.btn.btn-default.btn-sm.title-btn{:href => map_path(lat: @map[:lat], lng: @map[:lng], :ref => 'homepage'), :title => 'Academy Map'}
+          %span.fa.fa-search-plus
+          See larger map
+        .btn-group.title-btn
+          = link_to wizard_locations_path(ref: 'hprec'), class: 'btn btn-success btn-sm' do
+            %i.fa.fa-map-marker
+            Create Academy
+          %button.btn.btn-success.btn-sm.dropdown-toggle{:'aria-expanded' => false, :'data-toggle' => 'dropdown', :type => 'button'}
+            %span.caret
+            %span.sr-only
+              Toggle Dropdown
+          %ul.dropdown-menu{:role => 'menu'}
+            %li
+              = link_to wizard_events_path(ref: 'hprec') do
+                %i.fa.fa-calendar-o
+                Create Event
+
       = render partial: 'maps/map'
     .col-md-4
-      %h3.pull-left
-        New Additions
-      .btn-group.title-btn.pull-right
-        = link_to wizard_locations_path(ref: 'hprec'), class: 'btn btn-success btn-sm' do
-          %i.fa.fa-map-marker
-          Create Academy
-        %button.btn.btn-success.btn-sm.dropdown-toggle{:'aria-expanded' => false, :'data-toggle' => 'dropdown', :type => 'button'}
-          %span.caret
-          %span.sr-only
-            Toggle Dropdown
-        %ul.dropdown-menu{:role => 'menu'}
-          %li
-            = link_to wizard_events_path(ref: 'hprec') do
-              %i.fa.fa-calendar-o
-              Create Event
-
-      .recent-locations.location-list.loading.clear
-        .loading-overlay
-          %span.fa.fa-refresh.fa-3x.fa-spin
-        .empty-message
-          %i.text-muted There are no recent locations
-        .items
-    .col-md-3
-      %br/
-      = render partial: 'application/google_adsense'
       %h3.pull-left Upcoming Events
       .upcoming-events.location-list.loading.clear
         .loading-overlay
@@ -43,6 +35,17 @@
         .items
         .empty-message
           %i.text-muted There are no upcoming events
+    .col-md-3
+      %br/
+      = render partial: 'application/google_adsense'
+      %h3.pull-left
+        New Additions
+      .recent-locations.location-list.loading.clear
+        .loading-overlay
+          %span.fa.fa-refresh.fa-3x.fa-spin
+        .empty-message
+          %i.text-muted There are no recent locations
+        .items
   .row
     .col-md-12
       %h3 Around The World
@@ -66,8 +69,8 @@
   = javascript_include_tag 'map'
   :coffeescript
     $(document).ready ->
-      recentView = new RollFindr.Views.RecentLocationsView({count: 6})
-      upcomingView = new RollFindr.Views.UpcomingEventsView()
+      recentView = new RollFindr.Views.RecentLocationsView({count: 10})
+      upcomingView = new RollFindr.Views.UpcomingEventsView({count: 16})
 
       mapModel = new RollFindr.Models.Map(#{render_json(@map)})
       mapView = new RollFindr.Views.MapView({el: $('.map'), model: mapModel})
