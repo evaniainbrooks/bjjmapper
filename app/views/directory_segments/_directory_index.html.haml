@@ -1,12 +1,31 @@
 .row
-  - per_column = (@directory_segments.size / 3.0).ceil
+  - per_column = (@directory_segments.size / 4.0).ceil
   - @directory_segments.each_slice(per_column).each do |segments|
-    .col-md-3
+    .col-md-2
       - segments.each do |country|
-        %h3= link_to country.name, directory_segment_path(country.name), title: "List of Brazilian Jiu-Jitsu gyms in #{country.name}"
+        %h3.parent-segment
+          = link_to country.name, directory_segment_path(country.name), class: 'text-info', title: "List of Brazilian Jiu-Jitsu gyms in #{country.name}"
+          %small
+            %span= country.location_count 
+
         - unless country.child_segments.empty?
           %ul.list-inline
             - country.child_segments.each do |city|
-              %li.small= link_to city.name, directory_segment_path(country.name, city.name), title: "List of Brazilian Jiu-Jitsu gyms in #{city.name}, #{country.name}"
-  .col-md-3
-    = render partial: 'google_adsense'
+              %li.small.child-segment
+                = link_to directory_segment_path(country.name, city.name), class: 'text-muted', title: "List of Brazilian Jiu-Jitsu gyms in #{city.name}, #{country.name}" do
+                  = city.name
+  .col-md-4
+    %hr.visible-xs
+    = render partial: 'application/facebook_widget'
+    %h3.pull-left Upcoming Events
+    .upcoming-events.location-list.loading.clear
+      .loading-overlay
+        %span.fa.fa-refresh.fa-3x.fa-spin
+      .items
+      .empty-message
+        %i.text-muted There are no upcoming events
+
+= content_for(:scripts) do
+  = render partial: 'facebook_sdk'
+  :coffeescript
+    upcomingView = new RollFindr.Views.UpcomingEventsView({count: 6})

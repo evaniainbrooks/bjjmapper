@@ -58,7 +58,7 @@ class MapsController < ApplicationController
       is_event_venue = has_events && Location::LOCATION_TYPE_ACADEMY == location.loctype
       is_empty_event_venue = !has_events && Location::LOCATION_TYPE_EVENT_VENUE == location.loctype
 
-      (@location_type.include?(location.loctype) || is_event_venue) && !is_empty_event_venue
+      !is_empty_event_venue
     end
 
     tracker.track('searchMap',
@@ -118,8 +118,6 @@ class MapsController < ApplicationController
   def set_filters
     @event_type = params.fetch(:event_type, action?(:show) ? [Event::EVENT_TYPE_TOURNAMENT] : []).collect(&:to_i)
     @location_type = params.fetch(:location_type, action?(:show) ? [Location::LOCATION_TYPE_ACADEMY] : []).collect(&:to_i)
-    @location_type << Location::LOCATION_TYPE_EVENT_VENUE if @event_type.present?
-    @location_type.uniq!
   end
 
   def set_segment
@@ -153,16 +151,20 @@ class MapsController < ApplicationController
     @offset = params.fetch(:offset, 0).to_i
     @text_filter = params.fetch(:query, nil)
     @distance = params.fetch(:distance, DEFAULT_SEARCH_DISTANCE).to_f
-    
-    @locations = if @segment.present?
-      @segment.locations.limit(@count).offset(@offset)
-    elsif @lat.present? && @lng.present?
-      Location.where(:loctype.in => @location_type).limit(@count).offset(@offset).where(:coordinates => { "$geoWithin" => { "$centerSphere" => [[@lng, @lat], @distance/3963.2] }})
-    elsif @text_filter.present?
-      Location.where(:loctype.in => @location_type).limit(@count).offset(@offset)
-    end
+   
+    loctypes = @location_type.dup
+    loctypes << Location::LOCATION_TYPE_EVENT_VENUE if @event_type.present?
+    loctypes.uniq!
 
-    return if @locations.nil?
+    if @segment.present?
+      @locations = @segment.locations.where(:loctype.in => loctypes).limit(@count).offset(@offset)
+    elsif @lat.present? && @lng.present?
+      @locations = Location.where(:loctype.in => loctypes).limit(@count).offset(@offset).where(:coordinates => { "$geoWithin" => { "$centerSphere" => [[@lng, @lat], @distance/3963.2] }})
+    elsif @text_filter.present?
+      @locations = Location.where(:loctype.in => loctypes).limit(@count).offset(@offset)
+    else
+      return
+    end
 
     @locations = @locations.not_closed unless flag?(:closed)
     @locations = @locations.not_rejected unless flag?(:rejected)

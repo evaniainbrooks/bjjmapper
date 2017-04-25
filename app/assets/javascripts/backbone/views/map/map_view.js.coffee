@@ -17,7 +17,10 @@ class RollFindr.Views.MapView extends Backbone.View
       'activeMarkerChanged',
       'clearSearchAndFetchViewport',
       'search',
-      'setCenterFromModel'
+      'setCenterFromModel',
+      'setupEventListeners',
+      'onFiltersChanged',
+      'offFiltersChanged',
       'initializeMarkerView',
       'initializeMap',
       'setCenterGeolocate',
@@ -37,6 +40,17 @@ class RollFindr.Views.MapView extends Backbone.View
       @setupEventListeners()
       @initializeMap()
       @directionsView = new RollFindr.Views.DirectionsOverlayView({el: @el, model: @model, map: @map})
+  
+  initializeMap: ->
+    hasCenter = @model.get('lat')? && @model.get('lng')?
+    shouldGeolocate = @model.get('geolocate') || !hasCenter
+
+    if (shouldGeolocate && navigator.geolocation)
+      @setCenterGeolocate =>
+        @fetchViewport()
+    else
+      @setCenterFromModel =>
+        @fetchViewport()
 
   initializeMarkerView: (editable)->
     shouldRender = @markerView?
@@ -65,9 +79,7 @@ class RollFindr.Views.MapView extends Backbone.View
 
     return true
 
-  setupEventListeners: ->
-    @listenTo(@model, 'sync reset', @render)
-
+  onFiltersChanged: ->
     filtersChanged = _.debounce(@fetchViewport, 500)
     @model.on('change:event_type', filtersChanged)
     @model.on('change:location_type', filtersChanged)
@@ -75,6 +87,18 @@ class RollFindr.Views.MapView extends Backbone.View
     @model.on('change:offset', filtersChanged)
     @model.on('change:flags', filtersChanged)
     @model.on('change:sort', filtersChanged)
+  
+  offFiltersChanged: ->
+    @model.off('change:event_type')
+    @model.off('change:location_type')
+    @model.off('change:count')
+    @model.off('change:offset')
+    @model.off('change:flags')
+    @model.off('change:sort')
+
+  setupEventListeners: ->
+    @listenTo(@model, 'sync reset', @render)
+    @onFiltersChanged()
 
     RollFindr.GlobalEvents.on('geolocate', @geolocate)
     RollFindr.GlobalEvents.on('search', @search)
@@ -134,16 +158,6 @@ class RollFindr.Views.MapView extends Backbone.View
     else
       geolocateFailedCallback()
 
-  initializeMap: ->
-    hasCenter = @model.get('lat')? && @model.get('lng')?
-    shouldGeolocate = @model.get('geolocate') || !hasCenter
-
-    if (shouldGeolocate && navigator.geolocation)
-      @setCenterGeolocate =>
-        @fetchViewport()
-    else
-      @setCenterFromModel =>
-        @fetchViewport()
 
   setCenterFromModel: (callback)->
     defaultLat = @model.get('lat')
@@ -160,7 +174,7 @@ class RollFindr.Views.MapView extends Backbone.View
     @clearSearch()
     @fetchViewport()
 
-  fetchViewport: ->
+  fetchViewport: -> 
     if (undefined == @map.getCenter() || undefined == @map.getBounds())
       google.maps.event.addListenerOnce(@map, 'idle', @fetchViewport)
       return
@@ -187,15 +201,16 @@ class RollFindr.Views.MapView extends Backbone.View
       geoquery: @model.get('geoquery')
     }, @model.get('flags')))
 
-  fetchMap: (args, completeCallback)->
+  fetchMap: (args)->
+    @offFiltersChanged()
     @model.fetch({
       data: args
       success: =>
         @setCenterFromModel()
         toastr.success("Found #{'location'.pluralize(@model.get('location_count'))} and #{'event'.pluralize(@model.get('event_count'))}", 'Map refreshed')
       complete: =>
+        @onFiltersChanged()
         @$('.refresh-button .fa').removeClass('fa-spin')
-        completeCallback() if completeCallback?
       error: =>
         toastr.error('Failed to refresh map', 'Error')
     })

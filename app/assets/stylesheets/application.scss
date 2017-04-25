@@ -27,6 +27,13 @@ html, body {
   height: 100%;
 }
 
+.directory {
+  h3.parent-segment {
+    font-size: 24px; 
+    font-weight: 100;
+  }
+}
+
 .homepage, .directory, .page {
   h3 {
     text-transform: uppercase;

@@ -37,8 +37,8 @@
     .col-md-7.edit-field
       = f.label :title, class: 'small text-muted upcase'
       = f.text_field :title, class: 'input-lg form-control'
-      = f.label :organization, class: 'small text-muted upcase'
-      = f.select :organization, Organization.asc(:name).map{|o| [o.name, o.id]}, {include_blank: true}, class: 'form-control input-md', selected: event.organization.id
+      = f.label :organization_id, class: 'small text-muted upcase'
+      = f.select :organization_id, options_for_select(Organization.asc(:name).map{|o| [o.name, o.id.to_s]}, event.organization.id), {include_blank: true}, {class: 'form-control input-md'}
       = f.label :description, class: 'small text-muted upcase'
       = f.text_area :description, class: 'input-md form-control'
     .col-md-3.display-field.col-sm-12

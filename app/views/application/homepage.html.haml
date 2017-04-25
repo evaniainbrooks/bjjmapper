@@ -7,7 +7,7 @@
   .div#fb-root
   .row
     .col-md-5
-      %h3.pull-left BJJ Near You
+      %h3.pull-left Nearby 
       %span.pull-right
         %a.btn.btn-default.btn-sm.title-btn{:href => map_path(lat: @map[:lat], lng: @map[:lng], :ref => 'homepage'), :title => 'Academy Map'}
           %span.fa.fa-search-plus
@@ -15,7 +15,7 @@
         .btn-group.title-btn
           = link_to wizard_locations_path(ref: 'hprec'), class: 'btn btn-success btn-sm' do
             %i.fa.fa-map-marker
-            Create Academy
+            New Academy
           %button.btn.btn-success.btn-sm.dropdown-toggle{:'aria-expanded' => false, :'data-toggle' => 'dropdown', :type => 'button'}
             %span.caret
             %span.sr-only
@@ -24,7 +24,7 @@
             %li
               = link_to wizard_events_path(ref: 'hprec') do
                 %i.fa.fa-calendar-o
-                Create Event
+                New Event
 
       = render partial: 'maps/map'
     .col-md-4
@@ -60,7 +60,7 @@
   %hr/
   .row
     .col-md-4
-      .fb-page{"data-colorscheme" => "light", "data-header" => "false", "data-href" => "https://www.facebook.com/BJJMapper", "data-show-border" => "true", "data-show-faces" => "false", "data-show-posts" => "false"}
+      = render partial: 'application/facebook_widget' 
     .col-md-8.hidden-sm.hidden-xs
       %br/
       = render partial: 'application/google_adsense_banner'

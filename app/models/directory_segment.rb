@@ -1,4 +1,5 @@
 require 'mongoid-history'
+require 'redis_cache'
 require 'i18n'
 
 class DirectorySegment
@@ -89,6 +90,13 @@ class DirectorySegment
     (self.attributes['abbreviations'] || []).concat(
       RollFindr::DirectoryCountryAbbreviations[I18n.transliterate(name).downcase] || []
     )
+  end
+
+  def location_count
+    key = ['SegmentLocationCount', self.id.to_s].join('-')
+    RollFindr::Redis.cache(key: key, expire: rand(10.hours.seconds..10.days.seconds)) do
+      locations.count
+    end
   end
 
   def locations

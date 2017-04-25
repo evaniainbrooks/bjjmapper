@@ -6,13 +6,19 @@
     .col-md-12
       %h1
         = title
-        %span.small= "#{Location.verified.academies.count} academies and #{Event.count} events"
+        %span.small
+          %b.month= Location.verified.academies.count
+          %span= " academies and " 
+          %b.month= Event.count
+          %span= " events"
   .row.hidden-xs
     .col-md-12
       = render partial: 'breadcrumb'
   .row.hidden-xs
     .col-md-12
       = render partial: 'directory_welcome_message'
+  = render partial: 'directory_index'
   .row
     .col-md-12
-      = render partial: 'directory_index'
+      = render partial: 'google_adsense_banner'
+
