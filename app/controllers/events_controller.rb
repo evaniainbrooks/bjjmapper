@@ -100,7 +100,10 @@ private
     if id.present?
       Location.find(id)
     else
-      Location.create!(location_create_params)
+      Location.new(location_create_params).tap do |loc|
+        LocationGeocoder.update(loc)
+        loc.save!
+      end
     end
   end
 

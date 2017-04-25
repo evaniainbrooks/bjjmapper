@@ -119,13 +119,18 @@ class RollFindr.Views.EventVenueWizardView extends Backbone.View
 
   useVenue: (e)->
     venueId = $(e.currentTarget).data('id')
+    venueAddress = $(e.currentTarget).data('address')
     @$('[name="location_id"]').removeProp('disabled')
     @$('[name="location_id"]').val(venueId)
+    @$('#full_address').val(venueAddress)
     @$('.editable').removeClass('edit-mode')
     @enableSubmit()
 
-  useAddress: ->
+  useAddress: (e)->
+    fullAddress = @$('[name="address_options"]').val()
+    alert(fullAddress)
     @$('[name="location_id"]').prop('disabled', true)
+    @$('#full_address').val(fullAddress)
     @$('.editable').removeClass('edit-mode')
     @enableSubmit()
 
