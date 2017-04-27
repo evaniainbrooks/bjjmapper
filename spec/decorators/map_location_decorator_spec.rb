@@ -61,12 +61,28 @@ describe MapLocationDecorator do
       end
       subject { MapLocationDecorator.decorate(build(:location), params(events: events)) }
       it 'returns a sentence with the instructor and organization names' do
-        subject.entities.should match events[0].organization.abbreviation
+        subject.entities.should match events[0].organization.name
         subject.entities.should match events[1].instructor.name
       end
     end
     context 'without events' do
       subject { MapLocationDecorator.decorate(build(:location)).entities }
+      it { should be_nil }
+    end
+  end
+  describe '.entities_abbreviations' do
+    context 'with events' do
+      let(:events) do
+        [build(:tournament, organization: build(:organization)), build(:seminar, instructor: build(:user), organization: nil)]
+      end
+      subject { MapLocationDecorator.decorate(build(:location), params(events: events)) }
+      it 'returns a sentence with the instructor and organization names' do
+        subject.entities_abbreviations.should match events[0].organization.abbreviation
+        subject.entities_abbreviations.should match events[1].instructor.name
+      end
+    end
+    context 'without events' do
+      subject { MapLocationDecorator.decorate(build(:location)).entities_abbreviations }
       it { should be_nil }
     end
   end
