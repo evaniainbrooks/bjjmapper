@@ -29,6 +29,7 @@ json.lat location.lat
 json.lng location.lng
 json.link location.try(:link)
 json.entities location.try(:entities)
+json.entities_abbreviations location.try(:entities_abbreviations)
 json.event_count location.events.try(:count) || 0
 json.image location.image
 json.image_large location.try(:image_large)

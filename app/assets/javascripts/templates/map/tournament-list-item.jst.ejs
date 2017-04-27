@@ -6,7 +6,7 @@
     <img src="<%= location.image %>" alt="<% location.title %> logo" class="img-rounded logo pull-left" />
     <div>
       <h4 class="list-group-item-heading"><%= location.title %></h4>
-      <p class="team-title strong list-group-item-text small"><%= location.entities %></p>
+      <p class="team-title strong list-group-item-text small"><%= location.entities_abbreviations %></p>
       <p class="date list-group-item-text small">
         <span class="fa fa-calendar"></span>
         <%= moment(location.dates[0]).format("MMMM Do") %>
@@ -23,27 +23,56 @@
       <div>
         <h4 class="list-group-item-heading"><%= location.title %></h4>
         <p class="strong list-group-item-text small team-title"><%= location.entities %></p>
-        <p class="list-group-item-text small date">
+        <h5 class="list-group-item-text text-info date">
           <span class="fa fa-calendar"></span>
           <%= moment(location.dates[0]).format("MMMM Do") %>
-        </p>
+        </h5>
         <br />
-        <p class="list-group-item-text small upcase address">
+        <p class="list-group-item-text text-muted">
+          <span class="small"><%= location.venue_title %></span>
+          <br/>
           <span class="fa fa-map-marker"></span>
-          <%= location.address %>
+          <span class="upcase address"><%= location.address %></span>
         </p>
       </div>
       <br/>
     </a>
     <ul class="small list-unstyled">
+      <% if (null !== location.events[0].organization.email && location.events[0].organization.email.length > 0) { %>
+        <li>
+          <span class="col-md-offset-1 label text-muted upcase">Email</span>
+          <a class="email" href="mailto:<%= location.events[0].organization.email %>">
+            <span class="fa fa-envelope"></span>
+            <%= location.events[0].organization.email %>
+          </a>
+        </li>
+      <% } %>
       <% if (null !== location.events[0].organization.website && location.events[0].organization.website.length > 0) { %>
-        <li><span class="col-md-offset-1 label upcase">Org website</span> <a class="website" href="http://<%= location.events[0].organization.website %>"><%= location.events[0].organization.website %></a></li>
+        <li>
+          <span class="col-md-offset-1 label upcase">Website</span>
+          <a class="website" href="http://<%= location.events[0].organization.website %>">
+            <span class="fa fa-external-link"></span>
+            <%= location.events[0].organization.website %>
+          </a>
+        </li>
       <% } %>
       <% if (null !== location.events[0].website && location.events[0].website.length > 0) { %>
-        <li><span class="col-md-offset-1 label upcase">Website</span> <a class="website" href="http://<%= location.events[0].website %>"><%= location.events[0].website %></a></li>
+        <li>
+          <span class="col-md-offset-1 label upcase">Website</span>
+          <a class="website" href="http://<%= location.events[0].website %>">
+            <span class="fa fa-external-link"></span>
+            <%= location.events[0].website %>
+          </a>
+        </li>
       <% } %>
       <% if (null !== location.events[0].facebook && location.events[0].facebook.length > 0) { %>
-        <li><span class="col-md-offset-1 label upcase">Facebook</span> <a class="website" href="http://facebook.com/<%= location.events[0].facebook %>"><%= location.events[0].facebook %></a></li>
+        <li>
+          <span class="col-md-offset-1 label upcase">Facebook</span>
+          <a target="_blank" class="website" href="http://facebook.com/<%= location.events[0].facebook %>">
+            <span class="fa fa-facebook"></span>
+            <%= location.events[0].facebook %>
+          </a>
+        </li>
       <% } %>
     </ul>
     <span class="text-info distance small"><%= location.distance %></span>

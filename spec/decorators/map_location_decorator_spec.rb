@@ -40,10 +40,10 @@ describe MapLocationDecorator do
     end
     context 'when there are multiple events' do
       let(:event_venue) { build(:event_venue) }
-      let(:events) { [build(:event, location: event_venue), build(:event, location: event_venue)] }
+      let(:events) { [build(:event, location: event_venue), build(:event, location: event_venue), build(:event, location: event_venue)] }
       subject { MapLocationDecorator.decorate(event_venue, params(events: events)) }
       it 'is a string containing the event count' do
-        subject.title.should match('2')
+        subject.title.should match(events[0].title + " (+#{events.count-1} more)")
       end
     end
     context 'when it is an academy' do

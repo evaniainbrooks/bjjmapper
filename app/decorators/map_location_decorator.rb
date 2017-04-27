@@ -56,10 +56,17 @@ class MapLocationDecorator < LocationDecorator
     end.uniq.sort
   end
 
-  def entities
+  def entities_abbreviations
     return nil unless has_events?
     events.collect do |event|
       event.organization.try(:abbreviation) || event.instructor.try(:name)
+    end.compact.uniq.sort.to_sentence
+  end
+
+  def entities
+    return nil unless has_events?
+    events.collect do |event|
+      event.organization.try(:name) || event.instructor.try(:name)
     end.compact.uniq.sort.to_sentence
   end
 

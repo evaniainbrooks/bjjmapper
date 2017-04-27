@@ -36,22 +36,42 @@
         <span class="text-muted small">
           (<%= location.review_count %>)  
         </span>
-        <p class="list-group-item-text small upcase address">
+        <br />
+        <br />
+        <p class="address list-group-item-text upcase">
           <span class="fa fa-map-marker"></span>
-          <%= location.address %>
+          <span><%= location.address %></span>
         </p>
       </div>
       <br/>
     </a>
     <ul class="small list-unstyled">
       <% if (null !== location.phone && location.phone.length > 0) { %>
-        <li><span class="col-md-offset-1 label text-muted upcase">Phone</span> <a class="phone" href="tel:<%= location.phone %>"><%= location.phone %></a></li>
+        <li>
+          <span class="col-md-offset-1 label text-muted upcase">Phone</span>
+          <a class="phone" href="tel:<%= location.phone %>">
+            <span class="fa fa-phone"></span>
+            <%= location.phone %>
+          </a>
+        </li>
       <% } %>
       <% if (null !== location.email && location.email.length > 0) { %>
-        <li><span class="col-md-offset-1 label text-muted upcase">Email</span> <a class="email" href="mailto:<%= location.email %>"><%= location.email %></a></li>
+        <li>
+          <span class="col-md-offset-1 label text-muted upcase">Email</span>
+          <a class="email" href="mailto:<%= location.email %>">
+            <span class="fa fa-envelope"></span>
+            <%= location.email %>
+          </a>
+        </li>
       <% } %>
       <% if (null !== location.website && location.website.length > 0) { %>
-        <li><span class="col-md-offset-1 label text-muted upcase">Website</span> <a class="website" href="http://<%= location.website %>"><%= location.website %></a></li>
+        <li>
+          <span class="col-md-offset-1 label text-muted upcase">Website</span>
+          <a target="_blank" class="website" href="http://<%= location.website %>">
+            <span class="fa fa-external-link"></span>
+            <%= location.website %>
+          </a>
+        </li>
       <% } %>
     </ul>
     <span class="text-info distance small"><%= location.distance %></span>

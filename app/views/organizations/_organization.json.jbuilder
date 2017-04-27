@@ -3,5 +3,6 @@ json.param organization.to_param.to_s
 json.name organization.name
 json.abbreviation organization.abbreviation
 json.website organization.website
+json.email organization.email
 json.image organization.image
 json.image_large organization.image_large
