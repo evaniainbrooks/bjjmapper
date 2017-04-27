@@ -43,6 +43,7 @@
       = f.text_area :description, class: 'input-md form-control'
     .col-md-3.display-field.col-sm-12
       %b.small.text-muted.upcase Contact
+      %br/
       - if event.organization.try(:email).present?
         %span.display-field
           = link_to 'mailto:' + event.organization.email, class: 'small email' do

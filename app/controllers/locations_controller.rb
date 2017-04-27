@@ -7,7 +7,8 @@ class LocationsController < ApplicationController
   before_action :ensure_signed_in, only: [:wizard, :destroy, :create, :update, :move, :unlock, :close, :remove_image]
   before_action :check_permissions, only: [:destroy, :update, :move, :unlock, :close, :remove_image]
 
-  decorates_assigned :location, :locations, :with => LocationFetchServiceDecorator
+  decorates_assigned :location, :with => LocationFetchServiceDecorator
+  decorates_assigned :locations, :with => LocationDecorator
 
   helper_method :created?
   helper_method :reviewed?
