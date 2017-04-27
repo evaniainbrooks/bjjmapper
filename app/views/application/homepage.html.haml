@@ -37,30 +37,36 @@
           %i.text-muted There are no upcoming events
     .col-md-3
       %br/
+      - if FeatureSetting.enabled?(:hide_homepage_new_additions)
+        = render partial: 'application/facebook_widget' 
+        %br/
       = render partial: 'application/google_adsense'
-      %h3.pull-left
-        New Additions
-      .recent-locations.location-list.loading.clear
-        .loading-overlay
-          %span.fa.fa-refresh.fa-3x.fa-spin
-        .empty-message
-          %i.text-muted There are no recent locations
-        .items
-  .row
-    .col-md-12
-      %h3 Around The World
-  .row
-    - per_column = (@countries.size / 4.0).ceil
-    - @countries.each_slice(per_column).each do |countries|
-      .col-md-3
-        - countries.each do |country|
-          = link_to directory_segment_path(country: country.name), class: 'small block', title: "List of BJJ gyms in #{country.name}" do
-            Brazilian Jiu-Jitsu academies in
-            %strong= country.name
+      - if !FeatureSetting.enabled?(:hide_homepage_new_additions)
+        %h3.pull-left
+          New Additions
+        .recent-locations.location-list.loading.clear
+          .loading-overlay
+            %span.fa.fa-refresh.fa-3x.fa-spin
+          .empty-message
+            %i.text-muted There are no recent locations
+          .items
+
+  - unless FeatureSetting.enabled?(:hide_homepage_directory_segments)
+    .row
+      .col-md-12
+        %h3 Around The World
+    .row
+      - per_column = (@countries.size / 4.0).ceil
+      - @countries.each_slice(per_column).each do |countries|
+        .col-md-3
+          - countries.each do |country|
+            = link_to directory_segment_path(country: country.name), class: 'small block', title: "List of BJJ gyms in #{country.name}" do
+              Brazilian Jiu-Jitsu academies in
+              %strong= country.name
   %hr/
   .row
     .col-md-4
-      = render partial: 'application/facebook_widget' 
+      = render partial: 'application/facebook_widget' if !FeatureSetting.enabled?(:hide_homepage_directory_segments)
     .col-md-8.hidden-sm.hidden-xs
       %br/
       = render partial: 'application/google_adsense_banner'

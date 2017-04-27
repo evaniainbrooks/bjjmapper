@@ -27,11 +27,11 @@
           %small
             = link_to event.organization.abbreviation, '#'
       %p
-        %span.text-info
+        %h4.text-info
           %span.fa.fa-calendar
           = "#{event.schedule.try(:to_s)}"
-        %span.text-muted.small
-          = "(#{distance_of_time_in_words_to_now(event.starting)} from now)"
+          %small.text-muted.small
+            = "(#{distance_of_time_in_words_to_now(event.starting)} from now)"
       %p.display-field.description= event.description
       %div.clear.clear-fix
     .col-md-7.edit-field
@@ -49,22 +49,22 @@
             %i.fa.fa-envelope
             = event.organization.email
           %br/
-        - if event.website.present?
-          = link_to 'http://' + event.website, class: 'small website' do
-            %i.fa.fa-external-link
-            = event.website
-          %br/
-        - if event.organization.try(:website).present?
-          = link_to 'http://' + event.organization.website, class: 'small website' do
-            %i.fa.fa-external-link
-            = event.organization.website
-          %br/
-        - if event.facebook.present?
-          = link_to 'http://facebook.com/' + event.facebook, class: 'small facebook website' do
-            %i.fa.fa-facebook
-            = event.facebook
-          %br/
+      - if event.website.present?
+        = link_to 'http://' + event.website, class: 'small website' do
+          %i.fa.fa-external-link
+          = event.website
         %br/
+      - if event.organization.try(:website).present?
+        = link_to 'http://' + event.organization.website, class: 'small website' do
+          %i.fa.fa-external-link
+          = event.organization.website
+        %br/
+      - if event.facebook.present?
+        = link_to 'http://facebook.com/' + event.facebook, class: 'small facebook website' do
+          %i.fa.fa-facebook
+          = event.facebook
+        %br/
+      %br/
 
     .col-md-3.edit-field
       = f.label :email, class: 'small text-muted upcase'

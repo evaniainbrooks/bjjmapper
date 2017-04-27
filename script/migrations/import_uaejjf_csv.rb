@@ -64,6 +64,7 @@ csv.each do |row|
     #postal_code: results[0].postal_code,
     #country: results[0].country,
     #state: results[0].state,
+    modifier: su,
     coordinates: coords,
     source: source
   })

@@ -1,12 +1,15 @@
 .row
-  - per_column = (@directory_segments.size / 4.0).ceil
+  - sz = @directory_segments.size
+  - per_column = (sz / 4.0).ceil
   - @directory_segments.each_slice(per_column).each do |segments|
     .col-md-2
-      - segments.each do |country|
+      - segments.each_with_index do |country|
         %h3.parent-segment
           = link_to country.name, directory_segment_path(country.name), class: 'text-info', title: "List of Brazilian Jiu-Jitsu gyms in #{country.name}"
           %small
-            %span= country.location_count 
+            %span= country.location_count
+            - if Role.power(current_user.role) >= Role.power(Role::MODERATOR)
+              %span.text-warning= country.pending_location_count
 
         - unless country.child_segments.empty?
           %ul.list-inline

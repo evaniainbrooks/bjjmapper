@@ -93,9 +93,16 @@ class DirectorySegment
   end
 
   def location_count
-    key = ['SegmentLocationCount', self.id.to_s].join('-')
+    key = [DirectorySegment, 'LocationCount', self.id.to_s].join('-')
     RollFindr::Redis.cache(key: key, expire: rand(10.hours.seconds..10.days.seconds)) do
-      locations.count
+      locations.verified.count
+    end
+  end
+
+  def pending_location_count
+    key = [DirectorySegment, 'PendingLocationCount', self.id.to_s].join('-')
+    RollFindr::Redis.cache(key: key, expire: rand(10.hours.seconds..10.days.seconds)) do
+      locations.pending.count
     end
   end
 

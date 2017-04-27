@@ -48,7 +48,10 @@ class MapsController < ApplicationController
       @event_end)
     .where(
       :location_id.in => @locations.collect(&:id),
-      :event_type.in => @event_type).to_a
+      :event_type.in => @event_type)
+
+    @events = @events.where(:source.ne => 'import_bjjatlas_json.rb') if FeatureSetting.enabled?(:hide_bjjatlas_events)
+    @events = @events.to_a
 
     @event_count = @events.count
     @events = @events.group_by(&:location_id)
@@ -165,7 +168,8 @@ class MapsController < ApplicationController
     else
       return
     end
-
+    
+    @locations = @locations.where(:street.nin => ['', nil]) if FeatureSetting.enabled?(:hide_locations_with_missing_street)
     @locations = @locations.not_closed unless flag?(:closed)
     @locations = @locations.not_rejected unless flag?(:rejected)
     @locations = @locations.verified unless flag?(:unverified)

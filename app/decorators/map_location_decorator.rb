@@ -32,7 +32,7 @@ class MapLocationDecorator < LocationDecorator
         return events.first.title
       else
         event_type_names = events.collect{|e|e.event_type_name.capitalize.pluralize}.uniq.sort.to_sentence
-        return "#{events.count} #{event_type_names}"
+        return "#{events[0].title} (+#{events.count - 1} more)"
       end
     end
   end

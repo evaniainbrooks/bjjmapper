@@ -1,15 +1,24 @@
-<div class="show-location-overlay container-fluid">
+<div class="show-location-overlay text-center center-block">
   <a href="<%= location.link %>" data-no-turbolink>
-        <h4 class="list-group-item-heading"><%= location.title %></h4>
-        <p class="list-group-item-text small team-title"><%= location.entities %></p>
-        <p class="date list-group-item-text small">
-          <span class="fa fa-calendar"></span>
-          <%= moment(location.dates[0]).format("MMMM Do") %>
-        </p>
-        <span class="address small">
-          <span class="fa fa-map-marker"></span>
-          <%= location.street %>
-        </span>
+    <img class="center-block img-rounded logo" src="<%= location.image %>" /> 
+    <div class="list-group-item-heading">
+      <h4><%= location.title %>
+        <small class="small team-title"><%= location.entities %></small>
+      </h4>
+      <h5 class="text-info">
+        <span class="fa fa-calendar"></span>
+        <%= moment(location.dates[0]).format("MMMM Do, YYYY") %>
+      </h5>
+      <br />
+      <span class="small address">
+        <%= location.venue_title %>
+      </span>
+      <br/>
+      <span class="address">
+        <span class="fa fa-map-marker"></span>
+        <%= location.street %>
+      </span>
+    </div>
   </a>
   <br />
   <ul class="text-center nav">

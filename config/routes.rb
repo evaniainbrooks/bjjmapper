@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
+    resources :feature_settings, only: [:index, :update]
     resources :directory_segments, only: [:new, :create, :edit, :update]
     resources :organizations, only: [:new, :create]
     resources :locations, only: [:index, :show] do
