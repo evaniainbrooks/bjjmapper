@@ -1,4 +1,6 @@
 class TeamsController < ApplicationController
+  include TeamCreateParams
+
   before_action :set_team, only: [:show, :update, :remove_image, :destroy]
   before_action :redirect_legacy_bsonid, only: [:show, :update, :remove_image, :destroy]
   before_action :set_teams, only: :index
@@ -17,11 +19,11 @@ class TeamsController < ApplicationController
   end
 
   def create
-    @team = Team.create(create_params)
+    @team = Team.create(team_create_params)
 
     tracker.track('createTeam',
       team: @team.attributes.as_json({}),
-      has_avatar: create_params[:avatar].present?
+      has_avatar: team_create_params[:avatar].present?
     )
 
     respond_to do |format|
@@ -82,11 +84,11 @@ class TeamsController < ApplicationController
     tracker.track('updateTeam',
       id: @team.to_param,
       team: @team.attributes.as_json({}),
-      updates: create_params.except(:avatar),
-      has_avatar: create_params[:avatar].present?
+      updates: team_create_params.except(:avatar),
+      has_avatar: team_create_params[:avatar].present?
     )
 
-    @team.update!(create_params)
+    @team.update!(team_create_params)
 
     respond_to do |format|
       format.json { render partial: 'teams/team' }
@@ -121,12 +123,6 @@ class TeamsController < ApplicationController
 
   def created?
     return params.fetch(:create, 0).to_i.eql?(1)
-  end
-
-  def create_params
-    p = params.require(:team).permit(:name, :description, :parent_team_id, :primary_color_index, :modifier_id, :ig_hashtag)
-    p[:modifier] = current_user if signed_in?
-    p
   end
 
   def redirect_legacy_bsonid

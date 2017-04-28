@@ -24,32 +24,6 @@ class Location
   STATUS_VERIFIED = 2
   STATUS_REJECTED = 3
 
-  CREATE_PARAMS_WHITELIST = [
-   :loctype,
-    :ig_hashtag,
-    :city,
-    :street,
-    :postal_code,
-    :state,
-    :country,
-    :title,
-    :description,
-    #:coordinates,
-    :team_id,
-    :directions,
-    :phone,
-    :email,
-    :website,
-    :source,
-    :status,
-    :status_updated_at,
-    :facebook_id,
-    :yelp_id,
-    :google_id,
-    :twitter,
-    :flag_closed,
-    :instagram].freeze
-
   track_history   :on => :all,
                   :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier
                   :modifier_field_inverse_of => nil, # adds an ":inverse_of" option to the "belongs_to :modifier" relation, default is not set

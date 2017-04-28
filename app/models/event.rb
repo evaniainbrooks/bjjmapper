@@ -22,28 +22,6 @@ class Event
 
   EVENT_TYPE_ALL = [EVENT_TYPE_CLASS, EVENT_TYPE_SEMINAR, EVENT_TYPE_TOURNAMENT, EVENT_TYPE_CAMP, EVENT_TYPE_OPENING_HOURS].freeze
 
-  CREATE_PARAMS_WHITELIST = [
-    :event_type,
-    :organization,
-    :cover_image,
-    :cover_image_x,
-    :cover_image_y,
-    :image,
-    :image_large,
-    :image_tiny,
-    :starting,
-    :ending,
-    :event_recurrence,
-    :title,
-    :description,
-    :instructor,
-    :location,
-    :parent_event,
-    :email,
-    :website,
-    :facebook,
-    :weekly_recurrence_days => []].freeze
-
   include Mongoid::Document
   include Mongoid::Slug
   include Mongoid::Timestamps

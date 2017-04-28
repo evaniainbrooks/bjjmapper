@@ -23,6 +23,9 @@ class Team
   field :image_tiny, type: String
   field :image, type: String
   field :image_large, type: String
+  field :cover_image
+  field :cover_image_x, default: 0, type: Integer
+  field :cover_image_y, default: 0, type: Integer
   field :primary_color_index, type: String
   field :locked, type: Boolean
 

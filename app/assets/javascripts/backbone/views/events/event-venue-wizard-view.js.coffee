@@ -128,7 +128,6 @@ class RollFindr.Views.EventVenueWizardView extends Backbone.View
 
   useAddress: (e)->
     fullAddress = @$('[name="address_options"]').val()
-    alert(fullAddress)
     @$('[name="location_id"]').prop('disabled', true)
     @$('#full_address').val(fullAddress)
     @$('.editable').removeClass('edit-mode')

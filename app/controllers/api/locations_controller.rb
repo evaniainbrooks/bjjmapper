@@ -1,5 +1,5 @@
 class Api::LocationsController < Api::ApiController
-  include LocationCreateParams
+  include Api::LocationCreateParams
   include ModerationNotificationCreateParams
 
   DEFAULT_SEARCH_DISTANCE = 10.0
@@ -18,16 +18,16 @@ class Api::LocationsController < Api::ApiController
   end
 
   def create
-    @location = Location.new(location_create_params)
+    @location = Location.new(api_location_create_params)
     if @location.academy? && @location.team.nil?
-      @location.team = guess_team(location_create_params[:title])
+      @location.team = guess_team(api_location_create_params[:title])
     end
     @location.save!
     
     ModerationNotification.create(type: ModerationNotification::TYPE_REVIEW_LOCATION,
                                   coordinates: @location.coordinates,
                                   message: "#{@location.title} was automatically created and requires review",
-                                  source: "Api::LocationsController #{@location.source}",
+                                  source: "#{current_user.name} via Api::LocationsController", 
                                   info: { location_id: @location.id.to_s })
 
     respond_to do |format|
@@ -41,7 +41,7 @@ class Api::LocationsController < Api::ApiController
 
     head :not_found and return false unless @location.present?
 
-    @location.update!(location_create_params)
+    @location.update!(api_location_create_params)
 
     respond_to do |format|
       format.json { render partial: 'locations/location' }

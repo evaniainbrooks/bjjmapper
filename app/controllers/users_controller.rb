@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  include UserCreateParams 
+  
   before_action :set_user, only: [:destroy, :show, :update, :remove_image]
   before_action :redirect_legacy_bsonid, only: [:destroy, :show, :update, :remove_image]
   before_action :ensure_signed_in, only: [:update, :create, :remove_image]
@@ -57,7 +59,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.create(create_params)
+    @user = User.create(user_create_params)
 
     tracker.track('createUser',
       user: @user.attributes.as_json({}),
@@ -74,10 +76,10 @@ class UsersController < ApplicationController
     tracker.track('updateUser',
       id: @user.to_param,
       user: @user.attributes.as_json({}),
-      updates: create_params
+      updates: user_create_params
     )
 
-    @user.update!(create_params)
+    @user.update!(user_create_params)
 
     respond_to do |format|
       format.json { render partial: 'users/user' }
@@ -128,32 +130,6 @@ class UsersController < ApplicationController
 
   def created?
     return params.fetch(:create, 0).to_i.eql?(1)
-  end
-
-  def create_params
-    p = params.require(:user).permit(
-      :name,
-      :nickname,
-      :email,
-      :contact_email,
-      :belt_rank,
-      :stripe_rank,
-      :birth_day,
-      :birth_month,
-      :birth_year,
-      :lineal_parent_id,
-      :birth_place,
-      :description,
-      :female,
-      :thumbnailx,
-      :thumbnaily,
-      :flag_display_email,
-      :flag_display_directory,
-      :flag_display_reviews,
-      :flag_locked)
-
-    p[:modifier] = current_user if signed_in?
-    p
   end
 
   def redirect_legacy_bsonid

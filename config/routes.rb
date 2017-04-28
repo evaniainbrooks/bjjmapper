@@ -6,6 +6,8 @@ Rails.application.routes.draw do
     end
     resources :moderation_notifications, path: '/notifications', only: [:create]
     resources :reviews, only: [:index, :create]
+    resources :users, only: [:update]
+    resources :teams, only: [:update]
   end
 
   namespace :admin do

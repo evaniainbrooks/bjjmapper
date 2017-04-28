@@ -1,4 +1,4 @@
-class Api::ApiController <  ApplicationController
+class Api::ApiController < ApplicationController
   before_action :ensure_api_user
 
   private

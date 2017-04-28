@@ -14,7 +14,7 @@ class User
   DEFAULT_THUMBNAIL_X = 50
   DEFAULT_THUMBNAIL_Y = 0
 
-  VALID_IMAGE_MATCH = /(^https:\/\/(common)?datastorage.googleapis.com\/bjjmapper\/)|(^https:\/\/upload.wikimedia.org)/
+  #VALID_IMAGE_MATCH = /(^https:\/\/(common)?datastorage.googleapis.com\/bjjmapper\/)|(^https:\/\/upload.wikimedia.org)/
 
   track_history   :on => :all,
                   :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier
@@ -74,7 +74,7 @@ class User
 
   validates :name, presence: true
 
-  validate :valid_image_prefix?
+  #validate :valid_image_prefix?
 
   geocoded_by :ip_address
   after_validation :safe_geocode
@@ -267,18 +267,6 @@ class User
   end
 
   private
-
-  def valid_image_prefix?
-    if self.image_tiny.present? && VALID_IMAGE_MATCH.match(self.image_tiny).blank?
-      errors.add(:image_tiny, 'invalid image url')
-    end
-    if self.image.present? && VALID_IMAGE_MATCH.match(self.image).blank?
-      errors.add(:image, 'invalid image url')
-    end
-    if self.image_large.present? && VALID_IMAGE_MATCH.match(self.image_large).blank?
-      errors.add(:image_large, 'invalid image url')
-    end
-  end
 
   def safe_geocode
     begin
