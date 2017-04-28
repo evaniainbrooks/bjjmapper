@@ -14,7 +14,7 @@
         <span class="text-info distance small"><%= location.distance %></span>
       </div>
       <div class="active-content">
-        <a class="location-link" href="<%= Routes.location_path(location.id) %>" alt="See more about <%= location.title %>">
+        <a class="location-link" href="<%= Routes.location_path(location.param) %>" alt="See more about <%= location.title %>">
           <div class="list-index">
             <span><%= location.marker_id %></span>
           </div>

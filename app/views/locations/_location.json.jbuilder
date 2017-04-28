@@ -3,7 +3,7 @@ json.param location.to_param
 json.loctype location.loctype
 json.status location.status
 json.title location.title
-if location.object
+if location.respond_to? :object
   json.venue_title location.object.title
 end
 json.team_name location.team_name
