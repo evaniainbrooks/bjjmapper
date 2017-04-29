@@ -21,16 +21,20 @@ class RollFindr.Views.EventViewBase extends Backbone.View
     }
 
     formatIso8601 = "YYYY-MM-DDTHH:mm:ss"
+    formatNoTime = "DD/MM/YYYY"
 
-    $('.pick-time').datetimepicker({
-      pickTime: true
-      sideBySide: true
-      useSeconds: false
-      useCurrent: false
-      minuteStepping: 15
-      icons: icons
-      format: formatIso8601
-    })
+    $('.pick-time').each ->
+      pickTime = $(this).data('pick-time')
+      format = if pickTime then formatIso8601 else formatNoTime
+      $(this).datetimepicker({
+        pickTime: pickTime
+        sideBySide: pickTime
+        useSeconds: false
+        useCurrent: false
+        minuteStepping: 15
+        icons: icons
+        format: format 
+      })
 
     @startPicker = $('.pick-time.start')
     @endPicker = $('.pick-time.end')

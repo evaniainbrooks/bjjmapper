@@ -20,7 +20,12 @@ class LocationEventsController < ApplicationController
 
   def create
     event = Event.new(event_create_params)
-    @location.events << event
+    if event.parent_event_id.present?
+      event.ending = event.starting + 1.day
+      event.save!
+    else
+      @location.events << event
+    end
 
     tracker.track('createEvent',
       location: @location.to_param,
@@ -29,6 +34,7 @@ class LocationEventsController < ApplicationController
     )
 
     respond_to do |format|
+      format.html { redirect_to(location_event_path(location, event.parent_event, created: 1)) }
       format.json do
         if !event.valid?
           render status: :bad_request
@@ -70,7 +76,7 @@ class LocationEventsController < ApplicationController
   end
 
   def destroy
-    @event = @location.events.find(params[:id])
+    @event = @location.events.unscoped.find(params[:id])
     @event.destroy
 
     tracker.track('deleteEvent',

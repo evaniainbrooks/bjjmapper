@@ -25,14 +25,20 @@ label {
 
 .location-list {
   padding: 0px !important;
-  .list-count {
-    text-transform: uppercase;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin-bottom: 0px !important;
+  .status {
+    text-align: center;
+    width: 100%;
     color: #e9ebee;
     background-color: #222;
   }
+
+  .list-count {
+    line-height: 2.0em;
+    display: inline-block;
+    margin: 0px auto;
+    text-transform: uppercase;
+  }
+
   .map-list-item {
     padding-left: 4px !important;
     h4 {

@@ -17,7 +17,7 @@ module EventCreateParams
     :description,
     :instructor,
     :location,
-    :parent_event,
+    :parent_event_id,
     :email,
     :website,
     :facebook,

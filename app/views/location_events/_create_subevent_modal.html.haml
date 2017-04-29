@@ -1,0 +1,20 @@
+- new_event = Event.new(parent_event: event, event_type: Event::EVENT_TYPE_SUBEVENT)
+.create-subevent-dialog.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "addSubEventLabel", :role => "dialog", :tabindex => "-1"}
+  = form_for([location, new_event], html: { class: "form-horizontal #{event_type_name(Event::EVENT_TYPE_CLASS)}" } ) do |f|
+    .modal-dialog
+      .modal-content
+        .modal-body
+          .container-fluid
+            .row
+              .col-md-offset-2.col-md-8.col-xs-12
+                = f.hidden_field :parent_event_id
+                = f.hidden_field :event_type
+                = f.label :title
+                = f.text_field :title, class: 'form-control input-md', placeholder: 'eg. Registration Closes'
+            .row
+              .col-md-offset-2.col-md-8.col-xs-12
+                = render partial: 'location_events/start_picker', locals: { pick_time: false }
+        .modal-footer
+          %button.btn.btn-default{:type => 'button', 'data-dismiss' => 'modal'} Cancel
+          %button.btn.btn-success{:type => 'submit'} Create
+

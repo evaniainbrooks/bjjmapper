@@ -225,19 +225,21 @@ $colors: $color0, $color3, $color6, $color9, $color1, $color4, $color7, $color10
     }
   }
 }
-  
-.month {
-  text-transform: uppercase;
-  color: #8b0000;
-  font-weight: bold;
-  text-shadow: 0px 1px 4px white;
-}
 
-.day {
-  font-size: 175%;
-  color: black;
-  line-height: 0.1em;
-  text-shadow: 0px 1px 4px white;
+.upcoming-events, .event-schedule {
+  .month {
+    text-transform: uppercase;
+    color: #8b0000;
+    font-weight: bold;
+    text-shadow: 0px 1px 4px white;
+  }
+
+  .day {
+    font-size: 175%;
+    color: black;
+    line-height: 0.1em;
+    text-shadow: 0px 1px 4px white;
+  }
 }
 
 .image-container {

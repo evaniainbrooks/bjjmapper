@@ -28,6 +28,14 @@ class Event
   include Mongoid::History::Trackable
 
   extend MongoidSearchExt::Search
+  
+  track_history   :on => :all,
+                  :modifier_field => :modifier, # adds "belongs_to :modifier" to track who made the change, default is :modifier
+                  :modifier_field_inverse_of => nil, # adds an ":inverse_of" option to the "belongs_to :modifier" relation, default is not set
+                  :version_field => :version,   # adds "field :version, :type => Integer" to track current version, default is :version
+                  :track_create   =>  true,    # track document creation, default is false
+                  :track_update   =>  true,     # track document updates, default is true
+                  :track_destroy  =>  true     # track document destruction, default is false
 
   attr_accessor :event_recurrence
   attr_accessor :weekly_recurrence_days
@@ -87,7 +95,7 @@ class Event
   field :schedule
 
   before_save :set_coordinates
-  before_save :set_event_type
+  before_validation :set_event_type
   before_save :create_schedule
   before_save :serialize_schedule
 

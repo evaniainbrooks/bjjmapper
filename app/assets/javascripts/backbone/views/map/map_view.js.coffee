@@ -11,6 +11,8 @@ class RollFindr.Views.MapView extends Backbone.View
   events: {
     'change [name="sort_order"]': 'sortOrderChanged'
     'click .refresh-button': 'clearSearchAndFetchViewport'
+    'click .map-prev-page': 'navigatePrevPage'
+    'click .map-next-page': 'navigateNextPage'
   }
   initialize: (options)->
     _.bindAll(this,
@@ -19,6 +21,8 @@ class RollFindr.Views.MapView extends Backbone.View
       'search',
       'setCenterFromModel',
       'setupEventListeners',
+      'navigateNextPage',
+      'navigatePrevPage',
       'onFiltersChanged',
       'offFiltersChanged',
       'initializeMarkerView',
@@ -41,6 +45,14 @@ class RollFindr.Views.MapView extends Backbone.View
       @initializeMap()
       @directionsView = new RollFindr.Views.DirectionsOverlayView({el: @el, model: @model, map: @map})
   
+  navigateNextPage: (e)->
+    @model.set('offset', @model.get('offset') + 50)
+    alert('next page')
+
+  navigatePrevPage: (e)->
+    @model.set('offset', @model.get('offset') - 50)
+    alert('prev page')
+
   initializeMap: ->
     hasCenter = @model.get('lat')? && @model.get('lng')?
     shouldGeolocate = @model.get('geolocate') || !hasCenter
@@ -193,6 +205,7 @@ class RollFindr.Views.MapView extends Backbone.View
       team: @model.get('team')
       lat: lat
       lng: lng
+      offset: @model.get('offset')
       segment: @model.get('segment')
       distance: distance
       count: @model.get('count')

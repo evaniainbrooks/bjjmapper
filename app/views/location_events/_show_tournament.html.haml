@@ -19,7 +19,14 @@
     .col-sm-3.col-md-2.col-xs-4.text-center.center-block{:style => 'padding-right: 0px;'}
       %a{target: '_blank', href:  event.image_large, title: "View large logo"}
         %img.img-thumbnail{alt: event.title, :src => event.image, :class => 'logo center-block'}/
-      %p.text-small.small.text-muted= "last updated #{distance_of_time_in_words_to_now(event.updated_at)} ago"
+      %span.text-small.small.text-muted= "last updated #{distance_of_time_in_words_to_now(event.updated_at)} ago"
+      %br/
+      - if event.object.source =~ /bjjatlas/
+        %b.small.text-muted source
+        %span.small.text-muted
+          = link_to 'https://bjjatlas.com?ref=tournament_src' do
+            BJJ Atlas
+
     .col-md-7.col-xs-8.display-field
       %h1
         = event.title
@@ -81,11 +88,11 @@
   .row
     .col-md-2.edit-field
       %br/
-      %b.pull-left.small.text-muted.upcase
+      %b.small.text-muted.upcase
         Tournament Schedule
-      %span.pull-right
-        %button.title-btn.btn.btn-default{type: 'button'}
-          Add Date
+      %button.btn.btn-default.add-date.block{type: 'button', style: 'width: 100%'}
+        %span.fa.fa-calendar
+        Add Date
       %br.clear.clear-fix/
       .form-group.small.upcase.text-muted
         = render partial: 'location_events/start_picker', locals: { value: event.starting }
@@ -93,7 +100,7 @@
     .col-md-2.display-field
       %b.small.text-muted.upcase
         Tournament Schedule
-      %ul.list-unstyled
+      %ul.list-unstyled.event-schedule
         - event.sub_events.unscoped.each do |sub_event|
           %li.list-group-item
             %span.pull-left.text-muted
@@ -145,12 +152,16 @@
         %button.btn.btn-default.btn-md{:type => 'button', 'data-cancel-edit' => true} Cancel Editing
         %button.btn.btn-primary.btn-md{:type => 'submit'} Save Changes
 
+= render partial: 'location_events/create_subevent_modal'
 = content_for(:scripts) do
   = javascript_include_tag 'map'
   :coffeescript
     $(document).ready ->
       eventModel = new RollFindr.Models.Event(#{render_json(event)})
       showView = new RollFindr.Views.EventShowView({ model: eventModel })
+
+      $('.add-date').click ->
+        $('.create-subevent-dialog').modal('show')
 
       upcomingEventsView = new RollFindr.Views.UpcomingEventsView({organization_id: "#{event.organization.id}", count: 5})
 

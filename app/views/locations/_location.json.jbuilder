@@ -24,6 +24,7 @@ json.postal_code location.postal_code
 json.street location.street || ''
 json.address location.address
 json.timezone location.timezone
+json.timezone_offset location.timezone_offset
 json.dates location.try(:dates)
 json.lat location.lat
 json.lng location.lng

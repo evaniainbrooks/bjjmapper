@@ -226,6 +226,10 @@ class Location
     super || (populate_timezone unless self.destroyed?)
   end
 
+  def timezone_offset
+    ActiveSupport::TimeZone[timezone].try(:formatted_offset, false)
+  end
+
   def lat
     self.to_coordinates[0]
   end

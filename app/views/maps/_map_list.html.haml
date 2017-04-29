@@ -1,5 +1,13 @@
 .list-group
-  %p.small.text-center.list-count.float-left Loading &hellip;
+  .status
+    - if local_assigns[:show_pagination]
+      %button.btn.btn-default.pull-left.map-prev-page
+        %span.fa.fa-chevron-circle-left
+    %p.small.text-center.list-count Loading &hellip;
+    - if local_assigns[:show_pagination]
+      %button.btn.btn-default.pull-right.map-next-page
+        %span.fa.fa-chevron-circle-right
+    %div.clear.clear-fix
   .empty-message
     %div
       %h5.text-danger
@@ -18,7 +26,7 @@
             %span Where is my academy?
           %small{:style => 'margin-bottom: 10px; display: block'} Click here to add your academy to the map
       %br/
-  .items
+  .items.clear.clear-fix
   -#.page-buttons
     %button.btn.btn-default.btn-sm.small.text-muted.float-left{'data-map-next' => true, :type => 'button'}
       %span.fa.fa-chevron-left
