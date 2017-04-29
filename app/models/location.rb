@@ -227,6 +227,7 @@ class Location
   end
 
   def timezone_offset
+    nil if timezone.blank?
     ActiveSupport::TimeZone[timezone].try(:formatted_offset, false)
   end
 
