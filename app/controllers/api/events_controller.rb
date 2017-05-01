@@ -1,6 +1,6 @@
 class Api::EventsController < Api::ApiController
-  include EventCreateParams
-  include LocationCreateParams
+  include ::EventCreateParams
+  include ::LocationCreateParams
   
   def create
     @location = find_or_create_location
