@@ -45,7 +45,10 @@ class EventDecorator < Draper::Decorator
 
   def generated_description
     venue_link = h.link_to(object.location.title, h.map_path(zoom: Map::ZOOM_LOCATION, lat: object.location.lat, lng: object.location.lng))
+    website_link = object.website.present? ? h.link_to('tournament website', 'http://' + object.website) : nil
 
-    "The '#{object.title}' is a #{event.organization.abbreviation} Brazilian Jiu-Jitsu #{event_type_name} taking place on #{object.schedule.to_s} at #{venue_link}. For more information, visit the #{h.link_to('tournament website', 'http://' + object.website)}.".html_safe
+    desc = "The '#{object.title}' is a #{event.organization.try(:abbreviation)} Brazilian Jiu-Jitsu #{event_type_name} taking place on #{object.schedule.to_s} at #{venue_link}."
+    desc = desc + " For more information, visit the #{website_link}." if website_link.present?
+    desc.html_safe
   end
 end

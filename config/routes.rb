@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     resources :reviews, only: [:index, :create]
     resources :users, only: [:update]
     resources :teams, only: [:update]
+    resources :events, only: [:create]
   end
 
   namespace :admin do

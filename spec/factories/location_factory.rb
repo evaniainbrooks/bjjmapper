@@ -8,10 +8,20 @@ FactoryGirl.define do
     country 'Canada'
     city 'Halifax'
     loctype Location::LOCATION_TYPE_ACADEMY
-
-    after(:build) do |instance|
+    
+    before(:build) do |instance|
       RSpec::Mocks.with_temporary_scope do
         RollFindr::LocationFetchService.stub(:search).and_return(true)
+        RollFindr::LocationFetchService.stub(:photos).and_return(nil)
+        RollFindr::LocationFetchService.stub(:reviews).and_return(nil)
+      end
+    end
+
+    before(:create) do |instance|
+      RSpec::Mocks.with_temporary_scope do
+        RollFindr::LocationFetchService.stub(:search).and_return(true)
+        RollFindr::LocationFetchService.stub(:photos).and_return(nil)
+        RollFindr::LocationFetchService.stub(:reviews).and_return(nil)
       end
     end
 
