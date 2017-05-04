@@ -156,11 +156,17 @@
         self.addMarker(loc);
         newMarkers[loc.get('id')] = 1;
       });
+      
+      var bounds = new google.maps.LatLngBounds();
       for (var marker in this.markers) {
         if (!newMarkers[marker]) {
           self.deleteMarker(marker);
+        } else {
+          bounds.extend(this.markers[marker].marker.getPosition());
         }
       }
+
+      this.map.fitBounds(bounds);
     }
   });
 
