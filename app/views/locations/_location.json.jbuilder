@@ -43,8 +43,4 @@ json.rating location.rating
 json.review_count location.all_reviews.items.count
 json.stars location.stars
 json.half_star location.half_star?
-if location.respond_to?(:yelp_url)
-  json.yelp_url location.yelp_url
-  json.google_url location.google_url
-  json.facebook_url location.facebook_url
-end
+json.profiles location.profiles

@@ -3,10 +3,15 @@ class LocationFetchServiceDecorator < LocationDecorator
   decorates :location
 
   PHOTO_COUNT = 50
+  ALTERNATIVE_TITLE_MATCH_PERCENT = 90.0
 
   def updated_at
-    val = profiles.collect{|p| p[:created_at]}.push(object.updated_at).compact.max
+    val = profiles.values.collect{|p| p[:updated_at]}.push(object.updated_at).compact.max || 0
     "#{h.time_ago_in_words(val)} ago"
+  end
+  
+  def foursquare_url
+    foursquare_profile.try(:[], :url)
   end
 
   def facebook_url
@@ -22,7 +27,7 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
 
   def health
-    health_components = [facebook_url, yelp_url, google_url, facebook, twitter, instagram, team_id, website, email, phone]
+    health_components = [foursquare_url, facebook_url, yelp_url, google_url, facebook, twitter, instagram, team_id, website, email, phone]
     health_val = ((health_components.compact.size / health_components.size.to_f) * 100).to_i
   end
 
@@ -132,36 +137,14 @@ class LocationFetchServiceDecorator < LocationDecorator
     phone.present? || email.present? || website.present? || facebook.present? || twitter.present? || instagram.present?
   end
 
-  def yelp_match
-    if yelp_address.present?
-      yelp_profile.try(:[], :address_match).try(:round, 1)
-    end
+  def profile_match(profile)
+    if profiles[profile].present?
+      profiles[profile].try(:[], :address_match).try(:round, 1)
+    end || 100.0
   end
 
-  def yelp_address
-    addr = yelp_profile
-    addr.slice(:street, :city, :state, :postal_code, :country).values.compact.join(', ') if addr.present?
-  end
-
-  def google_match
-    if google_address.present?
-      google_profile.try(:[], :address_match).try(:round, 1)
-    end
-  end
-
-  def google_address
-    addr = google_profile
-    addr.slice(:street, :city, :state, :postal_code, :country).values.compact.join(', ') if addr.present?
-  end
-
-  def facebook_match
-    if facebook_address.present?
-      facebook_profile.try(:[], :address_match).try(:round, 1)
-    end
-  end
-
-  def facebook_address
-    addr = facebook_profile
+  def profile_address(profile)
+    addr = profiles[profile]
     addr.slice(:street, :city, :state, :postal_code, :country).values.compact.join(', ') if addr.present?
   end
 
@@ -170,19 +153,27 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
 
   def profiles
-    [google_profile, yelp_profile, facebook_profile].compact || []
+    object_profiles = object.profiles.keys.inject({}) do |h, k|
+      h[k] = { url: object.profiles[k] } if object.profiles[k].present?
+      h
+    end
+
+    {
+      foursquare: foursquare_profile,
+      google: google_profile,
+      yelp: yelp_profile,
+      facebook: facebook_profile
+    }.merge(object_profiles).delete_if {|k, v| v.blank? }
   end
 
   def alternate_titles
-    profiles.collect do |profile|
-      profile[:title] if profile && (profile[:title_match] || 0) < 95.0
-    end.compact.uniq
+    profiles.values.select {|p| (p[:title_match] || 100.0) < ALTERNATIVE_TITLE_MATCH_PERCENT }
   end
 
   def alternate_titles_tooltip
     header = "Alternate names: #{}"
-    titles = alternate_titles.collect do |title|
-      "\"#{title}\""
+    titles = alternate_titles.collect do |p|
+      "\"#{p[:title]}\""
     end.join("<br/>")
 
     [header, titles].join("<br/>").html_safe
@@ -228,17 +219,9 @@ class LocationFetchServiceDecorator < LocationDecorator
 
     @_source_profile[component]
   end
-
-  def yelp_id
-    yelp_profile.try(:[], :yelp_id)
-  end
-
-  def google_id
-    google_profile.try(:[], :google_id)
-  end
-
-  def facebook_id
-    facebook_profile.try(:[], :facebook_id)
+  
+  def foursquare_profile
+    service_data_arr.find {|profile| profile[:source] == 'Foursquare'}
   end
 
   def yelp_profile
@@ -273,7 +256,9 @@ class LocationFetchServiceDecorator < LocationDecorator
 
   def service_data_arr
     @_service_data ||= (RollFindr::Redis.cache(key: ['Detail', self.id].join('-'), expire: 1.hour.seconds) do
-      RollFindr::LocationFetchService.listings(self.id, self.address_components.merge(title: object.title))
+
+      params = { lat: object.lat, lng: object.lng, title: object.title }.merge(self.address_components)
+      RollFindr::LocationFetchService.listings(self.id, params)
     end || [])
   end
 

@@ -1,6 +1,8 @@
 = content_for(:title) do
-  = "#{location.title} #{"BJJ" unless location.title.end_with?("BJJ")} academy in #{location.city}, #{location.country}"
-
+  - if location.loctype == Location::LOCATION_TYPE_ACADEMY
+    = "#{location.title} #{"BJJ" unless location.title.end_with?("BJJ")} academy in #{location.city}, #{location.country}"
+  - else
+    = "#{location.title} BJJ event venue in #{location.city}, #{location.country}"
 .container.show-location.page{ class: moved? ? 'moved' : (closed? ? 'closed' : '') }
   %div#fb-root
   = form_for(location, html: { class: 'form ' + edit_mode_classes }) do |f|
@@ -20,11 +22,12 @@
     -#.row{:style => "position: absolute; background-size: cover; background: url('#{location.cover_image}') -#{location.cover_image_x}px -#{location.cover_image_y}px"}
     .row
       .col-md-2.col-xs-4.col-sm-3{:style => 'padding-right: 0px;'}
-        .display-field
+        - if location.image.present?
           %a{target: '_blank', href: location.image_large, title: "View large logo"}
-            %img.img-thumbnail{:width => location.image_width, :height => location.image_height, :src => location.image, :class => 'logo center-block'}/
+            %img.edit-image.img-thumbnail{:width => location.image_width, :height => location.image_height, :src => location.image, :class => 'logo center-block'}/
+        - else
+          %canvas{class: "center-block img-rounded logo", width: location.image_width, height: location.image_height, :'data-name' => location.title, :'data-avatar-placeholder' => true}/
         .edit-field
-          %img.img-thumbnail{:width => location.image_height, :height => location.image_height, :src => location.image, :class => 'logo center-block edit-image'}/
           %br/
           %input{:'data-url' => upload_image_location_path(location), :'data-upload-avatar' => true, :type => 'file', :class => 'input-md form-control'}/
           - if location.object.image.present?

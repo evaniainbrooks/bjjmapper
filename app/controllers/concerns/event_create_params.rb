@@ -4,6 +4,7 @@ module EventCreateParams
   CREATE_PARAMS_WHITELIST = [
     :event_type,
     :organization,
+    :organization_id,
     :cover_image,
     :cover_image_x,
     :cover_image_y,
@@ -15,7 +16,9 @@ module EventCreateParams
     :event_recurrence,
     :title,
     :description,
+    :instructor_id,
     :instructor,
+    :location_id,
     :location,
     :parent_event_id,
     :email,

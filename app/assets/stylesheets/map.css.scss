@@ -110,16 +110,23 @@ label {
   .list-group-item-text {
     margin-left: 98px;
   }
-  img.logo {
+  .logo {
     width: 50px;
     height: 50px;
     margin-right: 7px;
   }
+  .logo-large {
+    width: 100px;
+    height: 100px;
+    margin-right: 14px;
+  }
 }
 
 .map-list-item {
-  opacity: 0.7;
+  filter: blur(1px) opacity(0.8);
+  
   &.marker-active {
+    filter: none;
     opacity: 1.0;
 
     a.phone, a.website, a.email {

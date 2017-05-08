@@ -12,7 +12,13 @@ class Api::EventsController < Api::ApiController
       @redirect_path = location_event_path(@location, @event, create: 1)
 
       respond_to do |format|
-        format.json { render partial: 'events/event', object: @event }
+        format.json do
+          if @event.valid?
+            render partial: 'events/event', object: @event
+          else
+            render status: 400, partial: 'application/api_error', locals: { entity: @event }
+          end
+        end
       end
     end
   end

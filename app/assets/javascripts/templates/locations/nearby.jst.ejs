@@ -1,7 +1,11 @@
 <li class="card nearby-card">
   <a class="thumbnail" href="<%= Routes.location_path(location.param) %>">
     <div class="pull-left">
-      <img class="img-rounded img-tiny" src="<%= location.image %>" alt="<%= location.title %> logo" />
+      <% if (location.image) { %>
+        <img src="<%= location.image %>" alt="<% location.title %>" class="center-block logo img-rounded img-tiny" />
+      <% } else { %>
+        <canvas class="center-block logo img-rounded img-tiny" width="50" height="50" data-name="<%= location.title %>" data-avatar-placeholder></canvas>
+      <% } %>
     </div>
     <div class="pull-left list-group-item-heading">
       <h5 class="text-primary">

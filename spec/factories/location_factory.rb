@@ -11,6 +11,7 @@ FactoryGirl.define do
     
     before(:build) do |instance|
       RSpec::Mocks.with_temporary_scope do
+        RollFindr::LocationFetchService.stub(:associate).and_return(true)
         RollFindr::LocationFetchService.stub(:search).and_return(true)
         RollFindr::LocationFetchService.stub(:photos).and_return(nil)
         RollFindr::LocationFetchService.stub(:reviews).and_return(nil)
@@ -19,6 +20,7 @@ FactoryGirl.define do
 
     before(:create) do |instance|
       RSpec::Mocks.with_temporary_scope do
+        RollFindr::LocationFetchService.stub(:associate).and_return(true)
         RollFindr::LocationFetchService.stub(:search).and_return(true)
         RollFindr::LocationFetchService.stub(:photos).and_return(nil)
         RollFindr::LocationFetchService.stub(:reviews).and_return(nil)

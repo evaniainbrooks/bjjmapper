@@ -114,12 +114,12 @@ class DirectorySegment
     end
   end
   
-  def notifications
-    @_notifications ||= if self.child?
-      ModerationNotification.where(:coordinates => { "$geoWithin" => { "$centerSphere" => [self.coordinates, self.distance/3963.2] }})
+  def activities
+    @_activities ||= if self.child?
+      Activity.where(:coordinates => { "$geoWithin" => { "$centerSphere" => [self.coordinates, self.distance/3963.2] }}).sort(created_at: -1)
     else
-      ModerationNotification.where(:country.in => self.abbreviations.push(self.name))
-    end
+      Activity.where(:segment_key.in => self.abbreviations.push(self.name)).sort(created_at: -1)
+    end.to_a
   end
 
   def to_param

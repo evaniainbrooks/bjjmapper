@@ -21,7 +21,7 @@ class Admin::DirectorySegmentsController < Admin::AdminController
     respond_to do |format|
       format.html do
         if @directory_segment.child?
-          redirect_to directory_segment_path(country: @directory_segment.parent_directory_segment.name, city: @directory_segment.name, edit: 1, create: 1)
+          redirect_to directory_segment_path(country: @directory_segment.parent_segment.name, city: @directory_segment.name, edit: 1, create: 1)
         else
           redirect_to directory_segment_path(country: @directory_segment.name, edit: 1, create: 1)
         end

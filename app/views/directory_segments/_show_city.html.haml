@@ -21,19 +21,21 @@
       = render partial: 'maps/map', locals: { height: 300, show_create: false }
     .col-md-2
       = render partial: 'maps/filter_list'
-  .row
-    - if directory_segment.child_segments.present?
-      .col-md-3
-        %h3 Other Cities in #{directory_segment.full_name}
+      - if directory_segment.parent_segment.child_segments.present?
+        %br/
+        %br/
+        %h5.text-muted.small.upcase More Cities in #{directory_segment.parent_segment.full_name}
         %ul.list-unstyled.list-inline
-          - directory_segment.child_segments.sort.each do |city|
+          - directory_segment.parent_segment.child_segments.sort.each do |city|
+            - next if city.name == directory_segment.name
             %li= link_to city.name, directory_segment_path(country: directory_segment.name, city: city.name), title: "List of Brazilian Jiu-Jitsu gyms in #{directory_segment.full_name}" 
-    - if Role.power(current_user.role) >= Role.power(Role::MODERATOR)
-      .col-md-9
-        %h3 Moderation Notifications
-        - directory_segment.notifications.each do |notification|
-          = render partial: 'moderation_notifications/notification', object: notification
-
+  - if FeatureSetting.enabled?(:show_activities)
+    .row
+      .col-md-12
+        %h4= "Recently in #{directory_segment.full_name}"
+        %ul.list-unstyled
+          - directory_segment.activities.each do |o|
+            = render partial: 'activities/activity', object: o
 
 = content_for(:scripts) do
   = javascript_include_tag 'map'

@@ -18,11 +18,15 @@ class EventDecorator < Draper::Decorator
   end
 
   def image
-    organization.try(:image) || instructor.try(:image) || location.try(:image)
+    object.image || organization.try(:image) || instructor.try(:image) || location.try(:image)
   end
 
   def image_large
-    organization.try(:image_large) || instructor.try(:image_large) || location.try(:image_large)
+    object.image_large || organization.try(:image_large) || instructor.try(:image_large) || location.try(:image_large)
+  end
+
+  def image_tiny
+    object.image_tiny || organization.try(:image_tiny) || instructor.try(:image_tiny) || location.try(:image_tiny)
   end
 
   def description

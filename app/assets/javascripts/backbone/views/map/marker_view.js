@@ -122,9 +122,12 @@
     openInfoWindow: function(loc) {
       var self = this;
       var template = self.template(loc);
+      var content = template({location: loc.toJSON()});
 
-      self.infoWindow.setContent(template({location: loc.toJSON()}));
+      self.infoWindow.setContent(content);
       self.infoWindow.open(self.map, self.markers[loc.get('id')].marker);
+      
+      window.generateAvatars($('[data-avatar-placeholder]', '.show-location-overlay'));
     },
     deleteMarker: function(id) {
       if ("undefined" !== typeof(this.markers[id])) {
@@ -166,7 +169,9 @@
         }
       }
 
-      this.map.fitBounds(bounds);
+      if (this.markers.length > 1) {
+        this.map.fitBounds(bounds);
+      }
     }
   });
 

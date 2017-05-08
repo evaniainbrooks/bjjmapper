@@ -61,6 +61,10 @@ class RollFindr.Collections.LocationsCollection extends Backbone.Collection
   model: RollFindr.Models.Location
   url: Routes.search_map_path()
   sort_key: 'name'
+  initialize: (options)->
+    @bind 'change sync reset', ->
+      setTimeout window.generateAvatars, 200
+  
   comparator:
     (item)->
       return item.get(this.sort_key)
@@ -77,6 +81,9 @@ class RollFindr.Collections.NearbyLocationsCollection extends Backbone.Collectio
     @location_type = options.location_type || []
     @count = options.count || 3
 
+    @bind 'change sync reset', ->
+      setTimeout window.generateAvatars, 200
+
   url: =>
     Routes.nearby_locations_path
       lat: @lat
@@ -88,6 +95,9 @@ class RollFindr.Collections.NearbyLocationsCollection extends Backbone.Collectio
 class RollFindr.Collections.RecentLocationsCollection extends Backbone.Collection
   initialize: (options)->
     @count = options.count
+    
+    @bind 'change sync reset', ->
+      setTimeout window.generateAvatars, 200
 
   url: =>
     Routes.recent_locations_path({count: @count})

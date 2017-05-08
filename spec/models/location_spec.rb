@@ -16,7 +16,7 @@ describe Location do
 
   describe 'profiles' do
     let(:yelp_id) { 'yelp123' }
-    subject { build(:location, yelp_id: yelp_id) }
+    subject { build(:location, profiles: [name: :yelp, value: yelp_id]) }
     it 'associates profile info before save' do
       RollFindr::LocationFetchService.should_receive(:associate).with(anything, hash_including(yelp_id: yelp_id))
 

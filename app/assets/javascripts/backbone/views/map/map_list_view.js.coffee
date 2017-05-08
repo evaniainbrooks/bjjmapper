@@ -48,6 +48,8 @@ class RollFindr.Views.MapListView extends Backbone.View
 
       @$('.items').append(locElement)
 
+    window.generateAvatars(@$('[data-avatar-placeholder]'))
+
   activeMarkerChanged: (e)->
     @activeMarkerId = e.id
     @updateActiveMarker(e.id)

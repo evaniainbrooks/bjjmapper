@@ -91,22 +91,19 @@ class LocationDecorator < Draper::Decorator
   def image
     img = object.image
     img = team.image if img.blank? && team.present?
-    img = avatar_service_url(object.title) if img.blank?
-    h.image_path(img)
+    img.present? ? h.image_path(img) : nil
   end
 
   def image_tiny
     img = object.image_tiny
     img = team.image_tiny if img.blank? && team.present?
-    img = avatar_service_url(object.title, 50) if img.blank?
-    h.image_path(img)
+    img.present? ? h.image_path(img) : nil
   end
 
   def image_large
     img = object.image_large
     img = team.image_large if img.blank? && team.present?
-    img = avatar_service_url(object.title, 300) if img.blank?
-    h.image_path(img)
+    img.present? ? h.image_path(img) : nil
   end
 
   def opengraph_image
@@ -170,12 +167,6 @@ class LocationDecorator < Draper::Decorator
     end
 
     desc.html_safe
-  end
-
-  def avatar_service_url(name, wh = 100)
-    clean_name = I18n.transliterate(name)
-    clean_name = clean_name.gsub(/[^\w ]/i, '')
-    "/service/avatar/#{wh}x#{wh}/#{CGI.escape(clean_name)}/image.png"
   end
 end
 

@@ -4,11 +4,12 @@
     - if Role.power(current_user.role) >= Role.power(Role::MODERATOR)
       = "(src: #{location.object.source || 'BJJMapper'})"
   %br/
-  - [:google, :yelp, :facebook].each do |profile|
-    = render partial: 'locations/progress_bar', locals: { sym: profile, address: location.send("#{profile}_address"), href: location.send("#{profile}_url"), value: location.send("#{profile}_match") }
-  - if location.instagram.present?
-    = link_to 'http://instagram.com/' + location.instagram, class: 'instagram', target: '_blank' do
+  - [:foursquare, :google, :yelp, :facebook].each do |profile|
+    - next unless location.profiles[profile]
+    = render partial: 'locations/progress_bar', locals: { sym: profile, address: location.profile_address(profile), href: location.profiles[profile][:url], value: location.profile_match(profile) }
+  - if location.profiles[:instagram].present?
+    = link_to 'http://instagram.com/' + location.profiles[:instagram][:url], class: 'instagram', target: '_blank' do
       %i.fa.fa-instagram
-  - if location.twitter.present?
-    = link_to 'http://twitter.com/' + location.twitter, class: 'twitter', target: '_blank' do
+  - if location.profiles[:twitter].present?
+    = link_to 'http://twitter.com/' + location.profiles[:twitter][:url], class: 'twitter', target: '_blank' do
       %i.fa.fa-twitter-square

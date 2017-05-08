@@ -17,8 +17,9 @@ class Location
 
   LOCATION_TYPE_ACADEMY = 1
   LOCATION_TYPE_EVENT_VENUE = 2
+  LOCATION_TYPE_INSTAGRAM_VENUE = 3
 
-  LOCATION_TYPE_ALL = [LOCATION_TYPE_ACADEMY, LOCATION_TYPE_EVENT_VENUE].freeze
+  LOCATION_TYPE_ALL = [LOCATION_TYPE_ACADEMY, LOCATION_TYPE_EVENT_VENUE, LOCATION_TYPE_INSTAGRAM_VENUE].freeze
 
   STATUS_PENDING = 1
   STATUS_VERIFIED = 2
@@ -69,14 +70,10 @@ class Location
   field :phone
   field :email
   field :timezone
-  field :facebook # Deprecated
-
-  attr_accessor :facebook_id
-  attr_accessor :google_id
-  attr_accessor :yelp_id
-
+  field :facebook
   field :instagram
   field :twitter
+  
   field :ig_hashtag
   field :loctype, type: Integer, default: LOCATION_TYPE_ACADEMY
 
@@ -84,7 +81,7 @@ class Location
   field :flag_closed, type: Boolean, default: false
 
   canonicalize :website, as: :website
-  canonicalize :facebook, as: :facebook # Deprecated
+  canonicalize :facebook, as: :facebook
   canonicalize :phone, as: :phone
 
   belongs_to :moved_to_location, class_name: 'Location', inverse_of: :moved_from_location
@@ -138,7 +135,6 @@ class Location
     }
   })
 
-  default_scope -> { includes(:owner).includes(:team) }
   scope :pending, -> { where(:status => STATUS_PENDING) }
   scope :not_pending, -> { where(:status.ne => STATUS_PENDING) }
   scope :verified, -> { where(:status.in => [nil, STATUS_VERIFIED]) }
@@ -267,6 +263,22 @@ class Location
     end
   end
 
+  def profiles=(val)
+    @_profiles = val
+  end
+
+  def profiles
+    {
+      facebook: self.facebook,
+      twitter: self.twitter,
+      instagram: self.instagram
+    }.delete_if {|k, v| v.nil? }
+  end
+
+  def has_profiles?
+    !profiles.empty?
+  end
+
   def search_metadata!
     params = {
       lat: self.lat,
@@ -323,14 +335,12 @@ class Location
   end
 
   def set_profile_associations
-    [:yelp, :facebook, :google].each do |profile|
-      idfield = "#{profile}_id".to_sym
-      val = self.send(idfield)
-      if val
-        params = { scope: profile }
-        params[idfield] = val
-        RollFindr::LocationFetchService.associate(self.id.to_s, params)
-      end
-    end
+    @_profiles.each do |profile|
+      idfield = "#{profile[:name]}_id".to_sym
+      val = profile[:value]
+      params = { scope: profile[:name] }
+      params[idfield] = val
+      RollFindr::LocationFetchService.associate(self.id.to_s, params)
+    end if @_profiles
   end
 end

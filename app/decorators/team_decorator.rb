@@ -12,22 +12,19 @@ class TeamDecorator < Draper::Decorator
   def image_large
     img = object.image_large
     img = parent_team.image_large if img.blank? && parent_team.present?
-    img = avatar_service_url(object.name, 300) if img.blank?
-    h.image_path(img)
+    img.present? ? h.image_path(img) : nil
   end
 
   def image
     img = object.image
     img = parent_team.image if img.blank? && parent_team.present?
-    img = avatar_service_url(object.name, 100) if img.blank?
-    h.image_path(img)
+    img.present? ? h.image_path(img) : nil
   end
 
   def image_tiny
     img = object.image_tiny
     img = parent_team.image_tiny if img.blank? && parent_team.present?
-    img = avatar_service_url(object.name, 50) if img.blank?
-    h.image_path(img)
+    img.present? ? h.image_path(img) : nil
   end
 
   def updated_at
@@ -72,9 +69,5 @@ class TeamDecorator < Draper::Decorator
     end || ''
 
     return [academies, instructors].join(' ')
-  end
-
-  def avatar_service_url(name, size)
-    "/service/avatar/#{size}x#{size}/#{CGI.escape(name)}/image.png"
   end
 end
