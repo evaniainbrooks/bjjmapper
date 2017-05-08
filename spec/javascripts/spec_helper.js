@@ -44,6 +44,7 @@ var stubGoogleMapsApi = function() {
         return {
           controls: [{ push: noop }],
           getBounds: noop,
+          fitBounds: noop,
           getCenter: noop,
           setCenter: noop,
           setTilt: noop,
