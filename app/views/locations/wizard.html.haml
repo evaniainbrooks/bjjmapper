@@ -32,8 +32,9 @@
     .step-content
       .step-pane.active.alert{'data-step' => 1}
         .row
-          .col-md-8.col-md-offset-2
-            %img.logo.img-border.center-block.edit-image{:width => 100, :height => 100, 'data-default-src' => '//storage.googleapis.com/bjjmapper/academy-default-100.png', :alt => 'logo', :src => '//storage.googleapis.com/bjjmapper/academy-default-100.png'}/
+          .col-md-8.col-md-offset-2.editable
+            %img.logo.img-border.center-block.display-field{:width => 100, :height => 100, 'data-default-src' => '//storage.googleapis.com/bjjmapper/academy-default-100.png', :alt => 'logo', :src => '//storage.googleapis.com/bjjmapper/academy-default-100.png'}/
+            %canvas.logo.img-rounded.center-block.edit-field{:width => 100, :height => 100, :alt => 'logo', :'data-avatar-placeholder' => true, :'data-name' => '?'}
             %fieldset
               .form-group
                 %label.control-label{:for => "location[title]"} Name

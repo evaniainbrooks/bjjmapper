@@ -3,6 +3,7 @@
 #= require backbone/models/map
 #= require backbone/views/map/map_view
 #= require toastr
+#= require avatar_generator
 
 describe 'Views.MapView', ->
   viewModel = new RollFindr.Models.Map({"zoom":12,"center":[80.0,80.0],"geolocate":1,"locations":[]})

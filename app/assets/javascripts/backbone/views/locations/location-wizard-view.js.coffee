@@ -94,21 +94,23 @@ class RollFindr.Views.LocationWizardView extends Backbone.View
 
   setSelectedTeamImage: ->
     teamImg = $("[name='location[team_id]'] option:selected").data('img-src')
-    imgElem = @$('.edit-image')
+    imgElem = @$('img.logo')
     imgElem.attr('src', if teamImg && teamImg.length > 0 then teamImg else imgElem.data('default-src'))
 
   teamChanged: (e)->
     if @hasTeam()
       @setSelectedTeamImage()
+      @$('canvas.logo').parents('.editable').removeClass('edit-mode')
     else
       title = @$('input[name="location[title]"]').val()
-      @$('.edit-image').attr('src', RollFindr.AvatarService(title))
-
+      window.generateAvatars()
+      @$('canvas.logo').data('name', title).parents('.editable').addClass('edit-mode')
 
   titleChanged: ->
     if @isTitleEntered() && !@hasTeam()
       title = @$('input[name="location[title]"]').val()
-      @$('.edit-image').attr('src', RollFindr.AvatarService(title))
+      window.generateAvatars()
+      @$('canvas.logo').data('name', title).parents('.editable').addClass('edit-mode')
 
     @setNextDisabled( !@isTitleEntered() )
 
