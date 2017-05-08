@@ -42,7 +42,7 @@
     },
     changeTeam: function(e) {
       var teamImg = $('option:selected', e.currentTarget).data('img-src');
-      var imgElem = this.$('.edit-image');
+      var imgElem = this.$('img.logo');
       imgElem.attr('src', teamImg);
     },
     showMetadataDialog: function() {

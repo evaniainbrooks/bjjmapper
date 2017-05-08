@@ -21,20 +21,20 @@
           canvasCssWidth = canvasWidth,
           canvasCssHeight = canvasHeight;
 
-      if (window.devicePixelRatio) {
+      /*if (window.devicePixelRatio) {
           $(canvas).attr("width", canvasWidth * window.devicePixelRatio);
           $(canvas).attr("height", canvasHeight * window.devicePixelRatio);
           $(canvas).css("width", canvasCssWidth);
           $(canvas).css("height", canvasCssHeight);
           context.scale(window.devicePixelRatio, window.devicePixelRatio);
-      }
+      }*/
 
       context.fillStyle = colours[colourIndex]; 
-      context.fillRect (0, 0, canvas.width, canvas.height);
-      context.font = ((canvas.width / 3) + 10) + "px Arial";
+      context.fillRect (0, 0, canvasWidth, canvasHeight);
+      context.font = ((canvasWidth / 3) + 10) + "px Arial";
       context.textAlign = "center";
       context.fillStyle = "#FFF";
-      context.fillText(initials, canvasCssWidth / 2, canvasCssHeight / 1.5);
+      context.fillText(initials, canvasWidth / 2, canvasHeight / 1.5);
     });
   }
 

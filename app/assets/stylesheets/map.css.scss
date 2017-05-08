@@ -123,7 +123,8 @@ label {
 }
 
 .map-list-item {
-  filter: blur(1px) opacity(0.8);
+  filter: blur(1px);
+  opacity: 0.8;
   
   &.marker-active {
     filter: none;
