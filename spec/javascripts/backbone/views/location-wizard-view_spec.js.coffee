@@ -1,5 +1,6 @@
 #= require spec_helper
 #= require backbone/rollfindr
+#= require avatar_generator
 
 describe 'Views.LocationWizardView', ->
   testTitle = "Test Location"
