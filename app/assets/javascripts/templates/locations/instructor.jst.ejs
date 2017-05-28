@@ -1,5 +1,5 @@
 <div class="card user-card">
-  <button class="edit-field close remove-user" aria-hidden="true" type="button" data-id="<%= user.id %>">&times;</button>
+  <button class="edit-field close remove-instructor remove-user" aria-hidden="true" type="button" data-id="<%= user.id %>">&times;</button>
   <a class="thumbnail" data-user-id="<%= user.id %>" href="<%= Routes.user_path(user) %>">
     <% if (user.thumbnailx && user.thumbnaily) { %>
       <div class="avatar pull-left" style="background: url('<%= user.image %>') top -<%= user.thumbnaily %>px left -<%= user.thumbnailx %>px no-repeat"></div>

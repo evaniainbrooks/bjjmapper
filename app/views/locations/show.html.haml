@@ -26,7 +26,7 @@
           %a{target: '_blank', href: location.image_large, title: "View large logo"}
             %img.edit-image.img-thumbnail{:width => location.image_width, :height => location.image_height, :src => location.image, :class => 'logo center-block'}/
         - else
-          %canvas{class: "center-block img-rounded logo", width: location.image_width, height: location.image_height, :'data-name' => location.title, :'data-avatar-placeholder' => true}/
+          %canvas{class: "center-block img-rounded logo", width: location.image_width, height: location.image_height, :'data-name' => location.title, :'data-avatar-placeholder' => true}
         .edit-field
           %br/
           %input{:'data-url' => upload_image_location_path(location), :'data-upload-avatar' => true, :type => 'file', :class => 'input-md form-control'}/

@@ -16,7 +16,11 @@
 
 .row
   .col-md-2
-    %img{:src => location.image, :class => 'center-block'}/
+    - if location.image.present?
+      %a{target: '_blank', href: location.image_large, title: "View large logo"}
+        %img.edit-image.img-thumbnail{:width => location.image_width, :height => location.image_height, :src => location.image, :class => 'logo center-block'}/
+    - else
+      %canvas{class: "center-block img-rounded logo", width: location.image_width, height: location.image_height, :'data-name' => location.title, :'data-avatar-placeholder' => true}
   .col-md-10
     - if location.loctype == Location::LOCATION_TYPE_ACADEMY
       %h1

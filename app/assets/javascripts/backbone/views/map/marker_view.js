@@ -169,7 +169,9 @@
         }
       }
 
-      this.map.fitBounds(bounds);
+      if (this.markers.length > 1) {
+        this.map.fitBounds(bounds);
+      }
     }
   });
 

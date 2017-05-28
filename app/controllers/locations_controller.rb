@@ -131,7 +131,7 @@ class LocationsController < ApplicationController
     head :no_content and return false unless @locations.present?
 
     @locations = decorated_locations_with_distance_to_center(@locations, lat, lng)
-    @locations = @locations.sort_by {|loc| Geocoder::Calculations.distance_between([lat, lng], loc.to_coordinates) }
+    @locations = @locations.sort_by {|loc| Geocoder::Calculations.distance_between([lat, lng], loc.to_coordinates) }.take(count)
 
     respond_to do |format|
       format.json
