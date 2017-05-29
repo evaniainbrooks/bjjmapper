@@ -67,7 +67,7 @@ Rails.application.routes.draw do
 
     resources :reviews, controller: :location_reviews, only: [:create, :destroy, :index]
 
-    resources :users, controller: :instructors, as: :instructors, path: '/instructors', only: [:create, :destroy, :index]
+    resources :users, controller: :instructors, as: :instructors, path: '/instructors', only: [:create, :destroy]
 
     resources :events, controller: :location_events, only: [:create, :index, :show, :destroy, :update] do
       post :move, on: :member

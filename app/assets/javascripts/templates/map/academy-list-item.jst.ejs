@@ -11,7 +11,7 @@
     <div>
       <h4 class="list-group-item-heading"><%= location.title %></h4>
       <p class="team-title strong list-group-item-text small"><%= location.team_name %></p>
-      <p class="upcase address list-group-item-text small">
+      <p class="address list-group-item-text small">
         <%= location.street %>
           </p>
         </div>
@@ -23,7 +23,7 @@
             <span><%= location.marker_id %></span>
           </div>
           <% if (location.image) { %>
-            <img src="<%= location.image %>" alt="<% location.title %>" width="100" height="100" class="logo-large img-rounded pull-left" />
+            <img src="<%= location.image %>" alt="<% location.title %>" width="100" class="logo-large img-rounded pull-left" />
           <% } else { %>
             <canvas class="img-rounded logo-large pull-left" width="100" height="100" data-name="<%= location.title %>" data-avatar-placeholder></canvas>
           <% } %>
@@ -46,7 +46,7 @@
         </span>
         <br />
         <br />
-        <p class="address list-group-item-text upcase">
+        <p class="address list-group-item-text">
           <span class="fa fa-map-marker"></span>
           <span><%= location.address %></span>
         </p>

@@ -25,9 +25,11 @@
         %br/
         %br/
         %h5.text-muted.small.upcase Cities in #{directory_segment.full_name}
-        %ul.list-unstyled.list-inline
-          - directory_segment.child_segments.sort.each do |city|
-            %li= link_to city.name, directory_segment_path(country: directory_segment.name, city: city.name), title: "List of Brazilian Jiu-Jitsu gyms in #{city.full_name}" 
+        %ul.list-unstyled
+          - directory_segment.child_segments.sort_by(&:name).each do |city|
+            %li
+              = link_to city.name, directory_segment_path(country: directory_segment.name, city: city.name), title: "List of Brazilian Jiu-Jitsu gyms in #{city.full_name}"
+              %span.text-muted.small= city.location_count
   - if FeatureSetting.enabled?(:show_activities)
     .row
       .col-md-12

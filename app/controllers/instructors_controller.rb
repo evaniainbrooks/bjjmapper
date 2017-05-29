@@ -1,15 +1,6 @@
 class InstructorsController < ApplicationController
   before_action :set_location_or_team
   before_action :set_instructor, only: [:destroy]
-  before_action :set_instructors, only: [:index]
-
-  decorates_assigned :instructors
-
-  def index
-    respond_to do |format|
-      format.json
-    end
-  end
 
   def create
     @instructor = find_or_create_instructor
@@ -43,11 +34,6 @@ class InstructorsController < ApplicationController
   end
 
   private
-
-  def set_instructors
-    @instructors = @location_or_team.instructors
-    render(status: :no_content, json: {}) and return false if @instructors.empty?
-  end
 
   def find_or_create_instructor
     if params.key?(:user)

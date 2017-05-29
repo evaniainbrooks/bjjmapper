@@ -60,27 +60,5 @@ describe InstructorsController do
       end
     end
   end
-
-  describe 'GET index' do
-    context 'with json format' do
-      let(:location) { build(:location) }
-      before { Location.stub(:find).and_return(location) }
-      context 'when there are instructors' do
-        let(:instructors) { build_list(:user, 3) }
-        before { Location.any_instance.stub(:instructors).and_return(instructors) }
-        it 'returns the instructors' do
-          get :index, format: 'json', location_id: '123'
-          assigns[:instructors].count.should eq instructors.count
-        end
-      end
-      context 'when there are no instructors' do
-        before { Location.any_instance.stub(:instructors).and_return([]) }
-        it 'returns 204 no content' do
-          get :index, format: 'json', location_id: '123'
-          response.status.should eq 204
-        end
-      end
-    end
-  end
 end
 

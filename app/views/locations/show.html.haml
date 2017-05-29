@@ -152,7 +152,7 @@
   :coffeescript
     $('.media').readmore(collapsedHeight: 105, moreLink: "<a class='pull-right btn btn-default btn-small' href='#'>See more</a>", lessLink: "<a class='pull-right btn btn-default btn-small' href='#'>Close</a>")
     $(document).ready ->
-      mapView = new RollFindr.Views.LocationShowView({ editable: #{edit_mode?}, model: #{render_json(location)}, mapModel: #{render_json(@map)}, el: $('.show-location')})
+      mapView = new RollFindr.Views.LocationShowView({ editable: #{edit_mode?}, model: #{render_json(location, partial: 'location_with_instructors')}, mapModel: #{render_json(@map)}, el: $('.show-location')})
   = render partial: 'facebook_sdk'
 
 = content_for(:head) do
