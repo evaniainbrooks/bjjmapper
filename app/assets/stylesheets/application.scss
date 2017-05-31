@@ -25,6 +25,13 @@ html, body {
   margin: 0px;
   padding: 0px;
   height: 100%;
+  background-color: #e9ebee !important;
+}
+
+.container {
+  background-color: white;
+  border-radius: 3px;
+  border: 1px solid #ccc;
 }
 
 .directory {
@@ -182,7 +189,7 @@ img.cover-image {
 .footer {
   width: 100%;
   margin-top: 20px;
-  border-top: 2px solid #e7e7e7;
+  border-top: 1px solid #ccc;
   padding: 14px 5px;
   background-color: #f8f8f8;
   span {
@@ -207,6 +214,8 @@ img.cover-image {
 
 body > .container {
   margin-top: 60px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .container {

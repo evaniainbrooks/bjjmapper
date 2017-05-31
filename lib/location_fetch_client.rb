@@ -13,7 +13,7 @@ module RollFindr
     end
 
     def associate(location_id, opts = {})
-      query = common_params.merge(opts.slice(:scope, :yelp_id, :facebook_id, :google_id)).to_query
+      query = common_params.merge(opts.slice(:scope, :foursquare_id, :yelp_id, :facebook_id, :google_id)).to_query
       uri = URI("#{@scheme}://#{@host}:#{@port}/#{SERVICE_PATH}/locations/#{location_id}/associate?#{query}")
 
       response = post_request(uri, nil)

@@ -102,7 +102,7 @@ class LocationsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render partial: 'location' }
+      format.json { render partial: 'location_with_instructors' }
     end
   end
 

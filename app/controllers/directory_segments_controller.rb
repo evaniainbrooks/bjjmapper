@@ -7,7 +7,13 @@ class DirectorySegmentsController < ApplicationController
   helper_method :map
 
   def index
-    @directory_segments = DirectorySegment.parent_segments.visible_in_index
+    @directory_segments = DirectorySegment
+      .all
+      .to_a
+      .group_by(&:parent_segment_id)
+      .delete_if do |key, value| 
+        key.nil? || key.flag_index_visible == false
+      end
 
     tracker.track('showDirectorySegmentsIndex',
       tl_segment_count: @directory_segments.count
@@ -15,7 +21,7 @@ class DirectorySegmentsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render @directory_segments }
+      format.json
     end
   end
 

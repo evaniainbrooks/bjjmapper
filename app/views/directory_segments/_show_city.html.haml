@@ -29,7 +29,7 @@
           - directory_segment.parent_segment.child_segments.sort_by(&:name).each do |city|
             - next if city.name == directory_segment.name
             %li
-              = link_to city.name, directory_segment_path(country: directory_segment.name, city: city.name), title: "List of Brazilian Jiu-Jitsu gyms in #{city.full_name}"
+              = link_to city.name, directory_segment_path(country: directory_segment.parent_segment.name, city: city.name), title: "List of Brazilian Jiu-Jitsu gyms in #{city.full_name}"
               %span.text-muted.small= city.location_count 
   - if FeatureSetting.enabled?(:show_activities)
     .row

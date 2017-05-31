@@ -10,6 +10,3 @@ json.timezone directory_segment.timezone
 json.lat directory_segment.lat
 json.lng directory_segment.lng
 json.synthetic directory_segment.synthetic
-json.child_segments(directory_segment.child_segments) do |segment|
-  json.partial! 'directory_segments/directory_segment', directory_segment: segment
-end

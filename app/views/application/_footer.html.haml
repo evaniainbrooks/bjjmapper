@@ -7,12 +7,15 @@
       %span &#124;
       = link_to 'Sitemap', sitemap_path
       %span &#124;
+      %span= link_to "I'm feeling lucky", random_locations_path
+      %span &#124;
       %span
         = link_to 'https://www.facebook.com/BJJMapper', target: '_blank' do
-          %b.fa.fa-facebook
-          Facebook
-      %span &#124;
-      %span= link_to "I'm feeling lucky", random_locations_path
+          %b.fa.fa-facebook-square.fa-2x
+      %span &nbsp;
+      %span
+        = link_to 'https://www.instagram.com/BJJMapper', target: '_blank' do
+          %b.fa.fa-instagram.fa-2x
     .col-md-6.text-right
       = render partial: 'mixpanel_partner'
 

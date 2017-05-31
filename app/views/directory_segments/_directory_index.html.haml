@@ -1,7 +1,7 @@
 .row
   - sz = @directory_segments.size
   - per_column = (sz / 4.0).ceil
-  - @directory_segments.each_slice(per_column).each do |segments|
+  - @directory_segments.keys.sort_by(&:name).each_slice(per_column).each do |segments|
     .col-md-2
       - segments.each_with_index do |country|
         %h3.parent-segment
@@ -11,9 +11,9 @@
             - if Role.power(current_user.role) >= Role.power(Role::MODERATOR)
               %span.text-warning= country.pending_location_count
 
-        - unless country.child_segments.empty?
+        - if @directory_segments.key?(country)
           %ul.list-inline
-            - country.child_segments.each do |city|
+            - @directory_segments[country].each do |city|
               %li.small.child-segment
                 = link_to directory_segment_path(country.name, city.name), class: 'text-muted', title: "List of Brazilian Jiu-Jitsu gyms in #{city.name}, #{country.name}" do
                   = city.name

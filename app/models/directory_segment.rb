@@ -24,7 +24,7 @@ class DirectorySegment
   field :coordinates, type: Array
   validates :coordinates, presence: true
 
-  field :flag_index_visible, type: Boolean, default: false
+  field :flag_index_visible, type: Boolean
   field :zoom, type: Integer
   field :distance, type: Integer, default: DEFAULT_DISTANCE_MILES
   field :timezone, type: String

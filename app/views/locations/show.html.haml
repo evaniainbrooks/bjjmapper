@@ -7,9 +7,9 @@
   %div#fb-root
   = form_for(location, html: { class: 'form ' + edit_mode_classes }) do |f|
     .row
-      .col-md-10.pull-left
+      .col-md-10.pull-left.col-sm-9
         = render partial: 'breadcrumb', locals: { location: location }
-      .col-md-2.pull-right
+      .col-md-2.pull-right.col-sm-3
         = render partial: 'edit_controls', locals: { location: location }
     .row
       .col-md-12
