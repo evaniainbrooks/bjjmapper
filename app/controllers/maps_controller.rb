@@ -184,6 +184,7 @@ class MapsController < ApplicationController
 
     @team = params.fetch(:team, [])
     @locations = @locations.where(:team_id.in => @team) if @team.present?
+    @locations = @locations.to_a
   end
 
   def set_coordinates_from_locations

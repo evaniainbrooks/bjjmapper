@@ -10,10 +10,12 @@ class DirectorySegmentsController < ApplicationController
     @directory_segments = DirectorySegment
       .all
       .to_a
-      .group_by(&:parent_segment_id)
-      .delete_if do |key, value| 
-        key.nil? || key.flag_index_visible == false
-      end
+
+    groups = @directory_segments.group_by(&:parent_segment_id)
+    @directory_segments = groups[nil].inject({}) do |hash, v|
+      hash[v] = groups[v.id] || []
+      hash
+    end
 
     tracker.track('showDirectorySegmentsIndex',
       tl_segment_count: @directory_segments.count

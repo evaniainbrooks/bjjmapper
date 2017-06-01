@@ -11,16 +11,15 @@
             - if Role.power(current_user.role) >= Role.power(Role::MODERATOR)
               %span.text-warning= country.pending_location_count
 
-        - if @directory_segments.key?(country)
-          %ul.list-inline
-            - @directory_segments[country].each do |city|
-              %li.small.child-segment
-                = link_to directory_segment_path(country.name, city.name), class: 'text-muted', title: "List of Brazilian Jiu-Jitsu gyms in #{city.name}, #{country.name}" do
-                  = city.name
+        %ul.list-inline
+          - @directory_segments[country].each do |city|
+            %li.small.child-segment
+              = link_to directory_segment_path(country.name, city.name), class: 'text-muted', title: "List of Brazilian Jiu-Jitsu gyms in #{city.name}, #{country.name}" do
+                = city.name
   .col-md-4
     %hr.visible-xs
     = render partial: 'application/facebook_widget'
-    %h3.pull-left Upcoming Events
+    %h3.clear.clear-fix Upcoming Events
     .upcoming-events.location-list.loading.clear
       .loading-overlay
         %span.fa.fa-refresh.fa-3x.fa-spin

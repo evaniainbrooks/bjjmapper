@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       post :merge, on: :member
     end
     resources :templates, only: [:show]
+    root 'admin#index'
   end
 
   resources :users, :path => '/people', :only => [:index, :show, :create, :update, :destroy] do

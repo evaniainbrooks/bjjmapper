@@ -9,12 +9,13 @@ describe DirectorySegmentsController do
     before do
       create(:directory_segment, name: 'Greece')
       create(:directory_segment, name: 'Cyprus')
+      create(:directory_segment, name: 'Turkey')
     end
     it 'fetches all parent segments' do
       get :index, format: 'html'
       response.status.should eq 200
 
-      assigns[:directory_segments].should eq DirectorySegment.parent_segments.visible_in_index
+      assigns[:directory_segments].count.should eq DirectorySegment.parent_segments.visible_in_index.count
     end
   end
   describe 'GET show' do

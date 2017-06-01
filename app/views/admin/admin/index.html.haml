@@ -1,0 +1,36 @@
+.container
+  .row
+    .col-md-12
+      %h3 Feature toggles
+      %pre= JSON.pretty_generate(@feature_settings)
+
+      %form.features.form.form-inline{action: admin_feature_settings_path, method: 'put'}
+        %input.form-control.input-md.id
+        %input.form-control.input-md.value
+        %button.btn.btn-default Save!
+
+= content_for(:scripts) do
+  :javascript
+    $(document).ready(function() {
+      $('form.features').on('submit', function(e) {
+        e.preventDefault();
+        var form = $(e.currentTarget);
+        var id = $('.id', form).val();
+        var value = $('.value', form).val();
+        var action = form.attr('action') + '/' + id;
+        var method = form.attr('method');
+        var data = {
+          format: 'json',
+          value: value
+        };
+
+        $.ajax({
+          url: action,
+          type: method,
+          data: data,
+          complete: function() {
+            window.location = window.location;
+          }
+        });
+      });
+    });

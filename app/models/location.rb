@@ -135,6 +135,7 @@ class Location
     }
   })
 
+  default_scope -> { includes(:team) }
   scope :pending, -> { where(:status => STATUS_PENDING) }
   scope :not_pending, -> { where(:status.ne => STATUS_PENDING) }
   scope :verified, -> { where(:status.in => [nil, STATUS_VERIFIED]) }
