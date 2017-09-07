@@ -148,19 +148,24 @@ class ApplicationController < ActionController::Base
   end
 
   def log_production_mutative_events
-    return if params.fetch(:action, '').eql?('report') || params.fetch(:action, '').eql?('contact')
+    begin
+      return if params.fetch(:action, '').eql?('report') || params.fetch(:action, '').eql?('contact')
 
-    if Rails.env.production? && !request.get? && !request.head? && !current_user.internal?
-      reason = "Mutative #{request.params[:controller]}/#{request.params[:action]} by #{current_user.try(:name)}"
-      description =  "#{request.inspect}"
-      subject_url = "#{request.original_url}"
+      if Rails.env.production? && !request.get? && !request.head? && !current_user.internal?
+        reason = "Mutative #{request.params[:controller]}/#{request.params[:action]} by #{current_user.try(:name)}"
+        description =  "#{request.inspect}"
+        subject_url = "#{request.original_url}"
 
-      ReportMailer.report_email(
-        subject: subject_url, 
-        reason: reason, 
-        description: description, 
-        user: current_user
-      ).deliver
+        ReportMailer.report_email(
+          subject: subject_url, 
+          reason: reason, 
+          description: description, 
+          user: current_user
+        ).deliver
+      end
+    rescue StandardError => e
+      Rails.logger.error(e)
+      return 
     end
   end
 
