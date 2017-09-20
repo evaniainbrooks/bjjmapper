@@ -2,6 +2,14 @@ class InstructorsController < ApplicationController
   before_action :set_location_or_team
   before_action :set_instructor, only: [:destroy]
 
+  decorates_assigned :location_or_team
+
+  def index
+    respond_to do |format|
+      format.json
+    end
+  end
+
   def create
     @instructor = find_or_create_instructor
     @location_or_team.instructors << @instructor
@@ -12,6 +20,23 @@ class InstructorsController < ApplicationController
       id: @instructor.to_param,
       createdNewUser: params.key?(:user)
     )
+    
+    #if @location_or_team.instance_of? Location
+    #  Activity.create({
+    #    activity_type: Activity::TYPE_INSTRUCTOR_CREATED,
+    #    coordinates: @location_or_team.coordinates,
+    #    segment_key: @location_or_team.country,
+    #    source_id: current_user.id.to_s,
+    #    source_type: User.to_s,
+    #    source_name: current_user.name.to_s,
+    #    entity_id: @location_or_team.id.to_s,
+    #    entity_type: Location.to_s,
+    #    data: {
+    #      location: @location_or_team.attributes,
+    #      instructor: @instructor.attributes
+    #    }
+    #  })
+    #end
 
     respond_to do |format|
       format.html { redirect_to polymorphic_path(@location_or_team, edit: 1) }

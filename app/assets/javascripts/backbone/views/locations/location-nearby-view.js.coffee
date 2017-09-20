@@ -11,10 +11,7 @@ class RollFindr.Views.LocationNearbyView extends Backbone.View
       lat: @model.get('lat'),
       lng: @model.get('lng'),
       reject: @model.get('param'),
-      location_type: [
-        RollFindr.Models.Location.LOCATION_TYPE_EVENT_VENUE,
-        RollFindr.Models.Location.LOCATION_TYPE_ACADEMY
-      ]
+      location_type: options.location_type || [RollFindr.Models.Location.LOCATION_TYPE_ACADEMY]
     }
     collection_params.count = options.count if options.count?
 

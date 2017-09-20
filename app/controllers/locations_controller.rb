@@ -185,7 +185,7 @@ class LocationsController < ApplicationController
       location: @location.attributes.as_json({})
     )
 
-    RollFindr::Redis.del(recent_cache_key(RECENT_COUNT_DEFAULT))
+    RollFindr::Redis.keys(recent_cache_key_prefix + '*').each{|k| RollFindr::Redis.del(k)}
 
     respond_to do |format|
       format.json
@@ -232,7 +232,7 @@ class LocationsController < ApplicationController
     @location.assign_attributes(location_create_params)
     LocationGeocoder.update(@location)
     @location.save!
-
+    
     respond_to do |format|
       format.json { render partial: 'location' }
       format.html { redirect_to location_path(location, success: 1, edit: 0) }
@@ -295,8 +295,12 @@ class LocationsController < ApplicationController
     return params.fetch(:error, 0).to_i.eql?(1)
   end
 
+  def recent_cache_key_prefix
+    'Recent'
+  end
+
   def recent_cache_key(count)
-    cache_key = ['Recent', count].compact.collect(&:to_s).join('-')
+    cache_key = [recent_cache_key_prefix, count].compact.collect(&:to_s).join('-')
   end
 
   def set_map

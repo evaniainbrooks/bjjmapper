@@ -225,4 +225,4 @@ class RollFindr.Views.LocationWizardView extends Backbone.View
       lat: lat,
       lng: lng
     })
-    @nearbyLocationsView = new RollFindr.Views.LocationNearbyView({ model: model })
+    @nearbyLocationsView = new RollFindr.Views.LocationNearbyView({ model: model, location_type: [RollFindr.Models.Location.LOCATION_TYPE_EVENT_VENUE, RollFindr.Models.Location.LOCATION_TYPE_ACADEMY] })

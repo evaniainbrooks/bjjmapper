@@ -35,7 +35,7 @@ class Location
 
   before_validation :generate_event_venue_title
 
-  before_save :set_profile_associations
+  before_save :set_profile_associations!
   before_save :set_closed_flag
   before_save :populate_timezone
   before_save :set_has_black_belt_flag
@@ -335,7 +335,7 @@ class Location
     return true
   end
 
-  def set_profile_associations
+  def set_profile_associations!
     @_profiles.each do |profile|
       idfield = "#{profile[:name]}_id".to_sym
       val = profile[:value]

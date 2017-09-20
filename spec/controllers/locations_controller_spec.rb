@@ -294,8 +294,11 @@ describe LocationsController do
           response.should redirect_to(location_path(Location.last, edit: 1, create: 1))
         end.to change { Location.count }.by(1)
       end
-      it 'expires the recent review cache' do
-        Redis.any_instance.should_receive(:del).with(controller.send(:recent_cache_key, LocationsController::RECENT_COUNT_DEFAULT))
+
+      let(:recent_cache_key) { 'cachekey123' }
+      it 'expires the recently created cache' do
+        Redis.any_instance.stub(:keys).and_return([recent_cache_key])
+        Redis.any_instance.should_receive(:del).with(recent_cache_key)
 
         post :create, create_params, session_params
       end

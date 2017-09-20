@@ -23,12 +23,12 @@
               %td.text-muted.text-right Rank
               %td
                 .edit-field.form-group
-                  = f.select :belt_rank, options_for_select(belt_ranks, user.belt_rank), {}, class: 'form-control input-md'
+                  = f.select :belt_rank, options_for_select(belt_ranks, new_instructor.belt_rank), {}, class: 'form-control input-md'
                 .edit-field.form-group
-                  = f.select :stripe_rank, options_for_select(stripe_ranks, user.stripe_rank), {}, class: 'form-control input-md'
+                  = f.select :stripe_rank, options_for_select(stripe_ranks, new_instructor.stripe_rank), {}, class: 'form-control input-md'
             %tr
               %td.text-muted.text-right Lineage
-              %td= render partial: 'users/lineage', locals: { :f => f, :user => user }
+              %td= render partial: 'users/lineage', locals: { :f => f, :user => new_instructor }
   .modal-footer
     %button.btn.btn-default{'data-dismiss' => 'modal'}
       Cancel

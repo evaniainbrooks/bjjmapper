@@ -169,7 +169,7 @@
         }
       }
 
-      if (this.markers.length > 1) {
+      if (this.model.get('locations').size() > 1) {
         this.map.fitBounds(bounds);
       }
     }
