@@ -30,6 +30,7 @@ class RollFindr.Views.MapView extends Backbone.View
       'setCenterGeolocate',
       'fetchViewport',
       'geolocate',
+      'activateMarker',
       'render')
 
     if @setupGoogleMap()
@@ -44,6 +45,11 @@ class RollFindr.Views.MapView extends Backbone.View
       @setupEventListeners()
       @initializeMap()
       @directionsView = new RollFindr.Views.DirectionsOverlayView({el: @el, model: @model, map: @map})
+  
+    @activateRandom = options.activateRandom || false
+
+  activateMarker: (id)->
+    RollFindr.GlobalEvents.trigger('markerActive', {id: id})
   
   navigateNextPage: (e)->
     @model.set('offset', @model.get('offset') + 50)
@@ -219,7 +225,18 @@ class RollFindr.Views.MapView extends Backbone.View
     @model.fetch({
       data: args
       success: =>
-        @setCenterFromModel()
+        if @activateRandom
+          @activateRandom = false
+
+          setTimeout =>
+            sz = @model.get('locations').size()
+            randomIndex = Math.floor(Math.random() * 100) % sz
+            randomMarker = @model.get('locations').at(randomIndex)
+            @activateMarker(randomMarker.get('id'))
+          , 100
+        else
+          @setCenterFromModel()
+
         toastr.success("Found #{'location'.pluralize(@model.get('location_count'))} and #{'event'.pluralize(@model.get('event_count'))}", 'Map refreshed')
       complete: =>
         @onFiltersChanged()

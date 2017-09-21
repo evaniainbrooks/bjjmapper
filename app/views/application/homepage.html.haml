@@ -37,10 +37,10 @@
           %i.text-muted There are no upcoming events
     .col-md-3
       %br/
-      - if FeatureSetting.enabled?(:hide_homepage_new_additions)
-        = render partial: 'application/facebook_widget' 
-        %br/
-      = render partial: 'application/google_adsense'
+      = render partial: 'application/facebook_widget' 
+      %br/
+      - if !FeatureSetting.enabled?(:hide_global_ads)
+        = render partial: 'application/google_adsense'
       - if !FeatureSetting.enabled?(:hide_homepage_new_additions)
         = content_for(:scripts) do
           :coffeescript
@@ -70,11 +70,10 @@
               %strong= country.name
   %hr/
   .row
-    .col-md-4
-      = render partial: 'application/facebook_widget' if !FeatureSetting.enabled?(:hide_homepage_directory_segments)
-    .col-md-8.hidden-sm.hidden-xs
-      %br/
-      = render partial: 'application/google_adsense_banner'
+    .col-md-12.hidden-sm.hidden-xs
+      - if !FeatureSetting.enabled?(:show_global_ads)
+        %br/
+        = render partial: 'application/google_adsense_banner'
 
 = content_for(:scripts) do
   = javascript_include_tag 'map'
@@ -83,5 +82,5 @@
       upcomingView = new RollFindr.Views.UpcomingEventsView({count: 16})
 
       mapModel = new RollFindr.Models.Map(#{render_json(@map)})
-      mapView = new RollFindr.Views.MapView({el: $('.map'), model: mapModel})
+      mapView = new RollFindr.Views.MapView({activateRandom: true, el: $('.map'), model: mapModel})
 

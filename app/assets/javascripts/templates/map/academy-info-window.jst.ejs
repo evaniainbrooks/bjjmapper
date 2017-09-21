@@ -5,9 +5,7 @@
     <% } else { %>
       <canvas class="img-rounded center-block logo" width="50" height="50" data-name="<%= location.title %>" data-avatar-placeholder></canvas>
     <% } %>
-        <h4 class="list-group-item-heading"><%= location.title %>
-          <small class="list-group-item-text small team-title"><%= location.team_name %></small>
-        </h4>
+        <h4 class="list-group-item-heading"><%= location.title %></h4>
         <span class="rating">
           <% for (var n = 1; n <= 5; ++n) { %> 
             <% if (location.stars >= n) { %>

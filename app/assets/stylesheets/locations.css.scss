@@ -77,6 +77,9 @@
   p.timestamp {
     margin: 0px;
   }
+  canvas {
+    display: none;
+  }
   img.marker {
     margin-right: 7px;
     margin-top: 4px;
@@ -87,10 +90,11 @@
   img.logo {
     opacity: 1.0;
     max-width: 50px;
+    display: none;
   }
   
   .content {
-    margin-left: 58px;
+    margin-left: 0px;
   }
 }
 

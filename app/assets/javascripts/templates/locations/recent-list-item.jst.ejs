@@ -1,5 +1,5 @@
 <div data-id="<%= location.id %>" class="location-list-item list-group-item">
-  <a style="width: 100%" class="pull-left text-primary" title="<%= location.title %>" href="<%= Routes.location_path(location.param, {ref: 'recent_l'}) %>"><h4 class="list-group-item-heading"><%= location.title %></h4></a>
+  <a style="width: 100%" class="pull-left text-primary" title="<%= location.title %>" href="<%= Routes.location_path(location.param, {ref: 'recent_l'}) %>"><h5 class="list-group-item-heading"><%= location.title %></h5></a>
   <div class="clear clear-fix"></div>
   <% if (location.image) { %>
     <img src="<%= location.image %>" alt="<% location.title %>" class="pull-left logo img-rounded" />
