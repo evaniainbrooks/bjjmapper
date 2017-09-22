@@ -4,9 +4,10 @@
     - if Role.power(current_user.role) >= Role.power(Role::MODERATOR)
       = "(src: #{location.object.source || 'BJJMapper'})"
   %br/
-  - [:foursquare, :google, :yelp, :facebook].each do |profile|
+  - [:jiujitsucom, :foursquare, :google, :yelp, :facebook].each do |profile|
     - next unless location.profiles[profile]
-    = render partial: 'locations/progress_bar', locals: { sym: profile, address: location.profile_address(profile), href: location.profiles[profile][:url], value: location.profile_match(profile) }
+    - sym = profile == :jiujitsucom ? :'circle-o' : profile 
+    = render partial: 'locations/progress_bar', locals: { sym: sym, address: location.profile_address(profile), href: location.profiles[profile][:url], value: location.profile_match(profile) }
   - if location.profiles[:instagram].present?
     = link_to 'http://instagram.com/' + location.profiles[:instagram][:url], class: 'instagram', target: '_blank' do
       %i.fa.fa-instagram

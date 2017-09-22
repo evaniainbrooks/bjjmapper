@@ -10,6 +10,10 @@ class LocationFetchServiceDecorator < LocationDecorator
     "#{h.time_ago_in_words(val)} ago"
   end
   
+  def jiujitsucom_url
+    jiujitsucom_profile.try(:[], :url)
+  end
+  
   def foursquare_url
     foursquare_profile.try(:[], :url)
   end
@@ -27,7 +31,7 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
 
   def health
-    health_components = [foursquare_url, facebook_url, yelp_url, google_url, facebook, twitter, instagram, team_id, website, email, phone]
+    health_components = [jiujitsucom_url, foursquare_url, facebook_url, yelp_url, google_url, facebook, twitter, instagram, team_id, website, email, phone]
     health_val = ((health_components.compact.size / health_components.size.to_f) * 100).to_i
   end
 
@@ -159,6 +163,7 @@ class LocationFetchServiceDecorator < LocationDecorator
     end
 
     {
+      jiujitsucom: jiujitsucom_profile,
       foursquare: foursquare_profile,
       google: google_profile,
       yelp: yelp_profile,
@@ -218,6 +223,10 @@ class LocationFetchServiceDecorator < LocationDecorator
     return nil unless @_source_profile.present?
 
     @_source_profile[component]
+  end
+  
+  def jiujitsucom_profile
+    service_data_arr.find {|profile| profile[:source] == 'Jiujitsucom'}
   end
   
   def foursquare_profile
