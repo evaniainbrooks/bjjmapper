@@ -62,7 +62,7 @@
           .content
             %ul.list-unstyled.items
           .alternative
-            - if !FeatureSetting.enabled(:hide_global_ads)
+            - if !FeatureSetting.enabled?(:hide_global_ads)
               = render partial: 'application/google_adsense'
 
           - more_schools = [location.city, location.state || location.country].compact.join(', ')
