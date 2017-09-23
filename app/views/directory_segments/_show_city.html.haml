@@ -6,7 +6,7 @@
     .col-md-12
       %h1
         = directory_segment.full_name
-        %small BJJ academies and events
+        %small= "#{directory_segment.location_count} BJJ academies and events"
         %small
           %a{:href => map_path(segment: directory_segment.to_param, zoom: directory_segment.zoom, lat: directory_segment.lat, lng: directory_segment.lng, :ref => 'segment_city'), :title => "#{directory_segment.full_name} BJJ schools on the map"}
             %span.fa.fa-search-plus
