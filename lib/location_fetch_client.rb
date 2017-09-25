@@ -84,10 +84,13 @@ module RollFindr
       { api_key: API_KEY }
     end
 
-    def post_request(uri, body)
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true if 'https' == @scheme
-      request = Net::HTTP::Post.new(uri.request_uri)
+    def post_request(url, body)
+      http = Net::HTTP.new(url.host, url.port)
+      if 'https' == @scheme
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      end
+      request = Net::HTTP::Post.new(url.request_uri)
       request.body = body 
       request.content_type = 'application/json'
 
@@ -95,16 +98,20 @@ module RollFindr
         response = http.request(request)
         response
       rescue StandardError => e
-        Rails.logger.error e.message
+        Rails.logger.error e
         nil
       end
     end
 
-    def get_request(uri)
+    def get_request(url)
       begin
-        http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = true if 'https' == @scheme
-        request = Net::HTTP::Get.new(uri.request_uri)
+        http = Net::HTTP.new(url.host, url.port)
+        if 'https' == @scheme
+          http.use_ssl = true
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        end
+
+        request = Net::HTTP::Get.new(url.request_uri)
         response = http.request(request) 
         Rails.logger.info "Got response #{response.inspect}"
         
@@ -117,7 +124,7 @@ module RollFindr
           result.deep_symbolize_keys
         end
       rescue StandardError => e
-        Rails.logger.error e.message
+        Rails.logger.error e
         nil
       end
     end
