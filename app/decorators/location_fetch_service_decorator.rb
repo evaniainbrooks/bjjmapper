@@ -37,7 +37,7 @@ class LocationFetchServiceDecorator < LocationDecorator
 
   def website
     if object.website.present? && object.website.length > 3
-      object.website
+      super
     else
       (service_data(:website) || "").strip.gsub!(Canonicalized::WEBSITE_PATTERN, '')
     end
@@ -47,7 +47,7 @@ class LocationFetchServiceDecorator < LocationDecorator
     if object.phone.blank?
       service_data(:phone)
     else
-      object.phone
+      super
     end
   end
 
@@ -123,7 +123,7 @@ class LocationFetchServiceDecorator < LocationDecorator
     if object.email.blank?
       service_data(:email)
     else
-      object.email
+      super
     end
   end
 
