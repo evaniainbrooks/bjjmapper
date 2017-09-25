@@ -8,14 +8,14 @@ describe RollFindr::TimezoneClient do
       before do
         response_dbl = double('response', code: 200)
         response_dbl.stub(:body).and_return(expected_timezone)
-        Net::HTTP.stub(:get_response).and_return(response_dbl)
+        Net::HTTP.any_instance.stub(:request).and_return(response_dbl)
       end
       it 'returns the timezone' do
         subject.timezone_for(80.0, 80.0).should eq expected_timezone
       end
      end
     context 'when the server is down' do
-      before { Net::HTTP.should_receive(:get_response).and_raise(StandardError, 'service is down') }
+      before { Net::HTTP.any_instance.should_receive(:request).and_raise(StandardError, 'service is down') }
       it 'returns nil' do
         subject.timezone_for(80.0, 80.0).should be_nil
       end
@@ -24,7 +24,7 @@ describe RollFindr::TimezoneClient do
       before do
         response_dbl = double('response', code: 502)
         response_dbl.stub(:body).and_return(expected_timezone)
-        Net::HTTP.stub(:get_response).and_return(response_dbl)
+        Net::HTTP.any_instance.stub(:request).and_return(response_dbl)
       end
       it 'returns nil' do
         subject.timezone_for(80.0, 80.0).should be_nil
