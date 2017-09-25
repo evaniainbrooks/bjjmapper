@@ -37,6 +37,11 @@ Rails.application.routes.draw do
     resources :reviews, controller: :user_reviews, only: [:index]
   end
 
+  resources :articles, only: [:index, :show] do
+    put :publish, on: :member
+    put :unpublish, on: :member
+  end
+
   resource :map, only: [:show] do
     get :search, on: :collection
   end

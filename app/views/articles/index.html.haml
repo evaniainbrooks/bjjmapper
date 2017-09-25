@@ -1,0 +1,6 @@
+= content_for(:title) do
+  = "Recent news articles about Brazilian Jiu-Jitsu"
+.container.show-directory.page
+  .row
+    .col-md-12
+      = render partial: 'article', collection: articles

@@ -19,6 +19,9 @@
           %a{href: map_path(ref: 'navbar'), title: 'Brazilian Jiu-Jitsu Academy Map'} Map
         %li{:class => controller?(:directory_segments) ? 'active' : nil}
           %a{href: directory_index_path(ref: 'navbar'), title: 'Brazilian Jiu-Jitsu Academy Directory'} Directory
+        - if FeatureSetting.enabled?(:show_articles)
+          %li{:class => controller?(:articles) ? 'active' : nil}
+            %a{:href => articles_path(ref: 'navbar'), title: 'News articles about BJJ'} Articles
         %li{:class => action?(:meta) ? 'active' : nil}
           %a{:href => meta_path(ref: 'navbar'), title: 'Learn about BJJMapper'} About
       = render partial: 'profile_or_login'

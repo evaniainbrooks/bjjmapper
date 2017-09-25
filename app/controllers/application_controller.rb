@@ -34,7 +34,13 @@ class ApplicationController < ActionController::Base
       refresh: 0
     )
 
-    @countries = DirectorySegment.parent_segments.asc(:name)
+    
+    @countries = DirectorySegment.parent_segments.asc(:name) unless FeatureSetting.enabled?(:hide_homepage_directory_segments)
+    @articles = Article.all.order(:created_at => 1).limit(3).to_a if FeatureSetting.enabled?(:show_articles)
+    
+    respond_to do |format|
+      format.html
+    end
   end
 
   def contact
