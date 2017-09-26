@@ -138,7 +138,7 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
 
   def contact_info?
-    phone.present? || email.present? || website.present? || facebook.present? || twitter.present? || instagram.present?
+    phone.present? || email.present? || website.present? || twitter.present? || instagram.present? || profiles.any?
   end
 
   def profile_match(profile)
@@ -260,7 +260,7 @@ class LocationFetchServiceDecorator < LocationDecorator
   end
 
   def service_data(sym)
-    service_data_arr.find { |profile| profile[sym] }.try(:[], sym)
+    service_data_arr.find { |profile| profile[sym].present? }.try(:[], sym)
   end
 
   def service_data_arr

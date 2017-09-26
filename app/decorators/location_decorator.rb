@@ -131,7 +131,7 @@ class LocationDecorator < Draper::Decorator
   end
 
   def phone
-    h.number_to_phone(object.phone)
+    h.number_to_phone(object.phone) if object.phone
   end
 
   def facebook_group?
