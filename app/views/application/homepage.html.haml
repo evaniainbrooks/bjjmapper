@@ -28,11 +28,11 @@
 
       = render partial: 'maps/map'
     .col-md-4
-      - if FeatureSetting.enabled?(:show_articles) && @articles.any?
+      - if FeatureSetting.enabled?(:show_articles) && articles.any?
         %h3.pull-left Articles
         %br.clear/
-        %ul
-          = render partial: 'articles/thumbnail', collection: @articles, as: :article
+        %ul.list-unstyled
+          = render partial: 'articles/thumbnail', collection: articles, as: :article
         %br.clear/
 
       %h3.pull-left Upcoming Events

@@ -21,6 +21,8 @@ class ApplicationController < ActionController::Base
 
   after_action :log_production_mutative_events
 
+  decorates_assigned :countries, :articles
+
   def homepage
     @map = Map.new(
       zoom: Map::ZOOM_CITY,

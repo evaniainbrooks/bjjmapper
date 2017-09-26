@@ -26,6 +26,8 @@ class Article
   field :body
   field :status, type: Integer, default: STATUS_UNPUBLISHED
   field :author_id
+  field :coordinates, type: Array, default: Array.new(2)
+  field :location
 
   scope :published, -> { where(:status => STATUS_UNPUBLISHED) }
   scope :unpublished, -> { where(:status.ne => STATUS_PUBLISHED) }
@@ -33,14 +35,26 @@ class Article
   belongs_to :author, class_name: 'User' 
 
   def publish! as_user
-    update_attributes!(modifier: as_user, status: STATUS_PUBLISHED)
+    update_attributes!(author: as_user, modifier: as_user, status: STATUS_PUBLISHED)
   end
 
   def unpublish! as_user
-    update_attributes!(modifier: as_user, status: STATUS_UNPUBLISHED)
+    update_attributes!(author: as_user, modifier: as_user, status: STATUS_UNPUBLISHED)
   end
   
   def to_param
     slug
+  end
+  
+  def to_coordinates
+    coordinates.reverse
+  end
+
+  def lat
+    to_coordinates.try(:[], 0)
+  end
+
+  def lng
+    to_coordinates.try(:[], 1)
   end
 end

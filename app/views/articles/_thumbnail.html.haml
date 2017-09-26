@@ -3,5 +3,6 @@
     %img.media-object{:alt => "...", :src => "http://placehold.it/150x90"}/
   .media-body
     %h4.media-heading= link_to(article.title, article)
-    %p.by-author By #{link_to(article.author.try(:name), article.author)}
+    %p.by-author.small.text-muted By #{article.author.name}
+    %p.small.text-muted #{article.created_at}
 
