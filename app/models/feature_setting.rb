@@ -15,7 +15,8 @@ class FeatureSetting
     :hide_homepage_directory_segments,
     :hide_locations_with_missing_street,
     :show_activities,
-    :show_articles
+    :show_articles,
+    :hide_distant_location_profiles
   ].freeze
 
   def self.enabled?(name)

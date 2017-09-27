@@ -4,31 +4,18 @@ class LocationFetchServiceDecorator < LocationDecorator
 
   PHOTO_COUNT = 50
   ALTERNATIVE_TITLE_MATCH_PERCENT = 90.0
+  PROFILE_MAX_DISTANCE = 2.0 # miles
 
   def updated_at
     val = profiles.values.collect{|p| p[:updated_at]}.push(object.updated_at).compact.max || 0
     "#{h.time_ago_in_words(val)} ago"
   end
   
-  def jiujitsucom_url
-    jiujitsucom_profile.try(:[], :url)
-  end
-  
-  def foursquare_url
-    foursquare_profile.try(:[], :url)
-  end
-
-  def facebook_url
-    facebook_profile.try(:[], :url)
-  end
-
-  def google_url
-    google_profile.try(:[], :url)
-  end
-
-  def yelp_url
-    yelp_profile.try(:[], :url)
-  end
+  def jiujitsucom_url; jiujitsucom_profile.try(:[], :url); end
+  def foursquare_url; foursquare_profile.try(:[], :url); end
+  def facebook_url; facebook_profile.try(:[], :url); end
+  def google_url; google_profile.try(:[], :url); end
+  def yelp_url; yelp_profile.try(:[], :url); end
 
   def health
     health_components = [jiujitsucom_url, foursquare_url, facebook_url, yelp_url, google_url, facebook, twitter, instagram, team_id, website, email, phone]
@@ -71,13 +58,8 @@ class LocationFetchServiceDecorator < LocationDecorator
     end
   end
 
-  def image_height
-    100
-  end
-
-  def image_width
-    100
-  end
+  def image_height; 100; end
+  def image_width; 100; end
 
   def image
     if object.image.present?
@@ -143,8 +125,8 @@ class LocationFetchServiceDecorator < LocationDecorator
 
   def profile_match(profile)
     if profiles[profile].present?
-      profiles[profile].try(:[], :address_match).try(:round, 1)
-    end || 100.0
+      profiles[profile].try(:[], :address_match).try(:round, 0).try(:to_i)
+    end || 100
   end
 
   def profile_address(profile)
@@ -184,45 +166,25 @@ class LocationFetchServiceDecorator < LocationDecorator
     [header, titles].join("<br/>").html_safe
   end
 
-  def fan_count
-    facebook_profile.try(:[], :fan_count)
-  end
-
-  def checkins
-    facebook_profile.try(:[], :checkins)
-  end
-
-  def rating_count
-    facebook_profile.try(:[], :rating_count)
-  end
-
-  def street
-    object.street || source_address_component(:street)
-  end
-
-  def city
-    object.city || source_address_component(:city)
-  end
-
-  def state
-    object.state || source_address_component(:state)
-  end
-
-  def postal_code
-    object.postal_code || source_address_component(:postal_code)
-  end
-
-  def country
-    object.country || source_address_component(:country)
-  end
+  def fan_count; facebook_profile.try(:[], :fan_count); end
+  def checkins; facebook_profile.try(:[], :checkins); end
+  def rating_count; facebook_profile.try(:[], :rating_count); end
+  
+  def street; object.street || source_address_component(:street); end
+  def city; object.city || source_address_component(:city); end
+  def state; object.state || source_address_component(:state); end
+  def postal_code; object.postal_code || source_address_component(:postal_code); end
+  def country; object.country || source_address_component(:country); end
 
   private
 
-  def source_address_component(component)
+  def source_profile
     @_source_profile ||= service_data_arr.find {|profile| profile[:source] == object.source}
-    return nil unless @_source_profile.present?
+  end
 
-    @_source_profile[component]
+  def source_address_component(component)
+    return nil unless source_profile.present?
+    source_profile[component]
   end
   
   def jiujitsucom_profile
@@ -265,9 +227,16 @@ class LocationFetchServiceDecorator < LocationDecorator
 
   def service_data_arr
     @_service_data ||= (RollFindr::Redis.cache(key: ['Detail', self.id].join('-'), expire: 1.hour.seconds) do
-
       params = { lat: object.lat, lng: object.lng, title: object.title }.merge(self.address_components)
-      RollFindr::LocationFetchService.listings(self.id, params)
+      listings = RollFindr::LocationFetchService.listings(self.id, params)
+
+      if FeatureSetting.enabled?(:hide_distant_location_profiles)
+        listings.delete_if do |listing|
+          listing[:distance] > PROFILE_MAX_DISTANCE && listing[:source] != object.source
+        end
+      else
+        listings
+      end
     end || [])
   end
 

@@ -24,26 +24,26 @@
   %i.display-field.text-muted No contact information was provided
 - else
   .display-field
-    %b.small.text-muted.upcase Contact 
+    %b.text-muted.small.upcase Contact 
     %br/
     - if location.phone.present?
-      %span.small.display-field
+      %span.display-field
         %a{:class => 'phone', :href => "tel:#{location.phone}"}
           %i.fa.fa-phone
           = number_to_phone location.phone
     - if location.email.present?
-      %span.small.display-field
+      %span.display-field
         = link_to 'mailto:' + location.email, class: 'email' do
           %i.fa.fa-envelope
           = location.email
     - if location.website.present?
-      %span.small.display-field
+      %span.display-field
         = link_to 'http://' + location.website, target: '_blank', class: 'website' do
           %i.fa.fa-external-link
           = location.website
           = location.website_status
-.display-field
-  %br/
-  = render partial: 'show_profiles'
-- if !FeatureSetting.enabled?(:hide_global_ads)
-  .display-field.hidden-xs= render partial: 'application/google_adsense_halfbanner'
+  .display-field
+    %br/
+    = render partial: 'show_profiles'
+  - if !FeatureSetting.enabled?(:hide_global_ads)
+    .display-field.hidden-xs= render partial: 'application/google_adsense_halfbanner'
