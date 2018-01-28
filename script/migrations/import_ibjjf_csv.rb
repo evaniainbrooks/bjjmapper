@@ -29,7 +29,7 @@ end
 puts "Processing CSV file #{options[:filename]}"
 csv.each do |row|
   title = row[0].strip.split.map(&:capitalize).join(' ')
-  
+
   puts "Row is #{title}"
   date_start = row[1].strip
   date_start.slice!("Date: ")
@@ -46,7 +46,8 @@ csv.each do |row|
 
   results = GeocodersHelper.search(venue_address)
   if results.blank?
-    puts "*** Couldn't geocode #{venue_address}, skipping #{title}"
+    puts "*** Couldn't geocode \"#{venue_address}\""
+    puts "*** Skipping #{title}"
     next
   else
     puts "Got #{results.count} geocode results #{results.inspect}"
