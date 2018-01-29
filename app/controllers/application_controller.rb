@@ -36,10 +36,10 @@ class ApplicationController < ActionController::Base
       refresh: 0
     )
 
-    
+
     @countries = DirectorySegment.parent_segments.asc(:name) unless FeatureSetting.enabled?(:hide_homepage_directory_segments)
     @articles = Article.all.order(:created_at => 1).limit(3).to_a if FeatureSetting.enabled?(:show_articles)
-    
+
     respond_to do |format|
       format.html
     end
@@ -76,10 +76,10 @@ class ApplicationController < ActionController::Base
     render :bad_request and return false unless reason.present?
 
     ReportMailer.report_email(
-      subject: subject_url, 
-      reason: reason, 
-      description: description, 
-      email: email, 
+      subject: subject_url,
+      reason: reason,
+      description: description,
+      email: email,
       user: current_user
     ).deliver
 
@@ -99,7 +99,7 @@ class ApplicationController < ActionController::Base
 
   def ensure_signed_in
     respond_to do |format|
-      format.html { redirect_to '/signin' }
+      format.html { redirect_to(signin_path) }
       format.json { render status: :unauthorized,  json: {} }
     end unless signed_in?
   end
@@ -116,7 +116,7 @@ class ApplicationController < ActionController::Base
 
   def current_user
     @current_user ||= User.where(:role => 'super_user').first if Rails.env.development?
-    
+
     # NORMAL USER AUTHENTICATION
     begin
       @current_user ||= User.find(session[:user_id]) if session[:user_id]
@@ -165,15 +165,15 @@ class ApplicationController < ActionController::Base
         subject_url = "#{request.original_url}"
 
         ReportMailer.report_email(
-          subject: subject_url, 
-          reason: reason, 
-          description: description, 
+          subject: subject_url,
+          reason: reason,
+          description: description,
           user: current_user
         ).deliver
       end
     rescue StandardError => e
       Rails.logger.error(e)
-      return 
+      return
     end
   end
 

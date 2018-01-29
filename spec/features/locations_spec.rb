@@ -13,6 +13,8 @@ feature "Locations Pages" do
     Capybara.current_session.driver.header('User-Agent', 'TestUserAgent')
   end
 
+  before { allow(FeatureSetting).to receive(:enabled?) { false } }
+
   scenario "user visits a location detail page" do
     Location.create(title: 'Test Location', description: 'Test Description', country: 'USA', city: 'Seattle', coordinates: [80.0, 80.0])
     Event.create(title: 'Test Event', location: Location.last, modifier: User.last, starting: Time.now, ending: Time.now + 1.day)

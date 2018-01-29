@@ -12,6 +12,8 @@ feature "Teams Pages" do
     Capybara.current_session.driver.header('User-Agent', 'TestUserAgent')
   end
 
+  before { allow(FeatureSetting).to receive(:enabled?) { false } }
+
   scenario "user visits a team detail page" do
     Team.create(name: 'Test Team', description: 'Test Description')
     visit team_path(Team.last.id)

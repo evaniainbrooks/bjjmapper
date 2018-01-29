@@ -12,6 +12,8 @@ feature "Top Level Pages" do
     Capybara.current_session.driver.header('User-Agent', 'TestUserAgent')
   end
 
+  before { allow(FeatureSetting).to receive(:enabled?) { false } }
+
   scenario "user visits the main page" do
     create(:directory_segment)
     visit root_path

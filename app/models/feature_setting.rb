@@ -6,7 +6,7 @@ class FeatureSetting
   field :name, type: String
   field :value, type: Boolean
 
-  validate :name, presence: true
+  validates :name, presence: true
 
   VALID_FEATURE_SETTINGS = [
     :hide_global_ads,
@@ -21,7 +21,7 @@ class FeatureSetting
 
   def self.enabled?(name)
     raise ArgumentError, "#{name} is not a valid feature setting!" unless VALID_FEATURE_SETTINGS.include?(name)
-    
+
     FeatureSetting.where(name: name).first_or_initialize(value: false).value
   end
 

@@ -8,6 +8,8 @@ feature "Directory Segments" do
   include_context 'skip tracking'
   include_context 'locationfetch service'
 
+  before { allow(FeatureSetting).to receive(:enabled?) { false } }
+
   background do
     Capybara.current_session.driver.header('Accept-Language', 'en')
     Capybara.current_session.driver.header('User-Agent', 'TestUserAgent')
