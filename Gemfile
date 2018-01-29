@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-#ruby '1.9.3', :engine => 'jruby', :engine_version => '1.7.12'
+#ruby '2.3.0', :engine => 'jruby', :engine_version => '1.8.0'
 gem 'rails', '>= 4.1.0'
 gem 'i18n', '>= 0.7.0.beta1 '
 gem 'certified'
@@ -64,7 +64,7 @@ group :test, :development do
   gem 'simplecov'
   gem 'rubocop'
   gem 'letter_opener'
-  gem 'webmock'  
+  gem 'webmock'
 end
 
 

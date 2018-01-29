@@ -39,7 +39,7 @@ json.flag_closed location.flag_closed || false
 json.created_at location.created_at
 json.updated_at location.updated_at
 json.rating location.rating
-json.review_count location.all_reviews.items.count
+json.review_count location.review_count
 json.stars location.stars
 json.half_star location.half_star?
 json.profiles location.profiles

@@ -73,7 +73,7 @@ class Location
   field :facebook
   field :instagram
   field :twitter
-  
+
   field :ig_hashtag
   field :loctype, type: Integer, default: LOCATION_TYPE_ACADEMY
 
@@ -176,6 +176,10 @@ class Location
     slug
   end
 
+  def review_count
+    all_reviews&.items&.count
+  end
+
   def rating
     all_reviews.try(:rating) || 0.0
   end
@@ -225,7 +229,7 @@ class Location
 
   def timezone_offset
     return nil if timezone.blank?
-    
+
     ActiveSupport::TimeZone[timezone].try(:formatted_offset, false)
   end
 

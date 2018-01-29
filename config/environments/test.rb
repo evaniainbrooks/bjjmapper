@@ -41,4 +41,7 @@ Rails.application.configure do
 
   config.redis_host = 'bjjmapper.localhost'
   config.redis_password = ENV['REDIS_PASS']
+
+  config.default_keywords = ''
+  config.default_description = ''
 end
