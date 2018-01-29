@@ -5,6 +5,8 @@
     %meta(http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1")
     %meta(name="viewport" content="width=device-width, initial-scale=1.0")
     %title= content_for?(:title) ? yield(:title) : "Brazilian Jiu-Jitsu Academy Directory - schedules, gym ratings, seminars, tournaments and more"
+    %meta{:name => "description", :content => "#{yield_meta_tag(:description, RollFindr::Application.config.default_description)}"}/
+    %meta{:name => "keywords", :content => "#{yield_meta_tag(:keywords, RollFindr::Application.config.default_keywords)}"}/
     = csrf_meta_tags
     = stylesheet_link_tag "application", :media => "all"
     %link{:href => "//storage.googleapis.com/bjjmapper/apple-icon-57x57.png", :rel => "apple-touch-icon", :sizes => "57x57"}
@@ -24,11 +26,10 @@
     %meta{:content => "#ffffff", :name => "msapplication-TileColor"}
     %meta{:content => "/ms-icon-144x144.png", :name => "msapplication-TileImage"}
     %meta{:content => "#ffffff", :name => "theme-color"}/
-    %meta{:property => 'og:app_id', :content => '1566945533528111'}/ 
+    %meta{:property => 'og:app_id', :content => '1566945533528111'}/
     %meta{:property => 'og:type', :content => 'website'}/
     %meta{:property => 'og:title', :content => 'BJJMapper'}/
-    %meta{:property => 'og:description', :content => 'The free and collaborative Brazilian Jiu-Jitsu academy mapper. Find Brazilian Jiu-Jitsu academies and events around the world. Search accurate and up-to-date information about BJJ academies, instructors, lineage, class times, prices, events and seminars, tournaments and more.'}/
-    %meta{:name => 'description', :content => 'The free and collaborative Brazilian Jiu-Jitsu academy mapper. Find Brazilian Jiu-Jitsu academies and events around the world. Search accurate and up-to-date information about BJJ academies, instructors, lineage, class times, prices, events and seminars, tournaments and more.'}/
+    %meta{:property => 'og:description', :content => "#{yield_meta_tag(:description, RollFindr::Application.config.default_description)}"}/
     = yield(:head) if content_for(:head)
   %body{:data => {:userid => current_user.id}}
     .wrapper

@@ -101,6 +101,10 @@ Rails.application.configure do
 
   config.redis_host = 'redis.bjjmapper.com'
   config.redis_password = ENV['REDIS_PASS']
+
+  # SEO
+  config.default_keywords = "BJJ, Brazilian Jiu-Jitsu, MMA, Grappling, No-Gi, Submissing Fighting, Submission Only, BJJ Tournaments, BJJ Seminars"
+  config.default_description = "The free and collaborative Brazilian Jiu-Jitsu academy mapper. Find Brazilian Jiu-Jitsu academies and events around the world. Search accurate and up-to-date information about BJJ academies, grappling tournaments, submission-only events, seminars, Brazilian Jiu-Jitsu camps and more!"
 end
 
 GA.tracker = 'UA-56774786-1'

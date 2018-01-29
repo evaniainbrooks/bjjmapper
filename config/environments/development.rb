@@ -38,6 +38,10 @@ Rails.application.configure do
 
   config.redis_host = 'bjjmapper.localhost'
   config.redis_password = ENV['REDIS_PASS']
+
+  # SEO, edit real values in production.rb
+  config.default_keywords = "BJJ, Brazilian Jiu-Jitsu, DEVELOPMENT MODE"
+  config.default_description = "The free and collaborative Brazilian Jiu-Jitsu academy mapper. DEVELOPMENT MODE"
 end
 
 GA.tracker = 'UA-24220947-1'

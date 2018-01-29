@@ -7,6 +7,9 @@
     = csrf_meta_tags
     %title= content_for?(:title) ? yield(:title) : "Brazilian Jiu-Jitsu Academy Directory - schedules, gym ratings, seminars, tournaments and more"
     = stylesheet_link_tag "application", :media => "all"
+    %meta{:name => "description", :content => "#{yield_meta_tag(:description, RollFindr::Application.config.default_description)}"}/
+    %meta{:name => "keywords", :content => "#{yield_meta_tag(:keywords, RollFindr::Application.config.default_keywords)}"}/
+
     %link{:href => "//storage.googleapis.com/bjjmapper/apple-icon-57x57.png", :rel => "apple-touch-icon", :sizes => "57x57"}
     %link{:href => "//storage.googleapis.com/bjjmapper/apple-icon-60x60.png", :rel => "apple-touch-icon", :sizes => "60x60"}
     %link{:href => "//storage.googleapis.com/bjjmapper/apple-icon-72x72.png", :rel => "apple-touch-icon", :sizes => "72x72"}
@@ -26,6 +29,8 @@
     %meta{:content => "#ffffff", :name => "theme-color"}/
     %meta{:property => 'og:app_id', :content => '1566945533528111'}/
     %meta{:property => 'og:type', :content => 'website'}/
+    %meta{:property => 'og:title', :content => 'BJJMapper'}/
+    %meta{:property => 'og:description', :content => "#{yield_meta_tag(:description, RollFindr::Application.config.default_description)}"}/
     = yield(:head) if content_for(:head)
   %body{:data => {:userid => current_user.id}}
     = render partial: 'navbar'
