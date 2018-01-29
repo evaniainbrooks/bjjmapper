@@ -1,15 +1,4 @@
 GIT
-  remote: git://github.com/codebrew/backbone-rails.git
-  revision: 9bf992cc5e9fcb14174c437102040cdd6a562581
-  branch: master
-  specs:
-    rails-backbone (1.1.2)
-      coffee-script
-      ejs
-      jquery-rails
-      railties
-
-GIT
   remote: git://github.com/rails/sass-rails
   revision: 423178729e7b84addcee78b33891644b1fc1705b
   branch: master
@@ -323,6 +312,11 @@ GEM
       bundler (>= 1.3.0, < 2.0)
       railties (= 4.2.10)
       sprockets-rails
+    rails-backbone (1.2.0)
+      coffee-rails
+      ejs
+      jquery-rails
+      railties
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
     rails-dom-testing (1.0.9)
@@ -499,7 +493,7 @@ DEPENDENCIES
   puma
   rack-mini-profiler
   rails (>= 4.2.1)
-  rails-backbone!
+  rails-backbone
   redis-rails
   rspec-rails
   rubocop
