@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '>= 4.2.1'
 gem 'i18n', '>= 0.7.0.beta1 '
 gem 'certified'
-gem 'sass-rails', :git => 'git://github.com/rails/sass-rails', :branch => :master
+gem 'sass-rails'
 gem 'sprockets-rails'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
