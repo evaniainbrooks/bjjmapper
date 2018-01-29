@@ -34,7 +34,7 @@ set :default_env, {
   'JRUBY_OPTS' => '-X-C'
 }
 
-set :rvm_ruby_version, 'jruby-9.1.15.0'
+set :rvm_ruby_version, 'ruby-2.3.6'
 
 # Default value for keep_releases is 5
 set :keep_releases, 3

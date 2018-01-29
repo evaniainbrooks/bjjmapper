@@ -1,11 +1,12 @@
 source 'https://rubygems.org'
 
-#ruby '2.3.0', :engine => 'jruby', :engine_version => '1.8.0'
+#ruby '2.3.6'
 gem 'rails', '>= 4.2.1'
 gem 'i18n', '>= 0.7.0.beta1 '
 gem 'certified'
 gem 'sass-rails'
 gem 'sprockets-rails'
+gem 'therubyracer'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyrhino'
