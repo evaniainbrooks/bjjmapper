@@ -10,6 +10,10 @@ class UserDecorator < Draper::Decorator
   DEFAULT_IMAGE = '//storage.googleapis.com/bjjmapper/default-user-250.png'
   DEFAULT_DESCRIPTION = 'No description was provided'
 
+  def seo_title
+    "#{full_name} Brazilian Jiu-Jitsu #{descriptive_rank_in_words}"
+  end
+
   def description?
     object.description.present?
   end

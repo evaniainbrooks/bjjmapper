@@ -1,5 +1,12 @@
+- meta_description = user.seo_title
+- if user.locations.count > 0
+  meta_description = meta_description + ". #{user.locations.collect(&:title).to_sentence}"
+
+= meta_tag(:description, meta_description)
+= meta_tag(:keywords, "#{user.full_name}, BJJ #{user.descriptive_rank_in_words}, BJJ Lineage, BJJ Belt Ranks, Jiu-Jitsu Ranks, #{user.full_name} Students, #{user.full_name} Biography")
+
 = content_for(:title) do
-  = "#{user.full_name} Brazilian Jiu-Jitsu #{user.descriptive_rank_in_words}"
+  = user.seo_title
 
 .container.page.show-user
   = form_for(user, html: { class: 'form ' + edit_mode_classes }) do |f|
@@ -67,7 +74,7 @@
           %h3.pull-left Students
           %button.pull-right.edit-field.btn.btn-small.btn-default.add-student{:style => 'margin-top: -5px', :type => 'button'}
             %i.fa.fa-plus-circle
-            Add Student 
+            Add Student
           .row.items.clear
           .empty-message
             %i.text-muted No students are listed for this person
