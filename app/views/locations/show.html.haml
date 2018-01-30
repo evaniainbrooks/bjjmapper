@@ -1,8 +1,8 @@
+= meta_tag(:description, "Brazilian Jiu-Jitsu academy #{location.title} located at #{location.street} in #{location.city}. Part of the #{location.team_name} Jiu-Jitsu team. Find more BJJ gyms in #{location.city}, MMA training in #{location.country}. Grappling tournaments and events in #{location.city}")
+= meta_tag(:keywords, "BJJ in #{location.country}, BJJ gyms in #{location.city}, BJJ Tournaments near #{location.city}, BJJ Seminars in #{location.country}, IBJJF events in #{location.country}, BJJ Gyms, BJJ Training Locations, MMA gyms #{location.city}, MMA trainer #{location.country}")
+
 = content_for(:title) do
-  - if location.loctype == Location::LOCATION_TYPE_ACADEMY
-    = "#{location.title} #{"BJJ" unless location.title.end_with?("BJJ")} academy in #{location.city}, #{location.country}"
-  - else
-    = "#{location.title} BJJ event venue in #{location.city}, #{location.country}"
+  = location.seo_title
 .container.show-location.page{ class: moved? ? 'moved' : (closed? ? 'closed' : '') }
   %div#fb-root
   = form_for(location, html: { class: 'form ' + edit_mode_classes }) do |f|
@@ -35,7 +35,7 @@
         .rating-container
           = render partial: 'rating', :locals => { location: location }
         %div.small.text-center.center-block.display-field
-          = render partial: 'stats'  
+          = render partial: 'stats'
       .col-md-7.col-xs-8.col-sm-5
         = render partial: 'show_header', :locals => { location: location, f: f }
       .col-md-12.hidden-lg.hidden-md.hidden-sm.clear
@@ -47,7 +47,7 @@
       .col-md-2.col-xs-6.col-sm-3.text-center.hidden-xs
         = render partial: 'show_address', locals: { location: location, f: f }
         - if Role.power(current_user.role) >= Role.power(Role::MODERATOR)
-          = render partial: 'show_moderation', locals: { location: location, f: f } 
+          = render partial: 'show_moderation', locals: { location: location, f: f }
       .col-md-6.col-xs-12.col-sm-9
         .map
           %div.map-canvas{:style => 'height: 275px'}
@@ -99,7 +99,7 @@
         .clear.items
         .empty-message
           %i.text-muted We don't know who teaches at this academy.
-          %a.add-instructor{href: 'javascript:void(0)'} 
+          %a.add-instructor{href: 'javascript:void(0)'}
             %i Do you?
         %br/
         -#= render :partial => 'locations/instructors', :locals => { :location => location }

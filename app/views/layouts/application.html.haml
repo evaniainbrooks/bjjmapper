@@ -30,7 +30,6 @@
     %meta{:property => 'og:app_id', :content => '1566945533528111'}/
     %meta{:property => 'og:type', :content => 'website'}/
     %meta{:property => 'og:title', :content => 'BJJMapper'}/
-    %meta{:property => 'og:description', :content => "#{yield_meta_tag(:description, RollFindr::Application.config.default_description)}"}/
     = yield(:head) if content_for(:head)
   %body{:data => {:userid => current_user.id}}
     = render partial: 'navbar'

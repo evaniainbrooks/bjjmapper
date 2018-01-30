@@ -38,6 +38,14 @@ class LocationDecorator < Draper::Decorator
     self.instructors.index(instructor) || GUEST_INSTRUCTOR_COLOR_ORDINAL
   end
 
+  def seo_title
+    if object.loctype == Location::LOCATION_TYPE_ACADEMY
+      "#{object.title} #{"BJJ" unless object.title.end_with?("BJJ")} academy in #{object.city}, #{object.country}"
+    else
+      "#{object.title} BJJ event venue in #{object.city}, #{object.country}"
+    end
+  end
+
   def bearing_direction
     return nil unless bearing.present?
 

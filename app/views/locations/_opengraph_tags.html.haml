@@ -3,7 +3,6 @@
 %meta{:name => 'ICBM', :content => "#{location.lat},#{location.lng}"}/
 %meta{:name => 'geo.position', :content => "#{location.lat},#{location.lng}"}/
 %meta{:name => 'geo.placename', :content => "#{location.address_components.values.join(', ')}"}/
-%meta{:name => 'description', :content => description}/
 %meta{:property => 'og:title', :content => location.title}/
 %meta{:property => 'og:description', :content => description}/
 %meta{:property => 'og:updated_at', :content => location.opengraph_updated_at}/
