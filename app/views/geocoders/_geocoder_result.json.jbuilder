@@ -6,4 +6,4 @@ json.state result.state
 json.country result.country
 json.lat result.lat
 json.lng result.lng
-json.url map_path(lat: result.lat, lng: result.lng, ref: 'search')
+json.url map_path(zoom: Map::ZOOM_LOCATION, lat: result.lat, lng: result.lng, ref: 'search')
