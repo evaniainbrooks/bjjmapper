@@ -59,15 +59,20 @@ class SessionsController < ApplicationController
   private
 
   def return_url(return_to, params)
-    if return_to
-      callback = Addressable::URI.parse(return_to)
+    final_url = return_to
+    if session[:last_viewed_location_id]
+      final_url ||= location_path(session[:last_viewed_location_id])
+    end
+
+    if final_url
+      callback = Addressable::URI.parse(final_url)
       callback.query_values = (callback.query_values || {}).merge(params)
 
       session.delete(:return_to)
       callback.to_s
     else
       root_url(signed_in: 1)
-    end rescue return_to
+    end rescue final_url
   end
 
   def send_welcome_email(user)

@@ -6,6 +6,9 @@ class LocationsController < ApplicationController
   before_action :set_map, only: :show
   before_action :ensure_signed_in, only: [:wizard, :destroy, :create, :update, :move, :unlock, :close, :remove_image]
   before_action :check_permissions, only: [:destroy, :update, :move, :unlock, :close, :remove_image]
+  before_action only: :show do
+    session[:last_viewed_location_id] = @location.to_param
+  end
 
   decorates_assigned :location, :with => LocationFetchServiceDecorator
   decorates_assigned :locations, :with => LocationDecorator
@@ -232,7 +235,7 @@ class LocationsController < ApplicationController
     @location.assign_attributes(location_create_params)
     LocationGeocoder.update(@location)
     @location.save!
-    
+
     respond_to do |format|
       format.json { render partial: 'location' }
       format.html { redirect_to location_path(location, success: 1, edit: 0) }

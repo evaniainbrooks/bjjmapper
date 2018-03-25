@@ -62,6 +62,16 @@ describe SessionsController do
         response.should redirect_to("#{referrer}?signed_in=1")
       end
     end
+    context 'with no referer' do
+      let(:location_id) { create(:location).to_param }
+      before { session[:last_viewed_location_id] = location_id }
+      before { @user = create(:user, uid: omniauth_uid, provider: omniauth_provider) }
+
+      it 'redirects the user to the last viewed_location' do
+        post :create, { provider: omniauth_provider }, session_params
+        response.should redirect_to(location_path(location_id, signed_in: 1))
+      end
+    end
   end
 
   describe 'GET failure' do
