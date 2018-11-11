@@ -27,6 +27,7 @@ else
 end
 
 puts "Processing CSV file #{options[:filename]}"
+su = User.where(:role => 'super_user').first
 csv.each do |row|
   title = row[0].strip.split.map(&:capitalize).join(' ')
   puts "Row is #{title}"
@@ -71,7 +72,6 @@ csv.each do |row|
 
   puts "Venue is #{venue.to_param} errors #{venue.errors.messages}"
 
-  su = User.where(:role => 'super_user').first
   Time.use_zone(venue.timezone) do
     event = Event.create({
       title: title,
